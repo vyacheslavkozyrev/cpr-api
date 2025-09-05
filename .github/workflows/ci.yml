@@ -1,5 +1,7 @@
 name: CI
 
+name: CI
+
 on:
   push:
     branches: [ main ]
@@ -42,15 +44,11 @@ jobs:
 
       - name: Install dotnet-format tool
         run: dotnet tool install -g dotnet-format || true
-        env:
-          PATH: ${{ runner.tool_cache }}/dotnet/tools:${{ env.PATH }}
 
       - name: Lint (dotnet-format)
         run: |
           echo "Running dotnet-format on solution"
           dotnet format src/CPR.sln --verify-no-changes
-        env:
-          PATH: ${{ runner.tool_cache }}/dotnet/tools:${{ env.PATH }}
 
       - name: Build
         run: dotnet build src/CPR.sln --no-restore --configuration Release
@@ -92,10 +90,6 @@ jobs:
           psql -h localhost -U postgres -c "DROP DATABASE IF EXISTS \"$DB_NAME\";"
         env:
           PGPASSWORD: ${{ env.PGPASSWORD }}
-name: CI
-
-on:
-  push:
     branches: [ main ]
   pull_request:
     branches: [ main ]
