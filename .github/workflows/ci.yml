@@ -1,0 +1,84 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres" --health-interval 10s --health-timeout 5s --health-retries 5
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '9.0.x'
+
+    - name: Install dotnet-format
+      run: |
+        dotnet tool install -g dotnet-format
+        echo "$HOME/.dotnet/tools" >> $GITHUB_PATH
+
+    - name: Lint (dotnet-format check)
+      run: dotnet format --verify-no-changes || (echo "dotnet-format found issues; run 'dotnet format' locally to fix" && exit 1)
+
+    - name: Restore
+      run: dotnet restore src/CPR.sln
+    - name: Build
+      run: dotnet build src/CPR.sln --configuration Release --no-restore
+
+    - name: Install PostgreSQL client
+      run: sudo apt-get update && sudo apt-get install -y postgresql-client
+
+    - name: Create per-run test database
+      env:
+        PGPASSWORD: postgres
+      run: |
+        echo "DB_NAME=cpr_test_${{ github.run_id }}" >> $GITHUB_ENV
+        echo "DATABASE_URL=Host=localhost;Port=5432;Database=${{ env.DB_NAME }};Username=postgres;Password=postgres" >> $GITHUB_ENV
+        # Wait for Postgres to be ready
+        for i in {1..30}; do
+          pg_isready -h localhost -p 5432 -U postgres && break || sleep 1
+        done
+        psql -h localhost -U postgres -c "CREATE DATABASE \"${{ env.DB_NAME }}\";"
+
+    - name: Install dotnet-ef
+      run: |
+        dotnet tool install --global dotnet-ef --version 8.0.0
+        echo "$HOME/.dotnet/tools" >> $GITHUB_PATH
+
+    - name: Apply EF migrations to test DB
+      env:
+        DATABASE_URL: ${{ env.DATABASE_URL }}
+      run: dotnet ef database update -p src/CPR.Infrastructure -s src/CPR.Api
+
+    - name: Run unit tests
+      run: dotnet test tests/CPR.UnitTests/CPR.UnitTests.csproj --no-build --verbosity normal
+
+    - name: Run integration tests
+      env:
+        DATABASE_URL: ${{ env.DATABASE_URL }}
+      run: dotnet test tests/CPR.IntegrationTests/CPR.IntegrationTests.csproj --no-build --verbosity normal
+
+    - name: Run contract tests
+      run: dotnet test tests/CPR.ContractTests/CPR.ContractTests.csproj --no-build --verbosity normal
+
+    - name: Drop per-run test database
+      env:
+        PGPASSWORD: postgres
+      if: always()
+      run: |
+        psql -h localhost -U postgres -c "DROP DATABASE IF EXISTS \"${{ env.DB_NAME }}\";"
