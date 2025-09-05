@@ -33,7 +33,7 @@ jobs:
         echo "$HOME/.dotnet/tools" >> $GITHUB_PATH
 
     - name: Lint (dotnet-format check)
-      run: dotnet format --verify-no-changes || (echo "dotnet-format found issues; run 'dotnet format' locally to fix" && exit 1)
+      run: dotnet format src/CPR.sln --verify-no-changes || (echo "dotnet-format found issues; run 'dotnet format' locally to fix" && exit 1)
 
     - name: Restore
       run: dotnet restore src/CPR.sln
