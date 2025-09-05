@@ -71,98 +71,96 @@ jobs:
               - name: Setup .NET
                 uses: actions/setup-dotnet@v4
                 with:
-                  dotnet-version: '9.0.x'
+                  name: CI
 
-              - name: Restore
-                run: dotnet restore src/CPR.sln
+                  on:
+                    push:
+                      branches: [ main ]
+                    pull_request:
+                      branches: [ main ]
 
-              - name: Install dotnet-format tool
-                run: dotnet tool install -g dotnet-format || true
+                  jobs:
+                    build:
+                      runs-on: ubuntu-latest
+                      env:
+                        DB_NAME: cpr_test_${{ github.run_id }}
+                        PGPASSWORD: postgres
 
-              - name: Lint (dotnet-format)
-                run: |
-                  echo "Running dotnet-format on solution"
-                  dotnet format src/CPR.sln --verify-no-changes
+                      services:
+                        postgres:
+                          image: postgres:15
+                          env:
+                            POSTGRES_USER: postgres
+                            POSTGRES_PASSWORD: postgres
+                            POSTGRES_DB: postgres
+                          ports:
+                            - 5432:5432
+                          options: >-
+                            --health-cmd="pg_isready -U postgres"
+                            --health-interval=5s
+                            --health-timeout=5s
+                            --health-retries=10
 
-              - name: Build
-                run: dotnet build src/CPR.sln --no-restore --configuration Release
+                      steps:
+                        - name: Checkout
+                          uses: actions/checkout@v4
 
-              - name: Wait for Postgres
-                run: |
-                  for i in {1..30}; do
-                    pg_isready -h localhost -p 5432 -U postgres && break
-                    echo "Waiting for Postgres..."
-                    sleep 2
-                  done
+                        - name: Setup .NET
+                          uses: actions/setup-dotnet@v4
+                          with:
+                            dotnet-version: '9.0.x'
 
-              - name: Create test database
-                run: |
-                  echo "Creating test DB: $DB_NAME"
-                  psql -h localhost -U postgres -c "CREATE DATABASE \"$DB_NAME\";"
-                env:
-                  PGPASSWORD: ${{ env.PGPASSWORD }}
+                        - name: Restore
+                          run: dotnet restore src/CPR.sln
 
-              - name: Apply migrations to test DB
-                run: |
-                  export DATABASE_URL="Host=localhost;Port=5432;Database=$DB_NAME;Username=postgres;Password=postgres"
-                  dotnet ef database update -p src/CPR.Infrastructure -s src/CPR.Api
-                env:
-                  DOTNET_CLI_TELEMETRY_OPTOUT: "1"
+                        - name: Install dotnet-format tool
+                          run: dotnet tool install -g dotnet-format || true
 
-              - name: Run unit tests
-                run: dotnet test tests/CPR.UnitTests/CPR.UnitTests.csproj --no-build --logger:"trx"
+                        - name: Lint (dotnet-format)
+                          run: |
+                            echo "Running dotnet-format on solution"
+                            dotnet format src/CPR.sln --verify-no-changes
 
-              - name: Run integration tests
-                run: dotnet test tests/CPR.IntegrationTests/CPR.IntegrationTests.csproj --no-build --logger:"trx"
-                env:
-                  DATABASE_URL: Host=localhost;Port=5432;Database=${{ env.DB_NAME }};Username=postgres;Password=postgres
+                        - name: Build
+                          run: dotnet build src/CPR.sln --no-restore --configuration Release
 
-              - name: Drop test database (cleanup)
-                if: always()
-                run: |
-                  echo "Dropping test DB: $DB_NAME"
-                  psql -h localhost -U postgres -c "DROP DATABASE IF EXISTS \"$DB_NAME\";"
-                env:
-                  PGPASSWORD: ${{ env.PGPASSWORD }}
-          dotnet-version: '9.0.x'
+                        - name: Wait for Postgres
+                          run: |
+                            for i in {1..30}; do
+                              pg_isready -h localhost -p 5432 -U postgres && break
+                              echo "Waiting for Postgres..."
+                              sleep 2
+                            done
 
-      - name: Restore
-        run: dotnet restore src/CPR.sln
+                        - name: Create test database
+                          run: |
+                            echo "Creating test DB: $DB_NAME"
+                            psql -h localhost -U postgres -c "CREATE DATABASE \"$DB_NAME\";"
+                          env:
+                            PGPASSWORD: ${{ env.PGPASSWORD }}
 
-      - name: Install dotnet-format tool
-        run: dotnet tool install -g dotnet-format || true
-        env:
-          PATH: ${{ runner.tool_cache }}/dotnet/tools:${{ env.PATH }}
+                        - name: Apply migrations to test DB
+                          run: |
+                            export DATABASE_URL="Host=localhost;Port=5432;Database=${{ env.DB_NAME }};Username=postgres;Password=postgres"
+                            dotnet ef database update -p src/CPR.Infrastructure -s src/CPR.Api
+                          env:
+                            DOTNET_CLI_TELEMETRY_OPTOUT: "1"
 
-      - name: Lint (dotnet-format)
-        run: |
-          echo "Running dotnet-format on solution"
-          dotnet format src/CPR.sln --verify-no-changes
-        env:
-          PATH: ${{ runner.tool_cache }}/dotnet/tools:${{ env.PATH }}
+                        - name: Run unit tests
+                          run: dotnet test tests/CPR.UnitTests/CPR.UnitTests.csproj --no-build --logger:"trx"
 
-      - name: Build
-        run: dotnet build src/CPR.sln --no-restore --configuration Release
+                        - name: Run integration tests
+                          run: dotnet test tests/CPR.IntegrationTests/CPR.IntegrationTests.csproj --no-build --logger:"trx"
+                          env:
+                            DATABASE_URL: Host=localhost;Port=5432;Database=${{ env.DB_NAME }};Username=postgres;Password=postgres
 
-      - name: Wait for Postgres
-        run: |
-          for i in {1..30}; do
-            pg_isready -h localhost -p 5432 -U postgres && break
-            echo "Waiting for Postgres..."
-            sleep 2
-          done
-
-      - name: Create test database
-        run: |
-          echo "Creating test DB: $DB_NAME"
-          psql -h localhost -U postgres -c "CREATE DATABASE \"$DB_NAME\";"
-        env:
-          PGPASSWORD: ${{ env.PGPASSWORD }}
-
-      - name: Apply migrations to test DB
-        run: |
-          export DATABASE_URL="${{ env.DATABASE_URL }}"
-          dotnet ef database update -p src/CPR.Infrastructure -s src/CPR.Api
+                        - name: Drop test database (cleanup)
+                          if: always()
+                          run: |
+                            echo "Dropping test DB: $DB_NAME"
+                            psql -h localhost -U postgres -c "DROP DATABASE IF EXISTS \"$DB_NAME\";"
+                          env:
+                            PGPASSWORD: ${{ env.PGPASSWORD }}
         env:
           DOTNET_CLI_TELEMETRY_OPTOUT: "1"
           DATABASE_URL: ${{ env.DATABASE_URL }}
