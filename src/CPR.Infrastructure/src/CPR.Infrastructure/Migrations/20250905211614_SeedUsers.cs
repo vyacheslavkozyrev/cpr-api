@@ -13,7 +13,7 @@ namespace CPR.Infrastructure.src.CPR.Infrastructure.Migrations
         {
             migrationBuilder.InsertData(
                 table: "users",
-                columns: new[] { "id", "created_at", "CreatedBy", "DeletedAt", "DeletedBy", "display_name", "IsDeleted", "ModifiedAt", "ModifiedBy", "password_hash", "user_name" },
+                columns: new[] { "id", "created_at", "create_by", "deleted_at", "deleted_by", "display_name", "is_deleted", "modified_at", "modified_by", "password_hash", "user_name" },
                 values: new object[] { new Guid("11111111-1111-1111-1111-111111111111"), new DateTimeOffset(new DateTime(2025, 9, 5, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), null, null, null, "Jane Smith", false, null, null, "$2b$12$.........................", "jane.smith" });
         }
 
