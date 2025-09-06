@@ -131,7 +131,11 @@ jobs:
 
       - name: Apply EF migrations
         run: |
-          dotnet tool restore || true
+          echo "Ensure dotnet-ef is available"
+          dotnet tool install --global dotnet-ef --version 8.* || dotnet tool update --global dotnet-ef --version 8.*
+          echo "$HOME/.dotnet/tools" >> $GITHUB_PATH
+          echo "Restore solution before running migrations"
+          dotnet restore src/CPR.sln
           dotnet ef database update --project src/CPR.Infrastructure --startup-project src/CPR.Api -- --connection "${DATABASE_URL}"
 
       - name: Run integration tests
