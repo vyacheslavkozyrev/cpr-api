@@ -32,63 +32,79 @@ Iterations
     - Ran integration tests against the local DB: 4/4 tests passed.
   - Deployable: Database migrations applied in staging.
 
-- [ ] Iteration 3 — Authentication & users API
-  - Goal: Implement auth (JWT/OIDC stub) and basic `GET /me` and `PATCH /me` endpoints.
+ - [ ] Iteration 3 — Authorization (JWT stub)
+  - Goal: Implement application-level authorization only (JWT stub) and auth plumbing.
   - Acceptance criteria / tests:
-    - Authenticated request to `GET /me` returns the user profile.
-    - Unit tests for token validation and profile update.
-  - Deployable: Backend service with auth enabled.
+    - Authentication scheme registered and configurable via environment variable (no secrets in files).
+    - Unit tests for token validation (valid/invalid token scenarios).
+    - Swagger Authorize button usable with the stub token.
+  - Notes: Do not implement API endpoints in this iteration; endpoints come after DB tables are in place.
+  - Deployable: Auth middleware and test token generator available for local and CI runs.
 
-- [ ] Iteration 4 — Goals CRUD + tasks
+ - [ ] Iteration 4 — EF Core: Entity tables (core domain entities)
+  - Goal: Implement the core entity tables in EF Core and migrations: `users`, `employees`, `goals`, `skills` (core domain entities).
+  - Acceptance criteria / tests:
+    - Migrations scaffolded and applied successfully in a local dev DB.
+    - Basic seed data present for core entities to exercise integration tests later.
+  - Deployable: migrations ready for staging.
+
+ - [ ] Iteration 5 — EF Core: Relation tables
+  - Goal: Implement relation and join tables in EF Core and migrations: `employee_to_skill`, `goal_tasks` (or `tasks`), `feedback_requests`, `feedback` and any necessary junction tables.
+  - Acceptance criteria / tests:
+    - Referential integrity enforced by migrations (foreign keys configured).
+    - Migrations apply cleanly and seeded relation data present for integration tests.
+  - Deployable: full schema (entities + relations) ready for API development.
+
+ - [ ] Iteration 6 — Goals CRUD + tasks
   - Goal: Implement `POST /goals`, `GET /me/goals`, `PATCH /goals/{id}`, `DELETE /goals/{id}`, and `POST /goals/{id}/tasks`.
   - Acceptance criteria / tests:
     - API integration tests for create/read/update/delete and adding tasks.
     - Manual smoke: create a goal, add a task, mark progress.
   - Deployable: Backend APIs and DB migrations.
 
-- [ ] Iteration 5 — Skill taxonomy & self-assessments
+ - [ ] Iteration 7 — Skill taxonomy & self-assessments
   - Goal: Add `skills`, `skill_levels`, and `employee_to_skill` endpoints and data exposure via `GET /skills`.
   - Acceptance criteria / tests:
     - Seed skills available in a staging DB.
     - Integration test for submitting and reading a self-assessment.
   - Deployable: API and seeded data.
 
-- [ ] Iteration 6 — Feedback request flow
+ - [ ] Iteration 8 — Feedback request flow
   - Goal: Implement `POST /feedback/request`, `feedback_requests` table, notifications stub, and recipient listing.
   - Acceptance criteria / tests:
     - Creating a feedback request inserts rows and returns recipients list.
     - Unit test for idempotency handling and due_date enforcement.
   - Deployable: API with notifications disabled or stubbed.
 
-- [ ] Iteration 7 — Feedback submit & visibility
+ - [ ] Iteration 9 — Feedback submit & visibility
   - Goal: Implement `POST /feedback`, visibility rules, and `GET /feedback/me`.
   - Acceptance criteria / tests:
     - Submit feedback tied to goal/project and retrieve it via `GET /feedback/me`.
     - Authorization tests for visibility (employee vs manager).
   - Deployable: API with backend rules enforced.
 
-- [ ] Iteration 8 — Manager features & reviews
+ - [ ] Iteration 10 — Manager features & reviews
   - Goal: Manager endpoints (`GET /team`, `/team/goals`, `POST /performance_reviews`) and review storage.
   - Acceptance criteria / tests:
     - Manager can view direct reports' goals and create a performance review.
     - Integration tests for manager RBAC.
   - Deployable: API with manager role enabled.
 
-- [ ] Iteration 9 — Promotions & director flows
+ - [ ] Iteration 11 — Promotions & director flows
   - Goal: Implement promotions listing and approve/decline endpoints with links to reviews/feedback.
   - Acceptance criteria / tests:
     - Director endpoints return promotions ready for review.
     - E2E test: submit promotion request -> director approves/declines.
   - Deployable: API and small UI or API client scripts.
 
-- [ ] Iteration 10 — Reporting & analytics
+ - [ ] Iteration 12 — Reporting & analytics
   - Goal: Add reporting endpoints (`/reports/feedback-summary`, `/analytics/skills-gap`) and background jobs for aggregation.
   - Acceptance criteria / tests:
     - Aggregation jobs run and produce expected summaries in staging.
     - API returns analytics objects matching sample assertions.
   - Deployable: Backend job runner and reporting APIs.
 
-- [ ] Iteration 11 — Monitoring, retention & governance
+ - [ ] Iteration 13 — Monitoring, retention & governance
   - Goal: Add monitoring (metrics, health checks), retention/purge job, and enforce conventions (conventions.md checks in CI).
   - Acceptance criteria / tests:
     - Alerts configured in staging; retention job can be run manually.
