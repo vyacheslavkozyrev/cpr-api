@@ -6,6 +6,11 @@ Purpose
 Scope
 - Applies to all contributors working in this repository and to services built from it.
 
+Branching model
+- Primary workflow: work on a `develop` branch and merge into `main` when an iteration is complete and verified.
+- For single-developer workflows you may work locally on `develop` and push focused commits; merge `develop` -> `main` when the iteration is ready. If you prefer to work directly on `main`, keep commits small and self-contained and ensure CI passes before merging significant changes.
+
+
 Allowed actions
 - Contributors may create, read, update and soft-delete their own data (goals, tasks, self-assessments).
 - Managers may act on behalf of direct reports for goal assignment, feedback requests, and performance reviews within RBAC policies.
