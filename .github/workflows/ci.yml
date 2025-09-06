@@ -82,76 +82,76 @@ jobs:
           name: unit-test-results
           path: ./test-results/*.trx
 
-    integration:
-      name: Integration tests
-      runs-on: ubuntu-latest
-      needs: test
-      env:
-        DB_NAME: cpr_test_${{ github.run_id }}
-      services:
-        postgres:
-          image: postgres:15
-          env:
-            POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
-            POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
-          ports:
-            - 5432:5432
-          options: >-
-            --health-cmd pg_isready --health-interval=5s --health-timeout=2s --health-retries=10
-      steps:
-        - name: Checkout
-          uses: actions/checkout@v4
+  integration:
+    name: Integration tests
+    runs-on: ubuntu-latest
+    needs: test
+    env:
+      DB_NAME: cpr_test_${{ github.run_id }}
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready --health-interval=5s --health-timeout=2s --health-retries=10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
 
-        - name: Setup .NET
-          uses: actions/setup-dotnet@v4
-          with:
-            dotnet-version: '9.0.x'
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
 
-        - name: Install psql client
-          run: |
-            sudo apt-get update
-            sudo apt-get install -y postgresql-client
+      - name: Install psql client
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y postgresql-client
 
-        - name: Wait for Postgres
-          run: |
-            for i in {1..30}; do
-              pg_isready -h localhost -p 5432 && break || sleep 2
-            done
+      - name: Wait for Postgres
+        run: |
+          for i in {1..30}; do
+            pg_isready -h localhost -p 5432 && break || sleep 2
+          done
 
-        - name: Export DATABASE_URL for commands
-          run: |
-            echo "DATABASE_URL=Host=localhost;Port=5432;Database=${DB_NAME};Username=${{ secrets.POSTGRES_USER }};Password=${{ secrets.POSTGRES_PASSWORD }}" >> $GITHUB_ENV
+      - name: Export DATABASE_URL for commands
+        run: |
+          echo "DATABASE_URL=Host=localhost;Port=5432;Database=${DB_NAME};Username=${{ secrets.POSTGRES_USER }};Password=${{ secrets.POSTGRES_PASSWORD }}" >> $GITHUB_ENV
 
-        - name: Create per-run database
-          env:
-            PGPASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
-          run: |
-            if [ -z "${DB_NAME}" ]; then echo "DB_NAME is empty"; exit 1; fi
-            psql -h localhost -U ${{ secrets.POSTGRES_USER }} -c "CREATE DATABASE \"${DB_NAME}\";"
+      - name: Create per-run database
+        env:
+          PGPASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+        run: |
+          if [ -z "${DB_NAME}" ]; then echo "DB_NAME is empty"; exit 1; fi
+          psql -h localhost -U ${{ secrets.POSTGRES_USER }} -c "CREATE DATABASE \"${DB_NAME}\";"
 
-        - name: Apply EF migrations
-          run: |
-            dotnet tool restore || true
-            dotnet ef database update --project src/CPR.Infrastructure --startup-project src/CPR.Api -- --connection "${DATABASE_URL}"
+      - name: Apply EF migrations
+        run: |
+          dotnet tool restore || true
+          dotnet ef database update --project src/CPR.Infrastructure --startup-project src/CPR.Api -- --connection "${DATABASE_URL}"
 
-        - name: Run integration tests
-          run: |
-            mkdir -p ./test-results
-            dotnet test tests/CPR.IntegrationTests/CPR.IntegrationTests.csproj --no-build --logger "trx;LogFileName=integration-tests.trx" --results-directory ./test-results
+      - name: Run integration tests
+        run: |
+          mkdir -p ./test-results
+          dotnet test tests/CPR.IntegrationTests/CPR.IntegrationTests.csproj --no-build --logger "trx;LogFileName=integration-tests.trx" --results-directory ./test-results
 
-        - name: Upload integration test results
-          if: always()
-          uses: actions/upload-artifact@v4
-          with:
-            name: integration-test-results
-            path: ./test-results/*.trx
+      - name: Upload integration test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: integration-test-results
+          path: ./test-results/*.trx
 
-        - name: Cleanup - drop per-run database
-          if: always()
-          env:
-            PGPASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
-          run: |
-            set +e
-            psql -h localhost -U ${{ secrets.POSTGRES_USER }} -d postgres -c "SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname='${DB_NAME}' AND pid<>pg_backend_pid();"
-            psql -h localhost -U ${{ secrets.POSTGRES_USER }} -d postgres -c "DROP DATABASE IF EXISTS \"${DB_NAME}\";"
-            set -e
+      - name: Cleanup - drop per-run database
+        if: always()
+        env:
+          PGPASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+        run: |
+          set +e
+          psql -h localhost -U ${{ secrets.POSTGRES_USER }} -d postgres -c "SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname='${DB_NAME}' AND pid<>pg_backend_pid();"
+          psql -h localhost -U ${{ secrets.POSTGRES_USER }} -d postgres -c "DROP DATABASE IF EXISTS \"${DB_NAME}\";"
+          set -e
