@@ -56,3 +56,26 @@ jobs:
 
       - name: Build
         run: dotnet build src/CPR.sln --no-restore --configuration Release
+
+  test:
+    name: Unit tests
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+
+      - name: Run unit tests
+        run: dotnet test tests/CPR.UnitTests/CPR.UnitTests.csproj --no-build --logger trx --results-directory ./test-results
+
+      - name: Upload unit test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: unit-test-results
+          path: ./test-results
