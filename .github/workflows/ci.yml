@@ -70,12 +70,14 @@ jobs:
         with:
           dotnet-version: '9.0.x'
 
-      - name: Run unit tests
-        run: dotnet test tests/CPR.UnitTests/CPR.UnitTests.csproj --no-build --logger trx --results-directory ./test-results
+      - name: Run unit tests (produce TRX)
+        run: |
+          mkdir -p ./test-results
+          dotnet test tests/CPR.UnitTests/CPR.UnitTests.csproj --no-build --logger "trx;LogFileName=unit-tests.trx" --results-directory ./test-results
 
       - name: Upload unit test results
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: unit-test-results
-          path: ./test-results
+          path: ./test-results/*.trx
