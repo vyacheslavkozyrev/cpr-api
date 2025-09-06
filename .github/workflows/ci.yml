@@ -19,6 +19,13 @@ jobs:
         with:
           dotnet-version: '9.0.x'
 
+      - name: Fail fast if JWT_SIGNING_KEY is missing
+        run: |
+          if [ -z "${JWT_SIGNING_KEY}" ]; then
+            echo "ERROR: JWT_SIGNING_KEY repository secret is not set. Add it in Settings → Secrets and variables → Actions." >&2
+            exit 1
+          fi
+
       - name: Install dotnet-format
         run: |
           dotnet tool install -g dotnet-format
