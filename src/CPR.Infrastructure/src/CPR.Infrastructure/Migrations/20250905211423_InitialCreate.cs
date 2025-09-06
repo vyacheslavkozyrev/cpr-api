@@ -19,13 +19,13 @@ namespace CPR.Infrastructure.src.CPR.Infrastructure.Migrations
                     user_name = table.Column<string>(type: "text", nullable: false),
                     password_hash = table.Column<string>(type: "text", nullable: false),
                     display_name = table.Column<string>(type: "text", nullable: true),
-                    CreatedBy = table.Column<Guid>(type: "uuid", nullable: true),
-                    created_at = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "now()"),
-                    ModifiedBy = table.Column<Guid>(type: "uuid", nullable: true),
-                    ModifiedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
-                    DeletedBy = table.Column<Guid>(type: "uuid", nullable: true),
-                    DeletedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true)
+                    create_by = table.Column<Guid>(type: "uuid", nullable: true),
+                    create_at = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "now()"),
+                    modified_by = table.Column<Guid>(type: "uuid", nullable: true),
+                    modified_at = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
+                    is_deleted = table.Column<bool>(type: "boolean", nullable: false),
+                    deleted_by = table.Column<Guid>(type: "uuid", nullable: true),
+                    deleted_at = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true)
                 },
                 constraints: table =>
                 {

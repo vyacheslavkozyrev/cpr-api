@@ -10,225 +10,95 @@ namespace CPR.Infrastructure.src.CPR.Infrastructure.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            // users
-            migrationBuilder.RenameColumn(
-                name: "CreatedBy",
-                table: "users",
-                newName: "create_by");
+            var renames = new (string Table, string Old, string New)[]
+            {
+                                ("users", "CreatedBy", "create_by"),
+                                ("users", "CreatedAt", "create_at"),
+                                ("users", "ModifiedBy", "modified_by"),
+                                ("users", "ModifiedAt", "modified_at"),
+                                ("users", "IsDeleted", "is_deleted"),
+                                ("users", "DeletedBy", "deleted_by"),
+                                ("users", "DeletedAt", "deleted_at"),
 
-            migrationBuilder.RenameColumn(
-                name: "CreatedAt",
-                table: "users",
-                newName: "create_at");
+                                ("goals", "CreatedBy", "create_by"),
+                                ("goals", "CreatedAt", "create_at"),
+                                ("goals", "ModifiedBy", "modified_by"),
+                                ("goals", "ModifiedAt", "modified_at"),
+                                ("goals", "IsDeleted", "is_deleted"),
+                                ("goals", "DeletedBy", "deleted_by"),
+                                ("goals", "DeletedAt", "deleted_at"),
 
-            migrationBuilder.RenameColumn(
-                name: "ModifiedBy",
-                table: "users",
-                newName: "modified_by");
+                                ("employees", "CreatedBy", "create_by"),
+                                ("employees", "CreatedAt", "create_at"),
+                                ("employees", "ModifiedBy", "modified_by"),
+                                ("employees", "ModifiedAt", "modified_at"),
+                                ("employees", "IsDeleted", "is_deleted"),
+                                ("employees", "DeletedBy", "deleted_by"),
+                                ("employees", "DeletedAt", "deleted_at"),
+            };
 
-            migrationBuilder.RenameColumn(
-                name: "ModifiedAt",
-                table: "users",
-                newName: "modified_at");
+            foreach (var r in renames)
+            {
+                var sql = $@"DO $$
+BEGIN
+    IF EXISTS (
+        SELECT 1 FROM information_schema.columns
+        WHERE table_name='{r.Table}' AND column_name='{r.Old}'
+    ) THEN
+        EXECUTE 'ALTER TABLE {r.Table} RENAME COLUMN ""{r.Old}"" TO ""{r.New}""';
+    END IF;
+END
+$$;";
 
-            migrationBuilder.RenameColumn(
-                name: "IsDeleted",
-                table: "users",
-                newName: "is_deleted");
-
-            migrationBuilder.RenameColumn(
-                name: "DeletedBy",
-                table: "users",
-                newName: "deleted_by");
-
-            migrationBuilder.RenameColumn(
-                name: "DeletedAt",
-                table: "users",
-                newName: "deleted_at");
-
-            // goals
-            migrationBuilder.RenameColumn(
-                name: "CreatedBy",
-                table: "goals",
-                newName: "create_by");
-
-            migrationBuilder.RenameColumn(
-                name: "CreatedAt",
-                table: "goals",
-                newName: "create_at");
-
-            migrationBuilder.RenameColumn(
-                name: "ModifiedBy",
-                table: "goals",
-                newName: "modified_by");
-
-            migrationBuilder.RenameColumn(
-                name: "ModifiedAt",
-                table: "goals",
-                newName: "modified_at");
-
-            migrationBuilder.RenameColumn(
-                name: "IsDeleted",
-                table: "goals",
-                newName: "is_deleted");
-
-            migrationBuilder.RenameColumn(
-                name: "DeletedBy",
-                table: "goals",
-                newName: "deleted_by");
-
-            migrationBuilder.RenameColumn(
-                name: "DeletedAt",
-                table: "goals",
-                newName: "deleted_at");
-
-            // employees
-            migrationBuilder.RenameColumn(
-                name: "CreatedBy",
-                table: "employees",
-                newName: "create_by");
-
-            migrationBuilder.RenameColumn(
-                name: "CreatedAt",
-                table: "employees",
-                newName: "create_at");
-
-            migrationBuilder.RenameColumn(
-                name: "ModifiedBy",
-                table: "employees",
-                newName: "modified_by");
-
-            migrationBuilder.RenameColumn(
-                name: "ModifiedAt",
-                table: "employees",
-                newName: "modified_at");
-
-            migrationBuilder.RenameColumn(
-                name: "IsDeleted",
-                table: "employees",
-                newName: "is_deleted");
-
-            migrationBuilder.RenameColumn(
-                name: "DeletedBy",
-                table: "employees",
-                newName: "deleted_by");
-
-            migrationBuilder.RenameColumn(
-                name: "DeletedAt",
-                table: "employees",
-                newName: "deleted_at");
+                migrationBuilder.Sql(sql);
+            }
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            // users
-            migrationBuilder.RenameColumn(
-                name: "create_by",
-                table: "users",
-                newName: "CreatedBy");
+            var renames = new (string Table, string Old, string New)[]
+            {
+                                ("users", "create_by", "CreatedBy"),
+                                ("users", "create_at", "CreatedAt"),
+                                ("users", "modified_by", "ModifiedBy"),
+                                ("users", "modified_at", "ModifiedAt"),
+                                ("users", "is_deleted", "IsDeleted"),
+                                ("users", "deleted_by", "DeletedBy"),
+                                ("users", "deleted_at", "DeletedAt"),
 
-            migrationBuilder.RenameColumn(
-                name: "create_at",
-                table: "users",
-                newName: "CreatedAt");
+                                ("goals", "create_by", "CreatedBy"),
+                                ("goals", "create_at", "CreatedAt"),
+                                ("goals", "modified_by", "ModifiedBy"),
+                                ("goals", "modified_at", "ModifiedAt"),
+                                ("goals", "is_deleted", "IsDeleted"),
+                                ("goals", "deleted_by", "DeletedBy"),
+                                ("goals", "deleted_at", "DeletedAt"),
 
-            migrationBuilder.RenameColumn(
-                name: "modified_by",
-                table: "users",
-                newName: "ModifiedBy");
+                                ("employees", "create_by", "CreatedBy"),
+                                ("employees", "create_at", "CreatedAt"),
+                                ("employees", "modified_by", "ModifiedBy"),
+                                ("employees", "modified_at", "ModifiedAt"),
+                                ("employees", "is_deleted", "IsDeleted"),
+                                ("employees", "deleted_by", "DeletedBy"),
+                                ("employees", "deleted_at", "DeletedAt"),
+            };
 
-            migrationBuilder.RenameColumn(
-                name: "modified_at",
-                table: "users",
-                newName: "ModifiedAt");
+            foreach (var r in renames)
+            {
+                var sql = $@"DO $$
+BEGIN
+    IF EXISTS (
+        SELECT 1 FROM information_schema.columns
+        WHERE table_name='{r.Table}' AND column_name='{r.Old}'
+    ) THEN
+        EXECUTE 'ALTER TABLE {r.Table} RENAME COLUMN ""{r.Old}"" TO ""{r.New}""';
+    END IF;
+END
+$$;";
 
-            migrationBuilder.RenameColumn(
-                name: "is_deleted",
-                table: "users",
-                newName: "IsDeleted");
-
-            migrationBuilder.RenameColumn(
-                name: "deleted_by",
-                table: "users",
-                newName: "DeletedBy");
-
-            migrationBuilder.RenameColumn(
-                name: "deleted_at",
-                table: "users",
-                newName: "DeletedAt");
-
-            // goals
-            migrationBuilder.RenameColumn(
-                name: "create_by",
-                table: "goals",
-                newName: "CreatedBy");
-
-            migrationBuilder.RenameColumn(
-                name: "create_at",
-                table: "goals",
-                newName: "CreatedAt");
-
-            migrationBuilder.RenameColumn(
-                name: "modified_by",
-                table: "goals",
-                newName: "ModifiedBy");
-
-            migrationBuilder.RenameColumn(
-                name: "modified_at",
-                table: "goals",
-                newName: "ModifiedAt");
-
-            migrationBuilder.RenameColumn(
-                name: "is_deleted",
-                table: "goals",
-                newName: "IsDeleted");
-
-            migrationBuilder.RenameColumn(
-                name: "deleted_by",
-                table: "goals",
-                newName: "DeletedBy");
-
-            migrationBuilder.RenameColumn(
-                name: "deleted_at",
-                table: "goals",
-                newName: "DeletedAt");
-
-            // employees
-            migrationBuilder.RenameColumn(
-                name: "create_by",
-                table: "employees",
-                newName: "CreatedBy");
-
-            migrationBuilder.RenameColumn(
-                name: "create_at",
-                table: "employees",
-                newName: "CreatedAt");
-
-            migrationBuilder.RenameColumn(
-                name: "modified_by",
-                table: "employees",
-                newName: "ModifiedBy");
-
-            migrationBuilder.RenameColumn(
-                name: "modified_at",
-                table: "employees",
-                newName: "ModifiedAt");
-
-            migrationBuilder.RenameColumn(
-                name: "is_deleted",
-                table: "employees",
-                newName: "IsDeleted");
-
-            migrationBuilder.RenameColumn(
-                name: "deleted_by",
-                table: "employees",
-                newName: "DeletedBy");
-
-            migrationBuilder.RenameColumn(
-                name: "deleted_at",
-                table: "employees",
-                newName: "DeletedAt");
+                migrationBuilder.Sql(sql);
+            }
         }
     }
 }
