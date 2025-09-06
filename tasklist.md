@@ -1,9 +1,9 @@
 # Tasklist — CPR
 
 Progress (update after each iteration)
-- Iteration: 2
+- Iteration: 3
 - Status: Complete
-- Notes: Iteration 2 completed — database & schema finalized: initial migration rewritten to produce snake_case audit columns, RenameAuditColumns migration removed, DbContext mappings updated, migrations applied to local Docker DB (`cpr`), and integration tests passed locally.
+- Notes: Iteration 3 completed — development-only HMAC JWT stub authentication implemented and wired; `TokenGenerator` helper added; `/me` endpoint protected and returning `UserProfile`; unit and integration tests added (including an end-to-end smoke test); token generation scripts and README documentation added; CI workflow updated to provide `JWT_SIGNING_KEY` for tests; obsolete `src/CPR.Api.Tests` project removed.
 
 Guidelines
 - Each iteration is incremental: implement, test, and deploy the listed items.
@@ -32,13 +32,14 @@ Iterations
     - Ran integration tests against the local DB: 4/4 tests passed.
   - Deployable: Database migrations applied in staging.
 
- - [ ] Iteration 3 — Authorization (JWT stub)
+ - [x] Iteration 3 — Authorization (JWT stub)
   - Goal: Implement application-level authorization only (JWT stub) and auth plumbing.
   - Acceptance criteria / tests:
     - Authentication scheme registered and configurable via environment variable (no secrets in files).
     - Unit tests for token validation (valid/invalid token scenarios).
     - Swagger Authorize button usable with the stub token.
-  - Notes: Do not implement API endpoints in this iteration; endpoints come after DB tables are in place.
+  - Status: Complete
+  - Notes: Auth middleware, token generator, protected `/me` endpoint, tests, scripts, and CI guard implemented. Endpoints implemented as minimal protected surface (e.g., `/me`) for verification.
   - Deployable: Auth middleware and test token generator available for local and CI runs.
 
  - [ ] Iteration 4 — EF Core: Entity tables (core domain entities)
