@@ -50,6 +50,9 @@ builder.Services.AddSwaggerGen(options =>
         { securityScheme, Array.Empty<string>() }
     });
 
+    // Only apply the security requirement to endpoints decorated with [Authorize]
+    options.OperationFilter<CPR.Api.Swagger.AuthorizeCheckOperationFilter>();
+
     // Include XML comments if generated
     try
     {
