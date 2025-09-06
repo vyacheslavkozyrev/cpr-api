@@ -14,3 +14,4 @@ obj/
 **/appsettings.*.json
 **/secrets.json
 .idea/
+# test result artifacts\n**/TestResults/*.trx
