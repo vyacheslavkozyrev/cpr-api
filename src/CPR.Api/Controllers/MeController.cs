@@ -1,4 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using CPR.Api.Services;
+// ...existing usings...
 
 namespace CPR.Api.Controllers;
 
@@ -9,20 +12,27 @@ namespace CPR.Api.Controllers;
 [Route("[controller]")]
 public class MeController : ControllerBase
 {
+    private readonly IUserService _userService;
+
+    /// <summary>
+    /// Creates a new instance of <see cref="MeController"/>.
+    /// </summary>
+    /// <param name="userService">Service to read the current user's profile.</param>
+    public MeController(IUserService userService)
+    {
+        _userService = userService;
+    }
     /// <summary>
     /// Get the current user's profile (sample data for now).
     /// </summary>
     /// <returns>User profile object with basic details and position.</returns>
+    [Authorize]
     [HttpGet]
     public IActionResult Get()
     {
-        var sample = new
-        {
-            employee_id = "00000000-0000-0000-0000-000000000000",
-            user_name = "jane.smith",
-            display_name = "Jane Smith",
-            position = new { id = "00000000-0000-0000-0000-000000000001", title = "Senior Software Engineer" }
-        };
-        return Ok(sample);
+        var profile = _userService.GetCurrentUserProfile(User);
+        if (profile == null) return Unauthorized();
+
+        return Ok(profile);
     }
 }

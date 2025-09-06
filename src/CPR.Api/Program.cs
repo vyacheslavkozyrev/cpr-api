@@ -1,4 +1,6 @@
 using CPR.Api;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Mvc.NewtonsoftJson;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -12,7 +14,7 @@ using System.Reflection;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add minimal services
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddNewtonsoftJson();
 
 // Register stub authentication scheme (reads signing key from env var JWT_SIGNING_KEY)
 builder.Services.AddAuthentication(options =>
@@ -22,6 +24,9 @@ builder.Services.AddAuthentication(options =>
 }).AddScheme<Microsoft.AspNetCore.Authentication.AuthenticationSchemeOptions, CPR.Api.Auth.JwtStubAuthenticationHandler>("Stub", options => { });
 
 builder.Services.AddAuthorization();
+// Register app services
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<CPR.Api.Services.IUserService, CPR.Api.Services.UserService>();
 // Register Swagger/OpenAPI
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>

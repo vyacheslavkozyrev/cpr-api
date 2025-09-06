@@ -1,38 +1,38 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TestRun id="9a660652-dc82-4ff4-b3fc-fac14b502ba0" name="vyach@VYACHESLAV-LAPT 2025-09-06 12:03:53" runUser="VYACHESLAV-LAPT\vyach" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
-  <Times creation="2025-09-06T12:03:53.8770970-05:00" queuing="2025-09-06T12:03:53.8770972-05:00" start="2025-09-06T12:03:52.5208752-05:00" finish="2025-09-06T12:03:53.8809942-05:00" />
-  <TestSettings name="default" id="9c59eab8-2466-444c-9705-79e4e2dc5822">
-    <Deployment runDeploymentRoot="vyach_VYACHESLAV-LAPT_2025-09-06_12_03_53" />
+<TestRun id="25ac1e5e-600e-4dec-8b00-d051a9b6f006" name="vyach@VYACHESLAV-LAPT 2025-09-06 14:53:49" runUser="VYACHESLAV-LAPT\vyach" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2025-09-06T14:53:49.2398826-05:00" queuing="2025-09-06T14:53:49.2398832-05:00" start="2025-09-06T14:53:45.1243303-05:00" finish="2025-09-06T14:53:49.8031247-05:00" />
+  <TestSettings name="default" id="b170dffb-587c-4d7d-8167-5a0ea186d417">
+    <Deployment runDeploymentRoot="vyach_VYACHESLAV-LAPT_2025-09-06_14_53_49" />
   </TestSettings>
   <Results>
-    <UnitTestResult executionId="afdbd452-c621-4e86-9c4c-8d61e8222096" testId="fe1dd90f-597a-889d-a6df-6fac4049ab48" testName="CPR.IntegrationTests.SampleIntegrationTest.CanRun" computerName="VYACHESLAV-LAPT" duration="00:00:00.0135585" startTime="2025-09-06T12:03:52.9799501-05:00" endTime="2025-09-06T12:03:52.9799503-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="afdbd452-c621-4e86-9c4c-8d61e8222096" />
-    <UnitTestResult executionId="ac567e71-b581-462e-9884-7a99f72d60f4" testId="fe1ed513-1250-e1d2-25f2-fcc8fda41b69" testName="CPR.IntegrationTests.UserAndGoalPersistenceTests.CanCreateUserAndGoal" computerName="VYACHESLAV-LAPT" duration="00:00:00.8101671" startTime="2025-09-06T12:03:53.7746152-05:00" endTime="2025-09-06T12:03:53.7746153-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ac567e71-b581-462e-9884-7a99f72d60f4" />
-    <UnitTestResult executionId="b416d187-d873-4a46-b04d-f142f8f6e44a" testId="51b157e9-e068-e89d-0dd5-93fde292f37f" testName="CPR.IntegrationTests.MeControllerTests.SampleApiTest" computerName="VYACHESLAV-LAPT" duration="00:00:00.0020891" startTime="2025-09-06T12:03:52.9684211-05:00" endTime="2025-09-06T12:03:52.9684340-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b416d187-d873-4a46-b04d-f142f8f6e44a" />
-    <UnitTestResult executionId="facd023a-d5e9-4d29-abab-295616572ff9" testId="532ad4e5-578d-5d5e-389f-e29ae44a8370" testName="CPR.IntegrationTests.GoalPersistenceTests.CanCreateAndReadGoal" computerName="VYACHESLAV-LAPT" duration="00:00:00.8101625" startTime="2025-09-06T12:03:53.7746498-05:00" endTime="2025-09-06T12:03:53.7746499-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="facd023a-d5e9-4d29-abab-295616572ff9" />
+    <UnitTestResult executionId="b8e4b9c5-470b-4da0-b1e5-274116a1084c" testId="4db065df-e165-6201-98ef-ce56445e3caf" testName="CPR.IntegrationTests.MeControllerTests.GetMe_WithValidToken_ReturnsOk" computerName="VYACHESLAV-LAPT" duration="00:00:00.7099534" startTime="2025-09-06T14:53:48.3852215-05:00" endTime="2025-09-06T14:53:48.3852221-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b8e4b9c5-470b-4da0-b1e5-274116a1084c" />
+    <UnitTestResult executionId="64b9cc90-8faf-46c4-9d06-855e79a66e54" testId="fe1dd90f-597a-889d-a6df-6fac4049ab48" testName="CPR.IntegrationTests.SampleIntegrationTest.CanRun" computerName="VYACHESLAV-LAPT" duration="00:00:00.0097926" startTime="2025-09-06T14:53:47.6969944-05:00" endTime="2025-09-06T14:53:47.6970286-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="64b9cc90-8faf-46c4-9d06-855e79a66e54" />
+    <UnitTestResult executionId="aea62b55-682b-4506-a141-23403dee9848" testId="532ad4e5-578d-5d5e-389f-e29ae44a8370" testName="CPR.IntegrationTests.GoalPersistenceTests.CanCreateAndReadGoal" computerName="VYACHESLAV-LAPT" duration="00:00:01.9864460" startTime="2025-09-06T14:53:49.6621076-05:00" endTime="2025-09-06T14:53:49.6621077-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="aea62b55-682b-4506-a141-23403dee9848" />
+    <UnitTestResult executionId="1748748c-be2e-47f4-830a-d45224428a7d" testId="fe1ed513-1250-e1d2-25f2-fcc8fda41b69" testName="CPR.IntegrationTests.UserAndGoalPersistenceTests.CanCreateUserAndGoal" computerName="VYACHESLAV-LAPT" duration="00:00:01.9864631" startTime="2025-09-06T14:53:49.6617075-05:00" endTime="2025-09-06T14:53:49.6617077-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1748748c-be2e-47f4-830a-d45224428a7d" />
   </Results>
   <TestDefinitions>
     <UnitTest name="CPR.IntegrationTests.SampleIntegrationTest.CanRun" storage="d:\projects\cpr\tests\cpr.integrationtests\bin\release\net9.0\cpr.integrationtests.dll" id="fe1dd90f-597a-889d-a6df-6fac4049ab48">
-      <Execution id="afdbd452-c621-4e86-9c4c-8d61e8222096" />
-      <TestMethod codeBase="d:\projects\CPR\tests\CPR.IntegrationTests\bin\Release\net9.0\CPR.IntegrationTests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="CPR.IntegrationTests.SampleIntegrationTest" name="CanRun" />
+      <Execution id="64b9cc90-8faf-46c4-9d06-855e79a66e54" />
+      <TestMethod codeBase="D:\projects\CPR\tests\CPR.IntegrationTests\bin\Release\net9.0\CPR.IntegrationTests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="CPR.IntegrationTests.SampleIntegrationTest" name="CanRun" />
     </UnitTest>
     <UnitTest name="CPR.IntegrationTests.UserAndGoalPersistenceTests.CanCreateUserAndGoal" storage="d:\projects\cpr\tests\cpr.integrationtests\bin\release\net9.0\cpr.integrationtests.dll" id="fe1ed513-1250-e1d2-25f2-fcc8fda41b69">
-      <Execution id="ac567e71-b581-462e-9884-7a99f72d60f4" />
-      <TestMethod codeBase="d:\projects\CPR\tests\CPR.IntegrationTests\bin\Release\net9.0\CPR.IntegrationTests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="CPR.IntegrationTests.UserAndGoalPersistenceTests" name="CanCreateUserAndGoal" />
+      <Execution id="1748748c-be2e-47f4-830a-d45224428a7d" />
+      <TestMethod codeBase="D:\projects\CPR\tests\CPR.IntegrationTests\bin\Release\net9.0\CPR.IntegrationTests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="CPR.IntegrationTests.UserAndGoalPersistenceTests" name="CanCreateUserAndGoal" />
+    </UnitTest>
+    <UnitTest name="CPR.IntegrationTests.MeControllerTests.GetMe_WithValidToken_ReturnsOk" storage="d:\projects\cpr\tests\cpr.integrationtests\bin\release\net9.0\cpr.integrationtests.dll" id="4db065df-e165-6201-98ef-ce56445e3caf">
+      <Execution id="b8e4b9c5-470b-4da0-b1e5-274116a1084c" />
+      <TestMethod codeBase="D:\projects\CPR\tests\CPR.IntegrationTests\bin\Release\net9.0\CPR.IntegrationTests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="CPR.IntegrationTests.MeControllerTests" name="GetMe_WithValidToken_ReturnsOk" />
     </UnitTest>
     <UnitTest name="CPR.IntegrationTests.GoalPersistenceTests.CanCreateAndReadGoal" storage="d:\projects\cpr\tests\cpr.integrationtests\bin\release\net9.0\cpr.integrationtests.dll" id="532ad4e5-578d-5d5e-389f-e29ae44a8370">
-      <Execution id="facd023a-d5e9-4d29-abab-295616572ff9" />
-      <TestMethod codeBase="d:\projects\CPR\tests\CPR.IntegrationTests\bin\Release\net9.0\CPR.IntegrationTests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="CPR.IntegrationTests.GoalPersistenceTests" name="CanCreateAndReadGoal" />
-    </UnitTest>
-    <UnitTest name="CPR.IntegrationTests.MeControllerTests.SampleApiTest" storage="d:\projects\cpr\tests\cpr.integrationtests\bin\release\net9.0\cpr.integrationtests.dll" id="51b157e9-e068-e89d-0dd5-93fde292f37f">
-      <Execution id="b416d187-d873-4a46-b04d-f142f8f6e44a" />
-      <TestMethod codeBase="d:\projects\CPR\tests\CPR.IntegrationTests\bin\Release\net9.0\CPR.IntegrationTests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="CPR.IntegrationTests.MeControllerTests" name="SampleApiTest" />
+      <Execution id="aea62b55-682b-4506-a141-23403dee9848" />
+      <TestMethod codeBase="D:\projects\CPR\tests\CPR.IntegrationTests\bin\Release\net9.0\CPR.IntegrationTests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="CPR.IntegrationTests.GoalPersistenceTests" name="CanCreateAndReadGoal" />
     </UnitTest>
   </TestDefinitions>
   <TestEntries>
-    <TestEntry testId="fe1dd90f-597a-889d-a6df-6fac4049ab48" executionId="afdbd452-c621-4e86-9c4c-8d61e8222096" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
-    <TestEntry testId="fe1ed513-1250-e1d2-25f2-fcc8fda41b69" executionId="ac567e71-b581-462e-9884-7a99f72d60f4" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
-    <TestEntry testId="51b157e9-e068-e89d-0dd5-93fde292f37f" executionId="b416d187-d873-4a46-b04d-f142f8f6e44a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
-    <TestEntry testId="532ad4e5-578d-5d5e-389f-e29ae44a8370" executionId="facd023a-d5e9-4d29-abab-295616572ff9" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="4db065df-e165-6201-98ef-ce56445e3caf" executionId="b8e4b9c5-470b-4da0-b1e5-274116a1084c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="fe1dd90f-597a-889d-a6df-6fac4049ab48" executionId="64b9cc90-8faf-46c4-9d06-855e79a66e54" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="532ad4e5-578d-5d5e-389f-e29ae44a8370" executionId="aea62b55-682b-4506-a141-23403dee9848" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="fe1ed513-1250-e1d2-25f2-fcc8fda41b69" executionId="1748748c-be2e-47f4-830a-d45224428a7d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
   </TestEntries>
   <TestLists>
     <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
@@ -42,10 +42,26 @@
     <Counters total="4" executed="4" passed="4" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
     <Output>
       <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v2.5.3.1+6b60a9e56a (64-bit .NET 9.0.3)&#xD;
-[xUnit.net 00:00:00.05]   Discovering: CPR.IntegrationTests&#xD;
-[xUnit.net 00:00:00.08]   Discovered:  CPR.IntegrationTests&#xD;
-[xUnit.net 00:00:00.08]   Starting:    CPR.IntegrationTests&#xD;
-[xUnit.net 00:00:00.93]   Finished:    CPR.IntegrationTests&#xD;
+[xUnit.net 00:00:01.59]   Discovering: CPR.IntegrationTests&#xD;
+[xUnit.net 00:00:01.66]   Discovered:  CPR.IntegrationTests&#xD;
+[xUnit.net 00:00:01.67]   Starting:    CPR.IntegrationTests&#xD;
+info: Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager[63]&#xD;
+      User profile is available. Using 'C:\Users\vyach\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]&#xD;
+      Request starting HTTP/1.1 GET http://localhost/me - - -&#xD;
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]&#xD;
+      Executing endpoint 'CPR.Api.Controllers.MeController.Get (CPR.Api)'&#xD;
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[102]&#xD;
+      Route matched with {action = "Get", controller = "Me"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult Get() on controller CPR.Api.Controllers.MeController (CPR.Api).&#xD;
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor[1]&#xD;
+      Executing OkObjectResult, writing value of type 'CPR.Api.Models.UserProfile'.&#xD;
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[105]&#xD;
+      Executed action CPR.Api.Controllers.MeController.Get (CPR.Api) in 68.7666ms&#xD;
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]&#xD;
+      Executed endpoint 'CPR.Api.Controllers.MeController.Get (CPR.Api)'&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]&#xD;
+      Request finished HTTP/1.1 GET http://localhost/me - 200 233 application/json;+charset=utf-8 182.3980ms&#xD;
+[xUnit.net 00:00:03.74]   Finished:    CPR.IntegrationTests&#xD;
 </StdOut>
     </Output>
   </ResultSummary>
