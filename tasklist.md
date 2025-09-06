@@ -1,9 +1,9 @@
 # Tasklist — CPR
 
 Progress (update after each iteration)
-- Iteration: 1
+- Iteration: 2
 - Status: Complete
-- Notes: Iteration 1 completed — repo scaffold, CI, test projects, docker-compose, and initial migrations applied locally.
+- Notes: Iteration 2 completed — database & schema finalized: initial migration rewritten to produce snake_case audit columns, RenameAuditColumns migration removed, DbContext mappings updated, migrations applied to local Docker DB (`cpr`), and integration tests passed locally.
 
 Guidelines
 - Each iteration is incremental: implement, test, and deploy the listed items.
@@ -18,11 +18,18 @@ Iterations
     - README contains run/test instructions and Docker Compose usage.
   - Deployable: CI only (no runtime service). Include docker-compose.dev.yml with Postgres for local testing.
 
-- [ ] Iteration 2 — Database & schema
+ - [x] Iteration 2 — Database & schema
   - Goal: Add PostgreSQL connection, create core tables (users, employees, goals) and migrations.
   - Acceptance criteria / tests:
     - Migrations apply successfully in a local dev DB.
     - Integration test covers creating a user and a goal via DB layer.
+  - Status: Complete
+  - Notes / verification:
+    - Initial and subsequent migrations updated to emit final snake_case audit columns (created_by, created_at, etc.).
+    - Removed `RenameAuditColumns` migration files and cleaned project files.
+    - Updated `CprDbContext` property-to-column mappings to match migrations.
+    - Applied migrations to local Docker Postgres (container `cpr` / `cpr_db_1`) and confirmed tables exist with correct column names.
+    - Ran integration tests against the local DB: 4/4 tests passed.
   - Deployable: Database migrations applied in staging.
 
 - [ ] Iteration 3 — Authentication & users API
