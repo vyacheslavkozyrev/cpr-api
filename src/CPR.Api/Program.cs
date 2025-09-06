@@ -13,6 +13,15 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add minimal services
 builder.Services.AddControllers();
+
+// Register stub authentication scheme (reads signing key from env var JWT_SIGNING_KEY)
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = "Stub";
+    options.DefaultChallengeScheme = "Stub";
+}).AddScheme<Microsoft.AspNetCore.Authentication.AuthenticationSchemeOptions, CPR.Api.Auth.JwtStubAuthenticationHandler>("Stub", options => { });
+
+builder.Services.AddAuthorization();
 // Register Swagger/OpenAPI
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
