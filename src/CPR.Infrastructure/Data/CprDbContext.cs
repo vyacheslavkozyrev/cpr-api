@@ -25,8 +25,8 @@ namespace CPR.Infrastructure.Data
                 b.Property(u => u.PasswordHash).HasColumnName("password_hash").IsRequired();
                 b.Property(u => u.DisplayName).HasColumnName("display_name");
 
-                b.Property(u => u.CreatedBy).HasColumnName("create_by");
-                b.Property(u => u.CreatedAt).HasColumnName("create_at").HasDefaultValueSql("now()");
+                b.Property(u => u.CreatedBy).HasColumnName("created_by");
+                b.Property(u => u.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("now()");
                 b.Property(u => u.ModifiedBy).HasColumnName("modified_by");
                 b.Property(u => u.ModifiedAt).HasColumnName("modified_at");
                 b.Property(u => u.IsDeleted).HasColumnName("is_deleted");
@@ -54,8 +54,8 @@ namespace CPR.Infrastructure.Data
                 b.Property(e => e.Title).HasColumnName("title");
                 b.Property(e => e.Department).HasColumnName("department");
 
-                b.Property(e => e.CreatedBy).HasColumnName("create_by");
-                b.Property(e => e.CreatedAt).HasColumnName("create_at").HasDefaultValueSql("now()");
+                b.Property(e => e.CreatedBy).HasColumnName("created_by");
+                b.Property(e => e.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("now()");
                 b.Property(e => e.ModifiedBy).HasColumnName("modified_by");
                 b.Property(e => e.ModifiedAt).HasColumnName("modified_at");
                 b.Property(e => e.IsDeleted).HasColumnName("is_deleted");
@@ -84,8 +84,8 @@ namespace CPR.Infrastructure.Data
                 b.Property(g => g.Description).HasColumnName("description");
                 b.Property(g => g.Status).HasColumnName("status").HasDefaultValue("open");
 
-                b.Property(g => g.CreatedBy).HasColumnName("create_by");
-                b.Property(g => g.CreatedAt).HasColumnName("create_at").HasDefaultValueSql("now()");
+                b.Property(g => g.CreatedBy).HasColumnName("created_by");
+                b.Property(g => g.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("now()");
                 b.Property(g => g.ModifiedBy).HasColumnName("modified_by");
                 b.Property(g => g.ModifiedAt).HasColumnName("modified_at");
                 b.Property(g => g.IsDeleted).HasColumnName("is_deleted");

@@ -20,7 +20,7 @@ namespace CPR.Infrastructure.src.CPR.Infrastructure.Migrations
                     manager_id = table.Column<Guid>(type: "uuid", nullable: true),
                     title = table.Column<string>(type: "text", nullable: true),
                     department = table.Column<string>(type: "text", nullable: true),
-                    create_by = table.Column<Guid>(type: "uuid", nullable: true),
+                    created_by = table.Column<Guid>(type: "uuid", nullable: true),
                     created_at = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "now()"),
                     modified_by = table.Column<Guid>(type: "uuid", nullable: true),
                     modified_at = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
@@ -35,7 +35,7 @@ namespace CPR.Infrastructure.src.CPR.Infrastructure.Migrations
 
             migrationBuilder.InsertData(
                 table: "employees",
-                columns: new[] { "id", "created_at", "create_by", "deleted_at", "deleted_by", "department", "is_deleted", "manager_id", "modified_at", "modified_by", "title", "user_id" },
+                columns: new[] { "id", "created_at", "created_by", "deleted_at", "deleted_by", "department", "is_deleted", "manager_id", "modified_at", "modified_by", "title", "user_id" },
                 values: new object[] { new Guid("33333333-3333-3333-3333-333333333333"), new DateTimeOffset(new DateTime(2025, 9, 5, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), null, null, null, "Engineering", false, null, null, null, "Senior Software Engineer", new Guid("11111111-1111-1111-1111-111111111111") });
         }
 
