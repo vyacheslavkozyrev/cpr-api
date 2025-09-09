@@ -48,6 +48,27 @@ Iterations
     - Migrations scaffolded and applied successfully in a local dev DB.
     - Basic seed data present for core entities to exercise integration tests later.
   - Deployable: migrations ready for staging.
+ - [ ] Iteration 4 — EF Core: Entity tables (all entity tables)
+  - Goal: Implement all entity tables from `data.md` in EF Core and migrations. This iteration will create the canonical domain tables (not junction tables):
+    - users, employees, audit_logs, career_paths, career_tracks, positions, skill_categories, skills, skill_levels, departments, locations, projects, project_roles, goals, goal_tasks, feedback, feedback_requests
+  - Acceptance criteria / tests:
+    - One or more EF Core migrations added that create the listed tables with snake_case column names and constraints.
+    - `dotnet ef database update` succeeds against the local Docker dev DB (docker-compose.dev.yml) without manual SQL edits.
+    - Minimal seed data inserted (example: admin user, one employee, one goal, a couple of skills) so integration tests can run against real rows.
+    - Unit tests for repository/service layer (happy path) for at least `users`, `employees`, and `goals`.
+    - Integration tests that: create a user -> create an employee -> create a goal -> read goals for the employee.
+  - Implementation notes / plan:
+    1. Add domain entity classes under `CPR.Domain/Entities` for each table above.
+    2. Add `DbSet<>` properties and Fluent API mapping in `CprDbContext` (snake_case naming and audit columns) in `CPR.Infrastructure`.
+    3. Scaffold and review EF migration(s) (e.g., `AddEntities_v1`). Keep migrations small and readable.
+    4. Add a dev-only seeder (executed at startup in Development) to insert minimal seed rows for tests.
+    5. Add repository and service methods for basic CRUD for `users`, `employees`, and `goals` and unit tests.
+    6. Add integration tests (use Docker Postgres from `docker-compose.dev.yml`) that run migrations, seed, and exercise the API paths.
+    7. Update CI to run migrations and tests against a disposable Postgres instance (service container or testcontainers).
+  - Risk & mitigation:
+    - Risk: Schema drift or long migrations. Mitigation: keep migration steps incremental and test locally against the Docker DB before pushing.
+    - Risk: Flaky integration tests due to shared DB. Mitigation: use a fresh database per CI job or clear state between tests.
+  - Deployable: Full schema for core entities ready for staging; relation/junction tables (e.g., `employee_to_skill`, `position_to_skill`, `project_teams`) can be added in Iteration 5 if needed.
 
  - [ ] Iteration 5 — EF Core: Relation tables
   - Goal: Implement relation and join tables in EF Core and migrations: `employee_to_skill`, `goal_tasks` (or `tasks`), `feedback_requests`, `feedback` and any necessary junction tables.
