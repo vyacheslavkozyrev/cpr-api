@@ -1,9 +1,9 @@
 # Tasklist — CPR
 
 Progress (update after each iteration)
-- Iteration: 3
+- Iteration: 4
 - Status: Complete
-- Notes: Iteration 3 completed — development-only HMAC JWT stub authentication implemented and wired; `TokenGenerator` helper added; `/me` endpoint protected and returning `UserProfile`; unit and integration tests added (including an end-to-end smoke test); token generation scripts and README documentation added; CI workflow updated to provide `JWT_SIGNING_KEY` for tests; obsolete `src/CPR.Api.Tests` project removed.
+- Notes: Iteration 4 completed (2025-09-10) — EF Core domain entities added, audit base class and snake_case column mappings implemented; seeds and consolidated migration applied; dev DB recreated and integration tests executed. Changes pushed to `develop` and merged into `main`.
 
 Guidelines
 - Each iteration is incremental: implement, test, and deploy the listed items.
@@ -42,21 +42,25 @@ Iterations
   - Notes: Auth middleware, token generator, protected `/me` endpoint, tests, scripts, and CI guard implemented. Endpoints implemented as minimal protected surface (e.g., `/me`) for verification.
   - Deployable: Auth middleware and test token generator available for local and CI runs.
 
- - [ ] Iteration 4 — EF Core: Entity tables (core domain entities)
+ - [x] Iteration 4 — EF Core: Entity tables (core domain entities)
   - Goal: Implement the core entity tables in EF Core and migrations: `users`, `employees`, `goals`, `skills` (core domain entities).
+  - Status: Complete (2025-09-10)
   - Acceptance criteria / tests:
     - Migrations scaffolded and applied successfully in a local dev DB.
     - Basic seed data present for core entities to exercise integration tests later.
+  - Notes: Seed data inserted; integration tests executed against dev DB.
   - Deployable: migrations ready for staging.
- - [ ] Iteration 4 — EF Core: Entity tables (all entity tables)
+ - [x] Iteration 4 — EF Core: Entity tables (all entity tables)
   - Goal: Implement all entity tables from `data.md` in EF Core and migrations. This iteration will create the canonical domain tables (not junction tables):
     - users, employees, audit_logs, career_paths, career_tracks, positions, skill_categories, skills, skill_levels, departments, locations, projects, project_roles, goals, goal_tasks, feedback, feedback_requests
+  - Status: Complete (2025-09-10)
   - Acceptance criteria / tests:
     - One or more EF Core migrations added that create the listed tables with snake_case column names and constraints.
     - `dotnet ef database update` succeeds against the local Docker dev DB (docker-compose.dev.yml) without manual SQL edits.
     - Minimal seed data inserted (example: admin user, one employee, one goal, a couple of skills) so integration tests can run against real rows.
     - Unit tests for repository/service layer (happy path) for at least `users`, `employees`, and `goals`.
     - Integration tests that: create a user -> create an employee -> create a goal -> read goals for the employee.
+  - Notes: Consolidated migration scaffolded and applied; dev DB dropped and recreated to apply new schema; integration tests passed. Work merged to `main`.
   - Implementation notes / plan:
     1. Add domain entity classes under `CPR.Domain/Entities` for each table above.
     2. Add `DbSet<>` properties and Fluent API mapping in `CprDbContext` (snake_case naming and audit columns) in `CPR.Infrastructure`.
