@@ -1,159 +1,193 @@
-# API Endpoints — CPR
+# API Endpoints — CPR (persona-grouped)
 
-## Persona: Jane Smith — Senior Software Engineer
-- Roles: employee, project_member
-- Goals: set/track goals, request/collect feedback, update profile, contribute to projects, self-assess skills
-
-Endpoints
-
-Common query params used in many endpoints:
-- ?period=week|month|quarter|year (timeframe selection for timelines and reports)
-- ?status=not_started|in_progress|achieved|archived
+Common query params (used across endpoints):
 - pagination: ?page=1&per_page=20
+- filters: ?status=&department=&manager_id=&owner_id=
+- period: ?period=week|month|quarter|year
 
-# Contributor (Jane Smith) endpoints — goal & feedback focused
-- GET /me
-  - Return authenticated user's profile, current projects, active goals and recent feedback summary.
-  - Query params: ?include=projects,goals,feedback_summary
+## Personas
+- Employee (self)
+- Manager (team lead)
+- HR / Admin
+- Director
+- System / Integration (service)
 
-- GET /me/goals
-  - List user's goals with progress, tasks, related skill links and selected timeframe.
-  - Query params: ?status=active|completed|archived&period=month
-  - Response: paginated list of goal objects including progress_percent and timeframe summary
+---
 
-- POST /goals
-  - Create a personal or project-linked development goal. Accepts optional timeframe and related_skill_id.
-  - Body example:
-    { "title": "Improve API test coverage", "description": "Add integration tests for service X", "related_skill_id": "<skill_uuid>", "deadline": "2025-12-31", "project_id": "<project_uuid>", "timeframe": "quarter" }
-  - Response: 201 Created + created goal
+## Employee (self)
+Profile / Users
+- GET /me — return current user's profile (auth)
+- PATCH /me — update own profile (auth)
 
-- PATCH /goals/{id}
-  - Update goal fields (progress, description, deadline, timeframe). Partial updates allowed.
-  - Roles: owner, manager (where allowed)
+Employees
+- GET /me/employee — employee record for signed-in user
+- GET /employees/{id} — read employee (manager/admin)
+- GET /employees?department=&manager_id=&page=&size= — list / filters (manager/admin)
 
-- DELETE /goals/{id}
-  - Remove a goal (soft-delete). Managers may confirm deletion for direct reports.
-  - Response: 204 No Content
+Goals
+- POST /goals — create goal (auth)
+- GET /me/goals — list my goals (auth) (filters: status, page, sort)
+- GET /goals/{id} — read goal (owner/manager/admin)
+- PATCH /goals/{id} — update goal (owner)
+- DELETE /goals/{id} — soft-delete goal (owner/admin)
+- POST /goals/{id}/tasks — add task to goal
 
-- POST /goals/{id}/archive
-  - Archive a completed goal (moves to user's archive).
-  - Response: 200 OK
+### Contracts & purposes (Goals)
 
-- GET /goals/archive
-  - List archived goals for the authenticated user.
-  - Query params: ?page=1&per_page=20
+POST /goals
+- Purpose: create a new goal owned by the authenticated user.
+- Request (JSON):
+  - {
+  -   "title": "string (required, 1..250)",
+  -   "description": "string (optional)",
+  -   "deadline": "ISO8601 datetime (optional)",
+  -   "related_skill_id": "GUID (optional)"
+  - }
+- Response 201 (JSON):
+  - {
+  -   "id": "GUID",
+  -   "ownerId": "GUID",
+  -   "title": "string",
+  -   "description": "string|null",
+  -   "status": "open",
+  -   "createdAt": "ISO8601",
+  -   "createdBy": "GUID"
+  - }
+- Errors: 400 validation, 401 unauthorized.
 
-- GET /goals/{id}/progress
-  - Return detailed progress (tasks, completed steps, percent complete, timeline points).
-  - Response: progress object with task list and calculated progress_percent
+GET /me/goals
+- Purpose: return paged list of goals for the authenticated user.
+- Query params: ?status=&page=&per_page=
+- Response 200 (JSON):
+  - {
+  -   "items": [{ "id":"GUID","title":"string","status":"string","createdAt":"ISO8601" }],
+  -   "total": 123,
+  -   "page": 1,
+  -   "per_page": 20
+  - }
 
-- POST /goals/{id}/tasks
-  - Add a task under a goal (actionable step).
-  - Body: { "title": "Add tests for endpoint Y", "deadline": "2025-10-01" }
+GET /goals/{id}
+- Purpose: read a single goal with tasks and metadata. Access: owner, manager, admin.
+- Response 200 (JSON):
+  - {
+  -   "id": "GUID",
+  -   "ownerId": "GUID",
+  -   "title": "string",
+  -   "description": "string|null",
+  -   "status": "open|in_progress|completed",
+  -   "tasks": [{ "id":"GUID","title":"string","isCompleted":false }],
+  -   "createdAt": "ISO8601",
+  -   "updatedAt": "ISO8601"
+  - }
+- Errors: 401, 403, 404.
 
-- GET /skills
-  - Read-only taxonomy for skills and levels; used when creating goals or self-assessing.
+PATCH /goals/{id}
+- Purpose: partial update (owner or manager). Accepts fields to change.
+- Request (JSON): { "title": "string?", "description": "string?", "status": "open|in_progress|completed" }
+- Response 200: updated Goal object (same shape as GET).
+- Errors: 400, 401, 403, 404.
 
-- POST /employee_to_skill
-  - Submit a self-assessment entry for a skill (source='self').
-  - Body example: { "employee_id": "<uuid>", "skill_id": "<skill_uuid>", "skill_level_id": "<level_uuid>", "persist_value": 3.5, "source": "self", "effective_date": "2025-09-01", "is_target": false }
+DELETE /goals/{id}
+- Purpose: soft-delete or archive a goal (owner/admin). Implementation should mark as deleted or archived.
+- Response: 204 No Content.
+- Errors: 401, 403, 404.
 
-- POST /goals/suggest
-  - Suggest SMART goal(s) for a user based on current skill gaps, availability and history.
-  - Body: { "employee_id": "<uuid>", "skill_id": "<skill_uuid>", "availability": { "hours_per_week": 5 }, "target_timeframe": "quarter" }
-  - Response: list of suggested goal drafts (title, description, suggested_deadline)
+POST /goals/{id}/tasks
+- Purpose: add a task under a goal (owner or manager).
+- Request (JSON):
+  - { "title": "string (required)", "description": "string?", "deadline": "ISO8601?" }
+- Response 201 (JSON): task object:
+  - { "id":"GUID", "goalId":"GUID", "title":"string", "deadline":"ISO8601?", "isCompleted": false, "createdAt":"ISO8601" }
+- Errors: 400, 401, 403, 404.
 
-- POST /goals/{id}/plan
-  - Request an automated improvement plan (step list) for a specific goal.
-  - Response: step-by-step plan with suggested tasks and estimated time per step
+### Minimal DTO names (suggested, C#)
+- CreateGoalDto { string Title; string? Description; DateTimeOffset? Deadline; Guid? RelatedSkillId }
+- GoalDto { Guid Id; Guid OwnerId; string Title; string? Description; string Status; DateTimeOffset CreatedAt; DateTimeOffset? UpdatedAt; List<TaskDto> Tasks }
+- CreateGoalTaskDto { string Title; string? Description; DateTimeOffset? Deadline }
+- TaskDto { Guid Id; Guid GoalId; string Title; string? Description; DateTimeOffset? Deadline; bool IsCompleted; DateTimeOffset? CompletedAt }
 
-- POST /feedback/request
-  - Request feedback from project team or specific employees (creates feedback_request records and triggers notifications).
-  - Body example:
-    { "goal_id": "<goal_uuid>", "project_id": "<project_uuid>", "to_employee_ids": ["<employee_uuid>"], "message": "Would you review my recent PR and give feedback on design and tests?", "due_date": "2025-10-01" }
-  - Response: 200 OK + list of created feedback_request records
+Authentication & authorization notes
+- OwnerId should be sourced from the authenticated user's subject claim.
+- RBAC: owner & manager & admin roles map to update/delete privileges. Read allowed to owner/manager/admin and any project-member if goal is project-linked.
 
-- POST /feedback
-  - Submit feedback about a peer's work (can be tied to a goal or project).
-  - Body example:
-    { "goal_id": "<goal_uuid>", "project_id": "<project_uuid>", "from_employee_id": "<employee_uuid>", "to_employee_id": "<employee_uuid>", "content": "Great design and thorough tests.", "rating": 4, "visibility": "team" }
-  - Response: 201 Created + feedback record
+Validation highlights
+- Title required (1..250 characters).
+- Description length limit (e.g., 2000 chars).
+- Deadline optional; policy: allow future dates (or accept backdated if domain requires).
 
-- GET /feedback/me
-  - List feedback received by the authenticated user, aggregated by goal or timeframe.
+Skills / Self-assessment
+- GET /skills — list skills and taxonomy
+- GET /skill_levels?skill_id=
+- GET /me/skills
+- POST /me/skills — submit self-assessment
 
-- GET /feedback/reports
-  - Return aggregated feedback reports for the requesting user (e.g., contributions toward goals)
-  - Query params: ?period=90d
+Projects & Teams
+- GET /projects
+- GET /projects/{id}
+- GET /projects/{id}/team
 
-# People leader / Manager (Peter Morrison) endpoints — oversight & reviews
-- GET /team
-  - Return manager's team roster, open goals, and high-level feedback summary.
-  - Query params: ?include=members,goals,feedback_summary
+Feedback
+- POST /feedback/request — request feedback from people
+- POST /feedback — submit feedback
+- GET /feedback/me — feedback received by me
 
-- GET /team/members/{employee_id}
-  - Get profile, active goals, recent feedback and project assignments for a team member.
+---
 
-- GET /team/goals
-  - List goals owned by direct reports with progress and overdue flags.
-  - Query params: ?status=active|completed&overdue=true
+## Manager
+Team & Reports
+- GET /team — list direct reports
+- GET /team/members/{employee_id} — profile + goals + feedback
+- GET /team/goals?status=&overdue=
 
-- POST /goals (manager-as-owner)
-  - Create or assign development goals for direct reports.
-  - Body example: { "title": "Improve code review quality", "employee_id": "<employee_uuid>", "related_skill_id": "<skill_uuid>", "deadline": "2025-12-31" }
-
-- POST /feedback/request
-  - Request feedback on behalf of a direct report (creates feedback_request records).
-  - Body example:
-    { "employee_id": "<employee_uuid>", "goal_id": "<goal_uuid>", "project_id": "<project_uuid>", "to_employee_ids": ["<employee_uuid>"], "message": "Please provide feedback on Alex's recent design work.", "due_date": "2025-10-01" }
-
-- GET /feedback (manager view)
-  - Retrieve feedback for a specific team member (respecting visibility and policy).
-  - Query params: ?employee_id={id}&from_project={id}&since={date}
-
-- POST /performance_reviews
-  - Create a performance review record for a team member (cycle-based); attach goals and feedback.
-  - Body example: { "employee_id": "<employee_uuid>", "cycle": "2025-Q3", "ratings": { "communication": 4, "delivery": 3 }, "summary": "Mid-year review notes." }
-
+Approvals & Reviews
+- GET /reviews/pending
+- POST /performance_reviews — create review for team member
 - GET /performance_reviews/{employee_id}
-  - List past performance reviews for a team member.
 
-- GET /reports/feedback-summary
-  - Aggregated feedback metrics across the manager's team (ratings distribution, frequent tags).
-  - Query params: ?period=90d
+Feedback moderation
+- GET /team/feedback — feedback for team (visibility rules apply)
 
-# Director endpoints — promotions & approvals
-- GET /promotions
-  - List promotion requests ready for director review (with linked performance reviews and feedback).
+---
 
+## HR / Admin
+Users & Employees
+- GET /users; POST /users; PATCH /users/{id}; DELETE /users/{id}
+- GET /employees; POST /employees; PATCH /employees/{id}; DELETE /employees/{id}
+
+Positions & Career
+- CRUD /positions, /career_tracks, /career_paths
+- GET /positions/{id}/skills
+
+Skills taxonomy
+- CRUD /skills, /skill_levels, /skill_categories
+- POST /position_to_skill — map position → skill
+
+Audit & housekeeping
+- GET /audit_logs?entity_type=&entity_id=&from=&to=
+- POST /seeds/run (dev-only)
+
+---
+
+## Director
+- GET /promotions — list promotion requests
 - GET /promotions/{id}
-  - View promotion request details including performance review and aggregated feedback.
-
 - POST /promotions/{id}/approve
-  - Approve a promotion request (director action).
-  - Body: { "approved_by": "<employee_uuid>", "comments": "Approved for next level" }
-
 - POST /promotions/{id}/decline
-  - Decline a promotion request with comments.
-  - Body: { "declined_by": "<employee_uuid>", "comments": "Not enough impact evidence" }
+- GET /reports/skills-gap
 
-# Career path / taxonomy endpoints
-- GET /career_paths
-  - List available career paths
+---
 
-- GET /career_paths/{id}/tracks
-  - List tracks within a path
+## System / Integration
+- POST /internal/import/users
+- POST /internal/import/skills
+- POST /webhook/feedback
+- POST /jobs/retention/run
 
-- GET /tracks/{id}/titles
-  - List titles within a track
+---
 
-- GET /positions/{id}
-  - Get position details with requirements, expectations and skills criteria
-
-# Admin / reporting endpoints
-- GET /reports/performance-overview
-  - Organization-level performance overview (directors / HR)
-
-- GET /analytics/skills-gap
-  - Aggregated skills-gap analysis across org or team (supports filters)
+## Cross-cutting
+- GET /health, GET /ready, GET /metrics
+- Pagination and filter conventions: page, per_page, sort, q
+- Soft-delete: default filter is_deleted=false (use include_deleted=true to override)
+- Auth: role claims (admin|manager|director) + resource-owner checks
 

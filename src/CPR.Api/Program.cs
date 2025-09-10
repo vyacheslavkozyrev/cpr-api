@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Hellang.Middleware.ProblemDetails;
 using CPR.Infrastructure.Data;
 using System;
 using System.IO;
@@ -27,6 +28,7 @@ builder.Services.AddAuthorization();
 // Register app services
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<CPR.Api.Services.IUserService, CPR.Api.Services.UserService>();
+builder.Services.AddScoped<CPR.Application.Services.IGoalService, CPR.Api.Services.GoalService>();
 // Register Swagger/OpenAPI
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
@@ -87,6 +89,26 @@ builder.Services.AddDbContext<CprDbContext>(options =>
     options.UseNpgsql(connectionString)
 );
 
+// Configure ProblemDetails (Hellang middleware) - register before building the app
+builder.Services.AddProblemDetails(options =>
+{
+    // Map ArgumentNullException to 400
+    options.Map<ArgumentNullException>(ex => new Microsoft.AspNetCore.Mvc.ProblemDetails
+    {
+        Title = "Missing required value",
+        Detail = ex.Message,
+        Status = StatusCodes.Status400BadRequest
+    });
+
+    // Map ArgumentOutOfRangeException to 400
+    options.Map<ArgumentOutOfRangeException>(ex => new Microsoft.AspNetCore.Mvc.ProblemDetails
+    {
+        Title = "Invalid argument",
+        Detail = ex.Message,
+        Status = StatusCodes.Status400BadRequest
+    });
+});
+
 var app = builder.Build();
 
 // Enable Swagger UI in development
@@ -95,6 +117,15 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "CPR API v1"));
 }
+
+// Use the ProblemDetails middleware so exceptions are mapped to RFC7807 responses
+app.UseProblemDetails();
+
+// Test-only endpoints for integration tests that intentionally throw so ProblemDetails
+// middleware can be validated. Using MapGet ensures the TestHost routing matches
+// the paths reliably.
+app.MapGet("/__test/throw/argnull", (Microsoft.AspNetCore.Http.HttpContext _) => throw new ArgumentNullException("dto"));
+app.MapGet("/__test/throw/argout", (Microsoft.AspNetCore.Http.HttpContext _) => throw new ArgumentOutOfRangeException("page"));
 
 app.MapGet("/", () => Results.Ok(new { message = "CPR API - running" }));
 app.MapControllers();

@@ -87,7 +87,8 @@ jobs:
     runs-on: ubuntu-latest
     needs: test
     env:
-      DB_NAME: cpr_test_${{ github.run_id }}
+      # Make DB name unique per workflow run and per job to avoid collisions
+      DB_NAME: cpr_test_${{ github.run_id }}_${{ github.job }}
       JWT_SIGNING_KEY: ${{ secrets.JWT_SIGNING_KEY }}
     services:
       postgres:
@@ -128,7 +129,8 @@ jobs:
           PGPASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
         run: |
           if [ -z "${DB_NAME}" ]; then echo "DB_NAME is empty"; exit 1; fi
-          psql -h localhost -U ${{ secrets.POSTGRES_USER }} -c "CREATE DATABASE \"${DB_NAME}\";"
+          # Connect to the postgres maintenance DB to create the per-run database
+          psql -h localhost -U ${{ secrets.POSTGRES_USER }} -d postgres -c "CREATE DATABASE \"${DB_NAME}\";"
 
       - name: Apply EF migrations
         run: |
@@ -157,6 +159,7 @@ jobs:
           PGPASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
         run: |
           set +e
+          # Terminate any connections to the per-run database, then drop it
           psql -h localhost -U ${{ secrets.POSTGRES_USER }} -d postgres -c "SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname='${DB_NAME}' AND pid<>pg_backend_pid();"
           psql -h localhost -U ${{ secrets.POSTGRES_USER }} -d postgres -c "DROP DATABASE IF EXISTS \"${DB_NAME}\";"
           set -e

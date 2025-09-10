@@ -55,6 +55,34 @@ Write-Host "Token generated and copied to clipboard (length=$($token.Length))"
 Invoke-RestMethod -Uri http://localhost:5000/Me -Headers @{ Authorization = "Bearer $token" } -Method Get
 ```
 
+## Running integration tests locally with Postgres
+
+A minimal test Postgres instance is provided in `docker-compose.test.yml`.
+
+Start the database:
+
+```powershell
+docker-compose -f docker-compose.test.yml up -d
+```
+
+Set the `DATABASE_URL` environment variable for the test run (PowerShell):
+
+```powershell
+$env:DATABASE_URL = "Host=localhost;Port=5432;Database=cpr_test;Username=postgres;Password=postgres"
+```
+
+Run the integration tests:
+
+```powershell
+dotnet test tests/CPR.IntegrationTests/CPR.IntegrationTests.csproj
+```
+
+When finished, bring down the test database:
+
+```powershell
+docker-compose -f docker-compose.test.yml down
+```
+
 Notes
 - The stub signing key stored in the `JWT_SIGNING_KEY` environment variable is treated as a plain UTF-8 string (do not base64-decode it).
 - This auth stub is for local development and testing only. Do not use it in production.

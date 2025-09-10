@@ -6,7 +6,7 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.0" />
+  <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
   <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="8.0.0" />
   </ItemGroup>
@@ -15,6 +15,7 @@
     <ProjectReference Include="..\\CPR.Infrastructure\\CPR.Infrastructure.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.0" />
+  <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.0" />
+  <PackageReference Include="Hellang.Middleware.ProblemDetails" Version="6.4.0" />
   </ItemGroup>
 </Project>

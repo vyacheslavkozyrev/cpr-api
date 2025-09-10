@@ -16,7 +16,9 @@ namespace CPR.Api
         /// <returns>The modified service collection.</returns>
         public static IServiceCollection AddInfrastructure(this IServiceCollection services)
         {
-            // Placeholder for wiring Infrastructure (EF Core, repositories) later
+            // Register infrastructure services (repositories and EF-backed services)
+            services.AddScoped<CPR.Infrastructure.Repositories.GoalsRepository>();
+            services.AddScoped<CPR.Application.Services.IGoalService, CPR.Infrastructure.Services.GoalService>();
             return services;
         }
     }

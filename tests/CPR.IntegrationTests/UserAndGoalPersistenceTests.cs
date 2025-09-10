@@ -8,22 +8,25 @@ using Xunit;
 
 namespace CPR.IntegrationTests
 {
-    public class UserAndGoalPersistenceTests
+    public class UserAndGoalPersistenceTests : IClassFixture<CPR.IntegrationTests.Fixtures.PostgresTransactionalFixture>
     {
+        private readonly CPR.IntegrationTests.Fixtures.PostgresTransactionalFixture _fixture;
+
+        public UserAndGoalPersistenceTests(CPR.IntegrationTests.Fixtures.PostgresTransactionalFixture fixture)
+        {
+            _fixture = fixture;
+        }
+
         private CprDbContext CreateContext()
         {
-            var config = new ConfigurationBuilder()
-                .AddJsonFile("appsettings.test.json", optional: true)
-                .AddEnvironmentVariables()
-                .Build();
-
-            var conn = config.GetConnectionString("Default") ?? Environment.GetEnvironmentVariable("DATABASE_URL") ?? "Host=localhost;Port=5432;Database=cpr_dev;Username=postgres;Password=postgres";
-
             var options = new DbContextOptionsBuilder<CprDbContext>()
-                .UseNpgsql(conn)
+                .UseNpgsql(_fixture.Connection)
                 .Options;
 
-            return new CprDbContext(options);
+            var ctx = new CprDbContext(options);
+            // enlist EF Core context in the open transaction
+            ctx.Database.UseTransaction(_fixture.Transaction);
+            return ctx;
         }
 
         [Fact]
@@ -34,7 +37,7 @@ namespace CPR.IntegrationTests
             var user = new User
             {
                 Id = Guid.NewGuid(),
-                UserName = "integration.user",
+                UserName = "integration.user." + Guid.NewGuid().ToString("N"),
                 PasswordHash = "x",
                 DisplayName = "Integration User",
                 CreatedAt = DateTimeOffset.UtcNow
