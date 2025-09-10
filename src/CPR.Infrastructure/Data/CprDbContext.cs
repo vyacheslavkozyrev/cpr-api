@@ -25,6 +25,9 @@ namespace CPR.Infrastructure.Data
         public DbSet<GoalTask> GoalTasks { get; set; }
         public DbSet<Feedback> Feedback { get; set; }
         public DbSet<FeedbackRequest> FeedbackRequests { get; set; }
+        public DbSet<EmployeeToSkill> EmployeeSkills { get; set; }
+        public DbSet<PositionToSkill> PositionToSkills { get; set; }
+        public DbSet<ProjectTeam> ProjectTeams { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -528,6 +531,64 @@ namespace CPR.Infrastructure.Data
                 b.Property(fr => fr.IsDeleted).HasColumnName("is_deleted");
                 b.Property(fr => fr.DeletedBy).HasColumnName("deleted_by");
                 b.Property(fr => fr.DeletedAt).HasColumnName("deleted_at");
+            });
+
+            modelBuilder.Entity<EmployeeToSkill>(b =>
+            {
+                b.ToTable("employee_to_skill");
+                b.HasKey(es => es.Id);
+                b.Property(es => es.Id).HasColumnName("id");
+                b.Property(es => es.EmployeeId).HasColumnName("employee_id").IsRequired();
+                b.Property(es => es.SkillId).HasColumnName("skill_id").IsRequired();
+                b.Property(es => es.SkillLevelId).HasColumnName("skill_level_id");
+                b.Property(es => es.PersistValue).HasColumnName("persist_value");
+                b.Property(es => es.Source).HasColumnName("source");
+                b.Property(es => es.EffectiveDate).HasColumnName("effective_date");
+                b.Property(es => es.IsTarget).HasColumnName("is_target");
+                b.Property(es => es.CreatedBy).HasColumnName("created_by");
+                b.Property(es => es.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("now()");
+                b.Property(es => es.ModifiedBy).HasColumnName("modified_by");
+                b.Property(es => es.ModifiedAt).HasColumnName("modified_at");
+                b.Property(es => es.IsDeleted).HasColumnName("is_deleted");
+                b.Property(es => es.DeletedBy).HasColumnName("deleted_by");
+                b.Property(es => es.DeletedAt).HasColumnName("deleted_at");
+            });
+
+            modelBuilder.Entity<PositionToSkill>(b =>
+            {
+                b.ToTable("position_to_skill");
+                b.HasKey(p => p.Id);
+                b.Property(p => p.Id).HasColumnName("id");
+                b.Property(p => p.PositionId).HasColumnName("position_id").IsRequired();
+                b.Property(p => p.SkillId).HasColumnName("skill_id").IsRequired();
+                b.Property(p => p.SkillLevelId).HasColumnName("skill_level_id").IsRequired();
+                b.Property(p => p.Weight).HasColumnName("weight");
+                b.Property(p => p.IsMandatory).HasColumnName("is_mandatory");
+                b.Property(p => p.Rationale).HasColumnName("rationale");
+                b.Property(p => p.CreatedBy).HasColumnName("created_by");
+                b.Property(p => p.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("now()");
+                b.Property(p => p.ModifiedBy).HasColumnName("modified_by");
+                b.Property(p => p.ModifiedAt).HasColumnName("modified_at");
+                b.Property(p => p.IsDeleted).HasColumnName("is_deleted");
+                b.Property(p => p.DeletedBy).HasColumnName("deleted_by");
+                b.Property(p => p.DeletedAt).HasColumnName("deleted_at");
+            });
+
+            modelBuilder.Entity<ProjectTeam>(b =>
+            {
+                b.ToTable("project_teams");
+                b.HasKey(pt => pt.Id);
+                b.Property(pt => pt.Id).HasColumnName("id");
+                b.Property(pt => pt.ProjectId).HasColumnName("project_id").IsRequired();
+                b.Property(pt => pt.ProjectRoleId).HasColumnName("project_role_id").IsRequired();
+                b.Property(pt => pt.EmployeeId).HasColumnName("employee_id").IsRequired();
+                b.Property(pt => pt.CreatedBy).HasColumnName("created_by");
+                b.Property(pt => pt.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("now()");
+                b.Property(pt => pt.ModifiedBy).HasColumnName("modified_by");
+                b.Property(pt => pt.ModifiedAt).HasColumnName("modified_at");
+                b.Property(pt => pt.IsDeleted).HasColumnName("is_deleted");
+                b.Property(pt => pt.DeletedBy).HasColumnName("deleted_by");
+                b.Property(pt => pt.DeletedAt).HasColumnName("deleted_at");
             });
         }
     }
