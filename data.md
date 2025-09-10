@@ -12,7 +12,7 @@ Conventions
 
 ## TABLES
 
-### users
+### users - DONE
 - Purpose: Stores application user accounts and authentication details; referenced by audit and created_by/modified_by fields across the schema.
 - id uuid PRIMARY KEY
 - user_name text NOT NULL UNIQUE
@@ -32,7 +32,7 @@ Conventions
 
 Indexes: functional index on lower(user_name), index on (email)
 
-### employees
+### employees - DONE
 - Purpose: Represents people in the organization (profile and org links). Connects to `users` for login and to departments/positions for org data.
 - id uuid PRIMARY KEY
 - first_name text NOT NULL
@@ -70,7 +70,7 @@ Indexes: functional index on lower(user_name), index on (email)
 - deleted_by uuid NULL REFERENCES users(id)
 - deleted_at timestamptz NULL
 
-### audit_logs
+### audit_logs - DONE
 - Purpose: Append-only audit trail for key write actions, moderation and system events.
 - id uuid PRIMARY KEY
 - actor_id uuid NULL REFERENCES users(id)
@@ -86,7 +86,7 @@ Indexes: functional index on lower(user_name), index on (email)
 - deleted_by uuid NULL REFERENCES users(id)
 - deleted_at timestamptz NULL
 
-### career_paths
+### career_paths - DONE
 - Purpose: High-level career domains (e.g., Technology, Finance) used to group career tracks and roles.
 - id uuid PRIMARY KEY
 - title text NOT NULL
@@ -99,7 +99,7 @@ Indexes: functional index on lower(user_name), index on (email)
 - deleted_by uuid NULL REFERENCES users(id)
 - deleted_at timestamptz NULL
 
-### career_tracks
+### career_tracks - DONE
 - Purpose: Sub-domains within a career path that group related positions and progression ladders.
 - id uuid PRIMARY KEY
 - title text NOT NULL
@@ -113,7 +113,7 @@ Indexes: functional index on lower(user_name), index on (email)
 - deleted_by uuid NULL REFERENCES users(id)
 - deleted_at timestamptz NULL
 
-### positions
+### positions - DONE
 - Purpose: Canonical job/role definitions used for hiring, leveling and mapping to project roles.
 - id uuid PRIMARY KEY
 - title text NOT NULL
@@ -128,7 +128,7 @@ Indexes: functional index on lower(user_name), index on (email)
 - deleted_by uuid NULL REFERENCES users(id)
 - deleted_at timestamptz NULL
 
-### skill_categories
+### skill_categories - DONE
 - Purpose: Top-level grouping of skills (e.g., Leadership, Technical) to organize the skills taxonomy.
 - id uuid PRIMARY KEY
 - title text NOT NULL
@@ -141,7 +141,7 @@ Indexes: functional index on lower(user_name), index on (email)
 - deleted_by uuid NULL REFERENCES users(id)
 - deleted_at timestamptz NULL
 
-### skills
+### skills - DONE
 - Purpose: Individual skills or competencies tied to categories, used in assessments and goal linking.
 - id uuid PRIMARY KEY
 - title text NOT NULL
@@ -155,7 +155,7 @@ Indexes: functional index on lower(user_name), index on (email)
 - deleted_by uuid NULL REFERENCES users(id)
 - deleted_at timestamptz NULL
 
-### skill_levels
+### skill_levels - DONE
 - Purpose: Describes levels for a skill (e.g., Beginner..Expert) with numeric values for comparison.
 - id uuid PRIMARY KEY
 - title text NOT NULL
@@ -187,7 +187,7 @@ Indexes: functional index on lower(user_name), index on (email)
 - deleted_by uuid NULL REFERENCES users(id)
 - deleted_at timestamptz NULL
 
-### goals
+### goals - DONE
 - Purpose: Development or performance goals owned by employees, optionally linked to skills and projects.
 - id uuid PRIMARY KEY
 - title text NOT NULL
@@ -209,7 +209,7 @@ Indexes: functional index on lower(user_name), index on (email)
 - deleted_by uuid NULL REFERENCES users(id)
 - deleted_at timestamptz NULL
 
-### goal_tasks
+### goal_tasks - DONE
 - Purpose: Break down of a goal into actionable tasks with progress and completion tracking.
 - id uuid PRIMARY KEY
 - goal_id uuid NOT NULL REFERENCES goals(id) ON DELETE CASCADE
@@ -226,7 +226,7 @@ Indexes: functional index on lower(user_name), index on (email)
 - deleted_by uuid NULL REFERENCES users(id)
 - deleted_at timestamptz NULL
 
-### departments
+### departments - DONE
 - Purpose: Organizational departments for reporting lines, owner/manager assignment and grouping employees.
 - id uuid PRIMARY KEY
 - name text NOT NULL
@@ -242,7 +242,7 @@ Indexes: functional index on lower(user_name), index on (email)
 - deleted_by uuid NULL REFERENCES users(id)
 - deleted_at timestamptz NULL
 
-### locations
+### locations - DONE
 - Purpose: Physical or virtual workplace locations used for employee metadata and regional settings.
 - id uuid PRIMARY KEY
 - name text NOT NULL -- e.g., 'Headquarters', 'London Office', 'Remote'
@@ -261,7 +261,7 @@ Indexes: functional index on lower(user_name), index on (email)
 - deleted_by uuid NULL REFERENCES users(id)
 - deleted_at timestamptz NULL
 
-### projects
+### projects - DONE
 - Purpose: Tracks cross-functional initiatives; provides context for team membership and project-level feedback.
 - id uuid PRIMARY KEY
 - code text NOT NULL UNIQUE -- short project code (e.g., PRJ-123)
@@ -277,7 +277,7 @@ Indexes: functional index on lower(user_name), index on (email)
 - deleted_by uuid NULL REFERENCES users(id)
 - deleted_at timestamptz NULL
 
-### project_roles
+### project_roles - DONE
 - Purpose: Reusable project role definitions (e.g., Tech Lead, Product Manager) that map to positions.
 - id uuid PRIMARY KEY
 - title text NOT NULL
@@ -305,7 +305,7 @@ Indexes: functional index on lower(user_name), index on (email)
 - deleted_by uuid NULL REFERENCES users(id)
 - deleted_at timestamptz NULL
 
-### feedback
+### feedback - DONE
 - Purpose: Peer or manager feedback tied to a goal (and optionally project context) for performance reviews.
 - id uuid PRIMARY KEY
 - goal_id uuid NOT NULL REFERENCES goals(id) -- link to the goal this feedback is about
@@ -323,7 +323,7 @@ Indexes: functional index on lower(user_name), index on (email)
 - deleted_by uuid NULL REFERENCES users(id)
 - deleted_at timestamptz NULL
 
-### feedback_requests
+### feedback_requests - DONE
 - id uuid PRIMARY KEY
 - requestor_id uuid NOT NULL REFERENCES employees(id) -- employee who requested feedback
 - employee_id uuid NOT NULL REFERENCES employees(id) -- the subject of the requested feedback
