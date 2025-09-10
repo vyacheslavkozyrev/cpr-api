@@ -1,45 +1,63 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TestRun id="3cdbfc68-0d4c-443e-9451-0c43b9aeb1b7" name="vyach@VYACHESLAV-LAPT 2025-09-06 14:19:33" runUser="VYACHESLAV-LAPT\vyach" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
-  <Times creation="2025-09-06T14:19:33.7479590-05:00" queuing="2025-09-06T14:19:33.7479597-05:00" start="2025-09-06T14:19:32.2633820-05:00" finish="2025-09-06T14:19:33.7567121-05:00" />
-  <TestSettings name="default" id="272e49ee-8898-4ac7-a1fe-9e434f30e828">
-    <Deployment runDeploymentRoot="vyach_VYACHESLAV-LAPT_2025-09-06_14_19_33" />
+<TestRun id="57c21263-f426-45d9-bede-f4a961bcf1e6" name="vyach@VYACHESLAV-LAPT 2025-09-09 19:38:24" runUser="VYACHESLAV-LAPT\vyach" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2025-09-09T19:38:24.0156627-05:00" queuing="2025-09-09T19:38:24.0156636-05:00" start="2025-09-09T19:38:23.1102353-05:00" finish="2025-09-09T19:38:24.0210350-05:00" />
+  <TestSettings name="default" id="156a0e04-eefb-40e8-bb86-82e1a26aa1d8">
+    <Deployment runDeploymentRoot="vyach_VYACHESLAV-LAPT_2025-09-09_19_38_24" />
   </TestSettings>
   <Results>
-    <UnitTestResult executionId="d745f9f8-7af6-4208-b5ce-84a3791aca7a" testId="6dcbbebc-5ec3-8cd9-8adb-96eb4d601ff7" testName="CPR.UnitTests.SampleTests.Truth" computerName="VYACHESLAV-LAPT" duration="00:00:00.0062241" startTime="2025-09-06T14:19:33.4658508-05:00" endTime="2025-09-06T14:19:33.4658941-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d745f9f8-7af6-4208-b5ce-84a3791aca7a" />
-    <UnitTestResult executionId="b97be230-6c4c-4942-abc1-cd0933bc6a79" testId="7401c24a-10a6-8ef9-c23c-3cc6fdbc13a0" testName="CPR.UnitTests.JwtStubAuthenticationHandlerTests.InvalidToken_IsRejected" computerName="VYACHESLAV-LAPT" duration="00:00:00.0030055" startTime="2025-09-06T14:19:33.5293323-05:00" endTime="2025-09-06T14:19:33.5293327-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b97be230-6c4c-4942-abc1-cd0933bc6a79" />
-    <UnitTestResult executionId="3323cd15-e0ee-4d78-882a-7bbeba158a01" testId="54ff8e50-f462-b783-f88c-c6136ea4e932" testName="CPR.UnitTests.JwtStubAuthenticationHandlerTests.ValidToken_IsAuthenticated" computerName="VYACHESLAV-LAPT" duration="00:00:00.0733523" startTime="2025-09-06T14:19:33.5261684-05:00" endTime="2025-09-06T14:19:33.5261690-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="3323cd15-e0ee-4d78-882a-7bbeba158a01" />
+    <UnitTestResult executionId="fb0a18fd-9efb-4bd2-8d2d-e8c02a87a555" testId="56a69ab4-6219-6b26-299f-0681a9d61e92" testName="CPR.UnitTests.EntityModelTests.NewCareerPath_Defaults" computerName="VYACHESLAV-LAPT" duration="00:00:00.0002813" startTime="2025-09-09T19:38:23.8924051-05:00" endTime="2025-09-09T19:38:23.8924051-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="fb0a18fd-9efb-4bd2-8d2d-e8c02a87a555" />
+    <UnitTestResult executionId="665b193e-a3a5-4ba1-ac6d-ca9fd5b25208" testId="6dcbbebc-5ec3-8cd9-8adb-96eb4d601ff7" testName="CPR.UnitTests.SampleTests.Truth" computerName="VYACHESLAV-LAPT" duration="00:00:00.0025035" startTime="2025-09-09T19:38:23.8881653-05:00" endTime="2025-09-09T19:38:23.8881890-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="665b193e-a3a5-4ba1-ac6d-ca9fd5b25208" />
+    <UnitTestResult executionId="ec958e69-b159-4042-9c7b-c400cf9f2780" testId="54ff8e50-f462-b783-f88c-c6136ea4e932" testName="CPR.UnitTests.JwtStubAuthenticationHandlerTests.ValidToken_IsAuthenticated" computerName="VYACHESLAV-LAPT" duration="00:00:00.0237483" startTime="2025-09-09T19:38:23.9065081-05:00" endTime="2025-09-09T19:38:23.9065086-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ec958e69-b159-4042-9c7b-c400cf9f2780" />
+    <UnitTestResult executionId="319fd7a6-e451-455a-a8c6-7525950a0db9" testId="eb37ebbb-ad55-c51e-13ea-9bd5e8dd6e50" testName="CPR.UnitTests.EntityModelTests.NewSkill_Defaults" computerName="VYACHESLAV-LAPT" duration="00:00:00.0042450" startTime="2025-09-09T19:38:23.8910022-05:00" endTime="2025-09-09T19:38:23.8910023-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="319fd7a6-e451-455a-a8c6-7525950a0db9" />
+    <UnitTestResult executionId="c2402f0c-643d-4431-9d7f-add99d3d9bac" testId="56f1c77e-28c5-f5f1-3972-d20f73d8b63b" testName="CPR.UnitTests.TokenGeneratorTests.CreateToken_ProducesExpectedFormatAndSignature" computerName="VYACHESLAV-LAPT" duration="00:00:00.0050221" startTime="2025-09-09T19:38:23.8923447-05:00" endTime="2025-09-09T19:38:23.8923448-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c2402f0c-643d-4431-9d7f-add99d3d9bac" />
+    <UnitTestResult executionId="5ec66953-266f-4e6d-bf9e-c9c06ac214f2" testId="7401c24a-10a6-8ef9-c23c-3cc6fdbc13a0" testName="CPR.UnitTests.JwtStubAuthenticationHandlerTests.InvalidToken_IsRejected" computerName="VYACHESLAV-LAPT" duration="00:00:00.0012937" startTime="2025-09-09T19:38:23.9078935-05:00" endTime="2025-09-09T19:38:23.9078940-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="5ec66953-266f-4e6d-bf9e-c9c06ac214f2" />
   </Results>
   <TestDefinitions>
-    <UnitTest name="CPR.UnitTests.JwtStubAuthenticationHandlerTests.ValidToken_IsAuthenticated" storage="d:\projects\cpr\tests\cpr.unittests\bin\release\net9.0\cpr.unittests.dll" id="54ff8e50-f462-b783-f88c-c6136ea4e932">
-      <Execution id="3323cd15-e0ee-4d78-882a-7bbeba158a01" />
-      <TestMethod codeBase="d:\projects\CPR\tests\CPR.UnitTests\bin\Release\net9.0\CPR.UnitTests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="CPR.UnitTests.JwtStubAuthenticationHandlerTests" name="ValidToken_IsAuthenticated" />
+    <UnitTest name="CPR.UnitTests.TokenGeneratorTests.CreateToken_ProducesExpectedFormatAndSignature" storage="d:\projects\cpr\tests\cpr.unittests\bin\debug\net9.0\cpr.unittests.dll" id="56f1c77e-28c5-f5f1-3972-d20f73d8b63b">
+      <Execution id="c2402f0c-643d-4431-9d7f-add99d3d9bac" />
+      <TestMethod codeBase="D:\projects\CPR\tests\CPR.UnitTests\bin\Debug\net9.0\CPR.UnitTests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="CPR.UnitTests.TokenGeneratorTests" name="CreateToken_ProducesExpectedFormatAndSignature" />
     </UnitTest>
-    <UnitTest name="CPR.UnitTests.JwtStubAuthenticationHandlerTests.InvalidToken_IsRejected" storage="d:\projects\cpr\tests\cpr.unittests\bin\release\net9.0\cpr.unittests.dll" id="7401c24a-10a6-8ef9-c23c-3cc6fdbc13a0">
-      <Execution id="b97be230-6c4c-4942-abc1-cd0933bc6a79" />
-      <TestMethod codeBase="d:\projects\CPR\tests\CPR.UnitTests\bin\Release\net9.0\CPR.UnitTests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="CPR.UnitTests.JwtStubAuthenticationHandlerTests" name="InvalidToken_IsRejected" />
+    <UnitTest name="CPR.UnitTests.EntityModelTests.NewSkill_Defaults" storage="d:\projects\cpr\tests\cpr.unittests\bin\debug\net9.0\cpr.unittests.dll" id="eb37ebbb-ad55-c51e-13ea-9bd5e8dd6e50">
+      <Execution id="319fd7a6-e451-455a-a8c6-7525950a0db9" />
+      <TestMethod codeBase="D:\projects\CPR\tests\CPR.UnitTests\bin\Debug\net9.0\CPR.UnitTests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="CPR.UnitTests.EntityModelTests" name="NewSkill_Defaults" />
     </UnitTest>
-    <UnitTest name="CPR.UnitTests.SampleTests.Truth" storage="d:\projects\cpr\tests\cpr.unittests\bin\release\net9.0\cpr.unittests.dll" id="6dcbbebc-5ec3-8cd9-8adb-96eb4d601ff7">
-      <Execution id="d745f9f8-7af6-4208-b5ce-84a3791aca7a" />
-      <TestMethod codeBase="d:\projects\CPR\tests\CPR.UnitTests\bin\Release\net9.0\CPR.UnitTests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="CPR.UnitTests.SampleTests" name="Truth" />
+    <UnitTest name="CPR.UnitTests.EntityModelTests.NewCareerPath_Defaults" storage="d:\projects\cpr\tests\cpr.unittests\bin\debug\net9.0\cpr.unittests.dll" id="56a69ab4-6219-6b26-299f-0681a9d61e92">
+      <Execution id="fb0a18fd-9efb-4bd2-8d2d-e8c02a87a555" />
+      <TestMethod codeBase="D:\projects\CPR\tests\CPR.UnitTests\bin\Debug\net9.0\CPR.UnitTests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="CPR.UnitTests.EntityModelTests" name="NewCareerPath_Defaults" />
+    </UnitTest>
+    <UnitTest name="CPR.UnitTests.JwtStubAuthenticationHandlerTests.ValidToken_IsAuthenticated" storage="d:\projects\cpr\tests\cpr.unittests\bin\debug\net9.0\cpr.unittests.dll" id="54ff8e50-f462-b783-f88c-c6136ea4e932">
+      <Execution id="ec958e69-b159-4042-9c7b-c400cf9f2780" />
+      <TestMethod codeBase="D:\projects\CPR\tests\CPR.UnitTests\bin\Debug\net9.0\CPR.UnitTests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="CPR.UnitTests.JwtStubAuthenticationHandlerTests" name="ValidToken_IsAuthenticated" />
+    </UnitTest>
+    <UnitTest name="CPR.UnitTests.JwtStubAuthenticationHandlerTests.InvalidToken_IsRejected" storage="d:\projects\cpr\tests\cpr.unittests\bin\debug\net9.0\cpr.unittests.dll" id="7401c24a-10a6-8ef9-c23c-3cc6fdbc13a0">
+      <Execution id="5ec66953-266f-4e6d-bf9e-c9c06ac214f2" />
+      <TestMethod codeBase="D:\projects\CPR\tests\CPR.UnitTests\bin\Debug\net9.0\CPR.UnitTests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="CPR.UnitTests.JwtStubAuthenticationHandlerTests" name="InvalidToken_IsRejected" />
+    </UnitTest>
+    <UnitTest name="CPR.UnitTests.SampleTests.Truth" storage="d:\projects\cpr\tests\cpr.unittests\bin\debug\net9.0\cpr.unittests.dll" id="6dcbbebc-5ec3-8cd9-8adb-96eb4d601ff7">
+      <Execution id="665b193e-a3a5-4ba1-ac6d-ca9fd5b25208" />
+      <TestMethod codeBase="D:\projects\CPR\tests\CPR.UnitTests\bin\Debug\net9.0\CPR.UnitTests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="CPR.UnitTests.SampleTests" name="Truth" />
     </UnitTest>
   </TestDefinitions>
   <TestEntries>
-    <TestEntry testId="6dcbbebc-5ec3-8cd9-8adb-96eb4d601ff7" executionId="d745f9f8-7af6-4208-b5ce-84a3791aca7a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
-    <TestEntry testId="7401c24a-10a6-8ef9-c23c-3cc6fdbc13a0" executionId="b97be230-6c4c-4942-abc1-cd0933bc6a79" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
-    <TestEntry testId="54ff8e50-f462-b783-f88c-c6136ea4e932" executionId="3323cd15-e0ee-4d78-882a-7bbeba158a01" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="56a69ab4-6219-6b26-299f-0681a9d61e92" executionId="fb0a18fd-9efb-4bd2-8d2d-e8c02a87a555" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="6dcbbebc-5ec3-8cd9-8adb-96eb4d601ff7" executionId="665b193e-a3a5-4ba1-ac6d-ca9fd5b25208" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="54ff8e50-f462-b783-f88c-c6136ea4e932" executionId="ec958e69-b159-4042-9c7b-c400cf9f2780" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="eb37ebbb-ad55-c51e-13ea-9bd5e8dd6e50" executionId="319fd7a6-e451-455a-a8c6-7525950a0db9" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="56f1c77e-28c5-f5f1-3972-d20f73d8b63b" executionId="c2402f0c-643d-4431-9d7f-add99d3d9bac" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="7401c24a-10a6-8ef9-c23c-3cc6fdbc13a0" executionId="5ec66953-266f-4e6d-bf9e-c9c06ac214f2" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
   </TestEntries>
   <TestLists>
     <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
     <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
   </TestLists>
   <ResultSummary outcome="Completed">
-    <Counters total="3" executed="3" passed="3" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Counters total="6" executed="6" passed="6" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
     <Output>
       <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v2.5.3.1+6b60a9e56a (64-bit .NET 9.0.3)&#xD;
-[xUnit.net 00:00:00.18]   Discovering: CPR.UnitTests&#xD;
-[xUnit.net 00:00:00.26]   Discovered:  CPR.UnitTests&#xD;
-[xUnit.net 00:00:00.26]   Starting:    CPR.UnitTests&#xD;
-[xUnit.net 00:00:00.42]   Finished:    CPR.UnitTests&#xD;
+[xUnit.net 00:00:00.30]   Discovering: CPR.UnitTests&#xD;
+[xUnit.net 00:00:00.33]   Discovered:  CPR.UnitTests&#xD;
+[xUnit.net 00:00:00.33]   Starting:    CPR.UnitTests&#xD;
+[xUnit.net 00:00:00.40]   Finished:    CPR.UnitTests&#xD;
 </StdOut>
     </Output>
   </ResultSummary>
