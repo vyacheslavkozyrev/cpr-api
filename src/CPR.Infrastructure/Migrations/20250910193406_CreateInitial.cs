@@ -5,10 +5,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
 
-namespace CPR.Infrastructure.src.CPR.Infrastructure.Migrations
+namespace CPR.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class ConsolidatedInitial : Migration
+    public partial class CreateInitial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -101,6 +101,53 @@ namespace CPR.Infrastructure.src.CPR.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "employee_to_skill",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
+                    employee_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    skill_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    skill_level_id = table.Column<Guid>(type: "uuid", nullable: true),
+                    persist_value = table.Column<decimal>(type: "numeric", nullable: true),
+                    source = table.Column<string>(type: "text", nullable: true),
+                    effective_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    is_target = table.Column<bool>(type: "boolean", nullable: false),
+                    created_by = table.Column<Guid>(type: "uuid", nullable: true),
+                    created_at = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "now()"),
+                    modified_by = table.Column<Guid>(type: "uuid", nullable: true),
+                    modified_at = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
+                    is_deleted = table.Column<bool>(type: "boolean", nullable: false),
+                    deleted_by = table.Column<Guid>(type: "uuid", nullable: true),
+                    deleted_at = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_employee_to_skill", x => x.id);
+                });
+            // Indexes and unique constraints for employee_to_skill
+            migrationBuilder.CreateIndex(
+                name: "IX_employee_to_skill_employee_id",
+                table: "employee_to_skill",
+                column: "employee_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_employee_to_skill_skill_id",
+                table: "employee_to_skill",
+                column: "skill_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_employee_to_skill_skill_level_id",
+                table: "employee_to_skill",
+                column: "skill_level_id");
+
+            migrationBuilder.CreateIndex(
+                name: "UX_employee_to_skill_employee_skill_effective",
+                table: "employee_to_skill",
+                columns: new[] { "employee_id", "skill_id", "effective_date" },
+                unique: true);
+
+
+            migrationBuilder.CreateTable(
                 name: "employees",
                 columns: table => new
                 {
@@ -121,6 +168,16 @@ namespace CPR.Infrastructure.src.CPR.Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_employees", x => x.id);
                 });
+            // Indexes for employees
+            migrationBuilder.CreateIndex(
+                name: "IX_employees_user_id",
+                table: "employees",
+                column: "user_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_employees_manager_id",
+                table: "employees",
+                column: "manager_id");
 
             migrationBuilder.CreateTable(
                 name: "feedback",
@@ -243,6 +300,51 @@ namespace CPR.Infrastructure.src.CPR.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "position_to_skill",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
+                    position_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    skill_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    skill_level_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    weight = table.Column<decimal>(type: "numeric", nullable: true),
+                    is_mandatory = table.Column<bool>(type: "boolean", nullable: false),
+                    rationale = table.Column<string>(type: "text", nullable: true),
+                    created_by = table.Column<Guid>(type: "uuid", nullable: true),
+                    created_at = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "now()"),
+                    modified_by = table.Column<Guid>(type: "uuid", nullable: true),
+                    modified_at = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
+                    is_deleted = table.Column<bool>(type: "boolean", nullable: false),
+                    deleted_by = table.Column<Guid>(type: "uuid", nullable: true),
+                    deleted_at = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_position_to_skill", x => x.id);
+                });
+            // Indexes and unique constraints for position_to_skill
+            migrationBuilder.CreateIndex(
+                name: "IX_position_to_skill_position_id",
+                table: "position_to_skill",
+                column: "position_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_position_to_skill_skill_id",
+                table: "position_to_skill",
+                column: "skill_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_position_to_skill_skill_level_id",
+                table: "position_to_skill",
+                column: "skill_level_id");
+
+            migrationBuilder.CreateIndex(
+                name: "UX_position_to_skill_position_skill",
+                table: "position_to_skill",
+                columns: new[] { "position_id", "skill_id" },
+                unique: true);
+
+            migrationBuilder.CreateTable(
                 name: "positions",
                 columns: table => new
                 {
@@ -286,6 +388,48 @@ namespace CPR.Infrastructure.src.CPR.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "project_teams",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
+                    project_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    project_role_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    employee_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    created_by = table.Column<Guid>(type: "uuid", nullable: true),
+                    created_at = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "now()"),
+                    modified_by = table.Column<Guid>(type: "uuid", nullable: true),
+                    modified_at = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
+                    is_deleted = table.Column<bool>(type: "boolean", nullable: false),
+                    deleted_by = table.Column<Guid>(type: "uuid", nullable: true),
+                    deleted_at = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_project_teams", x => x.id);
+                });
+            // Indexes and unique constraints for project_teams
+            migrationBuilder.CreateIndex(
+                name: "IX_project_teams_project_id",
+                table: "project_teams",
+                column: "project_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_project_teams_project_role_id",
+                table: "project_teams",
+                column: "project_role_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_project_teams_employee_id",
+                table: "project_teams",
+                column: "employee_id");
+
+            migrationBuilder.CreateIndex(
+                name: "UX_project_teams_project_role_employee",
+                table: "project_teams",
+                columns: new[] { "project_id", "project_role_id", "employee_id" },
+                unique: true);
+
+            migrationBuilder.CreateTable(
                 name: "projects",
                 columns: table => new
                 {
@@ -307,6 +451,22 @@ namespace CPR.Infrastructure.src.CPR.Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_projects", x => x.id);
                 });
+            // Indexes and unique constraints for projects
+            migrationBuilder.CreateIndex(
+                name: "IX_projects_owner_id",
+                table: "projects",
+                column: "owner_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_projects_sponsor_id",
+                table: "projects",
+                column: "sponsor_id");
+
+            migrationBuilder.CreateIndex(
+                name: "UX_projects_code",
+                table: "projects",
+                column: "code",
+                unique: true);
 
             migrationBuilder.CreateTable(
                 name: "skill_categories",
@@ -349,6 +509,11 @@ namespace CPR.Infrastructure.src.CPR.Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_skill_levels", x => x.id);
                 });
+            // Indexes for skill_levels
+            migrationBuilder.CreateIndex(
+                name: "IX_skill_levels_skill_id",
+                table: "skill_levels",
+                column: "skill_id");
 
             migrationBuilder.CreateTable(
                 name: "skills",
@@ -370,6 +535,11 @@ namespace CPR.Infrastructure.src.CPR.Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_skills", x => x.id);
                 });
+            // Indexes for skills
+            migrationBuilder.CreateIndex(
+                name: "IX_skills_category_id",
+                table: "skills",
+                column: "category_id");
 
             migrationBuilder.CreateTable(
                 name: "users",
@@ -391,6 +561,12 @@ namespace CPR.Infrastructure.src.CPR.Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_users", x => x.id);
                 });
+            // Indexes and unique constraints for users
+            migrationBuilder.CreateIndex(
+                name: "UX_users_user_name",
+                table: "users",
+                column: "user_name",
+                unique: true);
 
             migrationBuilder.InsertData(
                 table: "career_paths",
@@ -491,6 +667,38 @@ namespace CPR.Infrastructure.src.CPR.Infrastructure.Migrations
             migrationBuilder.DropTable(
                 name: "departments");
 
+            // Drop indexes for employee_to_skill
+            migrationBuilder.DropIndex(
+                name: "UX_employee_to_skill_employee_skill_effective",
+                table: "employee_to_skill");
+
+            migrationBuilder.DropIndex(
+                name: "IX_employee_to_skill_skill_level_id",
+                table: "employee_to_skill");
+
+            migrationBuilder.DropIndex(
+                name: "IX_employee_to_skill_skill_id",
+                table: "employee_to_skill");
+
+            migrationBuilder.DropIndex(
+                name: "IX_employee_to_skill_employee_id",
+                table: "employee_to_skill");
+
+            migrationBuilder.DropTable(
+                name: "employee_to_skill");
+
+            // Drop indexes for employees
+            migrationBuilder.DropIndex(
+                name: "IX_employees_manager_id",
+                table: "employees");
+
+            migrationBuilder.DropIndex(
+                name: "IX_employees_user_id",
+                table: "employees");
+
+            migrationBuilder.DropTable(
+                name: "employees");
+
             migrationBuilder.DropTable(
                 name: "employees");
 
@@ -510,10 +718,67 @@ namespace CPR.Infrastructure.src.CPR.Infrastructure.Migrations
                 name: "locations");
 
             migrationBuilder.DropTable(
+                name: "position_to_skill");
+
+            // Drop indexes for position_to_skill
+            migrationBuilder.DropIndex(
+                name: "UX_position_to_skill_position_skill",
+                table: "position_to_skill");
+
+            migrationBuilder.DropIndex(
+                name: "IX_position_to_skill_skill_level_id",
+                table: "position_to_skill");
+
+            migrationBuilder.DropIndex(
+                name: "IX_position_to_skill_skill_id",
+                table: "position_to_skill");
+
+            migrationBuilder.DropIndex(
+                name: "IX_position_to_skill_position_id",
+                table: "position_to_skill");
+
+
+            migrationBuilder.DropTable(
                 name: "positions");
 
             migrationBuilder.DropTable(
                 name: "project_roles");
+
+            // Drop indexes for project_teams
+            migrationBuilder.DropIndex(
+                name: "UX_project_teams_project_role_employee",
+                table: "project_teams");
+
+            migrationBuilder.DropIndex(
+                name: "IX_project_teams_employee_id",
+                table: "project_teams");
+
+            migrationBuilder.DropIndex(
+                name: "IX_project_teams_project_role_id",
+                table: "project_teams");
+
+            migrationBuilder.DropIndex(
+                name: "IX_project_teams_project_id",
+                table: "project_teams");
+
+            migrationBuilder.DropTable(
+                name: "project_teams");
+
+            // Drop indexes for projects
+            migrationBuilder.DropIndex(
+                name: "UX_projects_code",
+                table: "projects");
+
+            migrationBuilder.DropIndex(
+                name: "IX_projects_sponsor_id",
+                table: "projects");
+
+            migrationBuilder.DropIndex(
+                name: "IX_projects_owner_id",
+                table: "projects");
+
+            migrationBuilder.DropTable(
+                name: "projects");
 
             migrationBuilder.DropTable(
                 name: "projects");
@@ -521,11 +786,26 @@ namespace CPR.Infrastructure.src.CPR.Infrastructure.Migrations
             migrationBuilder.DropTable(
                 name: "skill_categories");
 
+            // Drop indexes for skill_levels
+            migrationBuilder.DropIndex(
+                name: "IX_skill_levels_skill_id",
+                table: "skill_levels");
+
             migrationBuilder.DropTable(
                 name: "skill_levels");
 
+            // Drop indexes for skills
+            migrationBuilder.DropIndex(
+                name: "IX_skills_category_id",
+                table: "skills");
+
             migrationBuilder.DropTable(
                 name: "skills");
+
+            // Drop indexes for users
+            migrationBuilder.DropIndex(
+                name: "UX_users_user_name",
+                table: "users");
 
             migrationBuilder.DropTable(
                 name: "users");

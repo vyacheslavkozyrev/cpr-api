@@ -31,7 +31,8 @@ namespace CPR.IntegrationTests
                 }
             }
 
-            Assert.Contains(migrations, m => m.Contains("AddSeedData_v1") || m.Contains("AddSeedData"));
+            // Accept either the legacy AddSeedData migration name or the consolidated CreateInitial
+            Assert.Contains(migrations, m => m.Contains("AddSeedData_v1") || m.Contains("AddSeedData") || m.Contains("CreateInitial"));
         }
     }
 }
