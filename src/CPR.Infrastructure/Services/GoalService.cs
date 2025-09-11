@@ -26,7 +26,7 @@ namespace CPR.Infrastructure.Services
             var entity = new Goal
             {
                 Id = Guid.NewGuid(),
-                OwnerId = ownerId,
+                EmployeeId = ownerId,
                 Title = dto.Title,
                 Description = dto.Description,
                 Status = "open",
@@ -38,11 +38,19 @@ namespace CPR.Infrastructure.Services
             return new GoalDto
             {
                 Id = entity.Id,
-                OwnerId = entity.OwnerId,
+                EmployeeId = entity.EmployeeId,
                 Title = entity.Title,
                 Description = entity.Description,
                 Status = entity.Status,
-                CreatedAt = entity.CreatedAt
+                CreatedAt = entity.CreatedAt,
+                RelatedSkillId = entity.RelatedSkillId,
+                RelatedSkillLevelId = entity.RelatedSkillLevelId,
+                Deadline = entity.Deadline,
+                IsCompleted = entity.IsCompleted,
+                CompletedAt = entity.CompletedAt,
+                ProgressPercent = entity.ProgressPercent,
+                Priority = entity.Priority,
+                Visibility = entity.Visibility
             };
         }
 
@@ -92,16 +100,23 @@ namespace CPR.Infrastructure.Services
 
             // Some providers (Sqlite in-memory used in tests) do not support ordering
             // by DateTimeOffset in SQL. Fetch to memory then order/page on client side.
-            var all = await _repo.QueryByOwner(ownerId).ToListAsync();
+            var all = await _repo.QueryByEmployee(ownerId).ToListAsync();
             var items = all.OrderByDescending(g => g.CreatedAt).Skip((page - 1) * perPage).Take(perPage).ToArray();
             return items.Select(g => new GoalDto
             {
                 Id = g.Id,
-                OwnerId = g.OwnerId,
+                EmployeeId = g.EmployeeId,
                 Title = g.Title,
                 Description = g.Description,
                 Status = g.Status,
-                CreatedAt = g.CreatedAt
+                CreatedAt = g.CreatedAt,
+                RelatedSkillId = g.RelatedSkillId,
+                RelatedSkillLevelId = g.RelatedSkillLevelId,
+                Deadline = g.Deadline,
+                IsCompleted = g.IsCompleted,
+                CompletedAt = g.CompletedAt,
+                ProgressPercent = g.ProgressPercent,
+                Priority = g.Priority
             }).ToArray();
         }
 
@@ -113,12 +128,19 @@ namespace CPR.Infrastructure.Services
             return new GoalDto
             {
                 Id = g.Id,
-                OwnerId = g.OwnerId,
+                EmployeeId = g.EmployeeId,
                 Title = g.Title,
                 Description = g.Description,
                 Status = g.Status,
                 CreatedAt = g.CreatedAt,
                 UpdatedAt = g.ModifiedAt,
+                RelatedSkillId = g.RelatedSkillId,
+                RelatedSkillLevelId = g.RelatedSkillLevelId,
+                Deadline = g.Deadline,
+                IsCompleted = g.IsCompleted,
+                CompletedAt = g.CompletedAt,
+                ProgressPercent = g.ProgressPercent,
+                Priority = g.Priority,
                 Tasks = tasks.Select(t => new TaskDto
                 {
                     Id = t.Id,
@@ -146,12 +168,19 @@ namespace CPR.Infrastructure.Services
             return new GoalDto
             {
                 Id = g.Id,
-                OwnerId = g.OwnerId,
+                EmployeeId = g.EmployeeId,
                 Title = g.Title,
                 Description = g.Description,
                 Status = g.Status,
                 CreatedAt = g.CreatedAt,
-                UpdatedAt = g.ModifiedAt
+                UpdatedAt = g.ModifiedAt,
+                RelatedSkillId = g.RelatedSkillId,
+                RelatedSkillLevelId = g.RelatedSkillLevelId,
+                Deadline = g.Deadline,
+                IsCompleted = g.IsCompleted,
+                CompletedAt = g.CompletedAt,
+                ProgressPercent = g.ProgressPercent,
+                Priority = g.Priority
             };
         }
     }

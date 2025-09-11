@@ -96,10 +96,21 @@ namespace CPR.Infrastructure.Data
                 b.ToTable("goals");
                 b.HasKey(g => g.Id);
                 b.Property(g => g.Id).HasColumnName("id");
-                b.Property(g => g.OwnerId).HasColumnName("owner_id").IsRequired();
+                // OwnerId removed; owner is represented by employee_id
                 b.Property(g => g.Title).HasColumnName("title").IsRequired();
                 b.Property(g => g.Description).HasColumnName("description");
                 b.Property(g => g.Status).HasColumnName("status").HasDefaultValue("open");
+
+                // New columns from data.md
+                b.Property(g => g.EmployeeId).HasColumnName("employee_id");
+                b.Property(g => g.RelatedSkillId).HasColumnName("related_skill_id");
+                b.Property(g => g.RelatedSkillLevelId).HasColumnName("related_skill_level_id");
+                b.Property(g => g.Deadline).HasColumnName("deadline").HasColumnType("date");
+                b.Property(g => g.IsCompleted).HasColumnName("is_completed").HasDefaultValue(false);
+                b.Property(g => g.CompletedAt).HasColumnName("completed_at");
+                b.Property(g => g.ProgressPercent).HasColumnName("progress_percent").HasColumnType("numeric(5,2)").HasDefaultValue(0.00m);
+                b.Property(g => g.Priority).HasColumnName("priority").HasColumnType("smallint");
+                b.Property(g => g.Visibility).HasColumnName("visibility");
 
                 b.Property(g => g.CreatedBy).HasColumnName("created_by");
                 b.Property(g => g.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("now()");
@@ -113,7 +124,7 @@ namespace CPR.Infrastructure.Data
                 b.HasData(new Goal
                 {
                     Id = Guid.Parse("22222222-2222-2222-2222-222222222222"),
-                    OwnerId = Guid.Parse("11111111-1111-1111-1111-111111111111"),
+                    EmployeeId = Guid.Parse("11111111-1111-1111-1111-111111111111"),
                     Title = "Improve unit test coverage",
                     Description = "Add tests for critical services",
                     Status = "open",

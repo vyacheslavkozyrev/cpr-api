@@ -21,9 +21,15 @@ namespace CPR.Infrastructure.Repositories
 
         public IQueryable<Goal> QueryByOwner(Guid ownerId)
         {
+            // Backwards-compatible alias: delegate to QueryByEmployee
+            return QueryByEmployee(ownerId);
+        }
+
+        public IQueryable<Goal> QueryByEmployee(Guid employeeId)
+        {
             // Do not perform ordering here because some providers (SQLite in-memory used in tests)
             // cannot translate DateTimeOffset ordering into SQL. Leave ordering to the caller.
-            return _db.Goals.Where(g => g.OwnerId == ownerId && !g.IsDeleted);
+            return _db.Goals.Where(g => g.EmployeeId == employeeId && !g.IsDeleted);
         }
 
         public async Task AddAsync(Goal goal)

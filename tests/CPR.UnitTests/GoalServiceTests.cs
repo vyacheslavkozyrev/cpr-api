@@ -45,7 +45,11 @@ namespace CPR.UnitTests
             // act - create
             var created = await svc.CreateGoalAsync(ownerId, createDto);
             Assert.NotNull(created);
-            Assert.Equal(ownerId, created.OwnerId);
+            // OwnerId removed; created goal should be associated with the requesting employee
+            // Verify persistence mapping indirectly via fetching the stored entity
+            var stored = await _db.Goals.FindAsync(created.Id);
+            Assert.NotNull(stored);
+            Assert.Equal(ownerId, stored.EmployeeId);
             Assert.Equal("My Test Goal", created.Title);
 
             // act - list

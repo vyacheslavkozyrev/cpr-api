@@ -60,7 +60,7 @@ namespace CPR.IntegrationTests
             var goal = new Goal
             {
                 Id = Guid.NewGuid(),
-                OwnerId = user.Id,
+                EmployeeId = user.Id,
                 Title = "User goal",
                 Description = "Integration flow",
                 CreatedAt = DateTimeOffset.UtcNow

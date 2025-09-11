@@ -33,7 +33,7 @@ namespace CPR.IntegrationTests
             var goal = new Goal
             {
                 Id = Guid.NewGuid(),
-                OwnerId = Guid.Parse("11111111-1111-1111-1111-111111111111"),
+                EmployeeId = Guid.Parse("11111111-1111-1111-1111-111111111111"),
                 Title = "Integration test goal",
                 Description = "verify persistence",
                 Status = "open",

@@ -20,7 +20,7 @@ namespace CPR.Infrastructure.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.0")
+                .HasAnnotation("ProductVersion", "9.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -622,9 +622,41 @@ namespace CPR.Infrastructure.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("modified_by");
 
-                    b.Property<Guid>("OwnerId")
+                    b.Property<Guid>("EmployeeId")
                         .HasColumnType("uuid")
-                        .HasColumnName("owner_id");
+                        .HasColumnName("employee_id");
+
+                    b.Property<Guid?>("RelatedSkillId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("related_skill_id");
+
+                    b.Property<Guid?>("RelatedSkillLevelId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("related_skill_level_id");
+
+                    b.Property<DateTime?>("Deadline")
+                        .HasColumnType("date")
+                        .HasColumnName("deadline");
+
+                    b.Property<bool>("IsCompleted")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_completed");
+
+                    b.Property<DateTimeOffset?>("CompletedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("completed_at");
+
+                    b.Property<decimal>("ProgressPercent")
+                        .HasColumnType("numeric")
+                        .HasColumnName("progress_percent");
+
+                    b.Property<short?>("Priority")
+                        .HasColumnType("smallint")
+                        .HasColumnName("priority");
+
+                    b.Property<string>("Visibility")
+                        .HasColumnType("text")
+                        .HasColumnName("visibility");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -649,9 +681,11 @@ namespace CPR.Infrastructure.Migrations
                             CreatedAt = new DateTimeOffset(new DateTime(2025, 9, 5, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "Add tests for critical services",
                             IsDeleted = false,
-                            OwnerId = new Guid("11111111-1111-1111-1111-111111111111"),
+                            EmployeeId = new Guid("33333333-3333-3333-3333-333333333333"),
                             Status = "open",
-                            Title = "Improve unit test coverage"
+                            Title = "Improve unit test coverage",
+                            ProgressPercent = 0.00m,
+                            IsCompleted = false
                         });
                 });
 

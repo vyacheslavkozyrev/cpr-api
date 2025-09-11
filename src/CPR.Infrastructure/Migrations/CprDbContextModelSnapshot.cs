@@ -17,7 +17,7 @@ namespace CPR.Infrastructure.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.0")
+                .HasAnnotation("ProductVersion", "9.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -585,6 +585,10 @@ namespace CPR.Infrastructure.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
+                    b.Property<DateTimeOffset?>("CompletedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("completed_at");
+
                     b.Property<DateTimeOffset>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone")
@@ -594,6 +598,10 @@ namespace CPR.Infrastructure.Migrations
                     b.Property<Guid?>("CreatedBy")
                         .HasColumnType("uuid")
                         .HasColumnName("created_by");
+
+                    b.Property<DateTime?>("Deadline")
+                        .HasColumnType("date")
+                        .HasColumnName("deadline");
 
                     b.Property<DateTimeOffset?>("DeletedAt")
                         .HasColumnType("timestamp with time zone")
@@ -607,6 +615,16 @@ namespace CPR.Infrastructure.Migrations
                         .HasColumnType("text")
                         .HasColumnName("description");
 
+                    b.Property<Guid>("EmployeeId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("employee_id");
+
+                    b.Property<bool>("IsCompleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false)
+                        .HasColumnName("is_completed");
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean")
                         .HasColumnName("is_deleted");
@@ -619,9 +637,23 @@ namespace CPR.Infrastructure.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("modified_by");
 
-                    b.Property<Guid>("OwnerId")
+                    b.Property<short?>("Priority")
+                        .HasColumnType("smallint")
+                        .HasColumnName("priority");
+
+                    b.Property<decimal>("ProgressPercent")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("numeric(5,2)")
+                        .HasDefaultValue(0.00m)
+                        .HasColumnName("progress_percent");
+
+                    b.Property<Guid?>("RelatedSkillId")
                         .HasColumnType("uuid")
-                        .HasColumnName("owner_id");
+                        .HasColumnName("related_skill_id");
+
+                    b.Property<Guid?>("RelatedSkillLevelId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("related_skill_level_id");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -635,6 +667,10 @@ namespace CPR.Infrastructure.Migrations
                         .HasColumnType("text")
                         .HasColumnName("title");
 
+                    b.Property<string>("Visibility")
+                        .HasColumnType("text")
+                        .HasColumnName("visibility");
+
                     b.HasKey("Id");
 
                     b.ToTable("goals", (string)null);
@@ -645,8 +681,10 @@ namespace CPR.Infrastructure.Migrations
                             Id = new Guid("22222222-2222-2222-2222-222222222222"),
                             CreatedAt = new DateTimeOffset(new DateTime(2025, 9, 5, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "Add tests for critical services",
+                            EmployeeId = new Guid("11111111-1111-1111-1111-111111111111"),
+                            IsCompleted = false,
                             IsDeleted = false,
-                            OwnerId = new Guid("11111111-1111-1111-1111-111111111111"),
+                            ProgressPercent = 0.00m,
                             Status = "open",
                             Title = "Improve unit test coverage"
                         });

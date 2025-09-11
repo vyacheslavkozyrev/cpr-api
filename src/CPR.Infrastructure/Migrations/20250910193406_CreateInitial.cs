@@ -256,10 +256,18 @@ namespace CPR.Infrastructure.Migrations
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
-                    owner_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    employee_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    related_skill_id = table.Column<Guid>(type: "uuid", nullable: true),
+                    related_skill_level_id = table.Column<Guid>(type: "uuid", nullable: true),
                     title = table.Column<string>(type: "text", nullable: false),
                     description = table.Column<string>(type: "text", nullable: true),
                     status = table.Column<string>(type: "text", nullable: false, defaultValue: "open"),
+                    deadline = table.Column<DateTime>(type: "date", nullable: true),
+                    is_completed = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
+                    completed_at = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
+                    progress_percent = table.Column<decimal>(type: "numeric(5,2)", nullable: false, defaultValue: 0.00m),
+                    priority = table.Column<short>(type: "smallint", nullable: true),
+                    visibility = table.Column<string>(type: "text", nullable: true),
                     created_by = table.Column<Guid>(type: "uuid", nullable: true),
                     created_at = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "now()"),
                     modified_by = table.Column<Guid>(type: "uuid", nullable: true),
@@ -272,6 +280,20 @@ namespace CPR.Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_goals", x => x.id);
                 });
+
+            // index + FK for employee_id -> employees(id)
+            migrationBuilder.CreateIndex(
+                name: "IX_goals_employee_id",
+                table: "goals",
+                column: "employee_id");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_goals_employees_employee_id",
+                table: "goals",
+                column: "employee_id",
+                principalTable: "employees",
+                principalColumn: "id",
+                onDelete: ReferentialAction.Cascade);
 
             migrationBuilder.CreateTable(
                 name: "locations",
@@ -595,8 +617,8 @@ namespace CPR.Infrastructure.Migrations
 
             migrationBuilder.InsertData(
                 table: "goals",
-                columns: new[] { "id", "created_at", "created_by", "deleted_at", "deleted_by", "description", "is_deleted", "modified_at", "modified_by", "owner_id", "status", "title" },
-                values: new object[] { new Guid("22222222-2222-2222-2222-222222222222"), new DateTimeOffset(new DateTime(2025, 9, 5, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), null, null, null, "Add tests for critical services", false, null, null, new Guid("11111111-1111-1111-1111-111111111111"), "open", "Improve unit test coverage" });
+                columns: new[] { "id", "employee_id", "related_skill_id", "related_skill_level_id", "created_at", "created_by", "deleted_at", "deleted_by", "description", "is_deleted", "modified_at", "modified_by", "status", "title", "progress_percent", "is_completed" },
+                values: new object[] { new Guid("22222222-2222-2222-2222-222222222222"), new Guid("33333333-3333-3333-3333-333333333333"), null, null, new DateTimeOffset(new DateTime(2025, 9, 5, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), null, null, null, "Add tests for critical services", false, null, null, "open", "Improve unit test coverage", 0.00m, false });
 
             migrationBuilder.InsertData(
                 table: "locations",
