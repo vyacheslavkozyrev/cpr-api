@@ -91,6 +91,45 @@ namespace CPR.Infrastructure.Services
             };
         }
 
+        public async Task<TaskDto?> UpdateTaskAsync(Guid goalId, Guid taskId, Guid requestingUserId, UpdateGoalTaskDto dto)
+        {
+            if (dto == null) throw new ArgumentNullException(nameof(dto));
+            var goal = await _repo.GetByIdAsync(goalId);
+            if (goal == null) return null;
+
+            var task = await _db.GoalTasks.FindAsync(taskId).AsTask();
+            if (task == null || task.GoalId != goalId || task.IsDeleted) return null;
+
+            var wasCompleted = task.IsCompleted;
+
+            if (!string.IsNullOrEmpty(dto.Title)) task.Title = dto.Title;
+            if (dto.Description != null) task.Description = dto.Description;
+            if (dto.Deadline.HasValue) task.Deadline = dto.Deadline;
+            if (dto.IsCompleted.HasValue)
+            {
+                task.IsCompleted = dto.IsCompleted.Value;
+                if (task.IsCompleted && !wasCompleted) task.CompletedAt = DateTimeOffset.UtcNow;
+                if (!task.IsCompleted) task.CompletedAt = null;
+            }
+
+            task.ModifiedAt = DateTimeOffset.UtcNow;
+            task.ModifiedBy = requestingUserId;
+            _db.GoalTasks.Update(task);
+            await _db.SaveChangesAsync();
+
+            return new TaskDto
+            {
+                Id = task.Id,
+                GoalId = task.GoalId,
+                Title = task.Title,
+                Description = task.Description,
+                Deadline = task.Deadline,
+                IsCompleted = task.IsCompleted,
+                CompletedAt = task.CompletedAt,
+                CreatedAt = task.CreatedAt
+            };
+        }
+
         public async Task DeleteGoalAsync(Guid id, Guid requestingUserId)
         {
             var goal = await _repo.GetByIdAsync(id);
@@ -107,6 +146,11 @@ namespace CPR.Infrastructure.Services
             // by DateTimeOffset in SQL. Fetch to memory then order/page on client side.
             var all = await _repo.QueryByEmployee(ownerId).ToListAsync();
             var items = all.OrderByDescending(g => g.CreatedAt).Skip((page - 1) * perPage).Take(perPage).ToArray();
+            // load outstanding tasks for the returned page of goals to include in the DTOs
+            var goalIds = items.Select(g => g.Id).ToArray();
+            // include completed tasks as well, but exclude soft-deleted tasks
+            var tasks = await _db.GoalTasks.Where(t => goalIds.Contains(t.GoalId) && !t.IsDeleted).ToListAsync();
+
             return items.Select(g => new GoalDto
             {
                 Id = g.Id,
@@ -121,7 +165,18 @@ namespace CPR.Infrastructure.Services
                 IsCompleted = g.IsCompleted,
                 CompletedAt = g.CompletedAt,
                 ProgressPercent = g.ProgressPercent,
-                Priority = g.Priority
+                Priority = g.Priority,
+                Tasks = tasks.Where(t => t.GoalId == g.Id).Select(t => new TaskDto
+                {
+                    Id = t.Id,
+                    GoalId = t.GoalId,
+                    Title = t.Title,
+                    Description = t.Description,
+                    Deadline = t.Deadline,
+                    IsCompleted = t.IsCompleted,
+                    CompletedAt = t.CompletedAt,
+                    CreatedAt = t.CreatedAt
+                }).ToList()
             }).ToArray();
         }
 
@@ -129,7 +184,8 @@ namespace CPR.Infrastructure.Services
         {
             var g = await _repo.GetByIdAsync(id);
             if (g == null || g.IsDeleted) return null;
-            var tasks = await _db.GoalTasks.Where(t => t.GoalId == id && !t.IsCompleted).ToListAsync();
+            // include completed tasks as well, but exclude soft-deleted tasks
+            var tasks = await _db.GoalTasks.Where(t => t.GoalId == id && !t.IsDeleted).ToListAsync();
             return new GoalDto
             {
                 Id = g.Id,

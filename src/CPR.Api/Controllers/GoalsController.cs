@@ -128,5 +128,24 @@ namespace CPR.Api.Controllers
             var task = await _goalService.AddTaskAsync(id, ownerId, dto);
             return CreatedAtAction(nameof(GetById), new { id = task.GoalId }, task);
         }
+
+        /// <summary>
+        /// Partially update a task belonging to a goal (title/description/deadline/completion).
+        /// </summary>
+        /// <param name="id">Goal identifier.</param>
+        /// <param name="taskId">Task identifier.</param>
+        /// <param name="dto">Task update payload.</param>
+        [HttpPatch("{id}/tasks/{taskId}")]
+        [Authorize]
+        public async Task<IActionResult> PatchTask(Guid id, Guid taskId, [FromBody] UpdateGoalTaskDto dto)
+        {
+            var profile = _userService.GetCurrentUserProfile(User);
+            if (profile == null) return Unauthorized();
+            if (!Guid.TryParse(profile.EmployeeId, out var ownerId)) return Unauthorized();
+
+            var updated = await _goalService.UpdateTaskAsync(id, taskId, ownerId, dto);
+            if (updated == null) return NotFound();
+            return Ok(updated);
+        }
     }
 }

@@ -36,7 +36,7 @@ namespace CPR.UnitTests
         }
 
         [Fact]
-        public async Task Create_InvalidPriority_ModelStateError()
+        public void Create_InvalidPriority_ModelStateError()
         {
             var ctrl = CreateController(Guid.NewGuid().ToString());
             var dto = new CreateGoalDto { Title = "x", Priority = 1000 };
@@ -54,7 +54,7 @@ namespace CPR.UnitTests
         }
 
         [Fact]
-        public async Task Create_InvalidVisibility_ModelStateError()
+        public void Create_InvalidVisibility_ModelStateError()
         {
             var ctrl = CreateController(Guid.NewGuid().ToString());
             var dto = new CreateGoalDto { Title = "x", Visibility = "everyone" };
@@ -69,7 +69,7 @@ namespace CPR.UnitTests
         }
 
         [Fact]
-        public async Task Create_InvalidEmployeeIdInDto_ModelStateError()
+        public void Create_InvalidEmployeeIdInDto_ModelStateError()
         {
             var ctrl = CreateController(Guid.NewGuid().ToString());
             // EmployeeId property expects a GUID; we'll provide invalid string via model binder path isn't available here

@@ -92,10 +92,7 @@ namespace CPR.UnitTests
             var svc = new GoalService(_db, repo);
             var ownerId = Guid.NewGuid();
 
-            await Assert.ThrowsAsync<InvalidOperationException>(async () =>
-            {
-                await svc.UpdateGoalAsync(Guid.NewGuid(), ownerId, new UpdateGoalDto { Title = "x" });
-            });
+            await Assert.ThrowsAsync<InvalidOperationException>((Func<Task>)(() => svc.UpdateGoalAsync(Guid.NewGuid(), ownerId, new UpdateGoalDto { Title = "x" })));
         }
 
         [Fact]
@@ -105,10 +102,7 @@ namespace CPR.UnitTests
             var svc = new GoalService(_db, repo);
             var ownerId = Guid.NewGuid();
 
-            await Assert.ThrowsAsync<InvalidOperationException>(async () =>
-            {
-                await svc.AddTaskAsync(Guid.NewGuid(), ownerId, new CreateGoalTaskDto { Title = "t", Description = "d" });
-            });
+            await Assert.ThrowsAsync<InvalidOperationException>((Func<Task>)(() => svc.AddTaskAsync(Guid.NewGuid(), ownerId, new CreateGoalTaskDto { Title = "t", Description = "d" })));
         }
 
         [Fact]
@@ -170,10 +164,7 @@ namespace CPR.UnitTests
             var svc = new GoalService(_db, repo);
             var ownerId = Guid.NewGuid();
 
-            await Assert.ThrowsAsync<ArgumentNullException>(async () =>
-            {
-                await svc.CreateGoalAsync(ownerId, null!);
-            });
+            await Assert.ThrowsAsync<ArgumentNullException>((Func<Task>)(() => svc.CreateGoalAsync(ownerId, null!)));
         }
 
         [Fact]
@@ -185,10 +176,7 @@ namespace CPR.UnitTests
 
             // create a goal first so the service will reach the null dto dereference
             var created = await svc.CreateGoalAsync(ownerId, new CreateGoalDto { Title = "t" });
-            await Assert.ThrowsAsync<ArgumentNullException>(async () =>
-            {
-                await svc.AddTaskAsync(created.Id, ownerId, null!);
-            });
+            await Assert.ThrowsAsync<ArgumentNullException>((Func<Task>)(() => svc.AddTaskAsync(created.Id, ownerId, null!)));
         }
 
         [Fact]
@@ -232,6 +220,47 @@ namespace CPR.UnitTests
         }
 
         [Fact]
+        public async Task AddTask_Appears_In_GetGoalById()
+        {
+            var repo = new GoalsRepository(_db);
+            var svc = new GoalService(_db, repo);
+            var ownerId = Guid.NewGuid();
+
+            var created = await svc.CreateGoalAsync(ownerId, new CreateGoalDto { Title = "task-goal" });
+            var taskDto = new CreateGoalTaskDto { Title = "subtask-1", Description = "desc" };
+            var createdTask = await svc.AddTaskAsync(created.Id, ownerId, taskDto);
+
+            var goal = await svc.GetGoalByIdAsync(created.Id, ownerId);
+            Assert.NotNull(goal);
+            Assert.NotNull(goal.Tasks);
+            Assert.Single(goal.Tasks);
+            Assert.Equal("subtask-1", goal.Tasks[0].Title);
+            Assert.Equal(createdTask.Id, goal.Tasks[0].Id);
+        }
+
+        [Fact]
+        public async Task UpdateTask_CanModifyFields_AndToggleCompletion()
+        {
+            var repo = new GoalsRepository(_db);
+            var svc = new GoalService(_db, repo);
+            var ownerId = Guid.NewGuid();
+
+            var created = await svc.CreateGoalAsync(ownerId, new CreateGoalDto { Title = "task-goal-2" });
+            var task = await svc.AddTaskAsync(created.Id, ownerId, new CreateGoalTaskDto { Title = "t1", Description = "d1" });
+
+            // update title and mark complete
+            var updatedTask = await svc.UpdateTaskAsync(created.Id, task.Id, ownerId, new UpdateGoalTaskDto { Title = "t1-up", IsCompleted = true });
+            Assert.Equal("t1-up", updatedTask.Title);
+            Assert.True(updatedTask.IsCompleted);
+            Assert.NotNull(updatedTask.CompletedAt);
+
+            // un-complete
+            var reopened = await svc.UpdateTaskAsync(created.Id, task.Id, ownerId, new UpdateGoalTaskDto { IsCompleted = false });
+            Assert.False(reopened.IsCompleted);
+            Assert.Null(reopened.CompletedAt);
+        }
+
+        [Fact]
         public async Task GetGoals_InvalidPage_Throws()
         {
             var repo = new GoalsRepository(_db);
@@ -241,10 +270,7 @@ namespace CPR.UnitTests
             // create one goal so query returns something
             await svc.CreateGoalAsync(ownerId, new CreateGoalDto { Title = "t" });
 
-            await Assert.ThrowsAsync<ArgumentOutOfRangeException>(async () =>
-            {
-                await svc.GetGoalsForUserAsync(ownerId, page: 0, perPage: 10);
-            });
+            await Assert.ThrowsAsync<ArgumentOutOfRangeException>((Func<Task>)(() => svc.GetGoalsForUserAsync(ownerId, page: 0, perPage: 10)));
         }
 
         [Fact]

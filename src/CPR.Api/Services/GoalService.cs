@@ -46,5 +46,11 @@ namespace CPR.Api.Services
         {
             throw new NotImplementedException();
         }
+
+        /// <inheritdoc />
+        public Task<TaskDto?> UpdateTaskAsync(Guid goalId, Guid taskId, Guid requestingUserId, UpdateGoalTaskDto dto)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
