@@ -37,6 +37,8 @@ namespace CPR.IntegrationTests.Fixtures
             {
                 Connection = new NpgsqlConnection(_connectionString);
                 await Connection.OpenAsync();
+                Console.WriteLine($"PostgresTransactionalFixture opened connection: {Connection.ConnectionString}");
+                Console.WriteLine($"PostgresTransactionalFixture connection database: {Connection.Database}");
 
                 // Ensure migrations are applied so the schema and seed data exist for tests
                 var options = new DbContextOptionsBuilder<CprDbContext>()
@@ -46,6 +48,24 @@ namespace CPR.IntegrationTests.Fixtures
                 await using (var migrateCtx = new CprDbContext(options))
                 {
                     await migrateCtx.Database.MigrateAsync();
+                    // Debug: print the actual columns present in the goals table for the test DB.
+                    try
+                    {
+                        var listCmd = Connection.CreateCommand();
+                        listCmd.CommandText = "SELECT column_name FROM information_schema.columns WHERE table_name='goals' ORDER BY ordinal_position";
+                        await using (var reader = await listCmd.ExecuteReaderAsync())
+                        {
+                            Console.WriteLine("cpr_test goals table columns:");
+                            while (await reader.ReadAsync())
+                            {
+                                Console.WriteLine(reader.GetString(0));
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"Failed to list goals columns for debug: {ex.Message}");
+                    }
                 }
             }
             catch (Npgsql.PostgresException ex) when (ex.SqlState == "3D000") // invalid_catalog_name

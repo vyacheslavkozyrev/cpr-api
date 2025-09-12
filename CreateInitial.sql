@@ -209,10 +209,19 @@ BEGIN
     IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20250910193406_CreateInitial') THEN
     CREATE TABLE goals (
         id uuid NOT NULL,
-        owner_id uuid NOT NULL,
+        -- primary owner reference moved from owner_id to employee_id
+        employee_id uuid NOT NULL,
+        related_skill_id uuid,
+        related_skill_level_id uuid,
         title text NOT NULL,
         description text,
         status text NOT NULL DEFAULT 'open',
+        deadline date,
+        is_completed boolean NOT NULL DEFAULT FALSE,
+        completed_at timestamp with time zone,
+        progress_percent numeric(5,2) NOT NULL DEFAULT 0.00,
+        priority smallint,
+        visibility text,
         created_by uuid,
         created_at timestamp with time zone NOT NULL DEFAULT (now()),
         modified_by uuid,
@@ -475,8 +484,8 @@ END $EF$;
 DO $EF$
 BEGIN
     IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20250910193406_CreateInitial') THEN
-    INSERT INTO goals (id, created_at, created_by, deleted_at, deleted_by, description, is_deleted, modified_at, modified_by, owner_id, status, title)
-    VALUES ('22222222-2222-2222-2222-222222222222', TIMESTAMPTZ '2025-09-05T00:00:00+00:00', NULL, NULL, NULL, 'Add tests for critical services', FALSE, NULL, NULL, '11111111-1111-1111-1111-111111111111', 'open', 'Improve unit test coverage');
+    INSERT INTO goals (id, created_at, created_by, deleted_at, deleted_by, description, is_deleted, modified_at, modified_by, employee_id, status, title)
+    VALUES ('22222222-2222-2222-2222-222222222222', TIMESTAMPTZ '2025-09-05T00:00:00+00:00', NULL, NULL, NULL, 'Add tests for critical services', FALSE, NULL, NULL, '33333333-3333-3333-3333-333333333333', 'open', 'Improve unit test coverage');
     END IF;
 END $EF$;
 

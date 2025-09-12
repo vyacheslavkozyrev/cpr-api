@@ -5,6 +5,7 @@ using CPR.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Xunit;
+using System.Linq;
 
 namespace CPR.IntegrationTests
 {
@@ -17,10 +18,12 @@ namespace CPR.IntegrationTests
                 .AddEnvironmentVariables()
                 .Build();
 
-            var conn = config.GetConnectionString("Default") ?? Environment.GetEnvironmentVariable("DATABASE_URL") ?? "Host=localhost;Port=5432;Database=cpr_dev;Username=postgres;Password=postgres";
+            var conn = config.GetConnectionString("Default") ?? Environment.GetEnvironmentVariable("DATABASE_URL") ?? "Host=localhost;Port=5432;Database=cpr_test;Username=postgres;Password=postgres";
 
             var options = new DbContextOptionsBuilder<CprDbContext>()
                 .UseNpgsql(conn)
+                .LogTo(Console.WriteLine, Microsoft.Extensions.Logging.LogLevel.Debug)
+                .EnableSensitiveDataLogging()
                 .Options;
 
             return new CprDbContext(options);
@@ -30,10 +33,30 @@ namespace CPR.IntegrationTests
         public async Task CanCreateAndReadGoal()
         {
             using var db = CreateContext();
+            // Dump EF model properties for Goal to help debug mapping issues
+            var et = db.Model.FindEntityType(typeof(Goal));
+            var props = et.GetProperties().Select(p => p.Name).ToArray();
+            Console.WriteLine("EF Goal mapped properties: " + string.Join(", ", props));
+
+            // Query the database to list actual columns on the goals table
+            var conn = db.Database.GetDbConnection();
+            await conn.OpenAsync();
+            using (var cmd = conn.CreateCommand())
+            {
+                cmd.CommandText = "SELECT column_name FROM information_schema.columns WHERE table_name = 'goals' ORDER BY ordinal_position;";
+                var cols = new System.Collections.Generic.List<string>();
+                using var rdr = await cmd.ExecuteReaderAsync();
+                while (await rdr.ReadAsync())
+                {
+                    cols.Add(rdr.GetString(0));
+                }
+                Console.WriteLine("DB goals table columns: " + string.Join(", ", cols));
+            }
             var goal = new Goal
             {
                 Id = Guid.NewGuid(),
-                EmployeeId = Guid.Parse("11111111-1111-1111-1111-111111111111"),
+                // Use the seeded employee created by the model snapshot/migrations
+                EmployeeId = Guid.Parse("33333333-3333-3333-3333-333333333333"),
                 Title = "Integration test goal",
                 Description = "verify persistence",
                 Status = "open",

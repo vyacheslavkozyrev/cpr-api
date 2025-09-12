@@ -192,6 +192,46 @@ namespace CPR.UnitTests
         }
 
         [Fact]
+        public async Task Create_WithAllFields_PersistsFields()
+        {
+            var repo = new GoalsRepository(_db);
+            var svc = new GoalService(_db, repo);
+            var ownerId = Guid.NewGuid();
+
+            var overrideEmployee = Guid.NewGuid();
+            var relatedSkill = Guid.NewGuid();
+            var relatedSkillLevel = Guid.NewGuid();
+            var deadline = DateTime.UtcNow.AddDays(7);
+
+            var createDto = new CreateGoalDto
+            {
+                Title = "Full",
+                Description = "All fields",
+                EmployeeId = overrideEmployee,
+                RelatedSkillId = relatedSkill,
+                RelatedSkillLevelId = relatedSkillLevel,
+                Deadline = deadline,
+                Priority = 42,
+                Visibility = "team"
+            };
+
+            var created = await svc.CreateGoalAsync(ownerId, createDto);
+            Assert.NotNull(created);
+
+            var stored = await _db.Goals.FindAsync(created.Id);
+            Assert.NotNull(stored);
+            // EmployeeId should reflect the DTO override
+            Assert.Equal(overrideEmployee, stored.EmployeeId);
+            Assert.Equal(relatedSkill, stored.RelatedSkillId);
+            Assert.Equal(relatedSkillLevel, stored.RelatedSkillLevelId);
+            // Compare dates with second precision tolerance
+            Assert.True(stored.Deadline.HasValue);
+            Assert.Equal(deadline.ToString("s"), stored.Deadline.Value.ToString("s"));
+            Assert.Equal((short)42, stored.Priority);
+            Assert.Equal("team", stored.Visibility);
+        }
+
+        [Fact]
         public async Task GetGoals_InvalidPage_Throws()
         {
             var repo = new GoalsRepository(_db);

@@ -13,7 +13,7 @@ namespace CPR.IntegrationTests
         public void MigrationsHistory_Contains_AddSeedData()
         {
             var options = new DbContextOptionsBuilder<CprDbContext>()
-                .UseNpgsql("Host=localhost;Port=5432;Database=cpr_dev;Username=postgres;Password=postgres")
+                .UseNpgsql("Host=localhost;Port=5432;Database=cpr_test;Username=postgres;Password=postgres")
                 .Options;
 
             using var db = new CprDbContext(options);

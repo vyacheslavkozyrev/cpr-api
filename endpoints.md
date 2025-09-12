@@ -35,25 +35,63 @@ Goals
 ### Contracts & purposes (Goals)
 
 POST /goals
-- Purpose: create a new goal owned by the authenticated user.
+- Purpose: create a new goal owned by the authenticated user. The API will map the authenticated user's employee id as the owner unless `employeeId` is explicitly supplied and allowed.
 - Request (JSON):
   - {
   -   "title": "string (required, 1..250)",
-  -   "description": "string (optional)",
-  -   "deadline": "ISO8601 datetime (optional)",
-  -   "related_skill_id": "GUID (optional)"
+  -   "description": "string (optional, max 2000)",
+  -   "deadline": "date (optional, ISO8601 date or datetime)",
+  -   "relatedSkillId": "GUID (optional)",
+  -   "relatedSkillLevelId": "GUID (optional)",
+  -   "employeeId": "GUID (optional) - override owner; must be a valid GUID",
+  -   "priority": "integer (optional, 0..100)",
+  -   "visibility": "string (optional, one of: private|team|org)"
   - }
 - Response 201 (JSON):
   - {
   -   "id": "GUID",
-  -   "ownerId": "GUID",
+  -   "employeeId": "GUID",
   -   "title": "string",
   -   "description": "string|null",
   -   "status": "open",
+  -   "deadline": "ISO8601|null",
+  -   "priority": "integer|null",
+  -   "visibility": "string|null",
   -   "createdAt": "ISO8601",
   -   "createdBy": "GUID"
   - }
-- Errors: 400 validation, 401 unauthorized.
+- Errors: 400 validation (ProblemDetails with `errors` dictionary), 401 unauthorized.
+
+Validation rules (server-side - DataAnnotations):
+- title: required, string length 1..250
+- description: max length 2000
+- deadline: must be a parseable date/time (invalid format results in 400)
+- relatedSkillId / relatedSkillLevelId: GUID if supplied
+- employeeId: if supplied, must be a valid GUID (regex validated); otherwise the authenticated user's employee id is used
+- priority: optional integer between 0 and 100 inclusive
+- visibility: optional string; allowed values: "private", "team", "org"
+
+Example request (JSON):
+{
+  "title": "Improve onboarding experience",
+  "description": "Coordinate with product and design to reduce time to first value.",
+  "deadline": "2025-12-01",
+  "relatedSkillId": "11111111-2222-3333-4444-555555555555",
+  "relatedSkillLevelId": "22222222-3333-4444-5555-666666666666",
+  "priority": 50,
+  "visibility": "team"
+}
+
+Example error (400 ProblemDetails) — validation errors live under `errors`:
+{
+  "type": "https://tools.ietf.org/html/rfc7231#section-6.5.1",
+  "title": "One or more validation errors occurred.",
+  "status": 400,
+  "errors": {
+    "EmployeeId": ["EmployeeId must be a valid GUID"],
+    "Priority": ["Priority must be between 0 and 100"]
+  }
+}
 
 GET /me/goals
 - Purpose: return paged list of goals for the authenticated user.

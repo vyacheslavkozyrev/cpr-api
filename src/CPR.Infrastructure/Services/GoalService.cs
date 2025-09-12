@@ -26,9 +26,14 @@ namespace CPR.Infrastructure.Services
             var entity = new Goal
             {
                 Id = Guid.NewGuid(),
-                EmployeeId = ownerId,
+                EmployeeId = dto.EmployeeId ?? ownerId,
                 Title = dto.Title,
                 Description = dto.Description,
+                RelatedSkillId = dto.RelatedSkillId,
+                RelatedSkillLevelId = dto.RelatedSkillLevelId,
+                Deadline = dto.Deadline,
+                Priority = dto.Priority,
+                Visibility = dto.Visibility,
                 Status = "open",
                 CreatedAt = DateTimeOffset.UtcNow,
                 CreatedBy = ownerId

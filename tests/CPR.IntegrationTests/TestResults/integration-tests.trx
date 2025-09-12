@@ -1,68 +1,84 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TestRun id="19c2a64b-30d3-47a7-a9b4-62c2df9fd907" name="vyach@VYACHESLAV-LAPT 2025-09-10 11:21:38" runUser="VYACHESLAV-LAPT\vyach" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
-  <Times creation="2025-09-10T11:21:38.0287402-05:00" queuing="2025-09-10T11:21:38.0287406-05:00" start="2025-09-10T11:21:36.1640789-05:00" finish="2025-09-10T11:21:38.3537371-05:00" />
-  <TestSettings name="default" id="f2513db4-9deb-480a-982b-d23946715da9">
-    <Deployment runDeploymentRoot="vyach_VYACHESLAV-LAPT_2025-09-10_11_21_38" />
+<TestRun id="33585a0d-52fe-49f5-ab58-04314448ad1c" name="vyach@VYACHESLAV-LAPT 2025-09-12 09:38:17" runUser="VYACHESLAV-LAPT\vyach" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2025-09-12T09:38:17.3619035-05:00" queuing="2025-09-12T09:38:17.3619045-05:00" start="2025-09-12T09:38:15.4419624-05:00" finish="2025-09-12T09:38:17.8014312-05:00" />
+  <TestSettings name="default" id="5e1b4fb4-02db-469a-8ee4-2c964ed24341">
+    <Deployment runDeploymentRoot="vyach_VYACHESLAV-LAPT_2025-09-12_09_38_17" />
   </TestSettings>
   <Results>
-    <UnitTestResult executionId="3f490034-44f0-4d83-ac99-90a8ac6a43ed" testId="d05bc568-58a5-4262-725d-6c0b439220ce" testName="CPR.IntegrationTests.MigrationSmokeTests.MigrationsHistory_Contains_AddSeedData" computerName="VYACHESLAV-LAPT" duration="00:00:00.6778159" startTime="2025-09-10T11:21:38.2388987-05:00" endTime="2025-09-10T11:21:38.2388988-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="3f490034-44f0-4d83-ac99-90a8ac6a43ed" />
-    <UnitTestResult executionId="a83e6d1b-af17-482a-b96f-f37dabdb73ac" testId="8cc60949-5900-f178-8413-70dafcf5b45b" testName="CPR.IntegrationTests.TokenGeneratorSmokeTests.TokenGenerator_E2E_ReturnsUserProfile" computerName="VYACHESLAV-LAPT" duration="00:00:00.4337482" startTime="2025-09-10T11:21:38.0069257-05:00" endTime="2025-09-10T11:21:38.0069258-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a83e6d1b-af17-482a-b96f-f37dabdb73ac" />
-    <UnitTestResult executionId="6b7c935b-10f6-4eee-8607-24a7a040d5c0" testId="fe1ed513-1250-e1d2-25f2-fcc8fda41b69" testName="CPR.IntegrationTests.UserAndGoalPersistenceTests.CanCreateUserAndGoal" computerName="VYACHESLAV-LAPT" duration="00:00:00.7309547" startTime="2025-09-10T11:21:38.2919332-05:00" endTime="2025-09-10T11:21:38.2919333-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="6b7c935b-10f6-4eee-8607-24a7a040d5c0" />
-    <UnitTestResult executionId="fe7d6313-295d-4fca-8e84-b2eef334aaf8" testId="f063b7f5-94b9-a8f0-437e-38f824100854" testName="CPR.IntegrationTests.SeedVerificationTests.SeedRows_Exist_InDatabase" computerName="VYACHESLAV-LAPT" duration="00:00:00.7061576" startTime="2025-09-10T11:21:38.2671221-05:00" endTime="2025-09-10T11:21:38.2671222-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="fe7d6313-295d-4fca-8e84-b2eef334aaf8" />
-    <UnitTestResult executionId="410d30d2-d26c-46f6-948d-8072c605f023" testId="fe1dd90f-597a-889d-a6df-6fac4049ab48" testName="CPR.IntegrationTests.SampleIntegrationTest.CanRun" computerName="VYACHESLAV-LAPT" duration="00:00:00.0088444" startTime="2025-09-10T11:21:37.5731153-05:00" endTime="2025-09-10T11:21:37.5731294-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="410d30d2-d26c-46f6-948d-8072c605f023" />
-    <UnitTestResult executionId="3764fc54-19c9-4f0b-8526-55eda26bd976" testId="532ad4e5-578d-5d5e-389f-e29ae44a8370" testName="CPR.IntegrationTests.GoalPersistenceTests.CanCreateAndReadGoal" computerName="VYACHESLAV-LAPT" duration="00:00:00.7298595" startTime="2025-09-10T11:21:38.2908552-05:00" endTime="2025-09-10T11:21:38.2908553-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="3764fc54-19c9-4f0b-8526-55eda26bd976" />
-    <UnitTestResult executionId="eacf384c-17a7-4bf2-bda9-0e8946160734" testId="4db065df-e165-6201-98ef-ce56445e3caf" testName="CPR.IntegrationTests.MeControllerTests.GetMe_WithValidToken_ReturnsOk" computerName="VYACHESLAV-LAPT" duration="00:00:00.4317336" startTime="2025-09-10T11:21:37.9928412-05:00" endTime="2025-09-10T11:21:37.9928413-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="eacf384c-17a7-4bf2-bda9-0e8946160734" />
+    <UnitTestResult executionId="a900a35f-af51-444f-a47d-0249a1d1c4ec" testId="532ad4e5-578d-5d5e-389f-e29ae44a8370" testName="CPR.IntegrationTests.GoalPersistenceTests.CanCreateAndReadGoal" computerName="VYACHESLAV-LAPT" duration="00:00:00.9076071" startTime="2025-09-12T09:38:17.5472594-05:00" endTime="2025-09-12T09:38:17.5472595-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a900a35f-af51-444f-a47d-0249a1d1c4ec" />
+    <UnitTestResult executionId="29cfa5cc-e6b3-4130-8cc0-b97d129b8d86" testId="d05bc568-58a5-4262-725d-6c0b439220ce" testName="CPR.IntegrationTests.MigrationSmokeTests.MigrationsHistory_Contains_AddSeedData" computerName="VYACHESLAV-LAPT" duration="00:00:00.6960930" startTime="2025-09-12T09:38:17.3359473-05:00" endTime="2025-09-12T09:38:17.3359474-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="29cfa5cc-e6b3-4130-8cc0-b97d129b8d86" />
+    <UnitTestResult executionId="b2dce810-0c74-43ca-8d0d-0fb6a9c1a68e" testId="4db065df-e165-6201-98ef-ce56445e3caf" testName="CPR.IntegrationTests.MeControllerTests.GetMe_WithValidToken_ReturnsOk" computerName="VYACHESLAV-LAPT" duration="00:00:00.6188211" startTime="2025-09-12T09:38:17.2604361-05:00" endTime="2025-09-12T09:38:17.2604363-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b2dce810-0c74-43ca-8d0d-0fb6a9c1a68e" />
+    <UnitTestResult executionId="c0b8d71e-10e0-4bdc-ae33-555a221beeff" testId="ee2e5bd1-8e7f-cb2f-5ce3-d7e00bb52d61" testName="CPR.IntegrationTests.GoalControllerProblemDetailsTests.CreateGoal_WhenServiceThrowsArgumentNull_Returns400ProblemDetails" computerName="VYACHESLAV-LAPT" duration="00:00:00.6155338" startTime="2025-09-12T09:38:17.2552486-05:00" endTime="2025-09-12T09:38:17.2552488-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c0b8d71e-10e0-4bdc-ae33-555a221beeff" />
+    <UnitTestResult executionId="126c2474-de23-4eb4-b9f0-92b70ca08f40" testId="fe1ed513-1250-e1d2-25f2-fcc8fda41b69" testName="CPR.IntegrationTests.UserAndGoalPersistenceTests.CanCreateUserAndGoal" computerName="VYACHESLAV-LAPT" duration="00:00:00.1421974" startTime="2025-09-12T09:38:17.7240346-05:00" endTime="2025-09-12T09:38:17.7240347-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="126c2474-de23-4eb4-b9f0-92b70ca08f40" />
+    <UnitTestResult executionId="d4426ae1-da77-4249-bed3-71c2a41e2105" testId="db8fd5c7-ac98-c33d-b5b3-971433a1afb2" testName="CPR.IntegrationTests.GoalControllerProblemDetailsTests.GetMine_WhenServiceThrowsArgumentOutOfRange_Returns400ProblemDetails" computerName="VYACHESLAV-LAPT" duration="00:00:00.0413846" startTime="2025-09-12T09:38:17.2966775-05:00" endTime="2025-09-12T09:38:17.2966777-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d4426ae1-da77-4249-bed3-71c2a41e2105" />
+    <UnitTestResult executionId="e5c83ac5-44e6-4897-9fb4-d86d7cdee61d" testId="f063b7f5-94b9-a8f0-437e-38f824100854" testName="CPR.IntegrationTests.SeedVerificationTests.SeedRows_Exist_InDatabase" computerName="VYACHESLAV-LAPT" duration="00:00:00.8424783" startTime="2025-09-12T09:38:17.4820861-05:00" endTime="2025-09-12T09:38:17.4820862-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e5c83ac5-44e6-4897-9fb4-d86d7cdee61d" />
+    <UnitTestResult executionId="ca059cb6-0557-4aa0-b1bb-c37c3d4c0fe3" testId="fe1dd90f-597a-889d-a6df-6fac4049ab48" testName="CPR.IntegrationTests.SampleIntegrationTest.CanRun" computerName="VYACHESLAV-LAPT" duration="00:00:00.0306770" startTime="2025-09-12T09:38:16.6737691-05:00" endTime="2025-09-12T09:38:16.6737838-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ca059cb6-0557-4aa0-b1bb-c37c3d4c0fe3" />
+    <UnitTestResult executionId="d54ab5dd-38b0-43aa-b901-4570c0caa369" testId="8cc60949-5900-f178-8413-70dafcf5b45b" testName="CPR.IntegrationTests.TokenGeneratorSmokeTests.TokenGenerator_E2E_ReturnsUserProfile" computerName="VYACHESLAV-LAPT" duration="00:00:00.6202238" startTime="2025-09-12T09:38:17.2618207-05:00" endTime="2025-09-12T09:38:17.2618210-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d54ab5dd-38b0-43aa-b901-4570c0caa369" />
   </Results>
   <TestDefinitions>
+    <UnitTest name="CPR.IntegrationTests.GoalControllerProblemDetailsTests.GetMine_WhenServiceThrowsArgumentOutOfRange_Returns400ProblemDetails" storage="d:\projects\cpr\tests\cpr.integrationtests\bin\debug\net9.0\cpr.integrationtests.dll" id="db8fd5c7-ac98-c33d-b5b3-971433a1afb2">
+      <Execution id="d4426ae1-da77-4249-bed3-71c2a41e2105" />
+      <TestMethod codeBase="D:\projects\CPR\tests\CPR.IntegrationTests\bin\Debug\net9.0\CPR.IntegrationTests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="CPR.IntegrationTests.GoalControllerProblemDetailsTests" name="GetMine_WhenServiceThrowsArgumentOutOfRange_Returns400ProblemDetails" />
+    </UnitTest>
     <UnitTest name="CPR.IntegrationTests.MigrationSmokeTests.MigrationsHistory_Contains_AddSeedData" storage="d:\projects\cpr\tests\cpr.integrationtests\bin\debug\net9.0\cpr.integrationtests.dll" id="d05bc568-58a5-4262-725d-6c0b439220ce">
-      <Execution id="3f490034-44f0-4d83-ac99-90a8ac6a43ed" />
+      <Execution id="29cfa5cc-e6b3-4130-8cc0-b97d129b8d86" />
       <TestMethod codeBase="D:\projects\CPR\tests\CPR.IntegrationTests\bin\Debug\net9.0\CPR.IntegrationTests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="CPR.IntegrationTests.MigrationSmokeTests" name="MigrationsHistory_Contains_AddSeedData" />
     </UnitTest>
     <UnitTest name="CPR.IntegrationTests.SampleIntegrationTest.CanRun" storage="d:\projects\cpr\tests\cpr.integrationtests\bin\debug\net9.0\cpr.integrationtests.dll" id="fe1dd90f-597a-889d-a6df-6fac4049ab48">
-      <Execution id="410d30d2-d26c-46f6-948d-8072c605f023" />
+      <Execution id="ca059cb6-0557-4aa0-b1bb-c37c3d4c0fe3" />
       <TestMethod codeBase="D:\projects\CPR\tests\CPR.IntegrationTests\bin\Debug\net9.0\CPR.IntegrationTests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="CPR.IntegrationTests.SampleIntegrationTest" name="CanRun" />
     </UnitTest>
     <UnitTest name="CPR.IntegrationTests.UserAndGoalPersistenceTests.CanCreateUserAndGoal" storage="d:\projects\cpr\tests\cpr.integrationtests\bin\debug\net9.0\cpr.integrationtests.dll" id="fe1ed513-1250-e1d2-25f2-fcc8fda41b69">
-      <Execution id="6b7c935b-10f6-4eee-8607-24a7a040d5c0" />
+      <Execution id="126c2474-de23-4eb4-b9f0-92b70ca08f40" />
       <TestMethod codeBase="D:\projects\CPR\tests\CPR.IntegrationTests\bin\Debug\net9.0\CPR.IntegrationTests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="CPR.IntegrationTests.UserAndGoalPersistenceTests" name="CanCreateUserAndGoal" />
     </UnitTest>
     <UnitTest name="CPR.IntegrationTests.TokenGeneratorSmokeTests.TokenGenerator_E2E_ReturnsUserProfile" storage="d:\projects\cpr\tests\cpr.integrationtests\bin\debug\net9.0\cpr.integrationtests.dll" id="8cc60949-5900-f178-8413-70dafcf5b45b">
-      <Execution id="a83e6d1b-af17-482a-b96f-f37dabdb73ac" />
+      <Execution id="d54ab5dd-38b0-43aa-b901-4570c0caa369" />
       <TestMethod codeBase="D:\projects\CPR\tests\CPR.IntegrationTests\bin\Debug\net9.0\CPR.IntegrationTests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="CPR.IntegrationTests.TokenGeneratorSmokeTests" name="TokenGenerator_E2E_ReturnsUserProfile" />
     </UnitTest>
+    <UnitTest name="CPR.IntegrationTests.GoalControllerProblemDetailsTests.CreateGoal_WhenServiceThrowsArgumentNull_Returns400ProblemDetails" storage="d:\projects\cpr\tests\cpr.integrationtests\bin\debug\net9.0\cpr.integrationtests.dll" id="ee2e5bd1-8e7f-cb2f-5ce3-d7e00bb52d61">
+      <Execution id="c0b8d71e-10e0-4bdc-ae33-555a221beeff" />
+      <TestMethod codeBase="D:\projects\CPR\tests\CPR.IntegrationTests\bin\Debug\net9.0\CPR.IntegrationTests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="CPR.IntegrationTests.GoalControllerProblemDetailsTests" name="CreateGoal_WhenServiceThrowsArgumentNull_Returns400ProblemDetails" />
+    </UnitTest>
     <UnitTest name="CPR.IntegrationTests.SeedVerificationTests.SeedRows_Exist_InDatabase" storage="d:\projects\cpr\tests\cpr.integrationtests\bin\debug\net9.0\cpr.integrationtests.dll" id="f063b7f5-94b9-a8f0-437e-38f824100854">
-      <Execution id="fe7d6313-295d-4fca-8e84-b2eef334aaf8" />
+      <Execution id="e5c83ac5-44e6-4897-9fb4-d86d7cdee61d" />
       <TestMethod codeBase="D:\projects\CPR\tests\CPR.IntegrationTests\bin\Debug\net9.0\CPR.IntegrationTests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="CPR.IntegrationTests.SeedVerificationTests" name="SeedRows_Exist_InDatabase" />
     </UnitTest>
     <UnitTest name="CPR.IntegrationTests.MeControllerTests.GetMe_WithValidToken_ReturnsOk" storage="d:\projects\cpr\tests\cpr.integrationtests\bin\debug\net9.0\cpr.integrationtests.dll" id="4db065df-e165-6201-98ef-ce56445e3caf">
-      <Execution id="eacf384c-17a7-4bf2-bda9-0e8946160734" />
+      <Execution id="b2dce810-0c74-43ca-8d0d-0fb6a9c1a68e" />
       <TestMethod codeBase="D:\projects\CPR\tests\CPR.IntegrationTests\bin\Debug\net9.0\CPR.IntegrationTests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="CPR.IntegrationTests.MeControllerTests" name="GetMe_WithValidToken_ReturnsOk" />
     </UnitTest>
     <UnitTest name="CPR.IntegrationTests.GoalPersistenceTests.CanCreateAndReadGoal" storage="d:\projects\cpr\tests\cpr.integrationtests\bin\debug\net9.0\cpr.integrationtests.dll" id="532ad4e5-578d-5d5e-389f-e29ae44a8370">
-      <Execution id="3764fc54-19c9-4f0b-8526-55eda26bd976" />
+      <Execution id="a900a35f-af51-444f-a47d-0249a1d1c4ec" />
       <TestMethod codeBase="D:\projects\CPR\tests\CPR.IntegrationTests\bin\Debug\net9.0\CPR.IntegrationTests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="CPR.IntegrationTests.GoalPersistenceTests" name="CanCreateAndReadGoal" />
     </UnitTest>
   </TestDefinitions>
   <TestEntries>
-    <TestEntry testId="d05bc568-58a5-4262-725d-6c0b439220ce" executionId="3f490034-44f0-4d83-ac99-90a8ac6a43ed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
-    <TestEntry testId="8cc60949-5900-f178-8413-70dafcf5b45b" executionId="a83e6d1b-af17-482a-b96f-f37dabdb73ac" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
-    <TestEntry testId="fe1ed513-1250-e1d2-25f2-fcc8fda41b69" executionId="6b7c935b-10f6-4eee-8607-24a7a040d5c0" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
-    <TestEntry testId="f063b7f5-94b9-a8f0-437e-38f824100854" executionId="fe7d6313-295d-4fca-8e84-b2eef334aaf8" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
-    <TestEntry testId="fe1dd90f-597a-889d-a6df-6fac4049ab48" executionId="410d30d2-d26c-46f6-948d-8072c605f023" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
-    <TestEntry testId="532ad4e5-578d-5d5e-389f-e29ae44a8370" executionId="3764fc54-19c9-4f0b-8526-55eda26bd976" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
-    <TestEntry testId="4db065df-e165-6201-98ef-ce56445e3caf" executionId="eacf384c-17a7-4bf2-bda9-0e8946160734" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="532ad4e5-578d-5d5e-389f-e29ae44a8370" executionId="a900a35f-af51-444f-a47d-0249a1d1c4ec" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="d05bc568-58a5-4262-725d-6c0b439220ce" executionId="29cfa5cc-e6b3-4130-8cc0-b97d129b8d86" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="4db065df-e165-6201-98ef-ce56445e3caf" executionId="b2dce810-0c74-43ca-8d0d-0fb6a9c1a68e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="ee2e5bd1-8e7f-cb2f-5ce3-d7e00bb52d61" executionId="c0b8d71e-10e0-4bdc-ae33-555a221beeff" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="fe1ed513-1250-e1d2-25f2-fcc8fda41b69" executionId="126c2474-de23-4eb4-b9f0-92b70ca08f40" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="db8fd5c7-ac98-c33d-b5b3-971433a1afb2" executionId="d4426ae1-da77-4249-bed3-71c2a41e2105" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="f063b7f5-94b9-a8f0-437e-38f824100854" executionId="e5c83ac5-44e6-4897-9fb4-d86d7cdee61d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="fe1dd90f-597a-889d-a6df-6fac4049ab48" executionId="ca059cb6-0557-4aa0-b1bb-c37c3d4c0fe3" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="8cc60949-5900-f178-8413-70dafcf5b45b" executionId="d54ab5dd-38b0-43aa-b901-4570c0caa369" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
   </TestEntries>
   <TestLists>
     <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
     <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
   </TestLists>
   <ResultSummary outcome="Completed">
-    <Counters total="7" executed="7" passed="7" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Counters total="9" executed="9" passed="9" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
     <Output>
       <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v2.5.3.1+6b60a9e56a (64-bit .NET 9.0.3)&#xD;
-[xUnit.net 00:00:00.98]   Discovering: CPR.IntegrationTests&#xD;
-[xUnit.net 00:00:01.01]   Discovered:  CPR.IntegrationTests&#xD;
-[xUnit.net 00:00:01.01]   Starting:    CPR.IntegrationTests&#xD;
+[xUnit.net 00:00:00.73]   Discovering: CPR.IntegrationTests&#xD;
+[xUnit.net 00:00:00.75]   Discovered:  CPR.IntegrationTests&#xD;
+[xUnit.net 00:00:00.76]   Starting:    CPR.IntegrationTests&#xD;
+PostgresTransactionalFixture opened connection: Host=localhost;Port=5432;Database=cpr_test;Username=postgres&#xD;
+PostgresTransactionalFixture connection database: cpr_test&#xD;
+info: Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager[63]&#xD;
+      User profile is available. Using 'C:\Users\vyach\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.&#xD;
 info: Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager[63]&#xD;
       User profile is available. Using 'C:\Users\vyach\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.&#xD;
 info: Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager[63]&#xD;
@@ -70,7 +86,17 @@ info: Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager[63]&#xD;
 info: Microsoft.AspNetCore.Hosting.Diagnostics[1]&#xD;
       Request starting HTTP/1.1 GET http://localhost/me - - -&#xD;
 info: Microsoft.AspNetCore.Hosting.Diagnostics[1]&#xD;
+      Request starting HTTP/1.1 GET http://localhost/__test/throw/argnull - - -&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]&#xD;
       Request starting HTTP/1.1 GET http://localhost/me - - -&#xD;
+warn: 9/12/2025 09:38:17.211 CoreEventId.SensitiveDataLoggingEnabledWarning[10400] (Microsoft.EntityFrameworkCore.Infrastructure) &#xD;
+      Sensitive data logging is enabled. Log entries and exception messages may include sensitive application data; this mode should only be enabled during development.&#xD;
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]&#xD;
+      Executing endpoint 'HTTP: GET /__test/throw/argnull'&#xD;
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]&#xD;
+      Executed endpoint 'HTTP: GET /__test/throw/argnull'&#xD;
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor[1]&#xD;
+      Executing ObjectResult, writing value of type 'Microsoft.AspNetCore.Mvc.ProblemDetails'.&#xD;
 info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]&#xD;
       Executing endpoint 'CPR.Api.Controllers.MeController.Get (CPR.Api)'&#xD;
 info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]&#xD;
@@ -83,19 +109,257 @@ info: Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor[1]&#xD;
       Executing OkObjectResult, writing value of type 'CPR.Api.Models.UserProfile'.&#xD;
 info: Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor[1]&#xD;
       Executing OkObjectResult, writing value of type 'CPR.Api.Models.UserProfile'.&#xD;
+dbug: 9/12/2025 09:38:17.253 CoreEventId.ContextInitialized[10403] (Microsoft.EntityFrameworkCore.Infrastructure) &#xD;
+      Entity Framework Core 9.0.0 initialized 'CprDbContext' using provider 'Npgsql.EntityFrameworkCore.PostgreSQL:9.0.0+f07040d3e35e2a228486f3ee9633784aa196a2c3' with options: SensitiveDataLoggingEnabled &#xD;
+EF Goal mapped properties: Id, CompletedAt, CreatedAt, CreatedBy, Deadline, DeletedAt, DeletedBy, Description, EmployeeId, IsCompleted, IsDeleted, ModifiedAt, ModifiedBy, Priority, ProgressPercent, RelatedSkillId, RelatedSkillLevelId, Status, Title, Visibility&#xD;
+dbug: 9/12/2025 09:38:17.256 RelationalEventId.ConnectionCreating[20005] (Microsoft.EntityFrameworkCore.Database.Connection) &#xD;
+      Creating DbConnection.&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]&#xD;
+      Request finished HTTP/1.1 GET http://localhost/__test/throw/argnull - 400 166 application/problem+json;+charset=utf-8 57.3116ms&#xD;
 info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[105]&#xD;
-      Executed action CPR.Api.Controllers.MeController.Get (CPR.Api) in 17.9256ms&#xD;
+      Executed action CPR.Api.Controllers.MeController.Get (CPR.Api) in 5.2139ms&#xD;
 info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[105]&#xD;
-      Executed action CPR.Api.Controllers.MeController.Get (CPR.Api) in 18.0215ms&#xD;
+      Executed action CPR.Api.Controllers.MeController.Get (CPR.Api) in 5.2141ms&#xD;
 info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]&#xD;
       Executed endpoint 'CPR.Api.Controllers.MeController.Get (CPR.Api)'&#xD;
 info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]&#xD;
       Executed endpoint 'CPR.Api.Controllers.MeController.Get (CPR.Api)'&#xD;
 info: Microsoft.AspNetCore.Hosting.Diagnostics[2]&#xD;
-      Request finished HTTP/1.1 GET http://localhost/me - 200 233 application/json;+charset=utf-8 67.1052ms&#xD;
+      Request finished HTTP/1.1 GET http://localhost/me - 200 233 application/json;+charset=utf-8 66.0426ms&#xD;
 info: Microsoft.AspNetCore.Hosting.Diagnostics[2]&#xD;
-      Request finished HTTP/1.1 GET http://localhost/me - 200 233 application/json;+charset=utf-8 67.1086ms&#xD;
-[xUnit.net 00:00:01.78]   Finished:    CPR.IntegrationTests&#xD;
+      Request finished HTTP/1.1 GET http://localhost/me - 200 233 application/json;+charset=utf-8 66.0447ms&#xD;
+dbug: 9/12/2025 09:38:17.263 RelationalEventId.ConnectionCreated[20006] (Microsoft.EntityFrameworkCore.Database.Connection) &#xD;
+      Created DbConnection. (0ms).&#xD;
+info: Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager[63]&#xD;
+      User profile is available. Using 'C:\Users\vyach\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]&#xD;
+      Request starting HTTP/1.1 GET http://localhost/__test/throw/argout - - -&#xD;
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]&#xD;
+      Executing endpoint 'HTTP: GET /__test/throw/argout'&#xD;
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]&#xD;
+      Executed endpoint 'HTTP: GET /__test/throw/argout'&#xD;
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor[1]&#xD;
+      Executing ObjectResult, writing value of type 'Microsoft.AspNetCore.Mvc.ProblemDetails'.&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]&#xD;
+      Request finished HTTP/1.1 GET http://localhost/__test/throw/argout - 400 196 application/problem+json;+charset=utf-8 1.6977ms&#xD;
+DB goals table columns: id, employee_id, related_skill_id, related_skill_level_id, title, description, status, deadline, is_completed, completed_at, progress_percent, priority, visibility, created_by, created_at, modified_by, modified_at, is_deleted, deleted_by, deleted_at&#xD;
+dbug: 9/12/2025 09:38:17.388 CoreEventId.StartedTracking[10806] (Microsoft.EntityFrameworkCore.ChangeTracking) &#xD;
+      Context 'CprDbContext' started tracking 'Goal' entity with key '{Id: a190a19f-c182-422d-914e-5c96463635d0}'.&#xD;
+dbug: 9/12/2025 09:38:17.391 CoreEventId.SaveChangesStarting[10004] (Microsoft.EntityFrameworkCore.Update) &#xD;
+      SaveChanges starting for 'CprDbContext'.&#xD;
+dbug: 9/12/2025 09:38:17.392 CoreEventId.DetectChangesStarting[10800] (Microsoft.EntityFrameworkCore.ChangeTracking) &#xD;
+      DetectChanges starting for 'CprDbContext'.&#xD;
+dbug: 9/12/2025 09:38:17.421 CoreEventId.DetectChangesCompleted[10801] (Microsoft.EntityFrameworkCore.ChangeTracking) &#xD;
+      DetectChanges completed for 'CprDbContext'.&#xD;
+dbug: 9/12/2025 09:38:17.453 RelationalEventId.CommandCreating[20103] (Microsoft.EntityFrameworkCore.Database.Command) &#xD;
+      Creating DbCommand for 'ExecuteReader'.&#xD;
+dbug: 9/12/2025 09:38:17.454 RelationalEventId.CommandCreated[20104] (Microsoft.EntityFrameworkCore.Database.Command) &#xD;
+      Created DbCommand for 'ExecuteReader' (0ms).&#xD;
+dbug: 9/12/2025 09:38:17.457 RelationalEventId.CommandInitialized[20106] (Microsoft.EntityFrameworkCore.Database.Command) &#xD;
+      Initialized DbCommand for 'ExecuteReader' (4ms).&#xD;
+dbug: 9/12/2025 09:38:17.460 RelationalEventId.CommandExecuting[20100] (Microsoft.EntityFrameworkCore.Database.Command) &#xD;
+      Executing DbCommand [Parameters=[@p0='a190a19f-c182-422d-914e-5c96463635d0', @p1=NULL (DbType = DateTime), @p2='2025-09-12T14:38:17.3295250+00:00' (DbType = DateTime), @p3=NULL (DbType = Guid), @p4=NULL (DbType = Date), @p5=NULL (DbType = DateTime), @p6=NULL (DbType = Guid), @p7='verify persistence', @p8='33333333-3333-3333-3333-333333333333', @p9='False', @p10=NULL (DbType = DateTime), @p11=NULL (DbType = Guid), @p12=NULL (DbType = Int16), @p13=NULL (DbType = Guid), @p14=NULL (DbType = Guid), @p15='open' (Nullable = false), @p16='Integration test goal' (Nullable = false), @p17=NULL], CommandType='Text', CommandTimeout='30']&#xD;
+      INSERT INTO goals (id, completed_at, created_at, created_by, deadline, deleted_at, deleted_by, description, employee_id, is_deleted, modified_at, modified_by, priority, related_skill_id, related_skill_level_id, status, title, visibility)&#xD;
+      VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11, @p12, @p13, @p14, @p15, @p16, @p17)&#xD;
+      RETURNING is_completed, progress_percent;&#xD;
+info: 9/12/2025 09:38:17.476 RelationalEventId.CommandExecuted[20101] (Microsoft.EntityFrameworkCore.Database.Command) &#xD;
+      Executed DbCommand (16ms) [Parameters=[@p0='a190a19f-c182-422d-914e-5c96463635d0', @p1=NULL (DbType = DateTime), @p2='2025-09-12T14:38:17.3295250+00:00' (DbType = DateTime), @p3=NULL (DbType = Guid), @p4=NULL (DbType = Date), @p5=NULL (DbType = DateTime), @p6=NULL (DbType = Guid), @p7='verify persistence', @p8='33333333-3333-3333-3333-333333333333', @p9='False', @p10=NULL (DbType = DateTime), @p11=NULL (DbType = Guid), @p12=NULL (DbType = Int16), @p13=NULL (DbType = Guid), @p14=NULL (DbType = Guid), @p15='open' (Nullable = false), @p16='Integration test goal' (Nullable = false), @p17=NULL], CommandType='Text', CommandTimeout='30']&#xD;
+      INSERT INTO goals (id, completed_at, created_at, created_by, deadline, deleted_at, deleted_by, description, employee_id, is_deleted, modified_at, modified_by, priority, related_skill_id, related_skill_level_id, status, title, visibility)&#xD;
+      VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11, @p12, @p13, @p14, @p15, @p16, @p17)&#xD;
+      RETURNING is_completed, progress_percent;&#xD;
+dbug: 9/12/2025 09:38:17.486 RelationalEventId.DataReaderClosing[20301] (Microsoft.EntityFrameworkCore.Database.Command) &#xD;
+      Closing data reader to 'cpr_test' on server 'tcp://localhost:5432'.&#xD;
+dbug: 9/12/2025 09:38:17.488 RelationalEventId.DataReaderDisposing[20300] (Microsoft.EntityFrameworkCore.Database.Command) &#xD;
+      A data reader for 'cpr_test' on server 'tcp://localhost:5432' is being disposed after spending 9ms reading results.&#xD;
+dbug: 9/12/2025 09:38:17.494 CoreEventId.StateChanged[10807] (Microsoft.EntityFrameworkCore.ChangeTracking) &#xD;
+      The 'Goal' entity with key '{Id: a190a19f-c182-422d-914e-5c96463635d0}' tracked by 'CprDbContext' changed state from 'Added' to 'Unchanged'.&#xD;
+dbug: 9/12/2025 09:38:17.495 CoreEventId.SaveChangesCompleted[10005] (Microsoft.EntityFrameworkCore.Update) &#xD;
+      SaveChanges completed for 'CprDbContext' with 1 entities written to the database.&#xD;
+dbug: 9/12/2025 09:38:17.501 CoreEventId.QueryCompilationStarting[10111] (Microsoft.EntityFrameworkCore.Query) &#xD;
+      Compiling query expression: &#xD;
+      'DbSet&lt;Goal&gt;()&#xD;
+          .FirstOrDefault(g =&gt; g.Id == __goal_Id_0)'&#xD;
+dbug: 9/12/2025 09:38:17.531 CoreEventId.QueryExecutionPlanned[10107] (Microsoft.EntityFrameworkCore.Query) &#xD;
+      Generated query execution expression: &#xD;
+      'queryContext =&gt; ShapedQueryCompilingExpressionVisitor.SingleOrDefaultAsync&lt;Goal&gt;(&#xD;
+          asyncEnumerable: SingleQueryingEnumerable.Create&lt;Goal&gt;(&#xD;
+              relationalQueryContext: (RelationalQueryContext)queryContext, &#xD;
+              relationalCommandResolver: parameters =&gt; [LIFTABLE Constant: RelationalCommandCache.QueryExpression(&#xD;
+                  Projection Mapping:&#xD;
+                      EmptyProjectionMember -&gt; Dictionary&lt;IProperty, int&gt; { [Property: Goal.Id (Guid) Required PK AfterSave:Throw ValueGenerated.OnAdd, 0], [Property: Goal.CompletedAt (DateTimeOffset?), 1], [Property: Goal.CreatedAt (DateTimeOffset) Required ValueGenerated.OnAdd, 2], [Property: Goal.CreatedBy (Guid?), 3], [Property: Goal.Deadline (DateTime?), 4], [Property: Goal.DeletedAt (DateTimeOffset?), 5], [Property: Goal.DeletedBy (Guid?), 6], [Property: Goal.Description (string), 7], [Property: Goal.EmployeeId (Guid) Required, 8], [Property: Goal.IsCompleted (bool) Required ValueGenerated.OnAdd, 9], [Property: Goal.IsDeleted (bool) Required, 10], [Property: Goal.ModifiedAt (DateTimeOffset?), 11], [Property: Goal.ModifiedBy (Guid?), 12], [Property: Goal.Priority (short?), 13], [Property: Goal.ProgressPercent (decimal) Required ValueGenerated.OnAdd, 14], [Property: Goal.RelatedSkillId (Guid?), 15], [Property: Goal.RelatedSkillLevelId (Guid?), 16], [Property: Goal.Status (string) Required ValueGenerated.OnAdd, 17], [Property: Goal.Title (string) Required, 18], [Property: Goal.Visibility (string), 19] }&#xD;
+                  SELECT TOP(1) g.id, g.completed_at, g.created_at, g.created_by, g.deadline, g.deleted_at, g.deleted_by, g.description, g.employee_id, g.is_completed, g.is_deleted, g.modified_at, g.modified_by, g.priority, g.progress_percent, g.related_skill_id, g.related_skill_level_id, g.status, g.title, g.visibility&#xD;
+                  FROM goals AS g&#xD;
+                  WHERE g.id == @__goal_Id_0) | Resolver: c =&gt; new RelationalCommandCache(&#xD;
+                  c.Dependencies.MemoryCache, &#xD;
+                  c.RelationalDependencies.QuerySqlGeneratorFactory, &#xD;
+                  c.RelationalDependencies.RelationalParameterBasedSqlProcessorFactory, &#xD;
+                  Projection Mapping:&#xD;
+                      EmptyProjectionMember -&gt; Dictionary&lt;IProperty, int&gt; { [Property: Goal.Id (Guid) Required PK AfterSave:Throw ValueGenerated.OnAdd, 0], [Property: Goal.CompletedAt (DateTimeOffset?), 1], [Property: Goal.CreatedAt (DateTimeOffset) Required ValueGenerated.OnAdd, 2], [Property: Goal.CreatedBy (Guid?), 3], [Property: Goal.Deadline (DateTime?), 4], [Property: Goal.DeletedAt (DateTimeOffset?), 5], [Property: Goal.DeletedBy (Guid?), 6], [Property: Goal.Description (string), 7], [Property: Goal.EmployeeId (Guid) Required, 8], [Property: Goal.IsCompleted (bool) Required ValueGenerated.OnAdd, 9], [Property: Goal.IsDeleted (bool) Required, 10], [Property: Goal.ModifiedAt (DateTimeOffset?), 11], [Property: Goal.ModifiedBy (Guid?), 12], [Property: Goal.Priority (short?), 13], [Property: Goal.ProgressPercent (decimal) Required ValueGenerated.OnAdd, 14], [Property: Goal.RelatedSkillId (Guid?), 15], [Property: Goal.RelatedSkillLevelId (Guid?), 16], [Property: Goal.Status (string) Required ValueGenerated.OnAdd, 17], [Property: Goal.Title (string) Required, 18], [Property: Goal.Visibility (string), 19] }&#xD;
+                  SELECT TOP(1) g.id, g.completed_at, g.created_at, g.created_by, g.deadline, g.deleted_at, g.deleted_by, g.description, g.employee_id, g.is_completed, g.is_deleted, g.modified_at, g.modified_by, g.priority, g.progress_percent, g.related_skill_id, g.related_skill_level_id, g.status, g.title, g.visibility&#xD;
+                  FROM goals AS g&#xD;
+                  WHERE g.id == @__goal_Id_0, &#xD;
+                  False, &#xD;
+                  new HashSet&lt;string&gt;(&#xD;
+                      new string[]{ }, &#xD;
+                      StringComparer.Ordinal&#xD;
+                  )&#xD;
+              )].GetRelationalCommandTemplate(parameters), &#xD;
+              readerColumns: null, &#xD;
+              shaper: (queryContext, dataReader, resultContext, resultCoordinator) =&gt; &#xD;
+              {&#xD;
+                  Goal entity;&#xD;
+                  entity = &#xD;
+                  {&#xD;
+                      MaterializationContext materializationContext1;&#xD;
+                      IEntityType entityType1;&#xD;
+                      Goal instance1;&#xD;
+                      InternalEntityEntry entry1;&#xD;
+                      bool hasNullKey1;&#xD;
+                      materializationContext1 = new MaterializationContext(&#xD;
+                          [LIFTABLE Constant: ValueBuffer | Resolver: _ =&gt; (object)ValueBuffer.Empty], &#xD;
+                          queryContext.Context&#xD;
+                      );&#xD;
+                      instance1 = default(Goal);&#xD;
+                      entry1 = queryContext.TryGetEntry(&#xD;
+                          key: [LIFTABLE Constant: Key: Goal.Id PK | Resolver: c =&gt; c.Dependencies.Model.FindEntityType("CPR.Domain.Entities.Goal").FindPrimaryKey()], &#xD;
+                          keyValues: new object[]{ (object)dataReader.GetGuid(0) }, &#xD;
+                          throwOnNullKey: True, &#xD;
+                          hasNullKey: hasNullKey1);&#xD;
+                      !(hasNullKey1) ? entry1 != default(InternalEntityEntry) ? &#xD;
+                      {&#xD;
+                          entityType1 = entry1.EntityType;&#xD;
+                          return instance1 = (Goal)entry1.Entity;&#xD;
+                      } : &#xD;
+                      {&#xD;
+                          ISnapshot shadowSnapshot1;&#xD;
+                          shadowSnapshot1 = [LIFTABLE Constant: Snapshot | Resolver: _ =&gt; Snapshot.Empty];&#xD;
+                          entityType1 = [LIFTABLE Constant: EntityType: Goal | Resolver: namelessParameter{0} =&gt; namelessParameter{0}.Dependencies.Model.FindEntityType("CPR.Domain.Entities.Goal")];&#xD;
+                          instance1 = switch (entityType1)&#xD;
+                          {&#xD;
+                              case [LIFTABLE Constant: EntityType: Goal | Resolver: namelessParameter{1} =&gt; namelessParameter{1}.Dependencies.Model.FindEntityType("CPR.Domain.Entities.Goal")]: &#xD;
+                                  {&#xD;
+                                      return &#xD;
+                                      {&#xD;
+                                          Goal instance;&#xD;
+                                          instance = new Goal();&#xD;
+                                          instance.&lt;Id&gt;k__BackingField = dataReader.GetGuid(0);&#xD;
+                                          instance.&lt;CompletedAt&gt;k__BackingField = dataReader.IsDBNull(1) ? default(DateTimeOffset?) : (DateTimeOffset?)dataReader.GetFieldValue&lt;DateTimeOffset&gt;(1);&#xD;
+                                          instance.&lt;CreatedAt&gt;k__BackingField = dataReader.GetFieldValue&lt;DateTimeOffset&gt;(2);&#xD;
+                                          instance.&lt;CreatedBy&gt;k__BackingField = dataReader.IsDBNull(3) ? default(Guid?) : (Guid?)dataReader.GetGuid(3);&#xD;
+                                          instance.&lt;Deadline&gt;k__BackingField = dataReader.IsDBNull(4) ? default(DateTime?) : (DateTime?)dataReader.GetDateTime(4);&#xD;
+                                          instance.&lt;DeletedAt&gt;k__BackingField = dataReader.IsDBNull(5) ? default(DateTimeOffset?) : (DateTimeOffset?)dataReader.GetFieldValue&lt;DateTimeOffset&gt;(5);&#xD;
+                                          instance.&lt;DeletedBy&gt;k__BackingField = dataReader.IsDBNull(6) ? default(Guid?) : (Guid?)dataReader.GetGuid(6);&#xD;
+                                          instance.&lt;Description&gt;k__BackingField = dataReader.IsDBNull(7) ? default(string) : dataReader.GetString(7);&#xD;
+                                          instance.&lt;EmployeeId&gt;k__BackingField = dataReader.GetGuid(8);&#xD;
+                                          instance.&lt;IsCompleted&gt;k__BackingField = dataReader.GetBoolean(9);&#xD;
+                                          instance.&lt;IsDeleted&gt;k__BackingField = dataReader.GetBoolean(10);&#xD;
+                                          instance.&lt;ModifiedAt&gt;k__BackingField = dataReader.IsDBNull(11) ? default(DateTimeOffset?) : (DateTimeOffset?)dataReader.GetFieldValue&lt;DateTimeOffset&gt;(11);&#xD;
+                                          instance.&lt;ModifiedBy&gt;k__BackingField = dataReader.IsDBNull(12) ? default(Guid?) : (Guid?)dataReader.GetGuid(12);&#xD;
+                                          instance.&lt;Priority&gt;k__BackingField = dataReader.IsDBNull(13) ? default(short?) : (short?)dataReader.GetInt16(13);&#xD;
+                                          instance.&lt;ProgressPercent&gt;k__BackingField = dataReader.GetDecimal(14);&#xD;
+                                          instance.&lt;RelatedSkillId&gt;k__BackingField = dataReader.IsDBNull(15) ? default(Guid?) : (Guid?)dataReader.GetGuid(15);&#xD;
+                                          instance.&lt;RelatedSkillLevelId&gt;k__BackingField = dataReader.IsDBNull(16) ? default(Guid?) : (Guid?)dataReader.GetGuid(16);&#xD;
+                                          instance.&lt;Status&gt;k__BackingField = dataReader.GetString(17);&#xD;
+                                          instance.&lt;Title&gt;k__BackingField = dataReader.GetString(18);&#xD;
+                                          instance.&lt;Visibility&gt;k__BackingField = dataReader.IsDBNull(19) ? default(string) : dataReader.GetString(19);&#xD;
+                                          (instance is IInjectableService) ? ((IInjectableService)instance).Injected(&#xD;
+                                              context: materializationContext1.Context, &#xD;
+                                              entity: instance, &#xD;
+                                              queryTrackingBehavior: TrackAll, &#xD;
+                                              structuralType: [LIFTABLE Constant: EntityType: Goal | Resolver: namelessParameter{2} =&gt; namelessParameter{2}.Dependencies.Model.FindEntityType("CPR.Domain.Entities.Goal")]) : default(void);&#xD;
+                                          return instance;&#xD;
+                                      }}&#xD;
+                              default: &#xD;
+                                  default(Goal)&#xD;
+                          }&#xD;
+                          ;&#xD;
+                          entry1 = entityType1 == default(IEntityType) ? default(InternalEntityEntry) : queryContext.StartTracking(&#xD;
+                              entityType: entityType1, &#xD;
+                              entity: instance1, &#xD;
+                              snapshot: shadowSnapshot1);&#xD;
+                          return instance1;&#xD;
+                      } : default(void);&#xD;
+                      return instance1;&#xD;
+                  };&#xD;
+                  return entity;&#xD;
+              }, &#xD;
+              contextType: CPR.Infrastructure.Data.CprDbContext, &#xD;
+              standAloneStateManager: False, &#xD;
+              detailedErrorsEnabled: False, &#xD;
+              threadSafetyChecksEnabled: True), &#xD;
+          cancellationToken: queryContext.CancellationToken)'&#xD;
+dbug: 9/12/2025 09:38:17.541 RelationalEventId.CommandCreating[20103] (Microsoft.EntityFrameworkCore.Database.Command) &#xD;
+      Creating DbCommand for 'ExecuteReader'.&#xD;
+dbug: 9/12/2025 09:38:17.542 RelationalEventId.CommandCreated[20104] (Microsoft.EntityFrameworkCore.Database.Command) &#xD;
+      Created DbCommand for 'ExecuteReader' (0ms).&#xD;
+dbug: 9/12/2025 09:38:17.542 RelationalEventId.CommandInitialized[20106] (Microsoft.EntityFrameworkCore.Database.Command) &#xD;
+      Initialized DbCommand for 'ExecuteReader' (0ms).&#xD;
+dbug: 9/12/2025 09:38:17.542 RelationalEventId.CommandExecuting[20100] (Microsoft.EntityFrameworkCore.Database.Command) &#xD;
+      Executing DbCommand [Parameters=[@__goal_Id_0='a190a19f-c182-422d-914e-5c96463635d0'], CommandType='Text', CommandTimeout='30']&#xD;
+      SELECT g.id, g.completed_at, g.created_at, g.created_by, g.deadline, g.deleted_at, g.deleted_by, g.description, g.employee_id, g.is_completed, g.is_deleted, g.modified_at, g.modified_by, g.priority, g.progress_percent, g.related_skill_id, g.related_skill_level_id, g.status, g.title, g.visibility&#xD;
+      FROM goals AS g&#xD;
+      WHERE g.id = @__goal_Id_0&#xD;
+      LIMIT 1&#xD;
+info: 9/12/2025 09:38:17.544 RelationalEventId.CommandExecuted[20101] (Microsoft.EntityFrameworkCore.Database.Command) &#xD;
+      Executed DbCommand (2ms) [Parameters=[@__goal_Id_0='a190a19f-c182-422d-914e-5c96463635d0'], CommandType='Text', CommandTimeout='30']&#xD;
+      SELECT g.id, g.completed_at, g.created_at, g.created_by, g.deadline, g.deleted_at, g.deleted_by, g.description, g.employee_id, g.is_completed, g.is_deleted, g.modified_at, g.modified_by, g.priority, g.progress_percent, g.related_skill_id, g.related_skill_level_id, g.status, g.title, g.visibility&#xD;
+      FROM goals AS g&#xD;
+      WHERE g.id = @__goal_Id_0&#xD;
+      LIMIT 1&#xD;
+dbug: 9/12/2025 09:38:17.546 RelationalEventId.DataReaderClosing[20301] (Microsoft.EntityFrameworkCore.Database.Command) &#xD;
+      Closing data reader to 'cpr_test' on server 'tcp://localhost:5432'.&#xD;
+dbug: 9/12/2025 09:38:17.546 RelationalEventId.DataReaderDisposing[20300] (Microsoft.EntityFrameworkCore.Database.Command) &#xD;
+      A data reader for 'cpr_test' on server 'tcp://localhost:5432' is being disposed after spending 1ms reading results.&#xD;
+dbug: 9/12/2025 09:38:17.546 CoreEventId.ContextDisposed[10407] (Microsoft.EntityFrameworkCore.Infrastructure) &#xD;
+      'CprDbContext' disposed.&#xD;
+dbug: 9/12/2025 09:38:17.546 RelationalEventId.ConnectionDisposing[20007] (Microsoft.EntityFrameworkCore.Database.Connection) &#xD;
+      Disposing connection to database 'cpr_test' on server 'tcp://localhost:5432'.&#xD;
+dbug: 9/12/2025 09:38:17.547 RelationalEventId.ConnectionDisposed[20008] (Microsoft.EntityFrameworkCore.Database.Connection) &#xD;
+      Disposed connection to database 'cpr_test' on server 'tcp://localhost:5432' (0ms).&#xD;
+cpr_test goals table columns:&#xD;
+id&#xD;
+employee_id&#xD;
+related_skill_id&#xD;
+related_skill_level_id&#xD;
+title&#xD;
+description&#xD;
+status&#xD;
+deadline&#xD;
+is_completed&#xD;
+completed_at&#xD;
+progress_percent&#xD;
+priority&#xD;
+visibility&#xD;
+created_by&#xD;
+created_at&#xD;
+modified_by&#xD;
+modified_at&#xD;
+is_deleted&#xD;
+deleted_by&#xD;
+deleted_at&#xD;
+Test connection database: cpr_test&#xD;
+Visible goals table columns for this connection:&#xD;
+id&#xD;
+employee_id&#xD;
+related_skill_id&#xD;
+related_skill_level_id&#xD;
+title&#xD;
+description&#xD;
+status&#xD;
+deadline&#xD;
+is_completed&#xD;
+completed_at&#xD;
+progress_percent&#xD;
+priority&#xD;
+visibility&#xD;
+created_by&#xD;
+created_at&#xD;
+modified_by&#xD;
+modified_at&#xD;
+is_deleted&#xD;
+deleted_by&#xD;
+deleted_at&#xD;
+[xUnit.net 00:00:01.88]   Finished:    CPR.IntegrationTests&#xD;
 </StdOut>
     </Output>
   </ResultSummary>
