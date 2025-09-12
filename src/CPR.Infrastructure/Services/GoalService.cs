@@ -166,7 +166,13 @@ namespace CPR.Infrastructure.Services
             if (g == null) throw new InvalidOperationException("Goal not found");
             if (!string.IsNullOrEmpty(dto.Title)) g.Title = dto.Title;
             if (dto.Description != null) g.Description = dto.Description;
-            // Note: Goal entity does not have a Deadline field; task deadlines are on GoalTask.
+            if (dto.RelatedSkillId.HasValue) g.RelatedSkillId = dto.RelatedSkillId;
+            if (dto.RelatedSkillLevelId.HasValue) g.RelatedSkillLevelId = dto.RelatedSkillLevelId;
+            if (dto.Deadline.HasValue) g.Deadline = dto.Deadline.Value.DateTime;
+            if (!string.IsNullOrEmpty(dto.Status)) g.Status = dto.Status;
+            // EmployeeId is immutable via PATCH: do not modify g.EmployeeId here
+            if (dto.Priority.HasValue) g.Priority = dto.Priority;
+            if (!string.IsNullOrEmpty(dto.Visibility)) g.Visibility = dto.Visibility;
             g.ModifiedAt = DateTimeOffset.UtcNow;
             g.ModifiedBy = requestingUserId;
             await _repo.UpdateAsync(g);

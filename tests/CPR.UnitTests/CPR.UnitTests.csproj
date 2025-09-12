@@ -6,15 +6,16 @@
   <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
     <PackageReference Include="xunit" Version="2.5.3" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.5.3" />
+  <PackageReference Include="Moq" Version="4.20.0" />
   <FrameworkReference Include="Microsoft.AspNetCore.App" />
-    <PackageReference Include="Microsoft.Extensions.Options" Version="8.0.0" />
+  <PackageReference Include="Microsoft.Extensions.Options" Version="9.0.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\CPR.Api\CPR.Api.csproj" />
     <ProjectReference Include="..\..\src\CPR.Infrastructure\CPR.Infrastructure.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.Data.Sqlite" Version="8.0.0" />
+  <PackageReference Include="Microsoft.Data.Sqlite" Version="9.0.0" />
   <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="9.0.0" />
   </ItemGroup>
 </Project>
