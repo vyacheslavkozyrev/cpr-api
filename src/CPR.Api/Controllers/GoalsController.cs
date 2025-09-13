@@ -143,6 +143,12 @@ namespace CPR.Api.Controllers
             if (profile == null) return Unauthorized();
             if (!Guid.TryParse(profile.EmployeeId, out var ownerId)) return Unauthorized();
 
+            // Enforce that only the goal owner may patch tasks here. Retrieve the goal and
+            // verify the requesting employee matches the goal's employee id.
+            var goal = await _goalService.GetGoalByIdAsync(id, ownerId);
+            if (goal == null) return NotFound();
+            if (goal.EmployeeId != ownerId) return Forbid();
+
             var updated = await _goalService.UpdateTaskAsync(id, taskId, ownerId, dto);
             if (updated == null) return NotFound();
             return Ok(updated);

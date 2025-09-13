@@ -249,13 +249,13 @@ namespace CPR.UnitTests
             var task = await svc.AddTaskAsync(created.Id, ownerId, new CreateGoalTaskDto { Title = "t1", Description = "d1" });
 
             // update title and mark complete
-            var updatedTask = await svc.UpdateTaskAsync(created.Id, task.Id, ownerId, new UpdateGoalTaskDto { Title = "t1-up", IsCompleted = true });
+            var updatedTask = (await svc.UpdateTaskAsync(created.Id, task.Id, ownerId, new UpdateGoalTaskDto { Title = "t1-up", IsCompleted = true }))!;
             Assert.Equal("t1-up", updatedTask.Title);
             Assert.True(updatedTask.IsCompleted);
             Assert.NotNull(updatedTask.CompletedAt);
 
             // un-complete
-            var reopened = await svc.UpdateTaskAsync(created.Id, task.Id, ownerId, new UpdateGoalTaskDto { IsCompleted = false });
+            var reopened = (await svc.UpdateTaskAsync(created.Id, task.Id, ownerId, new UpdateGoalTaskDto { IsCompleted = false }))!;
             Assert.False(reopened.IsCompleted);
             Assert.Null(reopened.CompletedAt);
         }

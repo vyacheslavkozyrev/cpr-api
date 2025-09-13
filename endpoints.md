@@ -139,8 +139,8 @@ POST /goals/{id}/tasks
 - Errors: 400, 401, 403, 404.
 
 ### Minimal DTO names (suggested, C#)
-- CreateGoalDto { string Title; string? Description; DateTimeOffset? Deadline; Guid? RelatedSkillId }
-- GoalDto { Guid Id; Guid OwnerId; string Title; string? Description; string Status; DateTimeOffset CreatedAt; DateTimeOffset? UpdatedAt; List<TaskDto> Tasks }
+- CreateGoalDto { string Title; string? Description; DateTimeOffset? Deadline; Guid? RelatedSkillId; Guid? EmployeeId; int? Priority; string? Visibility }
+- GoalDto { Guid Id; Guid EmployeeId; string Title; string? Description; string Status; DateTimeOffset CreatedAt; DateTimeOffset? UpdatedAt; List<TaskDto> Tasks }
 - CreateGoalTaskDto { string Title; string? Description; DateTimeOffset? Deadline }
 - TaskDto { Guid Id; Guid GoalId; string Title; string? Description; DateTimeOffset? Deadline; bool IsCompleted; DateTimeOffset? CompletedAt }
 

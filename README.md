@@ -86,3 +86,29 @@ docker-compose -f docker-compose.test.yml down
 Notes
 - The stub signing key stored in the `JWT_SIGNING_KEY` environment variable is treated as a plain UTF-8 string (do not base64-decode it).
 - This auth stub is for local development and testing only. Do not use it in production.
+
+Scripts
+-------
+This repo includes convenience scripts in the `scripts/` folder for running tests and starting the API with a generated token.
+
+Windows (PowerShell):
+
+```powershell
+# run all tests (unit, contract, integration)
+.\scripts\run-tests.cmd
+
+# start API and generate a token (copied to clipboard)
+.\scripts\run-api.cmd
+```
+
+Unix / CI (bash):
+
+```bash
+# make sure script is executable once on your machine or CI job
+chmod +x ./scripts/run-tests.sh
+./scripts/run-tests.sh    # default: runs unit, contract, integration
+./scripts/run-tests.sh integration
+```
+
+If you need to override the test database name set `DATABASE_NAME` before invoking the scripts.
+

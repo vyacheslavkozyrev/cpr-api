@@ -1,5 +1,6 @@
 using CPR.Api;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Mvc.NewtonsoftJson;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -13,6 +14,17 @@ using System.IO;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Reduce noisy framework logging during test runs
+// (tests and TestServer pick up this configuration via Program)
+// Apply broader Microsoft/System filters to suppress verbose EF Core and ASP.NET logs
+builder.Logging.AddFilter("Microsoft", LogLevel.Warning);
+builder.Logging.AddFilter("System", LogLevel.Warning);
+builder.Logging.AddFilter("Microsoft.EntityFrameworkCore", LogLevel.Warning);
+builder.Logging.AddFilter("Microsoft.EntityFrameworkCore.Infrastructure", LogLevel.Warning);
+builder.Logging.AddFilter("Microsoft.EntityFrameworkCore.Database.Command", LogLevel.Warning);
+builder.Logging.AddFilter("Microsoft.AspNetCore", LogLevel.Warning);
+builder.Logging.AddFilter("Npgsql", LogLevel.Warning);
 
 // Add minimal services
 builder.Services.AddControllers().AddNewtonsoftJson();
@@ -28,7 +40,6 @@ builder.Services.AddAuthorization();
 // Register app services
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<CPR.Api.Services.IUserService, CPR.Api.Services.UserService>();
-builder.Services.AddScoped<CPR.Application.Services.IGoalService, CPR.Api.Services.GoalService>();
 // Register Swagger/OpenAPI
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
@@ -83,7 +94,9 @@ builder.Services.AddSwaggerGen(options =>
 });
 builder.Services.AddInfrastructure();
 
-var connectionString = builder.Configuration.GetConnectionString("Default") ?? builder.Configuration["DATABASE_URL"] ?? "Host=localhost;Port=5432;Database=cpr_dev;Username=postgres;Password=postgres";
+var dbName = Environment.GetEnvironmentVariable("DATABASE_NAME") ?? "cpr_dev";
+var defaultConn = $"Host=localhost;Port=5432;Database={dbName};Username=postgres;Password=postgres";
+var connectionString = builder.Configuration.GetConnectionString("Default") ?? builder.Configuration["DATABASE_URL"] ?? defaultConn;
 
 builder.Services.AddDbContext<CprDbContext>(options =>
     options.UseNpgsql(connectionString)
