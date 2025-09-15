@@ -1,9 +1,9 @@
 # Tasklist — CPR
 
 Progress (update after each iteration)
-- Iteration: 7
+- Iteration: 8
 - Status: Complete
-- Notes: Iteration 7 completed (2025-09-12) — Goals CRUD and Goal Tasks implemented; tests executed and convenience scripts added (run-tests, run-api-with-token). Changes staged in workspace; ready to commit.
+- Notes: Iteration 8 completed (2025-09-15) — Skills taxonomy endpoints implemented and seeded; integration tests pending. Changes staged in workspace; ready to commit.
 
 Guidelines
 - Each iteration is incremental: implement, test, and deploy the listed items.
@@ -94,7 +94,7 @@ Iterations
   - Scope: POST /goals/{id}/tasks, GET /goals/{id}/tasks, PATCH /goals/{id}/tasks/{taskId}/complete
   - Acceptance: Integration test to add and complete a task.
 
- - [ ] Iteration 8 — Skills taxonomy (read-only)
+ - [x] Iteration 8 — Skills taxonomy (read-only)
   - Scope: GET /career, GET /career_track?career_path_id=, GET /positions?career_track_id=
   - Acceptance: Seeded career paths, career tracks and positions visible in staging; integration tests read lists and filter by query params.
 
