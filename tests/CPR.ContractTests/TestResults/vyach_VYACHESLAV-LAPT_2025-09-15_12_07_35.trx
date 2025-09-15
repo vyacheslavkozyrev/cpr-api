@@ -1,0 +1,75 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="5cd85d2b-8afb-45fe-9599-a5451c695e96" name="vyach@VYACHESLAV-LAPT 2025-09-15 12:07:35" runUser="VYACHESLAV-LAPT\vyach" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2025-09-15T12:07:35.5025698-05:00" queuing="2025-09-15T12:07:35.5025704-05:00" start="2025-09-15T12:07:33.6020242-05:00" finish="2025-09-15T12:07:36.4710703-05:00" />
+  <TestSettings name="default" id="608ddaa5-7b04-4489-a78e-b3f95b48a2ae">
+    <Deployment runDeploymentRoot="vyach_VYACHESLAV-LAPT_2025-09-15_12_07_35" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="ea4f1d17-a952-4580-bdef-2de7892e31b9" testId="e2f24123-908d-b478-5150-3738daca4d83" testName="CPR.ContractTests.CareerContractTests.Career_HasExpectedJsonShape" computerName="VYACHESLAV-LAPT" duration="00:00:00.0102723" startTime="2025-09-15T12:07:36.3904986-05:00" endTime="2025-09-15T12:07:36.3904988-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ea4f1d17-a952-4580-bdef-2de7892e31b9" />
+    <UnitTestResult executionId="1a046420-c081-4b74-b9ae-d1482e51e753" testId="98b3a5b3-fc39-c222-7564-7e04f240aa80" testName="CPR.ContractTests.PositionsContractTest.Positions_HaveExpectedJsonShape" computerName="VYACHESLAV-LAPT" duration="00:00:01.3111333" startTime="2025-09-15T12:07:36.2861781-05:00" endTime="2025-09-15T12:07:36.2861782-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1a046420-c081-4b74-b9ae-d1482e51e753" />
+    <UnitTestResult executionId="e9ea460d-17b0-4ad9-ab3a-36980fbdfbb2" testId="85897dc3-8d4d-ab36-42a0-9eb523f50eb7" testName="CPR.ContractTests.SwaggerSchemaContractTest.Swagger_IncludesPositionExpectationsProperty" computerName="VYACHESLAV-LAPT" duration="00:00:00.4069908" startTime="2025-09-15T12:07:35.3966348-05:00" endTime="2025-09-15T12:07:35.3966353-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e9ea460d-17b0-4ad9-ab3a-36980fbdfbb2">
+      <Output>
+        <ErrorInfo>
+          <Message>Swagger schema does not contain an 'expectations' property for Position DTO</Message>
+          <StackTrace>   at CPR.ContractTests.SwaggerSchemaContractTest.Swagger_IncludesPositionExpectationsProperty() in d:\projects\CPR\tests\CPR.ContractTests\SwaggerSchemaContractTest.cs:line 40&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="d0018a75-e566-4610-9b7d-73cd3b374a6d" testId="a2f79f01-79fa-6498-0415-a09d8f8341f9" testName="CPR.ContractTests.SampleContractTest.ContractPlaceholder" computerName="VYACHESLAV-LAPT" duration="00:00:00.0028756" startTime="2025-09-15T12:07:34.9799235-05:00" endTime="2025-09-15T12:07:34.9799392-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d0018a75-e566-4610-9b7d-73cd3b374a6d" />
+    <UnitTestResult executionId="f3b09828-da52-42cf-8d60-2078e8a22f98" testId="8deded96-f125-e84d-be8f-636b2c034cf9" testName="CPR.ContractTests.CareerContractTests.CareerTrack_FilteredByCareerPath_ReturnsArray" computerName="VYACHESLAV-LAPT" duration="00:00:01.4048753" startTime="2025-09-15T12:07:36.3799965-05:00" endTime="2025-09-15T12:07:36.3799968-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f3b09828-da52-42cf-8d60-2078e8a22f98" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="CPR.ContractTests.PositionsContractTest.Positions_HaveExpectedJsonShape" storage="d:\projects\cpr\tests\cpr.contracttests\bin\debug\net9.0\cpr.contracttests.dll" id="98b3a5b3-fc39-c222-7564-7e04f240aa80">
+      <Execution id="1a046420-c081-4b74-b9ae-d1482e51e753" />
+      <TestMethod codeBase="d:\projects\CPR\tests\CPR.ContractTests\bin\Debug\net9.0\CPR.ContractTests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="CPR.ContractTests.PositionsContractTest" name="Positions_HaveExpectedJsonShape" />
+    </UnitTest>
+    <UnitTest name="CPR.ContractTests.SampleContractTest.ContractPlaceholder" storage="d:\projects\cpr\tests\cpr.contracttests\bin\debug\net9.0\cpr.contracttests.dll" id="a2f79f01-79fa-6498-0415-a09d8f8341f9">
+      <Execution id="d0018a75-e566-4610-9b7d-73cd3b374a6d" />
+      <TestMethod codeBase="d:\projects\CPR\tests\CPR.ContractTests\bin\Debug\net9.0\CPR.ContractTests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="CPR.ContractTests.SampleContractTest" name="ContractPlaceholder" />
+    </UnitTest>
+    <UnitTest name="CPR.ContractTests.CareerContractTests.Career_HasExpectedJsonShape" storage="d:\projects\cpr\tests\cpr.contracttests\bin\debug\net9.0\cpr.contracttests.dll" id="e2f24123-908d-b478-5150-3738daca4d83">
+      <Execution id="ea4f1d17-a952-4580-bdef-2de7892e31b9" />
+      <TestMethod codeBase="d:\projects\CPR\tests\CPR.ContractTests\bin\Debug\net9.0\CPR.ContractTests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="CPR.ContractTests.CareerContractTests" name="Career_HasExpectedJsonShape" />
+    </UnitTest>
+    <UnitTest name="CPR.ContractTests.SwaggerSchemaContractTest.Swagger_IncludesPositionExpectationsProperty" storage="d:\projects\cpr\tests\cpr.contracttests\bin\debug\net9.0\cpr.contracttests.dll" id="85897dc3-8d4d-ab36-42a0-9eb523f50eb7">
+      <Execution id="e9ea460d-17b0-4ad9-ab3a-36980fbdfbb2" />
+      <TestMethod codeBase="d:\projects\CPR\tests\CPR.ContractTests\bin\Debug\net9.0\CPR.ContractTests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="CPR.ContractTests.SwaggerSchemaContractTest" name="Swagger_IncludesPositionExpectationsProperty" />
+    </UnitTest>
+    <UnitTest name="CPR.ContractTests.CareerContractTests.CareerTrack_FilteredByCareerPath_ReturnsArray" storage="d:\projects\cpr\tests\cpr.contracttests\bin\debug\net9.0\cpr.contracttests.dll" id="8deded96-f125-e84d-be8f-636b2c034cf9">
+      <Execution id="f3b09828-da52-42cf-8d60-2078e8a22f98" />
+      <TestMethod codeBase="d:\projects\CPR\tests\CPR.ContractTests\bin\Debug\net9.0\CPR.ContractTests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="CPR.ContractTests.CareerContractTests" name="CareerTrack_FilteredByCareerPath_ReturnsArray" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="e2f24123-908d-b478-5150-3738daca4d83" executionId="ea4f1d17-a952-4580-bdef-2de7892e31b9" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="98b3a5b3-fc39-c222-7564-7e04f240aa80" executionId="1a046420-c081-4b74-b9ae-d1482e51e753" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="85897dc3-8d4d-ab36-42a0-9eb523f50eb7" executionId="e9ea460d-17b0-4ad9-ab3a-36980fbdfbb2" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="a2f79f01-79fa-6498-0415-a09d8f8341f9" executionId="d0018a75-e566-4610-9b7d-73cd3b374a6d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="8deded96-f125-e84d-be8f-636b2c034cf9" executionId="f3b09828-da52-42cf-8d60-2078e8a22f98" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Failed">
+    <Counters total="5" executed="5" passed="4" failed="1" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v2.8.0+6438bb880a (64-bit .NET 9.0.3)&#xD;
+[xUnit.net 00:00:00.93]   Discovering: CPR.ContractTests&#xD;
+[xUnit.net 00:00:00.96]   Discovered:  CPR.ContractTests&#xD;
+[xUnit.net 00:00:00.96]   Starting:    CPR.ContractTests&#xD;
+[xUnit.net 00:00:01.41]       Swagger schema does not contain an 'expectations' property for Position DTO&#xD;
+[xUnit.net 00:00:01.42]       Stack Trace:&#xD;
+[xUnit.net 00:00:01.42]         d:\projects\CPR\tests\CPR.ContractTests\SwaggerSchemaContractTest.cs(40,0): at CPR.ContractTests.SwaggerSchemaContractTest.Swagger_IncludesPositionExpectationsProperty()&#xD;
+[xUnit.net 00:00:01.42]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:00:02.41]   Finished:    CPR.ContractTests&#xD;
+</StdOut>
+    </Output>
+    <RunInfos>
+      <RunInfo computerName="VYACHESLAV-LAPT" outcome="Error" timestamp="2025-09-15T12:07:35.3945633-05:00">
+        <Text>[xUnit.net 00:00:01.41]     CPR.ContractTests.SwaggerSchemaContractTest.Swagger_IncludesPositionExpectationsProperty [FAIL]</Text>
+      </RunInfo>
+    </RunInfos>
+  </ResultSummary>
+</TestRun>

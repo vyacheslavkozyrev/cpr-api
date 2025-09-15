@@ -12,6 +12,7 @@ using CPR.Infrastructure.Data;
 using System;
 using System.IO;
 using System.Reflection;
+using Swashbuckle.AspNetCore.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -83,15 +84,22 @@ builder.Services.AddSwaggerGen(options =>
     // Include XML comments if generated
     try
     {
-        var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-        var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-        if (File.Exists(xmlPath)) options.IncludeXmlComments(xmlPath);
+        // Include XML comments from all referenced assemblies (so DTO XML in CPR.Application appears)
+        var xmlFiles = Directory.GetFiles(AppContext.BaseDirectory, "*.xml", SearchOption.TopDirectoryOnly);
+        foreach (var xmlPath in xmlFiles)
+        {
+            try { options.IncludeXmlComments(xmlPath); } catch { /* ignore malformed or unrelated xml */ }
+        }
     }
     catch
     {
         // ignore if XML file cannot be found or loaded
     }
+    // Register example providers from this assembly (no-op here; AddSwaggerExamplesFromAssemblyOf registers provider services)
 });
+
+// register Swashbuckle example provider services
+builder.Services.AddSwaggerExamplesFromAssemblyOf<CPR.Api.Swagger.Examples.PositionsExample>();
 builder.Services.AddInfrastructure();
 
 var dbName = Environment.GetEnvironmentVariable("DATABASE_NAME") ?? "cpr_dev";

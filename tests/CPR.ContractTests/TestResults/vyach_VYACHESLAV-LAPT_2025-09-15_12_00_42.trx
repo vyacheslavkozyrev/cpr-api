@@ -1,0 +1,141 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="07842062-50af-4ebc-a6a9-9cacf5cd1e53" name="vyach@VYACHESLAV-LAPT 2025-09-15 12:00:42" runUser="VYACHESLAV-LAPT\vyach" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2025-09-15T12:00:42.9015832-05:00" queuing="2025-09-15T12:00:42.9015836-05:00" start="2025-09-15T12:00:40.9572966-05:00" finish="2025-09-15T12:00:43.8841897-05:00" />
+  <TestSettings name="default" id="f9a5ba23-f2a3-4f02-b687-14b53d5cb617">
+    <Deployment runDeploymentRoot="vyach_VYACHESLAV-LAPT_2025-09-15_12_00_42" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="99b8ff9c-dce8-4e2f-b260-289aefa31965" testId="e2f24123-908d-b478-5150-3738daca4d83" testName="CPR.ContractTests.CareerContractTests.Career_HasExpectedJsonShape" computerName="VYACHESLAV-LAPT" duration="00:00:00.0094109" startTime="2025-09-15T12:00:43.7861626-05:00" endTime="2025-09-15T12:00:43.7861628-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="99b8ff9c-dce8-4e2f-b260-289aefa31965">
+      <Output>
+        <ErrorInfo>
+          <Message>System.IO.DirectoryNotFoundException : Could not find a part of the path 'd:\projects\CPR\tests\CPR.ContractTests\bin\Debug\net9.0\schemas\career.schema.json'.</Message>
+          <StackTrace>   at Microsoft.Win32.SafeHandles.SafeFileHandle.CreateFile(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options)&#xD;
+   at Microsoft.Win32.SafeHandles.SafeFileHandle.Open(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)&#xD;
+   at System.IO.Strategies.OSFileStreamStrategy..ctor(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)&#xD;
+   at System.IO.Strategies.FileStreamHelpers.ChooseStrategyCore(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)&#xD;
+   at System.IO.StreamReader.ValidateArgsAndOpenPath(String path, Encoding encoding, Int32 bufferSize)&#xD;
+   at System.IO.File.ReadAllText(String path, Encoding encoding)&#xD;
+   at CPR.ContractTests.SchemaValidator.ValidateJson(String schemaRelativePath, String json) in d:\projects\CPR\tests\CPR.ContractTests\SchemaValidator.cs:line 16&#xD;
+   at CPR.ContractTests.CareerContractTests.Career_HasExpectedJsonShape() in d:\projects\CPR\tests\CPR.ContractTests\CareerContractTests.cs:line 35&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="ce81334e-7ac3-4655-a52d-8dd5808b01f9" testId="98b3a5b3-fc39-c222-7564-7e04f240aa80" testName="CPR.ContractTests.PositionsContractTest.Positions_HaveExpectedJsonShape" computerName="VYACHESLAV-LAPT" duration="00:00:01.4742104" startTime="2025-09-15T12:00:43.6854450-05:00" endTime="2025-09-15T12:00:43.6854451-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ce81334e-7ac3-4655-a52d-8dd5808b01f9">
+      <Output>
+        <ErrorInfo>
+          <Message>System.IO.DirectoryNotFoundException : Could not find a part of the path 'd:\projects\CPR\tests\CPR.ContractTests\bin\Debug\net9.0\schemas\positions.schema.json'.</Message>
+          <StackTrace>   at Microsoft.Win32.SafeHandles.SafeFileHandle.CreateFile(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options)&#xD;
+   at Microsoft.Win32.SafeHandles.SafeFileHandle.Open(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)&#xD;
+   at System.IO.Strategies.OSFileStreamStrategy..ctor(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)&#xD;
+   at System.IO.Strategies.FileStreamHelpers.ChooseStrategyCore(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)&#xD;
+   at System.IO.StreamReader.ValidateArgsAndOpenPath(String path, Encoding encoding, Int32 bufferSize)&#xD;
+   at System.IO.File.ReadAllText(String path, Encoding encoding)&#xD;
+   at CPR.ContractTests.SchemaValidator.ValidateJson(String schemaRelativePath, String json) in d:\projects\CPR\tests\CPR.ContractTests\SchemaValidator.cs:line 16&#xD;
+   at CPR.ContractTests.PositionsContractTest.Positions_HaveExpectedJsonShape() in d:\projects\CPR\tests\CPR.ContractTests\PositionsContractTest.cs:line 35&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="06f10a71-26b8-4a50-886a-9ba2bbf28f2d" testId="a2f79f01-79fa-6498-0415-a09d8f8341f9" testName="CPR.ContractTests.SampleContractTest.ContractPlaceholder" computerName="VYACHESLAV-LAPT" duration="00:00:00.0044504" startTime="2025-09-15T12:00:42.2028251-05:00" endTime="2025-09-15T12:00:42.2028376-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="06f10a71-26b8-4a50-886a-9ba2bbf28f2d" />
+    <UnitTestResult executionId="904ae212-9008-4c2d-8507-d36a6849f4fa" testId="8deded96-f125-e84d-be8f-636b2c034cf9" testName="CPR.ContractTests.CareerContractTests.CareerTrack_FilteredByCareerPath_ReturnsArray" computerName="VYACHESLAV-LAPT" duration="00:00:01.5790874" startTime="2025-09-15T12:00:43.7766245-05:00" endTime="2025-09-15T12:00:43.7766246-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="904ae212-9008-4c2d-8507-d36a6849f4fa">
+      <Output>
+        <ErrorInfo>
+          <Message>System.IO.DirectoryNotFoundException : Could not find a part of the path 'd:\projects\CPR\tests\CPR.ContractTests\bin\Debug\net9.0\schemas\career_track.schema.json'.</Message>
+          <StackTrace>   at Microsoft.Win32.SafeHandles.SafeFileHandle.CreateFile(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options)&#xD;
+   at Microsoft.Win32.SafeHandles.SafeFileHandle.Open(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)&#xD;
+   at System.IO.Strategies.OSFileStreamStrategy..ctor(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)&#xD;
+   at System.IO.Strategies.FileStreamHelpers.ChooseStrategyCore(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)&#xD;
+   at System.IO.StreamReader.ValidateArgsAndOpenPath(String path, Encoding encoding, Int32 bufferSize)&#xD;
+   at System.IO.File.ReadAllText(String path, Encoding encoding)&#xD;
+   at CPR.ContractTests.SchemaValidator.ValidateJson(String schemaRelativePath, String json) in d:\projects\CPR\tests\CPR.ContractTests\SchemaValidator.cs:line 16&#xD;
+   at CPR.ContractTests.CareerContractTests.CareerTrack_FilteredByCareerPath_ReturnsArray() in d:\projects\CPR\tests\CPR.ContractTests\CareerContractTests.cs:line 79&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="CPR.ContractTests.PositionsContractTest.Positions_HaveExpectedJsonShape" storage="d:\projects\cpr\tests\cpr.contracttests\bin\debug\net9.0\cpr.contracttests.dll" id="98b3a5b3-fc39-c222-7564-7e04f240aa80">
+      <Execution id="ce81334e-7ac3-4655-a52d-8dd5808b01f9" />
+      <TestMethod codeBase="d:\projects\CPR\tests\CPR.ContractTests\bin\Debug\net9.0\CPR.ContractTests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="CPR.ContractTests.PositionsContractTest" name="Positions_HaveExpectedJsonShape" />
+    </UnitTest>
+    <UnitTest name="CPR.ContractTests.SampleContractTest.ContractPlaceholder" storage="d:\projects\cpr\tests\cpr.contracttests\bin\debug\net9.0\cpr.contracttests.dll" id="a2f79f01-79fa-6498-0415-a09d8f8341f9">
+      <Execution id="06f10a71-26b8-4a50-886a-9ba2bbf28f2d" />
+      <TestMethod codeBase="d:\projects\CPR\tests\CPR.ContractTests\bin\Debug\net9.0\CPR.ContractTests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="CPR.ContractTests.SampleContractTest" name="ContractPlaceholder" />
+    </UnitTest>
+    <UnitTest name="CPR.ContractTests.CareerContractTests.Career_HasExpectedJsonShape" storage="d:\projects\cpr\tests\cpr.contracttests\bin\debug\net9.0\cpr.contracttests.dll" id="e2f24123-908d-b478-5150-3738daca4d83">
+      <Execution id="99b8ff9c-dce8-4e2f-b260-289aefa31965" />
+      <TestMethod codeBase="d:\projects\CPR\tests\CPR.ContractTests\bin\Debug\net9.0\CPR.ContractTests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="CPR.ContractTests.CareerContractTests" name="Career_HasExpectedJsonShape" />
+    </UnitTest>
+    <UnitTest name="CPR.ContractTests.CareerContractTests.CareerTrack_FilteredByCareerPath_ReturnsArray" storage="d:\projects\cpr\tests\cpr.contracttests\bin\debug\net9.0\cpr.contracttests.dll" id="8deded96-f125-e84d-be8f-636b2c034cf9">
+      <Execution id="904ae212-9008-4c2d-8507-d36a6849f4fa" />
+      <TestMethod codeBase="d:\projects\CPR\tests\CPR.ContractTests\bin\Debug\net9.0\CPR.ContractTests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="CPR.ContractTests.CareerContractTests" name="CareerTrack_FilteredByCareerPath_ReturnsArray" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="e2f24123-908d-b478-5150-3738daca4d83" executionId="99b8ff9c-dce8-4e2f-b260-289aefa31965" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="98b3a5b3-fc39-c222-7564-7e04f240aa80" executionId="ce81334e-7ac3-4655-a52d-8dd5808b01f9" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="a2f79f01-79fa-6498-0415-a09d8f8341f9" executionId="06f10a71-26b8-4a50-886a-9ba2bbf28f2d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="8deded96-f125-e84d-be8f-636b2c034cf9" executionId="904ae212-9008-4c2d-8507-d36a6849f4fa" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Failed">
+    <Counters total="4" executed="4" passed="1" failed="3" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v2.8.0+6438bb880a (64-bit .NET 9.0.3)&#xD;
+[xUnit.net 00:00:00.74]   Discovering: CPR.ContractTests&#xD;
+[xUnit.net 00:00:00.78]   Discovered:  CPR.ContractTests&#xD;
+[xUnit.net 00:00:00.78]   Starting:    CPR.ContractTests&#xD;
+[xUnit.net 00:00:02.30]       System.IO.DirectoryNotFoundException : Could not find a part of the path 'd:\projects\CPR\tests\CPR.ContractTests\bin\Debug\net9.0\schemas\positions.schema.json'.&#xD;
+[xUnit.net 00:00:02.30]       Stack Trace:&#xD;
+[xUnit.net 00:00:02.30]            at Microsoft.Win32.SafeHandles.SafeFileHandle.CreateFile(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options)&#xD;
+[xUnit.net 00:00:02.30]            at Microsoft.Win32.SafeHandles.SafeFileHandle.Open(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)&#xD;
+[xUnit.net 00:00:02.30]            at System.IO.Strategies.OSFileStreamStrategy..ctor(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)&#xD;
+[xUnit.net 00:00:02.30]            at System.IO.Strategies.FileStreamHelpers.ChooseStrategyCore(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)&#xD;
+[xUnit.net 00:00:02.30]            at System.IO.StreamReader.ValidateArgsAndOpenPath(String path, Encoding encoding, Int32 bufferSize)&#xD;
+[xUnit.net 00:00:02.30]            at System.IO.File.ReadAllText(String path, Encoding encoding)&#xD;
+[xUnit.net 00:00:02.30]         d:\projects\CPR\tests\CPR.ContractTests\SchemaValidator.cs(16,0): at CPR.ContractTests.SchemaValidator.ValidateJson(String schemaRelativePath, String json)&#xD;
+[xUnit.net 00:00:02.30]         d:\projects\CPR\tests\CPR.ContractTests\PositionsContractTest.cs(35,0): at CPR.ContractTests.PositionsContractTest.Positions_HaveExpectedJsonShape()&#xD;
+[xUnit.net 00:00:02.30]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:00:02.39]       System.IO.DirectoryNotFoundException : Could not find a part of the path 'd:\projects\CPR\tests\CPR.ContractTests\bin\Debug\net9.0\schemas\career_track.schema.json'.&#xD;
+[xUnit.net 00:00:02.39]       Stack Trace:&#xD;
+[xUnit.net 00:00:02.39]            at Microsoft.Win32.SafeHandles.SafeFileHandle.CreateFile(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options)&#xD;
+[xUnit.net 00:00:02.39]            at Microsoft.Win32.SafeHandles.SafeFileHandle.Open(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)&#xD;
+[xUnit.net 00:00:02.39]            at System.IO.Strategies.OSFileStreamStrategy..ctor(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)&#xD;
+[xUnit.net 00:00:02.39]            at System.IO.Strategies.FileStreamHelpers.ChooseStrategyCore(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)&#xD;
+[xUnit.net 00:00:02.39]            at System.IO.StreamReader.ValidateArgsAndOpenPath(String path, Encoding encoding, Int32 bufferSize)&#xD;
+[xUnit.net 00:00:02.39]            at System.IO.File.ReadAllText(String path, Encoding encoding)&#xD;
+[xUnit.net 00:00:02.39]         d:\projects\CPR\tests\CPR.ContractTests\SchemaValidator.cs(16,0): at CPR.ContractTests.SchemaValidator.ValidateJson(String schemaRelativePath, String json)&#xD;
+[xUnit.net 00:00:02.39]         d:\projects\CPR\tests\CPR.ContractTests\CareerContractTests.cs(79,0): at CPR.ContractTests.CareerContractTests.CareerTrack_FilteredByCareerPath_ReturnsArray()&#xD;
+[xUnit.net 00:00:02.39]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:00:02.40]       System.IO.DirectoryNotFoundException : Could not find a part of the path 'd:\projects\CPR\tests\CPR.ContractTests\bin\Debug\net9.0\schemas\career.schema.json'.&#xD;
+[xUnit.net 00:00:02.40]       Stack Trace:&#xD;
+[xUnit.net 00:00:02.40]            at Microsoft.Win32.SafeHandles.SafeFileHandle.CreateFile(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options)&#xD;
+[xUnit.net 00:00:02.40]            at Microsoft.Win32.SafeHandles.SafeFileHandle.Open(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)&#xD;
+[xUnit.net 00:00:02.40]            at System.IO.Strategies.OSFileStreamStrategy..ctor(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)&#xD;
+[xUnit.net 00:00:02.40]            at System.IO.Strategies.FileStreamHelpers.ChooseStrategyCore(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)&#xD;
+[xUnit.net 00:00:02.40]            at System.IO.StreamReader.ValidateArgsAndOpenPath(String path, Encoding encoding, Int32 bufferSize)&#xD;
+[xUnit.net 00:00:02.40]            at System.IO.File.ReadAllText(String path, Encoding encoding)&#xD;
+[xUnit.net 00:00:02.40]         d:\projects\CPR\tests\CPR.ContractTests\SchemaValidator.cs(16,0): at CPR.ContractTests.SchemaValidator.ValidateJson(String schemaRelativePath, String json)&#xD;
+[xUnit.net 00:00:02.40]         d:\projects\CPR\tests\CPR.ContractTests\CareerContractTests.cs(35,0): at CPR.ContractTests.CareerContractTests.Career_HasExpectedJsonShape()&#xD;
+[xUnit.net 00:00:02.40]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:00:02.40]   Finished:    CPR.ContractTests&#xD;
+</StdOut>
+    </Output>
+    <RunInfos>
+      <RunInfo computerName="VYACHESLAV-LAPT" outcome="Error" timestamp="2025-09-15T12:00:43.6832113-05:00">
+        <Text>[xUnit.net 00:00:02.30]     CPR.ContractTests.PositionsContractTest.Positions_HaveExpectedJsonShape [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="VYACHESLAV-LAPT" outcome="Error" timestamp="2025-09-15T12:00:43.7763683-05:00">
+        <Text>[xUnit.net 00:00:02.39]     CPR.ContractTests.CareerContractTests.CareerTrack_FilteredByCareerPath_ReturnsArray [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="VYACHESLAV-LAPT" outcome="Error" timestamp="2025-09-15T12:00:43.7858181-05:00">
+        <Text>[xUnit.net 00:00:02.40]     CPR.ContractTests.CareerContractTests.Career_HasExpectedJsonShape [FAIL]</Text>
+      </RunInfo>
+    </RunInfos>
+  </ResultSummary>
+</TestRun>

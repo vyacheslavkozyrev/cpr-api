@@ -1,0 +1,28 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://example.com/schemas/career.schema.json",
+    "type": "array",
+    "items": {
+        "type": "object",
+        "required": [
+            "id",
+            "title"
+        ],
+        "properties": {
+            "id": {
+                "type": "string",
+                "format": "uuid"
+            },
+            "title": {
+                "type": "string"
+            },
+            "description": {
+                "type": [
+                    "string",
+                    "null"
+                ]
+            }
+        },
+        "additionalProperties": false
+    }
+}

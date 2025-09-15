@@ -31,6 +31,9 @@ public class PositionsContractTest : IClassFixture<WebApplicationFactory<Program
         var doc = JsonDocument.Parse(json);
         Assert.True(doc.RootElement.ValueKind == JsonValueKind.Array);
 
+        // validate against JSON Schema
+        SchemaValidator.ValidateJson("positions.schema.json", json);
+
         if (doc.RootElement.GetArrayLength() == 0)
         {
             // acceptable: empty array; contract requires array shape
@@ -38,10 +41,19 @@ public class PositionsContractTest : IClassFixture<WebApplicationFactory<Program
         }
 
         var item = doc.RootElement[0];
-        Assert.True(item.TryGetProperty("id", out _));
-        Assert.True(item.TryGetProperty("title", out _));
-        Assert.True(item.TryGetProperty("description", out _));
-        Assert.True(item.TryGetProperty("expectations", out _));
-        Assert.True(item.TryGetProperty("careerTrackId", out _));
+        Assert.True(item.TryGetProperty("id", out var idProp));
+        JsonAssertions.AssertIsGuidString(idProp);
+
+        Assert.True(item.TryGetProperty("title", out var titleProp));
+        Assert.Equal(JsonValueKind.String, titleProp.ValueKind);
+
+        Assert.True(item.TryGetProperty("description", out var descProp));
+        JsonAssertions.AssertIsStringOrNull(descProp);
+
+        Assert.True(item.TryGetProperty("expectations", out var expProp));
+        JsonAssertions.AssertIsStringOrNull(expProp);
+
+        Assert.True(item.TryGetProperty("careerTrackId", out var ctProp));
+        JsonAssertions.AssertIsGuidString(ctProp);
     }
 }

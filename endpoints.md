@@ -181,6 +181,30 @@ Example response for GET /positions?career_track_id=cccccccc-cccc-cccc-cccc-cccc
   }
 ]
 
+OpenAPI & example responses
+---------------------------
+The API publishes an OpenAPI document at `/swagger/v1/swagger.json` when running in Development. Example responses for taxonomy endpoints are included in the OpenAPI document and visible in Swagger UI.
+
+Quick client generation (PowerShell):
+
+```powershell
+# fetch swagger.json after starting the API locally
+Invoke-WebRequest -Uri http://localhost:5000/swagger/v1/swagger.json -OutFile .\swagger.json
+
+# generate a C# client with NSwag (install once)
+dotnet tool install --global NSwag.ConsoleCore
+nswag openapi2csclient /input:swagger.json /output:src\clients\CprApiClient.cs /namespace:CprApi.Client
+```
+
+Example response (C#) from generated client:
+
+```csharp
+var http = new HttpClient { BaseAddress = new Uri("http://localhost:5000") };
+var client = new CprApi.Client.CprApiClient(http);
+var positions = await client.GetPositionsAsync();
+foreach(var p in positions) Console.WriteLine($"{p.Id} {p.Title}");
+```
+
 
 Authentication & authorization notes
 - OwnerId should be sourced from the authenticated user's subject claim.

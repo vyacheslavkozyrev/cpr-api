@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="e3c6e303-bd48-4d92-9893-2edcf4954690" name="vyach@VYACHESLAV-LAPT 2025-09-15 12:17:34" runUser="VYACHESLAV-LAPT\vyach" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2025-09-15T12:17:34.0627349-05:00" queuing="2025-09-15T12:17:34.0627354-05:00" start="2025-09-15T12:17:32.1677344-05:00" finish="2025-09-15T12:17:34.7232694-05:00" />
+  <TestSettings name="default" id="1c26364b-9305-43fb-8c63-dd8e4b62ac39">
+    <Deployment runDeploymentRoot="vyach_VYACHESLAV-LAPT_2025-09-15_12_17_34" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="d571e394-604d-4369-8d22-5a6a1f2993f9" testId="e2f24123-908d-b478-5150-3738daca4d83" testName="CPR.ContractTests.CareerContractTests.Career_HasExpectedJsonShape" computerName="VYACHESLAV-LAPT" duration="00:00:00.0100257" startTime="2025-09-15T12:17:34.6531410-05:00" endTime="2025-09-15T12:17:34.6531417-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d571e394-604d-4369-8d22-5a6a1f2993f9" />
+    <UnitTestResult executionId="aee82764-1eda-429a-9deb-d90b8d7b6e69" testId="8deded96-f125-e84d-be8f-636b2c034cf9" testName="CPR.ContractTests.CareerContractTests.CareerTrack_FilteredByCareerPath_ReturnsArray" computerName="VYACHESLAV-LAPT" duration="00:00:01.2762544" startTime="2025-09-15T12:17:34.6428043-05:00" endTime="2025-09-15T12:17:34.6428045-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="aee82764-1eda-429a-9deb-d90b8d7b6e69" />
+    <UnitTestResult executionId="a84ea7e3-faf7-4ec8-b01b-9fcee4f74600" testId="a2f79f01-79fa-6498-0415-a09d8f8341f9" testName="CPR.ContractTests.SampleContractTest.ContractPlaceholder" computerName="VYACHESLAV-LAPT" duration="00:00:00.0029570" startTime="2025-09-15T12:17:33.3729450-05:00" endTime="2025-09-15T12:17:33.3729650-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a84ea7e3-faf7-4ec8-b01b-9fcee4f74600" />
+    <UnitTestResult executionId="f606ced4-f55c-43fd-be86-ba4d82d81af5" testId="98b3a5b3-fc39-c222-7564-7e04f240aa80" testName="CPR.ContractTests.PositionsContractTest.Positions_HaveExpectedJsonShape" computerName="VYACHESLAV-LAPT" duration="00:00:01.1870955" startTime="2025-09-15T12:17:34.5536577-05:00" endTime="2025-09-15T12:17:34.5536579-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f606ced4-f55c-43fd-be86-ba4d82d81af5" />
+    <UnitTestResult executionId="529b29b7-164a-4352-a6a9-cce1db48071b" testId="85897dc3-8d4d-ab36-42a0-9eb523f50eb7" testName="CPR.ContractTests.SwaggerSchemaContractTest.Swagger_IncludesPositionExpectationsProperty" computerName="VYACHESLAV-LAPT" duration="00:00:00.3934804" startTime="2025-09-15T12:17:33.7620083-05:00" endTime="2025-09-15T12:17:33.7620090-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="529b29b7-164a-4352-a6a9-cce1db48071b" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="CPR.ContractTests.PositionsContractTest.Positions_HaveExpectedJsonShape" storage="d:\projects\cpr\tests\cpr.contracttests\bin\debug\net9.0\cpr.contracttests.dll" id="98b3a5b3-fc39-c222-7564-7e04f240aa80">
+      <Execution id="f606ced4-f55c-43fd-be86-ba4d82d81af5" />
+      <TestMethod codeBase="d:\projects\CPR\tests\CPR.ContractTests\bin\Debug\net9.0\CPR.ContractTests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="CPR.ContractTests.PositionsContractTest" name="Positions_HaveExpectedJsonShape" />
+    </UnitTest>
+    <UnitTest name="CPR.ContractTests.SampleContractTest.ContractPlaceholder" storage="d:\projects\cpr\tests\cpr.contracttests\bin\debug\net9.0\cpr.contracttests.dll" id="a2f79f01-79fa-6498-0415-a09d8f8341f9">
+      <Execution id="a84ea7e3-faf7-4ec8-b01b-9fcee4f74600" />
+      <TestMethod codeBase="d:\projects\CPR\tests\CPR.ContractTests\bin\Debug\net9.0\CPR.ContractTests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="CPR.ContractTests.SampleContractTest" name="ContractPlaceholder" />
+    </UnitTest>
+    <UnitTest name="CPR.ContractTests.CareerContractTests.Career_HasExpectedJsonShape" storage="d:\projects\cpr\tests\cpr.contracttests\bin\debug\net9.0\cpr.contracttests.dll" id="e2f24123-908d-b478-5150-3738daca4d83">
+      <Execution id="d571e394-604d-4369-8d22-5a6a1f2993f9" />
+      <TestMethod codeBase="d:\projects\CPR\tests\CPR.ContractTests\bin\Debug\net9.0\CPR.ContractTests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="CPR.ContractTests.CareerContractTests" name="Career_HasExpectedJsonShape" />
+    </UnitTest>
+    <UnitTest name="CPR.ContractTests.SwaggerSchemaContractTest.Swagger_IncludesPositionExpectationsProperty" storage="d:\projects\cpr\tests\cpr.contracttests\bin\debug\net9.0\cpr.contracttests.dll" id="85897dc3-8d4d-ab36-42a0-9eb523f50eb7">
+      <Execution id="529b29b7-164a-4352-a6a9-cce1db48071b" />
+      <TestMethod codeBase="d:\projects\CPR\tests\CPR.ContractTests\bin\Debug\net9.0\CPR.ContractTests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="CPR.ContractTests.SwaggerSchemaContractTest" name="Swagger_IncludesPositionExpectationsProperty" />
+    </UnitTest>
+    <UnitTest name="CPR.ContractTests.CareerContractTests.CareerTrack_FilteredByCareerPath_ReturnsArray" storage="d:\projects\cpr\tests\cpr.contracttests\bin\debug\net9.0\cpr.contracttests.dll" id="8deded96-f125-e84d-be8f-636b2c034cf9">
+      <Execution id="aee82764-1eda-429a-9deb-d90b8d7b6e69" />
+      <TestMethod codeBase="d:\projects\CPR\tests\CPR.ContractTests\bin\Debug\net9.0\CPR.ContractTests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="CPR.ContractTests.CareerContractTests" name="CareerTrack_FilteredByCareerPath_ReturnsArray" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="e2f24123-908d-b478-5150-3738daca4d83" executionId="d571e394-604d-4369-8d22-5a6a1f2993f9" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="8deded96-f125-e84d-be8f-636b2c034cf9" executionId="aee82764-1eda-429a-9deb-d90b8d7b6e69" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="a2f79f01-79fa-6498-0415-a09d8f8341f9" executionId="a84ea7e3-faf7-4ec8-b01b-9fcee4f74600" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="98b3a5b3-fc39-c222-7564-7e04f240aa80" executionId="f606ced4-f55c-43fd-be86-ba4d82d81af5" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="85897dc3-8d4d-ab36-42a0-9eb523f50eb7" executionId="529b29b7-164a-4352-a6a9-cce1db48071b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="5" executed="5" passed="5" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v2.8.0+6438bb880a (64-bit .NET 9.0.3)&#xD;
+[xUnit.net 00:00:00.76]   Discovering: CPR.ContractTests&#xD;
+[xUnit.net 00:00:00.79]   Discovered:  CPR.ContractTests&#xD;
+[xUnit.net 00:00:00.79]   Starting:    CPR.ContractTests&#xD;
+[xUnit.net 00:00:02.12]   Finished:    CPR.ContractTests&#xD;
+</StdOut>
+    </Output>
+  </ResultSummary>
+</TestRun>

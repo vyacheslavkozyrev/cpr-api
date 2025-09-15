@@ -31,12 +31,21 @@ public class CareerContractTests : IClassFixture<WebApplicationFactory<Program>>
         var doc = JsonDocument.Parse(json);
         Assert.True(doc.RootElement.ValueKind == JsonValueKind.Array);
 
+        // validate against JSON Schema
+        SchemaValidator.ValidateJson("career.schema.json", json);
+
         if (doc.RootElement.GetArrayLength() == 0) return;
 
         var item = doc.RootElement[0];
-        Assert.True(item.TryGetProperty("id", out _));
-        Assert.True(item.TryGetProperty("title", out _));
-        Assert.True(item.TryGetProperty("description", out _));
+        Assert.True(item.TryGetProperty("id", out var idProp));
+        JsonAssertions.AssertIsGuidString(idProp);
+
+        Assert.True(item.TryGetProperty("title", out var titleProp));
+        Assert.Equal(JsonValueKind.String, titleProp.ValueKind);
+
+        // description may be string or null
+        Assert.True(item.TryGetProperty("description", out var descProp));
+        JsonAssertions.AssertIsStringOrNull(descProp);
     }
 
     [Fact]
@@ -66,12 +75,22 @@ public class CareerContractTests : IClassFixture<WebApplicationFactory<Program>>
         var doc = JsonDocument.Parse(json);
         Assert.True(doc.RootElement.ValueKind == JsonValueKind.Array);
 
+        // validate against JSON Schema
+        SchemaValidator.ValidateJson("career_track.schema.json", json);
+
         if (doc.RootElement.GetArrayLength() == 0) return;
 
         var item = doc.RootElement[0];
-        Assert.True(item.TryGetProperty("id", out _));
-        Assert.True(item.TryGetProperty("title", out _));
-        Assert.True(item.TryGetProperty("description", out _));
-        Assert.True(item.TryGetProperty("careerPathId", out _));
+        Assert.True(item.TryGetProperty("id", out var idProp));
+        JsonAssertions.AssertIsGuidString(idProp);
+
+        Assert.True(item.TryGetProperty("title", out var titleProp));
+        Assert.Equal(JsonValueKind.String, titleProp.ValueKind);
+
+        Assert.True(item.TryGetProperty("description", out var descProp));
+        JsonAssertions.AssertIsStringOrNull(descProp);
+
+        Assert.True(item.TryGetProperty("careerPathId", out var cpProp));
+        JsonAssertions.AssertIsGuidString(cpProp);
     }
 }

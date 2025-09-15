@@ -82,6 +82,55 @@ When finished, bring down the test database:
 ```powershell
 docker-compose -f docker-compose.test.yml down
 ```
+OpenAPI & client generation
+---------------------------
+You can generate client SDKs from the API OpenAPI document exposed at `/swagger/v1/swagger.json`.
+
+1) Run the API locally (PowerShell):
+
+```powershell
+$env:JWT_SIGNING_KEY = 'test-signing-key-12345'
+$env:ASPNETCORE_ENVIRONMENT = 'Development'
+dotnet run --project src\CPR.Api --urls "http://localhost:5000"
+```
+
+2) Download the OpenAPI JSON (PowerShell):
+
+```powershell
+# fetch swagger.json
+Invoke-WebRequest -Uri http://localhost:5000/swagger/v1/swagger.json -OutFile .\swagger.json
+```
+
+3) Generate a C# client using NSwag (recommended):
+
+```powershell
+# install once
+dotnet tool install --global NSwag.ConsoleCore
+# generate a single-file C# client
+nswag openapi2csclient /input:swagger.json /output:src\clients\CprApiClient.cs /namespace:CprApi.Client
+```
+
+Usage (example after generating `CprApiClient.cs`):
+
+```csharp
+var http = new HttpClient { BaseAddress = new Uri("http://localhost:5000") };
+var client = new CprApi.Client.CprApiClient(http);
+var positions = await client.GetPositionsAsync();
+```
+
+4) Generate TypeScript (optional) with OpenAPI Generator (requires Java):
+
+```powershell
+# generate TypeScript fetch client (openapi-generator-cli required)
+java -jar openapi-generator-cli.jar generate -i swagger.json -g typescript-fetch -o sdk/typescript
+```
+
+Publishing / CI
+- You can generate SDKs in CI and publish to an internal NuGet/NPM feed. Save `swagger.json` as a pipeline artifact or fetch `$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/...` in GitHub Actions, then run the above generator commands.
+
+Notes
+- The Swagger UI in development will include example responses for taxonomy endpoints (career, career_track, positions).
+- If you prefer a different generator (AutoRest, NSwag, openapi-generator), choose the language generator that fits your release workflow.
 
 Notes
 - The stub signing key stored in the `JWT_SIGNING_KEY` environment variable is treated as a plain UTF-8 string (do not base64-decode it).
@@ -111,4 +160,16 @@ chmod +x ./scripts/run-tests.sh
 ```
 
 If you need to override the test database name set `DATABASE_NAME` before invoking the scripts.
+
+PowerShell helpers
+------------------
+Use the included PowerShell scripts on Windows rather than the shell scripts:
+
+```powershell
+# generate a token and copy to clipboard
+.\scripts\generate-token.ps1 -SigningKey 'test-signing-key-12345' -UserId '00000000-0000-0000-0000-000000000123' -Copy
+
+# run tests (unit, contract, integration)
+.\scripts\run-tests.ps1
+```
 

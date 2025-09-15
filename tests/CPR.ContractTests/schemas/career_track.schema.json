@@ -1,0 +1,32 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "array",
+    "items": {
+        "type": "object",
+        "required": [
+            "id",
+            "title",
+            "careerPathId"
+        ],
+        "properties": {
+            "id": {
+                "type": "string",
+                "format": "uuid"
+            },
+            "title": {
+                "type": "string"
+            },
+            "description": {
+                "type": [
+                    "string",
+                    "null"
+                ]
+            },
+            "careerPathId": {
+                "type": "string",
+                "format": "uuid"
+            }
+        },
+        "additionalProperties": false
+    }
+}

@@ -1,0 +1,38 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "array",
+    "items": {
+        "type": "object",
+        "required": [
+            "id",
+            "title",
+            "careerTrackId"
+        ],
+        "properties": {
+            "id": {
+                "type": "string",
+                "format": "uuid"
+            },
+            "title": {
+                "type": "string"
+            },
+            "description": {
+                "type": [
+                    "string",
+                    "null"
+                ]
+            },
+            "expectations": {
+                "type": [
+                    "string",
+                    "null"
+                ]
+            },
+            "careerTrackId": {
+                "type": "string",
+                "format": "uuid"
+            }
+        },
+        "additionalProperties": false
+    }
+}

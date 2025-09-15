@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using CPR.Application.Services;
+using CPR.Application.Contracts;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CPR.Api.Controllers
@@ -27,6 +28,8 @@ namespace CPR.Api.Controllers
         /// Returns a list of career paths.
         /// </summary>
         [HttpGet("career")]
+        [ProducesResponseType(typeof(System.Collections.Generic.IEnumerable<CareerPathDto>), 200)]
+        [Swashbuckle.AspNetCore.Filters.SwaggerResponseExample(200, typeof(CPR.Api.Swagger.Examples.CareerPathExample))]
         public async Task<IActionResult> GetCareer()
         {
             var items = await _svc.GetCareerPathsAsync();
@@ -38,6 +41,8 @@ namespace CPR.Api.Controllers
         /// </summary>
         /// <param name="career_path_id">Optional career path id to filter tracks.</param>
         [HttpGet("career_track")]
+        [ProducesResponseType(typeof(System.Collections.Generic.IEnumerable<CareerTrackDto>), 200)]
+        [Swashbuckle.AspNetCore.Filters.SwaggerResponseExample(200, typeof(CPR.Api.Swagger.Examples.CareerTrackExample))]
         public async Task<IActionResult> GetCareerTracks([FromQuery] Guid? career_path_id)
         {
             var items = await _svc.GetCareerTracksAsync(career_path_id);
@@ -49,6 +54,8 @@ namespace CPR.Api.Controllers
         /// </summary>
         /// <param name="career_track_id">Optional career track id to filter positions.</param>
         [HttpGet("positions")]
+        [ProducesResponseType(typeof(System.Collections.Generic.IEnumerable<PositionDto>), 200)]
+        [Swashbuckle.AspNetCore.Filters.SwaggerResponseExample(200, typeof(CPR.Api.Swagger.Examples.PositionsExample))]
         public async Task<IActionResult> GetPositions([FromQuery] Guid? career_track_id)
         {
             var items = await _svc.GetPositionsAsync(career_track_id);
