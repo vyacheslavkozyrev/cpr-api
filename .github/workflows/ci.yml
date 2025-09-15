@@ -163,3 +163,67 @@ jobs:
           psql -h localhost -U ${{ secrets.POSTGRES_USER }} -d postgres -c "SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname='${DB_NAME}' AND pid<>pg_backend_pid();"
           psql -h localhost -U ${{ secrets.POSTGRES_USER }} -d postgres -c "DROP DATABASE IF EXISTS \"${DB_NAME}\";"
           set -e
+
+  contract-test:
+    name: Contract tests
+    runs-on: ubuntu-latest
+    needs: integration
+    env:
+      DB_NAME: cpr_test_${{ github.run_id }}_${{ github.job }}
+    services:
+      postgres:
+        image: postgres:13
+        env:
+          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+          POSTGRES_DB: ${{ secrets.POSTGRES_DB_NAME || 'cpr_test' }}
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}" --health-interval 10s --health-timeout 5s --health-retries 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+
+      - name: Ensure pg_isready available (install client)
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y postgresql-client
+
+      - name: Wait for Postgres to be ready
+        run: |
+          echo "Waiting for Postgres to be ready..."
+          MAX=30; i=0; until pg_isready -h localhost -p 5432 -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-cpr_test}; do
+            i=$((i+1)); echo "waiting... ($i)"; sleep 2
+            if [ $i -ge $MAX ]; then echo "Postgres did not become ready in time"; exit 1; fi
+          done
+
+      - name: Install dotnet-ef tool
+        run: |
+          dotnet tool install --global dotnet-ef --version 9.* || true
+          echo "$HOME/.dotnet/tools" >> $GITHUB_PATH
+
+      - name: Restore solution
+        run: dotnet restore src/CPR.sln
+
+      - name: Run contract tests
+        env:
+          POSTGRES_DB: ${{ secrets.POSTGRES_DB_NAME || 'cpr_test' }}
+          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+          ConnectionStrings__DefaultConnection: ${{ env.CONNECTION_STRING }}
+        run: |
+          echo "Running contract tests"
+          dotnet test tests/CPR.ContractTests/CPR.ContractTests.csproj --no-build -c Release --logger trx
+
+      - name: Upload contract test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: contract-test-results
+          path: ./test-results/*.trx
