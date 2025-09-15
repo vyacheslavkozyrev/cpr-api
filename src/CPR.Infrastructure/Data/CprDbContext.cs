@@ -43,7 +43,7 @@ namespace CPR.Infrastructure.Data
                 b.Property(u => u.DisplayName).HasColumnName("display_name");
 
                 b.Property(u => u.CreatedBy).HasColumnName("created_by");
-                b.Property(u => u.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("now()");
+                b.Property(u => u.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("CURRENT_TIMESTAMP");
                 b.Property(u => u.ModifiedBy).HasColumnName("modified_by");
                 b.Property(u => u.ModifiedAt).HasColumnName("modified_at");
                 b.Property(u => u.IsDeleted).HasColumnName("is_deleted");
@@ -72,7 +72,7 @@ namespace CPR.Infrastructure.Data
                 b.Property(e => e.Department).HasColumnName("department");
 
                 b.Property(e => e.CreatedBy).HasColumnName("created_by");
-                b.Property(e => e.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("now()");
+                b.Property(e => e.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("CURRENT_TIMESTAMP");
                 b.Property(e => e.ModifiedBy).HasColumnName("modified_by");
                 b.Property(e => e.ModifiedAt).HasColumnName("modified_at");
                 b.Property(e => e.IsDeleted).HasColumnName("is_deleted");
@@ -113,7 +113,7 @@ namespace CPR.Infrastructure.Data
                 b.Property(g => g.Visibility).HasColumnName("visibility");
 
                 b.Property(g => g.CreatedBy).HasColumnName("created_by");
-                b.Property(g => g.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("now()");
+                b.Property(g => g.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("CURRENT_TIMESTAMP");
                 b.Property(g => g.ModifiedBy).HasColumnName("modified_by");
                 b.Property(g => g.ModifiedAt).HasColumnName("modified_at");
                 b.Property(g => g.IsDeleted).HasColumnName("is_deleted");
@@ -141,7 +141,7 @@ namespace CPR.Infrastructure.Data
                 b.Property(a => a.Action).HasColumnName("action").IsRequired();
                 b.Property(a => a.ActorId).HasColumnName("actor_id");
                 b.Property(a => a.Detail).HasColumnName("detail");
-                b.Property(a => a.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("now()");
+                b.Property(a => a.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("CURRENT_TIMESTAMP");
                 b.Property(a => a.CreatedBy).HasColumnName("created_by");
                 b.Property(a => a.ModifiedBy).HasColumnName("modified_by");
                 b.Property(a => a.ModifiedAt).HasColumnName("modified_at");
@@ -159,7 +159,7 @@ namespace CPR.Infrastructure.Data
                 b.Property(c => c.Id).HasColumnName("id");
                 b.Property(c => c.Title).HasColumnName("title").IsRequired();
                 b.Property(c => c.Description).HasColumnName("description");
-                b.Property(c => c.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("now()");
+                b.Property(c => c.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("CURRENT_TIMESTAMP");
                 b.Property(c => c.CreatedBy).HasColumnName("created_by");
                 b.Property(c => c.ModifiedBy).HasColumnName("modified_by");
                 b.Property(c => c.ModifiedAt).HasColumnName("modified_at");
@@ -203,7 +203,7 @@ namespace CPR.Infrastructure.Data
                 b.Property(c => c.Title).HasColumnName("title").IsRequired();
                 b.Property(c => c.Description).HasColumnName("description");
                 b.Property(c => c.CareerPathId).HasColumnName("career_path_id");
-                b.Property(c => c.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("now()");
+                b.Property(c => c.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("CURRENT_TIMESTAMP");
                 b.Property(c => c.CreatedBy).HasColumnName("created_by");
                 b.Property(c => c.ModifiedBy).HasColumnName("modified_by");
                 b.Property(c => c.ModifiedAt).HasColumnName("modified_at");
@@ -231,7 +231,7 @@ namespace CPR.Infrastructure.Data
                 b.Property(p => p.CareerTrackId).HasColumnName("career_track_id");
                 b.Property(p => p.Description).HasColumnName("description");
                 b.Property(p => p.Expectations).HasColumnName("expectations");
-                b.Property(p => p.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("now()");
+                b.Property(p => p.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("CURRENT_TIMESTAMP");
                 b.Property(p => p.CreatedBy).HasColumnName("created_by");
                 b.Property(p => p.ModifiedBy).HasColumnName("modified_by");
                 b.Property(p => p.ModifiedAt).HasColumnName("modified_at");
@@ -256,7 +256,7 @@ namespace CPR.Infrastructure.Data
                 b.Property(s => s.Id).HasColumnName("id");
                 b.Property(s => s.Title).HasColumnName("title").IsRequired();
                 b.Property(s => s.Description).HasColumnName("description");
-                b.Property(s => s.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("now()");
+                b.Property(s => s.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("CURRENT_TIMESTAMP");
                 b.Property(s => s.CreatedBy).HasColumnName("created_by");
                 b.Property(s => s.ModifiedBy).HasColumnName("modified_by");
                 b.Property(s => s.ModifiedAt).HasColumnName("modified_at");
@@ -292,7 +292,7 @@ namespace CPR.Infrastructure.Data
                 b.Property(s => s.Title).HasColumnName("title").IsRequired();
                 b.Property(s => s.Description).HasColumnName("description");
                 b.Property(s => s.CategoryId).HasColumnName("category_id");
-                b.Property(s => s.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("now()");
+                b.Property(s => s.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("CURRENT_TIMESTAMP");
                 b.Property(s => s.CreatedBy).HasColumnName("created_by");
                 b.Property(s => s.ModifiedBy).HasColumnName("modified_by");
                 b.Property(s => s.ModifiedAt).HasColumnName("modified_at");
@@ -331,7 +331,7 @@ namespace CPR.Infrastructure.Data
                 b.Property(s => s.Description).HasColumnName("description");
                 b.Property(s => s.SkillId).HasColumnName("skill_id");
                 b.Property(s => s.Value).HasColumnName("value");
-                b.Property(s => s.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("now()");
+                b.Property(s => s.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("CURRENT_TIMESTAMP");
                 b.Property(s => s.CreatedBy).HasColumnName("created_by");
                 b.Property(s => s.ModifiedBy).HasColumnName("modified_by");
                 b.Property(s => s.ModifiedAt).HasColumnName("modified_at");
@@ -380,7 +380,7 @@ namespace CPR.Infrastructure.Data
                 b.Property(d => d.Description).HasColumnName("description");
                 b.Property(d => d.ManagerId).HasColumnName("manager_id");
                 b.Property(d => d.ParentDepartmentId).HasColumnName("parent_department_id");
-                b.Property(d => d.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("now()");
+                b.Property(d => d.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("CURRENT_TIMESTAMP");
                 b.Property(d => d.CreatedBy).HasColumnName("created_by");
                 b.Property(d => d.ModifiedBy).HasColumnName("modified_by");
                 b.Property(d => d.ModifiedAt).HasColumnName("modified_at");
@@ -411,7 +411,7 @@ namespace CPR.Infrastructure.Data
                 b.Property(l => l.PostalCode).HasColumnName("postal_code");
                 b.Property(l => l.Region).HasColumnName("region");
                 b.Property(l => l.Timezone).HasColumnName("timezone");
-                b.Property(l => l.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("now()");
+                b.Property(l => l.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("CURRENT_TIMESTAMP");
                 b.Property(l => l.CreatedBy).HasColumnName("created_by");
                 b.Property(l => l.ModifiedBy).HasColumnName("modified_by");
                 b.Property(l => l.ModifiedAt).HasColumnName("modified_at");
@@ -440,7 +440,7 @@ namespace CPR.Infrastructure.Data
                 b.Property(p => p.Description).HasColumnName("description");
                 b.Property(p => p.OwnerId).HasColumnName("owner_id");
                 b.Property(p => p.SponsorId).HasColumnName("sponsor_id");
-                b.Property(p => p.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("now()");
+                b.Property(p => p.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("CURRENT_TIMESTAMP");
                 b.Property(p => p.CreatedBy).HasColumnName("created_by");
                 b.Property(p => p.ModifiedBy).HasColumnName("modified_by");
                 b.Property(p => p.ModifiedAt).HasColumnName("modified_at");
@@ -466,7 +466,7 @@ namespace CPR.Infrastructure.Data
                 b.Property(r => r.Title).HasColumnName("title").IsRequired();
                 b.Property(r => r.PositionId).HasColumnName("position_id");
                 b.Property(r => r.Description).HasColumnName("description");
-                b.Property(r => r.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("now()");
+                b.Property(r => r.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("CURRENT_TIMESTAMP");
                 b.Property(r => r.CreatedBy).HasColumnName("created_by");
                 b.Property(r => r.ModifiedBy).HasColumnName("modified_by");
                 b.Property(r => r.ModifiedAt).HasColumnName("modified_at");
@@ -495,7 +495,7 @@ namespace CPR.Infrastructure.Data
                 b.Property(t => t.CompletedAt).HasColumnName("completed_at");
                 b.Property(t => t.Deadline).HasColumnName("deadline");
                 b.Property(t => t.IsCompleted).HasColumnName("is_completed");
-                b.Property(t => t.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("now()");
+                b.Property(t => t.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("CURRENT_TIMESTAMP");
                 b.Property(t => t.CreatedBy).HasColumnName("created_by");
                 b.Property(t => t.ModifiedBy).HasColumnName("modified_by");
                 b.Property(t => t.ModifiedAt).HasColumnName("modified_at");
@@ -515,7 +515,7 @@ namespace CPR.Infrastructure.Data
                 b.Property(f => f.ProjectId).HasColumnName("project_id");
                 b.Property(f => f.Rating).HasColumnName("rating");
                 b.Property(f => f.Content).HasColumnName("content").IsRequired();
-                b.Property(f => f.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("now()");
+                b.Property(f => f.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("CURRENT_TIMESTAMP");
                 b.Property(f => f.CreatedBy).HasColumnName("created_by");
                 b.Property(f => f.ModifiedBy).HasColumnName("modified_by");
                 b.Property(f => f.ModifiedAt).HasColumnName("modified_at");
@@ -535,7 +535,7 @@ namespace CPR.Infrastructure.Data
                 b.Property(fr => fr.DueDate).HasColumnName("due_date");
                 b.Property(fr => fr.ProjectId).HasColumnName("project_id");
                 b.Property(fr => fr.GoalId).HasColumnName("goal_id");
-                b.Property(fr => fr.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("now()");
+                b.Property(fr => fr.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("CURRENT_TIMESTAMP");
                 b.Property(fr => fr.CreatedBy).HasColumnName("created_by");
                 b.Property(fr => fr.ModifiedBy).HasColumnName("modified_by");
                 b.Property(fr => fr.ModifiedAt).HasColumnName("modified_at");
@@ -557,7 +557,7 @@ namespace CPR.Infrastructure.Data
                 b.Property(es => es.EffectiveDate).HasColumnName("effective_date");
                 b.Property(es => es.IsTarget).HasColumnName("is_target");
                 b.Property(es => es.CreatedBy).HasColumnName("created_by");
-                b.Property(es => es.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("now()");
+                b.Property(es => es.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("CURRENT_TIMESTAMP");
                 b.Property(es => es.ModifiedBy).HasColumnName("modified_by");
                 b.Property(es => es.ModifiedAt).HasColumnName("modified_at");
                 b.Property(es => es.IsDeleted).HasColumnName("is_deleted");
@@ -577,7 +577,7 @@ namespace CPR.Infrastructure.Data
                 b.Property(p => p.IsMandatory).HasColumnName("is_mandatory");
                 b.Property(p => p.Rationale).HasColumnName("rationale");
                 b.Property(p => p.CreatedBy).HasColumnName("created_by");
-                b.Property(p => p.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("now()");
+                b.Property(p => p.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("CURRENT_TIMESTAMP");
                 b.Property(p => p.ModifiedBy).HasColumnName("modified_by");
                 b.Property(p => p.ModifiedAt).HasColumnName("modified_at");
                 b.Property(p => p.IsDeleted).HasColumnName("is_deleted");
@@ -594,7 +594,7 @@ namespace CPR.Infrastructure.Data
                 b.Property(pt => pt.ProjectRoleId).HasColumnName("project_role_id").IsRequired();
                 b.Property(pt => pt.EmployeeId).HasColumnName("employee_id").IsRequired();
                 b.Property(pt => pt.CreatedBy).HasColumnName("created_by");
-                b.Property(pt => pt.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("now()");
+                b.Property(pt => pt.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("CURRENT_TIMESTAMP");
                 b.Property(pt => pt.ModifiedBy).HasColumnName("modified_by");
                 b.Property(pt => pt.ModifiedAt).HasColumnName("modified_at");
                 b.Property(pt => pt.IsDeleted).HasColumnName("is_deleted");

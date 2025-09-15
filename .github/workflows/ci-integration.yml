@@ -1,6 +1,0 @@
-name: DEPRECATED - ci-integration.yml
-
-on: []
-
-# This workflow was merged into `.github/workflows/ci.yml`.
-# Kept temporarily to preserve history; remove this file when ready.

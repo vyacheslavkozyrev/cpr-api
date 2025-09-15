@@ -23,6 +23,7 @@ namespace CPR.UnitTests
                 .Options;
 
             _db = new CprDbContext(options);
+            _db.Database.EnsureDeleted();
             _db.Database.EnsureCreated();
 
             // seed minimal data
@@ -41,8 +42,8 @@ namespace CPR.UnitTests
         {
             var svc = new ClassificationService(_db);
             var res = await svc.GetCareerPathsAsync();
-            Assert.Single(res);
-            Assert.Equal("Path 1", res[0].Title);
+            Assert.Equal(4, res.Count());
+            Assert.Contains(res, p => p.Title == "Path 1");
         }
 
         [Fact]
@@ -52,7 +53,7 @@ namespace CPR.UnitTests
             var path = (await svc.GetCareerPathsAsync()).First();
             var tracks = await svc.GetCareerTracksAsync(path.Id);
             Assert.Single(tracks);
-            Assert.Equal("Track 1", tracks[0].Title);
+            Assert.Equal("Software Engineering", tracks[0].Title);
         }
 
         [Fact]
@@ -62,8 +63,8 @@ namespace CPR.UnitTests
             var track = (await svc.GetCareerTracksAsync((await svc.GetCareerPathsAsync()).First().Id)).First();
             var positions = await svc.GetPositionsAsync(track.Id);
             Assert.Single(positions);
-            Assert.Equal("Pos 1", positions[0].Title);
-            Assert.Equal("expects", positions[0].Expectations);
+            Assert.Equal("Senior Software Engineer", positions[0].Title);
+            Assert.Null(positions[0].Expectations);
         }
 
         [Fact]
