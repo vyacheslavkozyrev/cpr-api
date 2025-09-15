@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc.NewtonsoftJson;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Hellang.Middleware.ProblemDetails;
@@ -108,6 +109,7 @@ var connectionString = builder.Configuration.GetConnectionString("Default") ?? b
 
 builder.Services.AddDbContext<CprDbContext>(options =>
     options.UseNpgsql(connectionString)
+        .ConfigureWarnings(warnings => warnings.Ignore(RelationalEventId.PendingModelChangesWarning))
 );
 
 // Configure ProblemDetails (Hellang middleware) - register before building the app

@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Xunit;
 
 namespace CPR.IntegrationTests
@@ -23,6 +24,7 @@ namespace CPR.IntegrationTests
             {
                 var options = new DbContextOptionsBuilder<CPR.Infrastructure.Data.CprDbContext>()
                     .UseNpgsql(_connString)
+                    .ConfigureWarnings(warnings => warnings.Ignore(RelationalEventId.PendingModelChangesWarning))
                     .Options;
 
                 using var db = new CPR.Infrastructure.Data.CprDbContext(options);
@@ -43,6 +45,7 @@ namespace CPR.IntegrationTests
             {
                 var options = new DbContextOptionsBuilder<CPR.Infrastructure.Data.CprDbContext>()
                     .UseNpgsql(_connString)
+                    .ConfigureWarnings(warnings => warnings.Ignore(RelationalEventId.PendingModelChangesWarning))
                     .Options;
 
                 using var db = new CPR.Infrastructure.Data.CprDbContext(options);

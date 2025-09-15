@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using CPR.Infrastructure.Data;
 using CPR.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Xunit;
 using System.Linq;
@@ -24,6 +25,7 @@ namespace CPR.IntegrationTests
                 .UseNpgsql(conn)
                 .LogTo(Console.WriteLine, Microsoft.Extensions.Logging.LogLevel.Debug)
                 .EnableSensitiveDataLogging()
+                .ConfigureWarnings(warnings => warnings.Ignore(RelationalEventId.PendingModelChangesWarning))
                 .Options;
 
             return new CprDbContext(options);

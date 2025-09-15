@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using CPR.Infrastructure.Data;
 using Xunit;
 
@@ -14,6 +15,7 @@ namespace CPR.IntegrationTests
         {
             var options = new DbContextOptionsBuilder<CprDbContext>()
                     .UseNpgsql("Host=localhost;Port=5432;Database=cpr_test;Username=postgres;Password=postgres")
+                    .ConfigureWarnings(warnings => warnings.Ignore(RelationalEventId.PendingModelChangesWarning))
                 .Options;
 
             using var db = new CprDbContext(options);

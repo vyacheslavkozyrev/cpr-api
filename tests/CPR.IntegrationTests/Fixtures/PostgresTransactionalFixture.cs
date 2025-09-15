@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Npgsql;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using CPR.Infrastructure.Data;
 using Xunit;
 
@@ -43,6 +44,7 @@ namespace CPR.IntegrationTests.Fixtures
                 // Ensure migrations are applied so the schema and seed data exist for tests
                 var options = new DbContextOptionsBuilder<CprDbContext>()
                     .UseNpgsql(Connection)
+                    .ConfigureWarnings(warnings => warnings.Ignore(RelationalEventId.PendingModelChangesWarning))
                     .Options;
 
                 await using (var migrateCtx = new CprDbContext(options))
@@ -98,6 +100,7 @@ namespace CPR.IntegrationTests.Fixtures
                 // Apply migrations after creating the database
                 var options = new DbContextOptionsBuilder<CprDbContext>()
                     .UseNpgsql(Connection)
+                    .ConfigureWarnings(warnings => warnings.Ignore(RelationalEventId.PendingModelChangesWarning))
                     .Options;
 
                 await using (var migrateCtx = new CprDbContext(options))
