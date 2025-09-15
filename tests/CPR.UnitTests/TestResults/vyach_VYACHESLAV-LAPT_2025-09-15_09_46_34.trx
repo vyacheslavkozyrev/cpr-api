@@ -1,0 +1,160 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="7ac8685e-958d-43d2-8dc0-6a5bc15986c2" name="vyach@VYACHESLAV-LAPT 2025-09-15 09:46:34" runUser="VYACHESLAV-LAPT\vyach" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2025-09-15T09:46:34.9362754-05:00" queuing="2025-09-15T09:46:34.9362757-05:00" start="2025-09-15T09:46:33.9346354-05:00" finish="2025-09-15T09:46:36.2424766-05:00" />
+  <TestSettings name="default" id="7f76c7c9-5e81-4006-b77c-96e36e91cd12">
+    <Deployment runDeploymentRoot="vyach_VYACHESLAV-LAPT_2025-09-15_09_46_34" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="23051760-a40d-4eb4-ba22-dbde56167e2e" testId="d3ed3139-af5b-e202-87ed-ba2d5f9985f6" testName="CPR.UnitTests.GoalServiceTests.Update_NonExistent_Throws" computerName="VYACHESLAV-LAPT" duration="00:00:00.0212258" startTime="2025-09-15T09:46:36.0777910-05:00" endTime="2025-09-15T09:46:36.0777913-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="23051760-a40d-4eb4-ba22-dbde56167e2e" />
+    <UnitTestResult executionId="bc04c4bb-cb03-481b-89ff-40a24fd9c5b3" testId="eb37ebbb-ad55-c51e-13ea-9bd5e8dd6e50" testName="CPR.UnitTests.EntityModelTests.NewSkill_Defaults" computerName="VYACHESLAV-LAPT" duration="00:00:00.0995212" startTime="2025-09-15T09:46:34.7855865-05:00" endTime="2025-09-15T09:46:34.7855872-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="bc04c4bb-cb03-481b-89ff-40a24fd9c5b3" />
+    <UnitTestResult executionId="8ece388a-ccab-4435-8edb-64b323d5b12f" testId="8fdbd666-92ef-5b7f-2802-7cd379660176" testName="CPR.UnitTests.GoalServiceTests.Update_WithNoFields_NoChange" computerName="VYACHESLAV-LAPT" duration="00:00:00.0660557" startTime="2025-09-15T09:46:35.9190865-05:00" endTime="2025-09-15T09:46:35.9190867-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="8ece388a-ccab-4435-8edb-64b323d5b12f" />
+    <UnitTestResult executionId="d9228dc0-3ce7-4515-8a54-8b3f375a8116" testId="4bcc2cdc-22f9-1be2-4107-f209763f8fd8" testName="CPR.UnitTests.GoalServiceTests.AddTask_NullDto_Throws" computerName="VYACHESLAV-LAPT" duration="00:00:00.0217503" startTime="2025-09-15T09:46:36.0048634-05:00" endTime="2025-09-15T09:46:36.0048636-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d9228dc0-3ce7-4515-8a54-8b3f375a8116" />
+    <UnitTestResult executionId="c7938377-b69a-4fca-9297-951579c30927" testId="6dcbbebc-5ec3-8cd9-8adb-96eb4d601ff7" testName="CPR.UnitTests.SampleTests.Truth" computerName="VYACHESLAV-LAPT" duration="00:00:00.0194400" startTime="2025-09-15T09:46:34.7075806-05:00" endTime="2025-09-15T09:46:34.7075954-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c7938377-b69a-4fca-9297-951579c30927" />
+    <UnitTestResult executionId="247b3643-6762-4dbb-a866-6bd07e66e354" testId="3c4be2da-b87b-8f23-f318-f442ae6abb24" testName="CPR.UnitTests.GoalServiceTests.Create_WithAllFields_PersistsFields" computerName="VYACHESLAV-LAPT" duration="00:00:00.0270534" startTime="2025-09-15T09:46:36.1665521-05:00" endTime="2025-09-15T09:46:36.1665524-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="247b3643-6762-4dbb-a866-6bd07e66e354" />
+    <UnitTestResult executionId="9502e769-2d46-4c4d-8880-fc2d71058ee6" testId="4dc77161-c76f-95f0-bfd3-57884040bb6f" testName="CPR.UnitTests.GoalsControllerValidationTests.Create_InvalidPriority_ModelStateError" computerName="VYACHESLAV-LAPT" duration="00:00:00.2072141" startTime="2025-09-15T09:46:34.8932228-05:00" endTime="2025-09-15T09:46:34.8932231-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="9502e769-2d46-4c4d-8880-fc2d71058ee6" />
+    <UnitTestResult executionId="6d2587d0-077a-4e7e-b90c-93d17dc7f770" testId="4719cafa-37e8-0976-4e22-b0ffa0c90c6f" testName="CPR.UnitTests.GoalServiceTests.Delete_NonExistent_DoesNotThrow" computerName="VYACHESLAV-LAPT" duration="00:00:00.0376895" startTime="2025-09-15T09:46:35.9569096-05:00" endTime="2025-09-15T09:46:35.9569098-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="6d2587d0-077a-4e7e-b90c-93d17dc7f770" />
+    <UnitTestResult executionId="4f0a26d3-ba8e-43ce-8ae8-e7d515f14078" testId="a38938d7-f90e-a2b0-6791-2f1eddfa19b0" testName="CPR.UnitTests.GoalServiceTests.Update_WithEmptyTitle_DoesNotOverwrite" computerName="VYACHESLAV-LAPT" duration="00:00:00.0180860" startTime="2025-09-15T09:46:36.1846741-05:00" endTime="2025-09-15T09:46:36.1846742-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="4f0a26d3-ba8e-43ce-8ae8-e7d515f14078" />
+    <UnitTestResult executionId="61a0f1a0-05e8-4ba9-bd89-522eee373e41" testId="5956719e-3452-5720-a6a3-0368dd87c461" testName="CPR.UnitTests.GoalServiceTests.Create_NullDto_Throws" computerName="VYACHESLAV-LAPT" duration="00:00:00.0188088" startTime="2025-09-15T09:46:36.0564577-05:00" endTime="2025-09-15T09:46:36.0564583-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="61a0f1a0-05e8-4ba9-bd89-522eee373e41" />
+    <UnitTestResult executionId="423b99b7-189d-4fa8-a00d-58c1f86aab92" testId="8a5940ea-4b2f-f542-b5ca-b09821dd76d9" testName="CPR.UnitTests.GoalServiceTests.GetGoals_InvalidPage_Throws" computerName="VYACHESLAV-LAPT" duration="00:00:00.0287109" startTime="2025-09-15T09:46:36.1394571-05:00" endTime="2025-09-15T09:46:36.1394574-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="423b99b7-189d-4fa8-a00d-58c1f86aab92" />
+    <UnitTestResult executionId="1ada0733-293b-4203-9a60-955b01d7f800" testId="54ff8e50-f462-b783-f88c-c6136ea4e932" testName="CPR.UnitTests.JwtStubAuthenticationHandlerTests.ValidToken_IsAuthenticated" computerName="VYACHESLAV-LAPT" duration="00:00:00.1738930" startTime="2025-09-15T09:46:34.8599903-05:00" endTime="2025-09-15T09:46:34.8599910-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1ada0733-293b-4203-9a60-955b01d7f800" />
+    <UnitTestResult executionId="52e2f4fd-5eb1-4f98-9c33-4064b2fbdcff" testId="0ad55d3a-4f89-ce26-d12a-323f058a8713" testName="CPR.UnitTests.GoalServiceTests.Update_ByDifferentUser_UpdatesModifiedBy" computerName="VYACHESLAV-LAPT" duration="00:00:00.0259734" startTime="2025-09-15T09:46:35.9830006-05:00" endTime="2025-09-15T09:46:35.9830009-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="52e2f4fd-5eb1-4f98-9c33-4064b2fbdcff" />
+    <UnitTestResult executionId="a87a9518-b055-4272-acc4-f9097e23cd6e" testId="b5ad94ba-f9b8-a11a-be7e-940412e7b510" testName="CPR.UnitTests.GoalServiceTests.AddTask_NonExistent_Throws" computerName="VYACHESLAV-LAPT" duration="00:00:00.0325497" startTime="2025-09-15T09:46:36.0375148-05:00" endTime="2025-09-15T09:46:36.0375150-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a87a9518-b055-4272-acc4-f9097e23cd6e" />
+    <UnitTestResult executionId="d969f893-a5e7-4a49-b9ea-ec9f406ac7a4" testId="56f1c77e-28c5-f5f1-3972-d20f73d8b63b" testName="CPR.UnitTests.TokenGeneratorTests.CreateToken_ProducesExpectedFormatAndSignature" computerName="VYACHESLAV-LAPT" duration="00:00:00.1067663" startTime="2025-09-15T09:46:34.7928187-05:00" endTime="2025-09-15T09:46:34.7928195-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d969f893-a5e7-4a49-b9ea-ec9f406ac7a4" />
+    <UnitTestResult executionId="aa5656bd-63c4-4e1e-8cd6-5ebb45dd2a99" testId="7401c24a-10a6-8ef9-c23c-3cc6fdbc13a0" testName="CPR.UnitTests.JwtStubAuthenticationHandlerTests.InvalidToken_IsRejected" computerName="VYACHESLAV-LAPT" duration="00:00:00.0010460" startTime="2025-09-15T09:46:34.8610911-05:00" endTime="2025-09-15T09:46:34.8610912-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="aa5656bd-63c4-4e1e-8cd6-5ebb45dd2a99" />
+    <UnitTestResult executionId="b5f2c751-31ba-41ca-ade2-c94a578c1ad3" testId="4173c94f-ea54-5a01-7339-de8d97f7ae90" testName="CPR.UnitTests.GoalServiceTests.Create_Get_Update_Delete_Workflow" computerName="VYACHESLAV-LAPT" duration="00:00:01.1261925" startTime="2025-09-15T09:46:35.8103005-05:00" endTime="2025-09-15T09:46:35.8103009-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b5f2c751-31ba-41ca-ade2-c94a578c1ad3" />
+    <UnitTestResult executionId="299832f0-7c24-4840-9670-3ee8388c1380" testId="5713dfa7-fb80-0c55-a159-c2c3037a4451" testName="CPR.UnitTests.GoalServiceTests.UpdateTask_CanModifyFields_AndToggleCompletion" computerName="VYACHESLAV-LAPT" duration="00:00:00.0324722" startTime="2025-09-15T09:46:36.1104036-05:00" endTime="2025-09-15T09:46:36.1104038-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="299832f0-7c24-4840-9670-3ee8388c1380" />
+    <UnitTestResult executionId="8e58e9b8-119f-4349-a5d9-f45a03206bd9" testId="17706901-0ddd-6372-5e91-aa055a1243d4" testName="CPR.UnitTests.GoalsControllerValidationTests.Create_InvalidEmployeeIdInDto_ModelStateError" computerName="VYACHESLAV-LAPT" duration="00:00:00.0009670" startTime="2025-09-15T09:46:34.8942301-05:00" endTime="2025-09-15T09:46:34.8942302-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="8e58e9b8-119f-4349-a5d9-f45a03206bd9" />
+    <UnitTestResult executionId="554b0388-4272-45f7-8785-895ba044e8dc" testId="1b740b8d-42b9-d248-6976-42342e3aa316" testName="CPR.UnitTests.GoalsControllerValidationTests.Create_InvalidVisibility_ModelStateError" computerName="VYACHESLAV-LAPT" duration="00:00:00.0008702" startTime="2025-09-15T09:46:34.9114765-05:00" endTime="2025-09-15T09:46:34.9114766-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="554b0388-4272-45f7-8785-895ba044e8dc" />
+    <UnitTestResult executionId="2e425439-2d69-4faf-a63a-afbf9be580ba" testId="0dd3b610-656a-f2ec-5e88-c7c112e68274" testName="CPR.UnitTests.GoalServiceTests.AddTask_Appears_In_GetGoalById" computerName="VYACHESLAV-LAPT" duration="00:00:00.0426213" startTime="2025-09-15T09:46:35.8529146-05:00" endTime="2025-09-15T09:46:35.8529147-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="2e425439-2d69-4faf-a63a-afbf9be580ba" />
+    <UnitTestResult executionId="1b11fb6e-bde7-4ff4-8ded-89c9ab7e0fce" testId="56a69ab4-6219-6b26-299f-0681a9d61e92" testName="CPR.UnitTests.EntityModelTests.NewCareerPath_Defaults" computerName="VYACHESLAV-LAPT" duration="00:00:00.0001753" startTime="2025-09-15T09:46:34.7859873-05:00" endTime="2025-09-15T09:46:34.7859874-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1b11fb6e-bde7-4ff4-8ded-89c9ab7e0fce" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="CPR.UnitTests.GoalServiceTests.Create_NullDto_Throws" storage="d:\projects\cpr\tests\cpr.unittests\bin\debug\net9.0\cpr.unittests.dll" id="5956719e-3452-5720-a6a3-0368dd87c461">
+      <Execution id="61a0f1a0-05e8-4ba9-bd89-522eee373e41" />
+      <TestMethod codeBase="d:\projects\CPR\tests\CPR.UnitTests\bin\Debug\net9.0\CPR.UnitTests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="CPR.UnitTests.GoalServiceTests" name="Create_NullDto_Throws" />
+    </UnitTest>
+    <UnitTest name="CPR.UnitTests.EntityModelTests.NewSkill_Defaults" storage="d:\projects\cpr\tests\cpr.unittests\bin\debug\net9.0\cpr.unittests.dll" id="eb37ebbb-ad55-c51e-13ea-9bd5e8dd6e50">
+      <Execution id="bc04c4bb-cb03-481b-89ff-40a24fd9c5b3" />
+      <TestMethod codeBase="d:\projects\CPR\tests\CPR.UnitTests\bin\Debug\net9.0\CPR.UnitTests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="CPR.UnitTests.EntityModelTests" name="NewSkill_Defaults" />
+    </UnitTest>
+    <UnitTest name="CPR.UnitTests.GoalServiceTests.AddTask_NullDto_Throws" storage="d:\projects\cpr\tests\cpr.unittests\bin\debug\net9.0\cpr.unittests.dll" id="4bcc2cdc-22f9-1be2-4107-f209763f8fd8">
+      <Execution id="d9228dc0-3ce7-4515-8a54-8b3f375a8116" />
+      <TestMethod codeBase="d:\projects\CPR\tests\CPR.UnitTests\bin\Debug\net9.0\CPR.UnitTests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="CPR.UnitTests.GoalServiceTests" name="AddTask_NullDto_Throws" />
+    </UnitTest>
+    <UnitTest name="CPR.UnitTests.JwtStubAuthenticationHandlerTests.ValidToken_IsAuthenticated" storage="d:\projects\cpr\tests\cpr.unittests\bin\debug\net9.0\cpr.unittests.dll" id="54ff8e50-f462-b783-f88c-c6136ea4e932">
+      <Execution id="1ada0733-293b-4203-9a60-955b01d7f800" />
+      <TestMethod codeBase="d:\projects\CPR\tests\CPR.UnitTests\bin\Debug\net9.0\CPR.UnitTests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="CPR.UnitTests.JwtStubAuthenticationHandlerTests" name="ValidToken_IsAuthenticated" />
+    </UnitTest>
+    <UnitTest name="CPR.UnitTests.EntityModelTests.NewCareerPath_Defaults" storage="d:\projects\cpr\tests\cpr.unittests\bin\debug\net9.0\cpr.unittests.dll" id="56a69ab4-6219-6b26-299f-0681a9d61e92">
+      <Execution id="1b11fb6e-bde7-4ff4-8ded-89c9ab7e0fce" />
+      <TestMethod codeBase="d:\projects\CPR\tests\CPR.UnitTests\bin\Debug\net9.0\CPR.UnitTests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="CPR.UnitTests.EntityModelTests" name="NewCareerPath_Defaults" />
+    </UnitTest>
+    <UnitTest name="CPR.UnitTests.GoalServiceTests.Update_WithEmptyTitle_DoesNotOverwrite" storage="d:\projects\cpr\tests\cpr.unittests\bin\debug\net9.0\cpr.unittests.dll" id="a38938d7-f90e-a2b0-6791-2f1eddfa19b0">
+      <Execution id="4f0a26d3-ba8e-43ce-8ae8-e7d515f14078" />
+      <TestMethod codeBase="d:\projects\CPR\tests\CPR.UnitTests\bin\Debug\net9.0\CPR.UnitTests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="CPR.UnitTests.GoalServiceTests" name="Update_WithEmptyTitle_DoesNotOverwrite" />
+    </UnitTest>
+    <UnitTest name="CPR.UnitTests.GoalServiceTests.AddTask_Appears_In_GetGoalById" storage="d:\projects\cpr\tests\cpr.unittests\bin\debug\net9.0\cpr.unittests.dll" id="0dd3b610-656a-f2ec-5e88-c7c112e68274">
+      <Execution id="2e425439-2d69-4faf-a63a-afbf9be580ba" />
+      <TestMethod codeBase="d:\projects\CPR\tests\CPR.UnitTests\bin\Debug\net9.0\CPR.UnitTests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="CPR.UnitTests.GoalServiceTests" name="AddTask_Appears_In_GetGoalById" />
+    </UnitTest>
+    <UnitTest name="CPR.UnitTests.GoalServiceTests.Update_NonExistent_Throws" storage="d:\projects\cpr\tests\cpr.unittests\bin\debug\net9.0\cpr.unittests.dll" id="d3ed3139-af5b-e202-87ed-ba2d5f9985f6">
+      <Execution id="23051760-a40d-4eb4-ba22-dbde56167e2e" />
+      <TestMethod codeBase="d:\projects\CPR\tests\CPR.UnitTests\bin\Debug\net9.0\CPR.UnitTests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="CPR.UnitTests.GoalServiceTests" name="Update_NonExistent_Throws" />
+    </UnitTest>
+    <UnitTest name="CPR.UnitTests.GoalServiceTests.Create_WithAllFields_PersistsFields" storage="d:\projects\cpr\tests\cpr.unittests\bin\debug\net9.0\cpr.unittests.dll" id="3c4be2da-b87b-8f23-f318-f442ae6abb24">
+      <Execution id="247b3643-6762-4dbb-a866-6bd07e66e354" />
+      <TestMethod codeBase="d:\projects\CPR\tests\CPR.UnitTests\bin\Debug\net9.0\CPR.UnitTests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="CPR.UnitTests.GoalServiceTests" name="Create_WithAllFields_PersistsFields" />
+    </UnitTest>
+    <UnitTest name="CPR.UnitTests.JwtStubAuthenticationHandlerTests.InvalidToken_IsRejected" storage="d:\projects\cpr\tests\cpr.unittests\bin\debug\net9.0\cpr.unittests.dll" id="7401c24a-10a6-8ef9-c23c-3cc6fdbc13a0">
+      <Execution id="aa5656bd-63c4-4e1e-8cd6-5ebb45dd2a99" />
+      <TestMethod codeBase="d:\projects\CPR\tests\CPR.UnitTests\bin\Debug\net9.0\CPR.UnitTests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="CPR.UnitTests.JwtStubAuthenticationHandlerTests" name="InvalidToken_IsRejected" />
+    </UnitTest>
+    <UnitTest name="CPR.UnitTests.GoalServiceTests.Create_Get_Update_Delete_Workflow" storage="d:\projects\cpr\tests\cpr.unittests\bin\debug\net9.0\cpr.unittests.dll" id="4173c94f-ea54-5a01-7339-de8d97f7ae90">
+      <Execution id="b5f2c751-31ba-41ca-ade2-c94a578c1ad3" />
+      <TestMethod codeBase="d:\projects\CPR\tests\CPR.UnitTests\bin\Debug\net9.0\CPR.UnitTests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="CPR.UnitTests.GoalServiceTests" name="Create_Get_Update_Delete_Workflow" />
+    </UnitTest>
+    <UnitTest name="CPR.UnitTests.GoalServiceTests.Update_WithNoFields_NoChange" storage="d:\projects\cpr\tests\cpr.unittests\bin\debug\net9.0\cpr.unittests.dll" id="8fdbd666-92ef-5b7f-2802-7cd379660176">
+      <Execution id="8ece388a-ccab-4435-8edb-64b323d5b12f" />
+      <TestMethod codeBase="d:\projects\CPR\tests\CPR.UnitTests\bin\Debug\net9.0\CPR.UnitTests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="CPR.UnitTests.GoalServiceTests" name="Update_WithNoFields_NoChange" />
+    </UnitTest>
+    <UnitTest name="CPR.UnitTests.GoalsControllerValidationTests.Create_InvalidVisibility_ModelStateError" storage="d:\projects\cpr\tests\cpr.unittests\bin\debug\net9.0\cpr.unittests.dll" id="1b740b8d-42b9-d248-6976-42342e3aa316">
+      <Execution id="554b0388-4272-45f7-8785-895ba044e8dc" />
+      <TestMethod codeBase="d:\projects\CPR\tests\CPR.UnitTests\bin\Debug\net9.0\CPR.UnitTests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="CPR.UnitTests.GoalsControllerValidationTests" name="Create_InvalidVisibility_ModelStateError" />
+    </UnitTest>
+    <UnitTest name="CPR.UnitTests.GoalServiceTests.GetGoals_InvalidPage_Throws" storage="d:\projects\cpr\tests\cpr.unittests\bin\debug\net9.0\cpr.unittests.dll" id="8a5940ea-4b2f-f542-b5ca-b09821dd76d9">
+      <Execution id="423b99b7-189d-4fa8-a00d-58c1f86aab92" />
+      <TestMethod codeBase="d:\projects\CPR\tests\CPR.UnitTests\bin\Debug\net9.0\CPR.UnitTests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="CPR.UnitTests.GoalServiceTests" name="GetGoals_InvalidPage_Throws" />
+    </UnitTest>
+    <UnitTest name="CPR.UnitTests.GoalServiceTests.UpdateTask_CanModifyFields_AndToggleCompletion" storage="d:\projects\cpr\tests\cpr.unittests\bin\debug\net9.0\cpr.unittests.dll" id="5713dfa7-fb80-0c55-a159-c2c3037a4451">
+      <Execution id="299832f0-7c24-4840-9670-3ee8388c1380" />
+      <TestMethod codeBase="d:\projects\CPR\tests\CPR.UnitTests\bin\Debug\net9.0\CPR.UnitTests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="CPR.UnitTests.GoalServiceTests" name="UpdateTask_CanModifyFields_AndToggleCompletion" />
+    </UnitTest>
+    <UnitTest name="CPR.UnitTests.GoalsControllerValidationTests.Create_InvalidPriority_ModelStateError" storage="d:\projects\cpr\tests\cpr.unittests\bin\debug\net9.0\cpr.unittests.dll" id="4dc77161-c76f-95f0-bfd3-57884040bb6f">
+      <Execution id="9502e769-2d46-4c4d-8880-fc2d71058ee6" />
+      <TestMethod codeBase="d:\projects\CPR\tests\CPR.UnitTests\bin\Debug\net9.0\CPR.UnitTests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="CPR.UnitTests.GoalsControllerValidationTests" name="Create_InvalidPriority_ModelStateError" />
+    </UnitTest>
+    <UnitTest name="CPR.UnitTests.GoalServiceTests.AddTask_NonExistent_Throws" storage="d:\projects\cpr\tests\cpr.unittests\bin\debug\net9.0\cpr.unittests.dll" id="b5ad94ba-f9b8-a11a-be7e-940412e7b510">
+      <Execution id="a87a9518-b055-4272-acc4-f9097e23cd6e" />
+      <TestMethod codeBase="d:\projects\CPR\tests\CPR.UnitTests\bin\Debug\net9.0\CPR.UnitTests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="CPR.UnitTests.GoalServiceTests" name="AddTask_NonExistent_Throws" />
+    </UnitTest>
+    <UnitTest name="CPR.UnitTests.GoalServiceTests.Update_ByDifferentUser_UpdatesModifiedBy" storage="d:\projects\cpr\tests\cpr.unittests\bin\debug\net9.0\cpr.unittests.dll" id="0ad55d3a-4f89-ce26-d12a-323f058a8713">
+      <Execution id="52e2f4fd-5eb1-4f98-9c33-4064b2fbdcff" />
+      <TestMethod codeBase="d:\projects\CPR\tests\CPR.UnitTests\bin\Debug\net9.0\CPR.UnitTests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="CPR.UnitTests.GoalServiceTests" name="Update_ByDifferentUser_UpdatesModifiedBy" />
+    </UnitTest>
+    <UnitTest name="CPR.UnitTests.GoalsControllerValidationTests.Create_InvalidEmployeeIdInDto_ModelStateError" storage="d:\projects\cpr\tests\cpr.unittests\bin\debug\net9.0\cpr.unittests.dll" id="17706901-0ddd-6372-5e91-aa055a1243d4">
+      <Execution id="8e58e9b8-119f-4349-a5d9-f45a03206bd9" />
+      <TestMethod codeBase="d:\projects\CPR\tests\CPR.UnitTests\bin\Debug\net9.0\CPR.UnitTests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="CPR.UnitTests.GoalsControllerValidationTests" name="Create_InvalidEmployeeIdInDto_ModelStateError" />
+    </UnitTest>
+    <UnitTest name="CPR.UnitTests.SampleTests.Truth" storage="d:\projects\cpr\tests\cpr.unittests\bin\debug\net9.0\cpr.unittests.dll" id="6dcbbebc-5ec3-8cd9-8adb-96eb4d601ff7">
+      <Execution id="c7938377-b69a-4fca-9297-951579c30927" />
+      <TestMethod codeBase="d:\projects\CPR\tests\CPR.UnitTests\bin\Debug\net9.0\CPR.UnitTests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="CPR.UnitTests.SampleTests" name="Truth" />
+    </UnitTest>
+    <UnitTest name="CPR.UnitTests.TokenGeneratorTests.CreateToken_ProducesExpectedFormatAndSignature" storage="d:\projects\cpr\tests\cpr.unittests\bin\debug\net9.0\cpr.unittests.dll" id="56f1c77e-28c5-f5f1-3972-d20f73d8b63b">
+      <Execution id="d969f893-a5e7-4a49-b9ea-ec9f406ac7a4" />
+      <TestMethod codeBase="d:\projects\CPR\tests\CPR.UnitTests\bin\Debug\net9.0\CPR.UnitTests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="CPR.UnitTests.TokenGeneratorTests" name="CreateToken_ProducesExpectedFormatAndSignature" />
+    </UnitTest>
+    <UnitTest name="CPR.UnitTests.GoalServiceTests.Delete_NonExistent_DoesNotThrow" storage="d:\projects\cpr\tests\cpr.unittests\bin\debug\net9.0\cpr.unittests.dll" id="4719cafa-37e8-0976-4e22-b0ffa0c90c6f">
+      <Execution id="6d2587d0-077a-4e7e-b90c-93d17dc7f770" />
+      <TestMethod codeBase="d:\projects\CPR\tests\CPR.UnitTests\bin\Debug\net9.0\CPR.UnitTests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="CPR.UnitTests.GoalServiceTests" name="Delete_NonExistent_DoesNotThrow" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="d3ed3139-af5b-e202-87ed-ba2d5f9985f6" executionId="23051760-a40d-4eb4-ba22-dbde56167e2e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="eb37ebbb-ad55-c51e-13ea-9bd5e8dd6e50" executionId="bc04c4bb-cb03-481b-89ff-40a24fd9c5b3" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="8fdbd666-92ef-5b7f-2802-7cd379660176" executionId="8ece388a-ccab-4435-8edb-64b323d5b12f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="4bcc2cdc-22f9-1be2-4107-f209763f8fd8" executionId="d9228dc0-3ce7-4515-8a54-8b3f375a8116" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="6dcbbebc-5ec3-8cd9-8adb-96eb4d601ff7" executionId="c7938377-b69a-4fca-9297-951579c30927" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="3c4be2da-b87b-8f23-f318-f442ae6abb24" executionId="247b3643-6762-4dbb-a866-6bd07e66e354" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="4dc77161-c76f-95f0-bfd3-57884040bb6f" executionId="9502e769-2d46-4c4d-8880-fc2d71058ee6" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="4719cafa-37e8-0976-4e22-b0ffa0c90c6f" executionId="6d2587d0-077a-4e7e-b90c-93d17dc7f770" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="a38938d7-f90e-a2b0-6791-2f1eddfa19b0" executionId="4f0a26d3-ba8e-43ce-8ae8-e7d515f14078" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="5956719e-3452-5720-a6a3-0368dd87c461" executionId="61a0f1a0-05e8-4ba9-bd89-522eee373e41" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="8a5940ea-4b2f-f542-b5ca-b09821dd76d9" executionId="423b99b7-189d-4fa8-a00d-58c1f86aab92" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="54ff8e50-f462-b783-f88c-c6136ea4e932" executionId="1ada0733-293b-4203-9a60-955b01d7f800" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="0ad55d3a-4f89-ce26-d12a-323f058a8713" executionId="52e2f4fd-5eb1-4f98-9c33-4064b2fbdcff" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="b5ad94ba-f9b8-a11a-be7e-940412e7b510" executionId="a87a9518-b055-4272-acc4-f9097e23cd6e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="56f1c77e-28c5-f5f1-3972-d20f73d8b63b" executionId="d969f893-a5e7-4a49-b9ea-ec9f406ac7a4" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="7401c24a-10a6-8ef9-c23c-3cc6fdbc13a0" executionId="aa5656bd-63c4-4e1e-8cd6-5ebb45dd2a99" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="4173c94f-ea54-5a01-7339-de8d97f7ae90" executionId="b5f2c751-31ba-41ca-ade2-c94a578c1ad3" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="5713dfa7-fb80-0c55-a159-c2c3037a4451" executionId="299832f0-7c24-4840-9670-3ee8388c1380" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="17706901-0ddd-6372-5e91-aa055a1243d4" executionId="8e58e9b8-119f-4349-a5d9-f45a03206bd9" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1b740b8d-42b9-d248-6976-42342e3aa316" executionId="554b0388-4272-45f7-8785-895ba044e8dc" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="0dd3b610-656a-f2ec-5e88-c7c112e68274" executionId="2e425439-2d69-4faf-a63a-afbf9be580ba" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="56a69ab4-6219-6b26-299f-0681a9d61e92" executionId="1b11fb6e-bde7-4ff4-8ded-89c9ab7e0fce" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="22" executed="22" passed="22" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v2.8.0+6438bb880a (64-bit .NET 9.0.3)&#xD;
+[xUnit.net 00:00:00.23]   Discovering: CPR.UnitTests&#xD;
+[xUnit.net 00:00:00.26]   Discovered:  CPR.UnitTests&#xD;
+[xUnit.net 00:00:00.26]   Starting:    CPR.UnitTests&#xD;
+[xUnit.net 00:00:01.80]   Finished:    CPR.UnitTests&#xD;
+</StdOut>
+    </Output>
+  </ResultSummary>
+</TestRun>

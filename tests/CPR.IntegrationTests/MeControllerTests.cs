@@ -7,6 +7,7 @@ using Xunit;
 
 namespace CPR.IntegrationTests;
 
+[Collection("IntegrationTestCollection")]
 public class MeControllerTests : IClassFixture<WebApplicationFactory<Program>>
 {
     private readonly WebApplicationFactory<Program> _factory;

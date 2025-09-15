@@ -144,6 +144,44 @@ POST /goals/{id}/tasks
 - CreateGoalTaskDto { string Title; string? Description; DateTimeOffset? Deadline }
 - TaskDto { Guid Id; Guid GoalId; string Title; string? Description; DateTimeOffset? Deadline; bool IsCompleted; DateTimeOffset? CompletedAt }
 
+---
+
+## Iteration 8 — Skills taxonomy (read-only)
+
+Endpoints
+
+- GET /career
+  - Purpose: return list of career paths (id, title, description)
+  - Response 200 (JSON): [ { "id": "GUID", "title": "string", "description": "string|null" } ]
+
+- GET /career_track?career_path_id={guid}
+  - Purpose: list career tracks; optional filter by career_path_id
+  - Query params: career_path_id (GUID)
+  - Response 200 (JSON): [ { "id": "GUID", "title": "string", "description": "string|null", "careerPathId": "GUID" } ]
+
+- GET /positions?career_track_id={guid}
+  - Purpose: list positions; optional filter by career_track_id
+  - Query params: career_track_id (GUID)
+  - Response 200 (JSON): [ { "id": "GUID", "title": "string", "description": "string|null", "expectations": "string|null", "careerTrackId": "GUID" } ]
+
+Notes
+- The `expectations` field is a free-form text field describing responsibilities and success expectations for the position.
+- Responses are camelCased in JSON (e.g., `careerPathId`, `careerTrackId`, `expectations`).
+- All endpoints are read-only and return 200 with an empty array when no rows matched.
+
+Example response for GET /positions?career_track_id=cccccccc-cccc-cccc-cccc-cccccccc0001
+
+[
+  {
+    "id": "33333333-3333-3333-3333-333333333333",
+    "title": "Senior Software Engineer",
+    "description": "Senior member of engineering team",
+    "expectations": "Deliver high-quality code, mentor peers, drive architecture decisions",
+    "careerTrackId": "cccccccc-cccc-cccc-cccc-cccccccc0001"
+  }
+]
+
+
 Authentication & authorization notes
 - OwnerId should be sourced from the authenticated user's subject claim.
 - RBAC: owner & manager & admin roles map to update/delete privileges. Read allowed to owner/manager/admin and any project-member if goal is project-linked.

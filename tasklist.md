@@ -1,9 +1,9 @@
 # Tasklist — CPR
 
 Progress (update after each iteration)
-- Iteration: 4
+- Iteration: 7
 - Status: Complete
-- Notes: Iteration 4 completed (2025-09-10) — EF Core domain entities added, audit base class and snake_case column mappings implemented; seeds and consolidated migration applied; dev DB recreated and integration tests executed. Changes pushed to `develop` and merged into `main`.
+- Notes: Iteration 7 completed (2025-09-12) — Goals CRUD and Goal Tasks implemented; tests executed and convenience scripts added (run-tests, run-api-with-token). Changes staged in workspace; ready to commit.
 
 Guidelines
 - Each iteration is incremental: implement, test, and deploy the listed items.
@@ -86,17 +86,21 @@ Iterations
 
 ## New small iterations (endpoint-focused)
 
-- [ ] Iteration 6 — Goals CRUD
+ - [x] Iteration 6 — Goals CRUD
   - Scope: POST /goals, GET /me/goals, GET /goals/{id}, PATCH /goals/{id}, DELETE /goals/{id}
   - Acceptance: Integration tests for create/read/update/delete (happy path).
 
-- [ ] Iteration 7 — Goal Tasks
+ - [x] Iteration 7 — Goal Tasks
   - Scope: POST /goals/{id}/tasks, GET /goals/{id}/tasks, PATCH /goals/{id}/tasks/{taskId}/complete
   - Acceptance: Integration test to add and complete a task.
 
-- [ ] Iteration 8 — Skills taxonomy (read-only)
-  - Scope: GET /skills, GET /skill_levels?skill_id=
-  - Acceptance: Seeded skills visible in staging; simple integration test reads taxonomy.
+ - [ ] Iteration 8 — Skills taxonomy (read-only)
+  - Scope: GET /career, GET /career_track?career_path_id=, GET /positions?career_track_id=
+  - Acceptance: Seeded career paths, career tracks and positions visible in staging; integration tests read lists and filter by query params.
+
+ - [ ] Iteration 8.1 — Skills taxonomy (part 2)
+  - Scope: GET /skills?position_id=, GET /skill_levels?skill_id=
+  - Acceptance: Seeded skills and skill_levels visible in staging; integration tests verify listing and filtering by position_id and skill_id respectively.
 
 - [ ] Iteration 9 — Self-assessments
   - Scope: POST /me/skills, GET /me/skills

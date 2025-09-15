@@ -6,6 +6,7 @@ using Xunit;
 
 namespace CPR.IntegrationTests
 {
+    [Collection("IntegrationTestCollection")]
     public class SeedVerificationTests
     {
         [Fact]
