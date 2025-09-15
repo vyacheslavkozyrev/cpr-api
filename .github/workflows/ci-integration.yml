@@ -62,7 +62,7 @@ jobs:
           export PATH="$HOME/.dotnet/tools:$PATH"
 
       - name: Restore
-        run: dotnet restore
+        run: dotnet restore src/CPR.sln
 
       - name: Setup obj/bin cache
         uses: actions/cache@v4
@@ -73,7 +73,7 @@ jobs:
           key: dotnet-build-${{ runner.os }}-$(date +%Y%m%d)-${{ hashFiles('**/*.csproj') }}
 
       - name: Build
-        run: dotnet build --no-restore --configuration Release
+        run: dotnet build src/CPR.sln --no-restore --configuration Release
 
       - name: Run EF migrations (apply seeds)
         env:
