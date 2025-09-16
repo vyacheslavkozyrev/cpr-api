@@ -1,9 +1,9 @@
 # Tasklist — CPR
 
 Progress (update after each iteration)
-- Iteration: 8
+- Iteration: 8.1
 - Status: Complete
-- Notes: Iteration 8 completed (2025-09-15) — Skills taxonomy endpoints implemented and seeded; integration tests pending. Changes staged in workspace; ready to commit.
+- Notes: Iteration 8.1 completed (2025-09-16) — Skills taxonomy endpoints fully implemented with proper seeding, filtering, and integration tests. GET /skills?position_id= and GET /skill_levels?skill_id= working correctly.
 
 Guidelines
 - Each iteration is incremental: implement, test, and deploy the listed items.
@@ -98,9 +98,11 @@ Iterations
   - Scope: GET /career, GET /career_track?career_path_id=, GET /positions?career_track_id=
   - Acceptance: Seeded career paths, career tracks and positions visible in staging; integration tests read lists and filter by query params.
 
- - [ ] Iteration 8.1 — Skills taxonomy (part 2)
+ - [x] Iteration 8.1 — Skills taxonomy (part 2)
   - Scope: GET /skills?position_id=, GET /skill_levels?skill_id=
   - Acceptance: Seeded skills and skill_levels visible in staging; integration tests verify listing and filtering by position_id and skill_id respectively.
+  - Status: Complete (2025-09-16)
+  - Notes: Implemented DTOs, service methods with LINQ joins, controller endpoints, seed data in migration, and integration tests. PositionToSkill relationships properly seeded and filtering working correctly.
 
 - [ ] Iteration 9 — Self-assessments
   - Scope: POST /me/skills, GET /me/skills
