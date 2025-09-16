@@ -61,5 +61,29 @@ namespace CPR.Api.Controllers
             var items = await _svc.GetPositionsAsync(career_track_id);
             return Ok(items);
         }
+
+        /// <summary>
+        /// Returns skills optionally filtered by position_id.
+        /// </summary>
+        /// <param name="position_id">Optional position id to filter skills.</param>
+        [HttpGet("skills")]
+        [ProducesResponseType(typeof(System.Collections.Generic.IEnumerable<SkillDto>), 200)]
+        public async Task<IActionResult> GetSkills([FromQuery] Guid? position_id)
+        {
+            var items = await _svc.GetSkillsAsync(position_id);
+            return Ok(items);
+        }
+
+        /// <summary>
+        /// Returns skill levels optionally filtered by skill_id.
+        /// </summary>
+        /// <param name="skill_id">Optional skill id to filter skill levels.</param>
+        [HttpGet("skill_levels")]
+        [ProducesResponseType(typeof(System.Collections.Generic.IEnumerable<SkillLevelDto>), 200)]
+        public async Task<IActionResult> GetSkillLevels([FromQuery] Guid? skill_id)
+        {
+            var items = await _svc.GetSkillLevelsAsync(skill_id);
+            return Ok(items);
+        }
     }
 }

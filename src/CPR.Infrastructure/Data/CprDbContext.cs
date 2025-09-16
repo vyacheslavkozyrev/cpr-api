@@ -583,6 +583,19 @@ namespace CPR.Infrastructure.Data
                 b.Property(p => p.IsDeleted).HasColumnName("is_deleted");
                 b.Property(p => p.DeletedBy).HasColumnName("deleted_by");
                 b.Property(p => p.DeletedAt).HasColumnName("deleted_at");
+                // Seed: position to skill relationships
+                b.HasData(new PositionToSkill
+                {
+                    Id = Guid.Parse("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaa0001"),
+                    PositionId = Guid.Parse("cccccccc-cccc-cccc-cccc-cccccccc0001"), // Senior Software Engineer
+                    SkillId = Guid.Parse("eeeeeeee-eeee-eeee-eeee-eeeeeeee0001"), // Unit Testing
+                    SkillLevelId = Guid.Parse("ffffffff-ffff-ffff-ffff-ffffffff0001"), // Beginner
+                    Weight = 1.0m,
+                    IsMandatory = true,
+                    Rationale = "Essential for code quality and reliability",
+                    CreatedBy = Guid.Parse("11111111-1111-1111-1111-111111111111"),
+                    CreatedAt = DateTimeOffset.Parse("2025-09-05T00:00:00Z")
+                });
             });
 
             modelBuilder.Entity<ProjectTeam>(b =>

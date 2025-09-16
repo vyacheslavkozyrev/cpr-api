@@ -37,5 +37,27 @@ namespace CPR.Infrastructure.Services
             var items = await q.ToListAsync();
             return items.Select(p => new PositionDto { Id = p.Id, Title = p.Title, Description = p.Description, Expectations = p.Expectations, CareerTrackId = p.CareerTrackId }).ToArray();
         }
+
+        public async Task<SkillDto[]> GetSkillsAsync(Guid? positionId = null)
+        {
+            var q = _db.Skills.Where(s => !s.IsDeleted);
+            if (positionId.HasValue)
+            {
+                q = q.Join(_db.PositionToSkills.Where(pts => pts.PositionId == positionId.Value),
+                          s => s.Id,
+                          pts => pts.SkillId,
+                          (s, pts) => s);
+            }
+            var items = await q.ToListAsync();
+            return items.Select(s => new SkillDto { Id = s.Id, Title = s.Title, Description = s.Description, CategoryId = s.CategoryId }).ToArray();
+        }
+
+        public async Task<SkillLevelDto[]> GetSkillLevelsAsync(Guid? skillId = null)
+        {
+            var q = _db.SkillLevels.Where(sl => !sl.IsDeleted);
+            if (skillId.HasValue) q = q.Where(sl => sl.SkillId == skillId.Value);
+            var items = await q.ToListAsync();
+            return items.Select(sl => new SkillLevelDto { Id = sl.Id, Title = sl.Title, Description = sl.Description, SkillId = sl.SkillId, Value = sl.Value }).ToArray();
+        }
     }
 }

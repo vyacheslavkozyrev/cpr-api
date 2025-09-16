@@ -46,4 +46,36 @@ namespace CPR.Application.Contracts
         /// <summary>Parent career track id</summary>
         public Guid CareerTrackId { get; set; }
     }
+
+    /// <summary>
+    /// Skill within a category
+    /// </summary>
+    public class SkillDto
+    {
+        /// <summary>Identifier (GUID)</summary>
+        public Guid Id { get; set; }
+        /// <summary>Human-friendly title</summary>
+        public string Title { get; set; } = null!;
+        /// <summary>Optional description</summary>
+        public string? Description { get; set; }
+        /// <summary>Parent skill category id</summary>
+        public Guid CategoryId { get; set; }
+    }
+
+    /// <summary>
+    /// Skill level within a skill
+    /// </summary>
+    public class SkillLevelDto
+    {
+        /// <summary>Identifier (GUID)</summary>
+        public Guid Id { get; set; }
+        /// <summary>Human-friendly title</summary>
+        public string Title { get; set; } = null!;
+        /// <summary>Optional description</summary>
+        public string? Description { get; set; }
+        /// <summary>Parent skill id</summary>
+        public Guid SkillId { get; set; }
+        /// <summary>Numeric value representing the level</summary>
+        public int Value { get; set; }
+    }
 }

@@ -9,5 +9,7 @@ namespace CPR.Application.Services
         Task<CareerPathDto[]> GetCareerPathsAsync();
         Task<CareerTrackDto[]> GetCareerTracksAsync(Guid? careerPathId = null);
         Task<PositionDto[]> GetPositionsAsync(Guid? careerTrackId = null);
+        Task<SkillDto[]> GetSkillsAsync(Guid? positionId = null);
+        Task<SkillLevelDto[]> GetSkillLevelsAsync(Guid? skillId = null);
     }
 }

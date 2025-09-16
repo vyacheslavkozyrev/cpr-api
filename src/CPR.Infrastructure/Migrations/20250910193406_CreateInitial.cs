@@ -669,6 +669,11 @@ namespace CPR.Infrastructure.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "position_to_skill",
+                columns: new[] { "id", "position_id", "skill_id", "skill_level_id", "weight", "is_mandatory", "rationale", "created_at", "created_by", "deleted_at", "deleted_by", "is_deleted", "modified_at", "modified_by" },
+                values: new object[] { new Guid("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaa0001"), new Guid("cccccccc-cccc-cccc-cccc-cccccccc0001"), new Guid("eeeeeeee-eeee-eeee-eeee-eeeeeeee0001"), new Guid("ffffffff-ffff-ffff-ffff-ffffffff0001"), 1.0m, true, "Essential for code quality and reliability", new DateTimeOffset(new DateTime(2025, 9, 5, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), new Guid("11111111-1111-1111-1111-111111111111"), null, null, false, null, null });
+
+            migrationBuilder.InsertData(
                 table: "users",
                 columns: new[] { "id", "created_at", "created_by", "deleted_at", "deleted_by", "display_name", "is_deleted", "modified_at", "modified_by", "password_hash", "user_name" },
                 values: new object[] { new Guid("11111111-1111-1111-1111-111111111111"), new DateTimeOffset(new DateTime(2025, 9, 5, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), null, null, null, "Jane Smith", false, null, null, "$2b$12$.........................", "jane.smith" });
