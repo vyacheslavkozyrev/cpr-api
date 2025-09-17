@@ -11,5 +11,10 @@ namespace CPR.Application.Services
         Task<PositionDto[]> GetPositionsAsync(Guid? careerTrackId = null);
         Task<SkillDto[]> GetSkillsAsync(Guid? positionId = null);
         Task<SkillLevelDto[]> GetSkillLevelsAsync(Guid? skillId = null);
+
+        // Employee skill assessment methods
+        Task<EmployeeSkillDto[]> GetEmployeeSkillsAsync(Guid employeeId);
+        Task<EmployeeSkillDto> CreateEmployeeSkillAsync(Guid employeeId, EmployeeSkillCreateDto dto);
+        Task<EmployeeSkillDto> UpdateEmployeeSkillAsync(Guid employeeId, Guid skillId, EmployeeSkillUpdateDto dto);
     }
 }
