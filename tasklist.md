@@ -1,9 +1,9 @@
 # Tasklist — CPR
 
 Progress (update after each iteration)
-- Iteration: 8.1
+- Iteration: 9
 - Status: Complete
-- Notes: Iteration 8.1 completed (2025-09-16) — Skills taxonomy endpoints fully implemented with proper seeding, filtering, and integration tests. GET /skills?position_id= and GET /skill_levels?skill_id= working correctly.
+- Notes: Iteration 9 completed (2025-09-17) — Self-assessment endpoints fully implemented with POST /me/skills, GET /me/skills, and PUT /me/skills/{skillId}. Includes upsert logic, JWT authentication, PostgreSQL DateTime compatibility fixes, and comprehensive integration tests (35/35 passing).
 
 Guidelines
 - Each iteration is incremental: implement, test, and deploy the listed items.
@@ -100,9 +100,19 @@ Iterations
   - Status: Complete (2025-09-16)
   - Notes: Implemented DTOs, service methods with LINQ joins, controller endpoints, seed data in migration, and integration tests. PositionToSkill relationships properly seeded and filtering working correctly.
 
-- [ ] Iteration 9 — Self-assessments
-  - Scope: POST /me/skills, GET /me/skills
-  - Acceptance: Integration test for submitting and reading a self-assessment.
+- [x] Iteration 9 — Self-assessments
+  - Scope: POST /me/skills, GET /me/skills, PUT /me/skills/{skillId}
+  - Acceptance: Integration tests for creating, reading, and updating self-assessments with proper authentication and validation.
+  - Status: Complete (2025-09-17)
+  - Notes: Fully implemented self-assessment system with:
+    - POST /me/skills - Create new skill assessment (with upsert logic for existing assessments)
+    - GET /me/skills - List user's skill assessments with skill and level details
+    - PUT /me/skills/{skillId} - Update existing skill assessment
+    - JWT authentication and employee ID extraction from claims
+    - PostgreSQL DateTime compatibility (UTC conversions)
+    - Comprehensive error handling and validation
+    - 35/35 integration tests passing, 31/31 unit tests passing
+    - Repository/Service pattern with proper separation of concerns
 
 - [ ] Iteration 10 — Feedback requests
   - Scope: POST /feedback/request, GET /feedback/requests?employee_id=
