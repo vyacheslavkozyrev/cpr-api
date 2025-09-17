@@ -134,7 +134,18 @@ namespace CPR.Infrastructure.Services
                 !es.IsDeleted);
 
             if (existing != null)
-                throw new InvalidOperationException("Skill assessment already exists for this employee");
+            {
+                // Update existing assessment instead of throwing exception
+                existing.SkillLevelId = dto.CurrentLevelId;
+                existing.Source = dto.Source;
+                existing.EffectiveDate = dto.EffectiveDate.HasValue ? dto.EffectiveDate.Value.UtcDateTime : DateTime.UtcNow;
+                existing.IsTarget = dto.IsTarget;
+                existing.ModifiedBy = employeeId;
+                existing.ModifiedAt = DateTimeOffset.UtcNow;
+
+                await _db.SaveChangesAsync();
+                return (await GetEmployeeSkillsAsync(employeeId)).First(es => es.Skill.Id == dto.SkillId);
+            }
 
             var employeeSkill = new CPR.Domain.Entities.EmployeeToSkill
             {
@@ -143,7 +154,7 @@ namespace CPR.Infrastructure.Services
                 SkillId = dto.SkillId,
                 SkillLevelId = dto.CurrentLevelId, // Note: This should be CurrentLevelId if that field exists
                 Source = dto.Source,
-                EffectiveDate = dto.EffectiveDate.HasValue ? dto.EffectiveDate.Value.DateTime : DateTime.UtcNow,
+                EffectiveDate = dto.EffectiveDate.HasValue ? dto.EffectiveDate.Value.UtcDateTime : DateTime.UtcNow,
                 IsTarget = dto.IsTarget,
                 CreatedBy = employeeId, // Use employee ID as created by
                 CreatedAt = DateTimeOffset.UtcNow
@@ -186,7 +197,7 @@ namespace CPR.Infrastructure.Services
             // Update the assessment
             existing.SkillLevelId = dto.CurrentLevelId ?? existing.SkillLevelId;
             existing.Source = dto.Source ?? existing.Source;
-            existing.EffectiveDate = dto.EffectiveDate.HasValue ? dto.EffectiveDate.Value.DateTime : existing.EffectiveDate;
+            existing.EffectiveDate = dto.EffectiveDate.HasValue ? dto.EffectiveDate.Value.UtcDateTime : existing.EffectiveDate;
             existing.IsTarget = dto.IsTarget;
             existing.ModifiedBy = employeeId; // Use employee ID as modified by
             existing.ModifiedAt = DateTimeOffset.UtcNow;

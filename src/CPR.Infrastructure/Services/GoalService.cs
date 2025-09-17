@@ -224,7 +224,7 @@ namespace CPR.Infrastructure.Services
             if (dto.Description != null) g.Description = dto.Description;
             if (dto.RelatedSkillId.HasValue) g.RelatedSkillId = dto.RelatedSkillId;
             if (dto.RelatedSkillLevelId.HasValue) g.RelatedSkillLevelId = dto.RelatedSkillLevelId;
-            if (dto.Deadline.HasValue) g.Deadline = dto.Deadline.Value.DateTime;
+            if (dto.Deadline.HasValue) g.Deadline = dto.Deadline.Value.UtcDateTime;
             if (!string.IsNullOrEmpty(dto.Status)) g.Status = dto.Status;
             // EmployeeId is immutable via PATCH: do not modify g.EmployeeId here
             if (dto.Priority.HasValue) g.Priority = dto.Priority;

@@ -30,6 +30,8 @@ namespace CPR.IntegrationTests
                 using var db = new CPR.Infrastructure.Data.CprDbContext(options);
                 // Remove rows commonly inserted by tests (identified by title/description markers)
                 db.Goals.RemoveRange(db.Goals.Where(g => g.Title.StartsWith("Integration test") || g.Description == "verify persistence"));
+                // Clean up employee skills created by tests
+                db.EmployeeSkills.RemoveRange(db.EmployeeSkills.Where(es => es.EmployeeId == Guid.Parse("33333333-3333-3333-3333-333333333333")));
                 await db.SaveChangesAsync();
             }
             catch (Exception)
@@ -50,6 +52,8 @@ namespace CPR.IntegrationTests
 
                 using var db = new CPR.Infrastructure.Data.CprDbContext(options);
                 db.Goals.RemoveRange(db.Goals.Where(g => g.Title.StartsWith("Integration test") || g.Description == "verify persistence"));
+                // Clean up employee skills created by tests
+                db.EmployeeSkills.RemoveRange(db.EmployeeSkills.Where(es => es.EmployeeId == Guid.Parse("33333333-3333-3333-3333-333333333333")));
                 await db.SaveChangesAsync();
             }
             catch (Exception)
