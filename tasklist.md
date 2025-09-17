@@ -1,9 +1,9 @@
 # Tasklist — CPR
 
 Progress (update after each iteration)
-- Iteration: 9
+- Iteration: 10
 - Status: Complete
-- Notes: Iteration 9 completed (2025-09-17) — Self-assessment endpoints fully implemented with POST /me/skills, GET /me/skills, and PUT /me/skills/{skillId}. Includes upsert logic, JWT authentication, PostgreSQL DateTime compatibility fixes, and comprehensive integration tests (35/35 passing).
+- Notes: Iteration 10 completed (2025-09-17) — Feedback requests fully implemented with POST /feedback/request, GET /me/feedback/request, and GET /me/feedback/request/todo. Includes user-centric endpoints, JWT authentication, comprehensive validation, EF Core navigation properties, and full test coverage (40/40 integration tests passing, 31/31 unit tests passing).
 
 Guidelines
 - Each iteration is incremental: implement, test, and deploy the listed items.
@@ -114,9 +114,26 @@ Iterations
     - 35/35 integration tests passing, 31/31 unit tests passing
     - Repository/Service pattern with proper separation of concerns
 
-- [ ] Iteration 10 — Feedback requests
-  - Scope: POST /feedback/request, GET /feedback/requests?employee_id=
-  - Acceptance: Creates feedback_request rows and returns recipients; unit test for validation.
+- [x] Iteration 10 — Feedback requests
+  - Scope: POST /feedback/request, GET /me/feedback/request, GET /me/feedback/request/todo
+  - Acceptance: Creates feedback_request rows and returns requests sent/received by current user; unit test for validation.
+  - Status: Complete (2025-09-17)
+  - Notes: Fully implemented feedback request system with:
+    - POST /feedback/request - Create new feedback request with validation and duplicate prevention
+    - GET /me/feedback/request - List feedback requests sent by current user with recipient details
+    - GET /me/feedback/request/todo - List feedback requests received by current user with sender details
+    - JWT authentication with employee ID extraction from claims
+    - Comprehensive validation (recipient exists, not self-request, duplicate prevention)
+    - EF Core navigation properties for efficient queries (User.DisplayName)
+    - DTO pattern with CreateFeedbackRequestDto and FeedbackRequestDto
+    - Service layer with IFeedbackService and FeedbackService implementation
+    - Repository/Service pattern with proper separation of concerns
+    - Database schema with FeedbackRequest entity and navigation properties
+    - Seed data for test users and employees in migrations
+    - Comprehensive error handling and HTTP status codes
+    - 40/40 integration tests passing (including 5 new feedback controller tests)
+    - 31/31 unit tests passing with no regressions
+    - Clean architecture principles maintained throughout implementation
 
 - [ ] Iteration 11 — Feedback submit & read
   - Scope: POST /feedback, GET /feedback/me

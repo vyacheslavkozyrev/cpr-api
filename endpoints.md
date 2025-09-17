@@ -228,8 +228,8 @@ Projects & Teams
 
 Feedback
 - POST /feedback/request — request feedback from people
-- POST /feedback — submit feedback
-- GET /feedback/me — feedback received by me
+- GET /me/feedback/request — feedback requests I sent
+- GET /me/feedback/request/todo — feedback requests addressed to me (to respond to)
 
 ---
 

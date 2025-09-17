@@ -58,6 +58,14 @@ namespace CPR.Infrastructure.Data
                     PasswordHash = "$2b$12$.........................", // placeholder
                     DisplayName = "Jane Smith",
                     CreatedAt = DateTimeOffset.Parse("2025-09-05T00:00:00Z")
+                },
+                new User
+                {
+                    Id = Guid.Parse("22222222-2222-2222-2222-222222222222"),
+                    UserName = "john.doe",
+                    PasswordHash = "$2b$12$.........................", // placeholder
+                    DisplayName = "John Doe",
+                    CreatedAt = DateTimeOffset.Parse("2025-09-05T00:00:00Z")
                 });
             });
 
@@ -79,6 +87,12 @@ namespace CPR.Infrastructure.Data
                 b.Property(e => e.DeletedBy).HasColumnName("deleted_by");
                 b.Property(e => e.DeletedAt).HasColumnName("deleted_at");
 
+                // Configure navigation properties
+                b.HasOne(e => e.User)
+                    .WithMany()
+                    .HasForeignKey(e => e.UserId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
                 // Seed: sample employee linked to seeded user
                 b.HasData(new Employee
                 {
@@ -86,6 +100,15 @@ namespace CPR.Infrastructure.Data
                     UserId = Guid.Parse("11111111-1111-1111-1111-111111111111"),
                     ManagerId = null,
                     Title = "Senior Software Engineer",
+                    Department = "Engineering",
+                    CreatedAt = DateTimeOffset.Parse("2025-09-05T00:00:00Z")
+                },
+                new Employee
+                {
+                    Id = Guid.Parse("44444444-4444-4444-4444-444444444444"),
+                    UserId = Guid.Parse("22222222-2222-2222-2222-222222222222"),
+                    ManagerId = Guid.Parse("33333333-3333-3333-3333-333333333333"), // Jane is John's manager
+                    Title = "Software Engineer",
                     Department = "Engineering",
                     CreatedAt = DateTimeOffset.Parse("2025-09-05T00:00:00Z")
                 });
@@ -542,6 +565,32 @@ namespace CPR.Infrastructure.Data
                 b.Property(fr => fr.IsDeleted).HasColumnName("is_deleted");
                 b.Property(fr => fr.DeletedBy).HasColumnName("deleted_by");
                 b.Property(fr => fr.DeletedAt).HasColumnName("deleted_at");
+
+                // Seed: sample feedback request
+                b.HasData(new FeedbackRequest
+                {
+                    Id = Guid.Parse("55555555-5555-5555-5555-555555555555"),
+                    RequestorId = Guid.Parse("33333333-3333-3333-3333-333333333333"), // Jane Smith (requestor)
+                    EmployeeId = Guid.Parse("44444444-4444-4444-4444-444444444444"), // John Doe (recipient)
+                    ProjectId = null,
+                    GoalId = null,
+                    Message = "Test feedback request",
+                    DueDate = DateTimeOffset.Parse("2025-10-01T00:00:00Z"),
+                    CreatedBy = Guid.Parse("11111111-1111-1111-1111-111111111111"), // Jane Smith's user ID
+                    CreatedAt = DateTimeOffset.Parse("2025-09-05T00:00:00Z")
+                },
+                new FeedbackRequest
+                {
+                    Id = Guid.Parse("66666666-6666-6666-6666-666666666666"),
+                    RequestorId = Guid.Parse("44444444-4444-4444-4444-444444444444"), // John Doe (requestor)
+                    EmployeeId = Guid.Parse("33333333-3333-3333-3333-333333333333"), // Jane Smith (recipient)
+                    ProjectId = null,
+                    GoalId = null,
+                    Message = "Please provide feedback to me",
+                    DueDate = DateTimeOffset.Parse("2025-10-15T00:00:00Z"),
+                    CreatedBy = Guid.Parse("22222222-2222-2222-2222-222222222222"), // John Doe's user ID
+                    CreatedAt = DateTimeOffset.Parse("2025-09-06T00:00:00Z")
+                });
             });
 
             modelBuilder.Entity<EmployeeToSkill>(b =>
