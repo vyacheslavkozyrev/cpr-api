@@ -28,7 +28,7 @@ public class FeedbackControllerTests : IClassFixture<WebApplicationFactory<Progr
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
         // Get sent requests and delete them (if there's a delete endpoint in the future)
-        var getResp = await client.GetAsync("/me/feedback/request");
+        var getResp = await client.GetAsync("/api/me/feedback/request");
         if (getResp.IsSuccessStatusCode)
         {
             var requests = await getResp.Content.ReadFromJsonAsync<FeedbackRequestDto[]>();
@@ -51,12 +51,12 @@ public class FeedbackControllerTests : IClassFixture<WebApplicationFactory<Progr
         // Test if Jane Smith exists
         var janeToken = CPR.Api.Auth.TokenGenerator.CreateToken("33333333-3333-3333-3333-333333333333", key);
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", janeToken);
-        var janeResponse = await client.GetAsync("/me");
+        var janeResponse = await client.GetAsync("/api/me");
 
         // Test if John Doe exists
         var johnToken = CPR.Api.Auth.TokenGenerator.CreateToken("44444444-4444-4444-4444-444444444444", key);
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", johnToken);
-        var johnResponse = await client.GetAsync("/me");
+        var johnResponse = await client.GetAsync("/api/me");
 
         if (!janeResponse.IsSuccessStatusCode || !johnResponse.IsSuccessStatusCode)
         {
@@ -86,7 +86,7 @@ public class FeedbackControllerTests : IClassFixture<WebApplicationFactory<Progr
         };
 
         // Act
-        var response = await client.PostAsJsonAsync("/feedback/request", createDto);
+        var response = await client.PostAsJsonAsync("/api/feedback/request", createDto);
 
         // Assert
         Assert.Equal(System.Net.HttpStatusCode.Created, response.StatusCode);
@@ -114,7 +114,7 @@ public class FeedbackControllerTests : IClassFixture<WebApplicationFactory<Progr
         };
 
         // Act
-        var response = await client.PostAsJsonAsync("/feedback/request", createDto);
+        var response = await client.PostAsJsonAsync("/api/feedback/request", createDto);
 
         // Assert
         Assert.Equal(System.Net.HttpStatusCode.BadRequest, response.StatusCode);
@@ -138,10 +138,10 @@ public class FeedbackControllerTests : IClassFixture<WebApplicationFactory<Progr
             EmployeeId = Guid.Parse("33333333-3333-3333-3333-333333333333"),
             Message = "Test feedback request"
         };
-        await client.PostAsJsonAsync("/feedback/request", createDto);
+        await client.PostAsJsonAsync("/api/feedback/request", createDto);
 
         // Act
-        var response = await client.GetAsync("/me/feedback/request");
+        var response = await client.GetAsync("/api/me/feedback/request");
 
         // Assert
         Assert.Equal(System.Net.HttpStatusCode.OK, response.StatusCode);
@@ -172,11 +172,11 @@ public class FeedbackControllerTests : IClassFixture<WebApplicationFactory<Progr
             EmployeeId = Guid.Parse("33333333-3333-3333-3333-333333333333"), // Self-request
             Message = "Please provide feedback to me"
         };
-        var createResponse = await client.PostAsJsonAsync("/feedback/request", createDto);
+        var createResponse = await client.PostAsJsonAsync("/api/feedback/request", createDto);
         // Don't assert creation success since we just want to test retrieval
 
         // Act
-        var response = await client.GetAsync("/me/feedback/request/todo");
+        var response = await client.GetAsync("/api/me/feedback/request/todo");
 
         // Assert
         Assert.Equal(System.Net.HttpStatusCode.OK, response.StatusCode);
@@ -193,15 +193,15 @@ public class FeedbackControllerTests : IClassFixture<WebApplicationFactory<Progr
         var client = _factory.CreateClient();
 
         // Act & Assert - POST without auth
-        var postResponse = await client.PostAsJsonAsync("/feedback/request", new CreateFeedbackRequestDto());
+        var postResponse = await client.PostAsJsonAsync("/api/feedback/request", new CreateFeedbackRequestDto());
         Assert.Equal(System.Net.HttpStatusCode.Unauthorized, postResponse.StatusCode);
 
         // Act & Assert - GET sent requests without auth
-        var getSentResponse = await client.GetAsync("/me/feedback/request");
+        var getSentResponse = await client.GetAsync("/api/me/feedback/request");
         Assert.Equal(System.Net.HttpStatusCode.Unauthorized, getSentResponse.StatusCode);
 
         // Act & Assert - GET todo requests without auth
-        var getTodoResponse = await client.GetAsync("/me/feedback/request/todo");
+        var getTodoResponse = await client.GetAsync("/api/me/feedback/request/todo");
         Assert.Equal(System.Net.HttpStatusCode.Unauthorized, getTodoResponse.StatusCode);
     }
 }

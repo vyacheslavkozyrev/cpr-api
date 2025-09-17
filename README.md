@@ -46,13 +46,13 @@ Write-Host "Token generated and copied to clipboard (length=$($token.Length))"
 3) Authorize in Swagger (open http://localhost:5000/swagger):
 
 - Click "Authorize". In the input field paste the raw token only (the value produced by the generation step), e.g. `00000000-0000-0000-0000-000000000123.<base64signature>` — do NOT include the `Bearer ` prefix (Swagger UI will add it automatically).
-- Click "Authorize" then close the dialog and call protected endpoints like `/Me`.
+- Click "Authorize" then close the dialog and call protected endpoints like `/me`.
 
-4) Call `/Me` from PowerShell (no Swagger):
+4) Call `/me` from PowerShell (no Swagger):
 
 ```powershell
 # assumes $token variable is available or re-run generation snippet
-Invoke-RestMethod -Uri http://localhost:5000/Me -Headers @{ Authorization = "Bearer $token" } -Method Get
+Invoke-RestMethod -Uri http://localhost:5000/me -Headers @{ Authorization = "Bearer $token" } -Method Get
 ```
 
 ## Running integration tests locally with Postgres

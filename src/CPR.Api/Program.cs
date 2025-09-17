@@ -151,6 +151,8 @@ app.MapGet("/__test/throw/argnull", (Microsoft.AspNetCore.Http.HttpContext _) =>
 app.MapGet("/__test/throw/argout", (Microsoft.AspNetCore.Http.HttpContext _) => throw new ArgumentOutOfRangeException("page"));
 
 app.MapGet("/", () => Results.Ok(new { message = "CPR API - running" }));
+
+// Configure routing with /api prefix for all controllers
 app.MapControllers();
 
 app.Run();

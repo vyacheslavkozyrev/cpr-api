@@ -24,7 +24,7 @@ public class PositionsContractTest : IClassFixture<WebApplicationFactory<Program
         var token = CPR.Api.Auth.TokenGenerator.CreateToken("00000000-0000-0000-0000-000000000123", key);
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-        var resp = await client.GetAsync("/positions");
+        var resp = await client.GetAsync("/api/positions");
         resp.EnsureSuccessStatusCode();
         var json = await resp.Content.ReadAsStringAsync();
 

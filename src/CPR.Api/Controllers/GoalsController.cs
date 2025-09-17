@@ -48,7 +48,7 @@ namespace CPR.Api.Controllers
         /// <summary>
         /// Return the current user's goals (paged).
         /// </summary>
-        [HttpGet("me")]
+        [HttpGet("~/api/me/goals")]
         [Authorize]
         public async Task<IActionResult> GetMine([FromQuery] int page = 1, [FromQuery] int per_page = 20)
         {

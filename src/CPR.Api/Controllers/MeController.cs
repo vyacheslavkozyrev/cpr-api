@@ -12,7 +12,7 @@ namespace CPR.Api.Controllers;
 /// MeController to manage user profile operations.
 /// </summary>
 [ApiController]
-[Route("[controller]")]
+[Route("api/me")]
 public class MeController : ControllerBase
 {
     private readonly IUserService _userService;

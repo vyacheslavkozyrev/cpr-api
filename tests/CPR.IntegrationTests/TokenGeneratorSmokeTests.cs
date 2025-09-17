@@ -28,7 +28,7 @@ public class TokenGeneratorSmokeTests : IClassFixture<WebApplicationFactory<Prog
         var token = CPR.Api.Auth.TokenGenerator.CreateToken(userId, key);
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-        var resp = await client.GetAsync("/me");
+        var resp = await client.GetAsync("/api/me");
         resp.EnsureSuccessStatusCode();
 
         var json = await resp.Content.ReadAsStringAsync();

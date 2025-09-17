@@ -10,7 +10,7 @@ namespace CPR.Api.Controllers
     /// Read-only taxonomy endpoints (career paths, career tracks, positions).
     /// </summary>
     [ApiController]
-    [Route("/")]
+    [Route("api")]
     public class TaxonomyController : ControllerBase
     {
         private readonly IClassificationService _svc;

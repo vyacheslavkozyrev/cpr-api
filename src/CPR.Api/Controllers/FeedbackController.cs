@@ -11,7 +11,7 @@ namespace CPR.Api.Controllers;
 /// Controller for feedback request operations
 /// </summary>
 [ApiController]
-[Route("feedback")]
+[Route("api/feedback")]
 public class FeedbackController : ControllerBase
 {
     private readonly IUserService _userService;
@@ -72,7 +72,7 @@ public class FeedbackController : ControllerBase
 /// Controller for current user's feedback request operations
 /// </summary>
 [ApiController]
-[Route("me/feedback")]
+[Route("api/me/feedback")]
 public class MeFeedbackController : ControllerBase
 {
     private readonly IUserService _userService;

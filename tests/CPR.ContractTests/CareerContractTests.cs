@@ -24,7 +24,7 @@ public class CareerContractTests : IClassFixture<WebApplicationFactory<Program>>
         var token = CPR.Api.Auth.TokenGenerator.CreateToken("00000000-0000-0000-0000-000000000123", key);
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-        var resp = await client.GetAsync("/career");
+        var resp = await client.GetAsync("/api/career");
         resp.EnsureSuccessStatusCode();
         var json = await resp.Content.ReadAsStringAsync();
 
@@ -58,7 +58,7 @@ public class CareerContractTests : IClassFixture<WebApplicationFactory<Program>>
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
         // first get career paths
-        var respCareer = await client.GetAsync("/career");
+        var respCareer = await client.GetAsync("/api/career");
         respCareer.EnsureSuccessStatusCode();
         var careerJson = await respCareer.Content.ReadAsStringAsync();
         var careerDoc = JsonDocument.Parse(careerJson);
@@ -69,7 +69,7 @@ public class CareerContractTests : IClassFixture<WebApplicationFactory<Program>>
         }
 
         var careerId = careerDoc.RootElement[0].GetProperty("id").GetString();
-        var resp = await client.GetAsync($"/career_track?career_path_id={careerId}");
+        var resp = await client.GetAsync($"/api/career_track?career_path_id={careerId}");
         resp.EnsureSuccessStatusCode();
         var json = await resp.Content.ReadAsStringAsync();
         var doc = JsonDocument.Parse(json);

@@ -28,7 +28,7 @@ public class TaxonomyIntegrationTests : IClassFixture<WebApplicationFactory<Prog
         var token = CPR.Api.Auth.TokenGenerator.CreateToken("00000000-0000-0000-0000-000000000123", key);
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-        var resp = await client.GetAsync("/career");
+        var resp = await client.GetAsync("/api/career");
         resp.EnsureSuccessStatusCode();
         var json = await resp.Content.ReadAsStringAsync();
         Assert.Contains("Technology", json); // seeded path
@@ -51,7 +51,7 @@ public class TaxonomyIntegrationTests : IClassFixture<WebApplicationFactory<Prog
         using var db = new CPR.Infrastructure.Data.CprDbContext(options);
         var cp = db.CareerPaths.First(p => p.Title == "Technology");
 
-        var resp = await client.GetAsync($"/career_track?career_path_id={cp.Id}");
+        var resp = await client.GetAsync($"/api/career_track?career_path_id={cp.Id}");
         resp.EnsureSuccessStatusCode();
         var json = await resp.Content.ReadAsStringAsync();
         Assert.Contains("Software", json);
@@ -73,7 +73,7 @@ public class TaxonomyIntegrationTests : IClassFixture<WebApplicationFactory<Prog
         using var db = new CPR.Infrastructure.Data.CprDbContext(options);
         var track = db.CareerTracks.First(t => t.Title.Contains("Software"));
 
-        var resp = await client.GetAsync($"/positions?career_track_id={track.Id}");
+        var resp = await client.GetAsync($"/api/positions?career_track_id={track.Id}");
         resp.EnsureSuccessStatusCode();
         var json = await resp.Content.ReadAsStringAsync();
         Assert.Contains("Senior Software Engineer", json);
@@ -89,7 +89,7 @@ public class TaxonomyIntegrationTests : IClassFixture<WebApplicationFactory<Prog
         var token = CPR.Api.Auth.TokenGenerator.CreateToken("00000000-0000-0000-0000-000000000123", key);
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-        var resp = await client.GetAsync("/skills");
+        var resp = await client.GetAsync("/api/skills");
         resp.EnsureSuccessStatusCode();
         var json = await resp.Content.ReadAsStringAsync();
         Assert.Contains("Unit Testing", json);
@@ -112,7 +112,7 @@ public class TaxonomyIntegrationTests : IClassFixture<WebApplicationFactory<Prog
         using var db = new CPR.Infrastructure.Data.CprDbContext(options);
         var position = db.Positions.First(p => p.Title == "Senior Software Engineer");
 
-        var resp = await client.GetAsync($"/skills?position_id={position.Id}");
+        var resp = await client.GetAsync($"/api/skills?position_id={position.Id}");
         resp.EnsureSuccessStatusCode();
         var json = await resp.Content.ReadAsStringAsync();
         Assert.Contains("Unit Testing", json); // should be in the seeded PositionToSkill data
@@ -127,7 +127,7 @@ public class TaxonomyIntegrationTests : IClassFixture<WebApplicationFactory<Prog
         var token = CPR.Api.Auth.TokenGenerator.CreateToken("00000000-0000-0000-0000-000000000123", key);
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-        var resp = await client.GetAsync("/skill_levels");
+        var resp = await client.GetAsync("/api/skill_levels");
         resp.EnsureSuccessStatusCode();
         var json = await resp.Content.ReadAsStringAsync();
         Assert.Contains("Beginner", json);
@@ -149,7 +149,7 @@ public class TaxonomyIntegrationTests : IClassFixture<WebApplicationFactory<Prog
         using var db = new CPR.Infrastructure.Data.CprDbContext(options);
         var skill = db.Skills.First(s => s.Title == "Unit Testing");
 
-        var resp = await client.GetAsync($"/skill_levels?skill_id={skill.Id}");
+        var resp = await client.GetAsync($"/api/skill_levels?skill_id={skill.Id}");
         resp.EnsureSuccessStatusCode();
         var json = await resp.Content.ReadAsStringAsync();
         Assert.Contains("Beginner", json); // should be in the seeded skill levels for Unit Testing
