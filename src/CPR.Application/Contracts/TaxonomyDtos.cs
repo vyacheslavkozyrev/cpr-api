@@ -78,4 +78,67 @@ namespace CPR.Application.Contracts
         /// <summary>Numeric value representing the level</summary>
         public int Value { get; set; }
     }
+
+    /// <summary>
+    /// Employee skill assessment (self-assessment)
+    /// </summary>
+    public class EmployeeSkillDto
+    {
+        /// <summary>Identifier (GUID)</summary>
+        public Guid Id { get; set; }
+        /// <summary>Employee identifier</summary>
+        public Guid EmployeeId { get; set; }
+        /// <summary>Skill details</summary>
+        public SkillDto Skill { get; set; } = null!;
+        /// <summary>Current skill level (optional)</summary>
+        public SkillLevelDto? CurrentLevel { get; set; }
+        /// <summary>Target skill level (optional)</summary>
+        public SkillLevelDto? TargetLevel { get; set; }
+        /// <summary>Source of the assessment</summary>
+        public string? Source { get; set; }
+        /// <summary>Effective date of the assessment</summary>
+        public DateTimeOffset? EffectiveDate { get; set; }
+        /// <summary>Whether this is a target assessment</summary>
+        public bool IsTarget { get; set; }
+        /// <summary>When the assessment was created</summary>
+        public DateTimeOffset CreatedAt { get; set; }
+        /// <summary>When the assessment was last modified</summary>
+        public DateTimeOffset? ModifiedAt { get; set; }
+    }
+
+    /// <summary>
+    /// DTO for creating a new employee skill assessment
+    /// </summary>
+    public class EmployeeSkillCreateDto
+    {
+        /// <summary>Skill identifier</summary>
+        public Guid SkillId { get; set; }
+        /// <summary>Current skill level identifier (optional)</summary>
+        public Guid? CurrentLevelId { get; set; }
+        /// <summary>Target skill level identifier (optional)</summary>
+        public Guid? TargetLevelId { get; set; }
+        /// <summary>Source of the assessment</summary>
+        public string? Source { get; set; }
+        /// <summary>Effective date of the assessment</summary>
+        public DateTimeOffset? EffectiveDate { get; set; }
+        /// <summary>Whether this is a target assessment</summary>
+        public bool IsTarget { get; set; }
+    }
+
+    /// <summary>
+    /// DTO for updating an existing employee skill assessment
+    /// </summary>
+    public class EmployeeSkillUpdateDto
+    {
+        /// <summary>Current skill level identifier (optional)</summary>
+        public Guid? CurrentLevelId { get; set; }
+        /// <summary>Target skill level identifier (optional)</summary>
+        public Guid? TargetLevelId { get; set; }
+        /// <summary>Source of the assessment</summary>
+        public string? Source { get; set; }
+        /// <summary>Effective date of the assessment</summary>
+        public DateTimeOffset? EffectiveDate { get; set; }
+        /// <summary>Whether this is a target assessment</summary>
+        public bool IsTarget { get; set; }
+    }
 }

@@ -82,10 +82,6 @@ Iterations
   - Deployable: full schema (entities + relations) ready for API development.
   - Notes: Completed (2025-09-10) — relation entities, migrations, indexes added; dev DB recreated and integration tests passed. Changes merged to `main`.
 
----
-
-## New small iterations (endpoint-focused)
-
  - [x] Iteration 6 — Goals CRUD
   - Scope: POST /goals, GET /me/goals, GET /goals/{id}, PATCH /goals/{id}, DELETE /goals/{id}
   - Acceptance: Integration tests for create/read/update/delete (happy path).
