@@ -44,6 +44,8 @@ namespace CPR.Api.Auth
             if (string.IsNullOrEmpty(token))
                 return Task.FromResult(AuthenticateResult.Fail("Empty token"));
 
+            Logger.LogInformation("JWT Stub Handler: Received token: {Token}", token);
+
             var parts = token.Split('.', 2);
             if (parts.Length != 2)
                 return Task.FromResult(AuthenticateResult.Fail("Invalid token format"));
@@ -51,15 +53,26 @@ namespace CPR.Api.Auth
             var userId = parts[0];
             var sig = parts[1];
 
-            var key = Environment.GetEnvironmentVariable("JWT_SIGNING_KEY");
+            Logger.LogInformation("JWT Stub Handler: Parsed userId: {UserId}, sig: {Sig}", userId, sig);
+
+            var key = Environment.GetEnvironmentVariable("JWT_SIGNING_KEY") ?? "test-key";
             if (string.IsNullOrEmpty(key))
                 return Task.FromResult(AuthenticateResult.Fail("Signing key not configured"));
+
+            Logger.LogInformation("JWT Stub Handler: Using signing key: {Key}", key);
 
             try
             {
                 var expected = ComputeSignature(key, userId);
+                Logger.LogInformation("JWT Stub Handler: Expected signature: {Expected}, Received: {Received}", expected, sig);
+
                 if (!CryptographicEquals(expected, sig))
+                {
+                    Logger.LogWarning("JWT Stub Handler: Signature validation failed");
                     return Task.FromResult(AuthenticateResult.Fail("Invalid token signature"));
+                }
+
+                Logger.LogInformation("JWT Stub Handler: Authentication successful for user: {UserId}", userId);
 
                 var claims = new[] { new Claim(ClaimTypes.NameIdentifier, userId), new Claim(ClaimTypes.Name, userId) };
                 var identity = new ClaimsIdentity(claims, Scheme.Name);

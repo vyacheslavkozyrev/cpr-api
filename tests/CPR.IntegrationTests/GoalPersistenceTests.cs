@@ -35,6 +35,48 @@ namespace CPR.IntegrationTests
         public async Task CanCreateAndReadGoal()
         {
             using var db = CreateContext();
+
+            // Ensure database is migrated and seeded before running the test
+            await db.Database.MigrateAsync();
+
+            // Check if seeded employee exists, if not create a test employee
+            var testEmployeeId = Guid.Parse("33333333-3333-3333-3333-333333333333");
+            var seededEmployee = await db.Employees.FirstOrDefaultAsync(e => e.Id == testEmployeeId);
+
+            if (seededEmployee == null)
+            {
+                // Create a test user first
+                var testUser = new CPR.Domain.Entities.User
+                {
+                    Id = Guid.NewGuid(),
+                    UserName = "testuser",
+                    DisplayName = "Test User",
+                    PasswordHash = "hashedpassword",
+                    IsDeleted = false
+                };
+
+                // Create a test employee
+                seededEmployee = new CPR.Domain.Entities.Employee
+                {
+                    Id = testEmployeeId,
+                    UserId = testUser.Id,
+                    Title = "Test Employee",
+                    Department = "Engineering",
+                    IsDeleted = false
+                };
+
+                db.Users.Add(testUser);
+                db.Employees.Add(seededEmployee);
+                await db.SaveChangesAsync();
+
+                // Verify the employee was actually saved
+                var verifyEmployee = await db.Employees.FirstOrDefaultAsync(e => e.Id == testEmployeeId);
+                if (verifyEmployee == null)
+                {
+                    throw new Exception("Failed to create test employee - employee not found after SaveChanges");
+                }
+            }
+
             // Dump EF model properties for Goal to help debug mapping issues
             var et = db.Model.FindEntityType(typeof(Goal));
             var props = et.GetProperties().Select(p => p.Name).ToArray();

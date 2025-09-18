@@ -38,5 +38,12 @@ namespace CPR.Application.Services
         /// <param name="memberEmployeeId">The team member's employee ID</param>
         /// <returns>True if the manager-employee relationship is valid</returns>
         Task<bool> ValidateManagerRelationshipAsync(Guid managerEmployeeId, Guid memberEmployeeId);
+
+        /// <summary>
+        /// Check if an employee is a manager (has direct reports)
+        /// </summary>
+        /// <param name="employeeId">The employee ID to check</param>
+        /// <returns>True if the employee has direct reports</returns>
+        Task<bool> IsManagerAsync(Guid employeeId);
     }
 }

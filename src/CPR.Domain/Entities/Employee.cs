@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace CPR.Domain.Entities
 {
@@ -12,5 +13,7 @@ namespace CPR.Domain.Entities
 
         // Navigation properties
         public virtual User? User { get; set; }
+        public virtual Employee? Manager { get; set; }
+        public virtual ICollection<Employee> DirectReports { get; set; } = new List<Employee>();
     }
 }

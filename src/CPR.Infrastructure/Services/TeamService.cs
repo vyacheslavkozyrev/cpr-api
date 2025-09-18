@@ -171,6 +171,16 @@ namespace CPR.Infrastructure.Services
         }
 
         /// <summary>
+        /// Check if an employee is a manager (has direct reports)
+        /// </summary>
+        public async Task<bool> IsManagerAsync(Guid employeeId)
+        {
+            var directReports = await _repo.GetDirectReports(employeeId)
+                .AnyAsync();
+            return directReports;
+        }
+
+        /// <summary>
         /// Get skills for an employee
         /// </summary>
         private async Task<EmployeeSkillDto[]> GetEmployeeSkillsAsync(Guid employeeId)

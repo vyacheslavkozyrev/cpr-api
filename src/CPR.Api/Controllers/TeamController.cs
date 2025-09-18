@@ -56,6 +56,14 @@ public class TeamController : ControllerBase
             return Unauthorized("Employee record not found");
         }
 
+        // Check if the user is a manager (has direct reports)
+        var isManager = await _teamService.IsManagerAsync(currentEmployee.Id);
+        System.Diagnostics.Debug.WriteLine($"TeamController.GetTeamMembers: User {userId}, Employee {currentEmployee.Id}, IsManager: {isManager}");
+        if (!isManager)
+        {
+            return StatusCode(403, "Access denied. Only managers can view team information.");
+        }
+
         try
         {
             var teamMembers = await _teamService.GetTeamMembersAsync(currentEmployee.Id);
@@ -91,6 +99,13 @@ public class TeamController : ControllerBase
         if (currentEmployee == null)
         {
             return Unauthorized("Employee record not found");
+        }
+
+        // Check if the user is a manager (has direct reports)
+        var isManager = await _teamService.IsManagerAsync(currentEmployee.Id);
+        if (!isManager)
+        {
+            return StatusCode(403, "Access denied. Only managers can view team information.");
         }
 
         try
@@ -131,6 +146,13 @@ public class TeamController : ControllerBase
         if (currentEmployee == null)
         {
             return Unauthorized("Employee record not found");
+        }
+
+        // Check if the user is a manager (has direct reports)
+        var isManager = await _teamService.IsManagerAsync(currentEmployee.Id);
+        if (!isManager)
+        {
+            return StatusCode(403, "Access denied. Only managers can view team information.");
         }
 
         try

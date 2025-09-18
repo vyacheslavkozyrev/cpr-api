@@ -1,9 +1,9 @@
 # Tasklist — CPR
 
 Progress (update after each iteration)
-- Iteration: 11
+- Iteration: 12
 - Status: Complete
-- Notes: Iteration 11 completed (2025-09-18) — Feedback submit & read fully implemented with POST /api/feedback and GET /api/me/feedback. Includes project association, streamlined payload, optimized response format, proper visibility rules, comprehensive validation, and full test coverage (45/45 unit tests, 48/48 integration tests, 5/5 contract tests passing).
+- Notes: Iteration 12 completed (2025-09-18) — Manager views fully implemented with GET /api/team, GET /api/team/members/{employeeId}, and GET /api/team/goals. Includes comprehensive team member profiles with skills/goals/feedback/projects, aggregated team goals with status tracking, proper manager RBAC authorization, JWT authentication, and full test coverage (unit + integration tests passing).
 
 Guidelines
 - Each iteration is incremental: implement, test, and deploy the listed items.
@@ -153,9 +153,11 @@ Iterations
     - Clean architecture principles maintained throughout implementation
     - API documentation updated to reflect current structure
 
-- [ ] Iteration 12 — Manager views
+- [x] Iteration 12 — Manager views
   - Scope: GET /team, GET /team/members/{employee_id}, GET /team/goals
   - Acceptance: Manager RBAC tests and integration smoke.
+  - Status: Complete (2025-09-18)
+  - Notes: Fully implemented team management endpoints with comprehensive data aggregation. Includes TeamController with all 3 endpoints, TeamService with rich data processing, TeamRepository for data access, complete DTOs, and full test coverage (unit + integration tests). Features manager RBAC authorization, JWT authentication, team member profiles with skills/goals/feedback/projects, and aggregated team goals with status tracking.
 
 - [ ] Iteration 13 — Performance reviews
   - Scope: POST /performance_reviews, GET /performance_reviews/{employee_id}

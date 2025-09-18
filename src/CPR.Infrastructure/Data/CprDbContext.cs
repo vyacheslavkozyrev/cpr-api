@@ -93,6 +93,12 @@ namespace CPR.Infrastructure.Data
                     .HasForeignKey(e => e.UserId)
                     .OnDelete(DeleteBehavior.Restrict);
 
+                // Configure self-referencing relationship for Manager
+                b.HasOne(e => e.Manager)
+                    .WithMany(e => e.DirectReports)
+                    .HasForeignKey(e => e.ManagerId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
                 // Seed: sample employee linked to seeded user
                 b.HasData(new Employee
                 {
