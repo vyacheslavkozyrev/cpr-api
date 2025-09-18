@@ -2,10 +2,11 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using CPR.Domain.Entities;
+using CPR.Application.Repositories;
 
 namespace CPR.Infrastructure.Repositories
 {
-    public class GoalsRepository
+    public class GoalsRepository : IGoalsRepository
     {
         private readonly CPR.Infrastructure.Data.CprDbContext _db;
 

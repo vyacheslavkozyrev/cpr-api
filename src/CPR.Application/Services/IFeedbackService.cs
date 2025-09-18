@@ -31,5 +31,27 @@ namespace CPR.Application.Services
         /// <param name="employeeId">Employee ID who should respond to the requests</param>
         /// <returns>List of feedback requests addressed to the employee</returns>
         Task<IEnumerable<FeedbackRequestDto>> GetTodoRequestsAsync(Guid employeeId);
+
+        /// <summary>
+        /// Submit feedback from one employee to another
+        /// </summary>
+        /// <param name="fromEmployeeId">Employee ID providing the feedback</param>
+        /// <param name="dto">Feedback data</param>
+        /// <returns>Created feedback details</returns>
+        Task<FeedbackDto> SubmitFeedbackAsync(Guid fromEmployeeId, SubmitFeedbackRequestDto dto);
+
+        /// <summary>
+        /// Get all feedback addressed to the specified employee
+        /// </summary>
+        /// <param name="employeeId">Employee ID to get feedback for</param>
+        /// <returns>List of feedback addressed to the employee</returns>
+        Task<IEnumerable<FeedbackDto>> GetFeedbackForEmployeeAsync(Guid employeeId);
+
+        /// <summary>
+        /// Get all feedback addressed to the current user (excludes redundant ToEmployee info)
+        /// </summary>
+        /// <param name="employeeId">Employee ID to get feedback for</param>
+        /// <returns>List of feedback addressed to the current user</returns>
+        Task<IEnumerable<MyFeedbackDto>> GetMyFeedbackAsync(Guid employeeId);
     }
 }

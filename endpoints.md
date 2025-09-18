@@ -227,9 +227,181 @@ Projects & Teams
 - GET /projects/{id}/team
 
 Feedback
-- POST /feedback/request — request feedback from people
-- GET /me/feedback/request — feedback requests I sent
-- GET /me/feedback/request/todo — feedback requests addressed to me (to respond to)
+- POST /api/feedback — submit feedback to an employee
+- POST /api/feedback/request — request feedback from people
+- GET /api/me/feedback — get feedback addressed to current user
+- GET /api/me/feedback/request — feedback requests I sent
+- GET /api/me/feedback/request/todo — feedback requests addressed to me (to respond to)
+
+### Contracts & purposes (Feedback)
+
+#### POST /api/feedback
+- **Purpose**: Submit feedback from the authenticated user to another employee regarding a specific goal. Content is automatically sanitized to prevent XSS attacks and malicious input.
+- **Authentication**: Required (JWT Bearer token)
+- **Request Body** (JSON):
+  ```json
+  {
+    "projectId": "GUID (optional) - The project this feedback is for",
+    "goalId": "GUID (required) - The goal this feedback is for",
+    "employeeId": "GUID (required) - Employee receiving feedback",
+    "content": "string (required, 10-2000 chars) - Feedback content",
+    "rating": "integer (required, 1-5) - Rating on 1-5 scale"
+  }
+  ```
+- **Validation Rules**:
+  - `projectId`: Optional, must be a valid project if provided
+  - `goalId`: Must be a valid, non-deleted goal
+  - `employeeId`: Must be a valid, non-deleted employee, cannot be the same as the authenticated user
+  - `content`: 10-2000 characters, automatically sanitized (HTML tags removed, scripts filtered)
+  - `rating`: Must be between 1 and 5
+- **Input Sanitization**: Content is automatically cleaned of HTML tags, script elements, and suspicious patterns
+- **Response 201** (JSON):
+  ```json
+  {
+    "id": "GUID - Feedback identifier",
+    "projectId": "GUID (nullable) - Associated project",
+    "goalId": "GUID - Associated goal",
+    "fromEmployeeId": "GUID - Feedback giver (derived from authentication)",
+    "toEmployeeId": "GUID - Feedback receiver",
+    "content": "string - Sanitized feedback content",
+    "rating": "integer - Rating value",
+    "createdAt": "DateTime - Creation timestamp",
+    "project": {
+      "id": "GUID (nullable)",
+      "title": "string (nullable) - Project title"
+    },
+    "goal": {
+      "id": "GUID",
+      "title": "string - Goal title"
+    },
+    "fromEmployee": {
+      "id": "GUID",
+      "displayName": "string - Employee name"
+    },
+    "toEmployee": {
+      "id": "GUID",
+      "displayName": "string - Employee name"
+    }
+  }
+  ```
+- **Error Responses**:
+  - `400 Bad Request`: Validation failed
+    ```json
+    {
+      "type": "https://tools.ietf.org/html/rfc7807",
+      "title": "Validation failed",
+      "detail": "One or more validation errors occurred",
+      "status": 400,
+      "instance": "/api/feedback",
+      "errors": {
+        "Content": ["Feedback content must be between 10 and 2000 characters"],
+        "Rating": ["Rating must be between 1 and 5"],
+        "EmployeeId": ["Cannot submit feedback to yourself"]
+      }
+    }
+    ```
+  - `400 Bad Request`: Sanitization/content validation failed
+    ```json
+    {
+      "type": "https://tools.ietf.org/html/rfc7807",
+      "title": "Validation failed",
+      "detail": "Feedback content contains invalid or malicious content",
+      "status": 400,
+      "instance": "/api/feedback"
+    }
+    ```
+  - `401 Unauthorized`: Authentication required
+  - `404 Not Found`: Goal or employee not found
+
+#### POST /api/feedback/request
+- **Purpose**: Create a feedback request from the current user to another employee
+- **Authentication**: Required (JWT Bearer token)
+- **Request Body** (JSON):
+  ```json
+  {
+    "employeeId": "GUID (required) - Employee to request feedback from",
+    "projectId": "GUID (optional) - Associated project context",
+    "goalId": "GUID (optional) - Associated goal context",
+    "message": "string (optional) - Request message",
+    "dueDate": "DateTimeOffset (optional) - When feedback is due"
+  }
+  ```
+- **Response 201** (JSON):
+  ```json
+  {
+    "id": "GUID - Request identifier",
+    "requestorId": "GUID - User who made the request",
+    "employeeId": "GUID - Employee to provide feedback",
+    "projectId": "GUID (nullable)",
+    "goalId": "GUID (nullable)",
+    "message": "string (nullable)",
+    "dueDate": "DateTimeOffset (nullable)",
+    "createdAt": "DateTimeOffset",
+    "requestor": {
+      "id": "GUID",
+      "displayName": "string"
+    },
+    "employee": {
+      "id": "GUID",
+      "displayName": "string"
+    },
+    "project": {
+      "id": "GUID (nullable)",
+      "title": "string (nullable)"
+    },
+    "goal": {
+      "id": "GUID (nullable)",
+      "title": "string (nullable)"
+    }
+  }
+  ```
+
+#### GET /api/me/feedback
+- **Purpose**: Get all feedback addressed to the current user (optimized response format)
+- **Authentication**: Required (JWT Bearer token)
+- **Response 200** (JSON Array):
+  ```json
+  [
+    {
+      "id": "GUID",
+      "projectId": "GUID (nullable)",
+      "goalId": "GUID",
+      "fromEmployeeId": "GUID",
+      "content": "string",
+      "rating": "integer",
+      "createdAt": "DateTime",
+      "project": {
+        "id": "GUID (nullable)",
+        "title": "string (nullable)"
+      },
+      "goal": {
+        "id": "GUID",
+        "title": "string"
+      },
+      "fromEmployee": {
+        "id": "GUID",
+        "displayName": "string"
+      }
+    }
+  ]
+  ```
+
+#### GET /api/me/feedback/request
+- **Purpose**: Get feedback requests sent by the current user
+- **Authentication**: Required (JWT Bearer token)
+- **Response 200** (JSON Array): Array of feedback request objects (same format as POST response)
+
+#### GET /api/me/feedback/request/todo
+- **Purpose**: Get feedback requests addressed to the current user (requests to respond to)
+- **Authentication**: Required (JWT Bearer token)
+- **Response 200** (JSON Array): Array of feedback request objects (same format as POST response)
+
+### Security & Validation Notes
+- **Input Sanitization**: All feedback content is automatically sanitized to prevent XSS attacks
+- **Self-Feedback Prevention**: Users cannot submit feedback to themselves
+- **Content Validation**: Feedback content must be 10-2000 characters and contain valid text patterns
+- **Rating Validation**: Ratings must be integers between 1 and 5
+- **Error Format**: All errors follow RFC7807 Problem Details format for consistent API responses
 
 ---
 

@@ -44,6 +44,10 @@ API & integration conventions
 - Idempotency: POST that may be retried (e.g., create feedback_request) must support idempotency keys when called by clients.
 - Rate limits: enforce per-user and per-IP limits on sensitive endpoints (feedback creation, requests).
 - Validation: server-side input validation for all endpoints; return helpful error messages and codes.
+- Error Format: Use RFC7807 Problem Details format for all error responses to ensure consistency across the API.
+- Input Sanitization: Automatically sanitize user-generated content to prevent XSS attacks and malicious input.
+- Model Validation: Use DataAnnotations and custom validation attributes for comprehensive request validation.
+- Business Rule Validation: Implement custom validators for domain-specific rules (e.g., preventing self-feedback).
 
 Security & secrets
 - Store secrets in secured vaults (Azure Key Vault, or equivalent). Never commit secrets to VCS.

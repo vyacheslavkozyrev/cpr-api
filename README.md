@@ -132,6 +132,50 @@ Notes
 - The Swagger UI in development will include example responses for taxonomy endpoints (career, career_track, positions).
 - If you prefer a different generator (AutoRest, NSwag, openapi-generator), choose the language generator that fits your release workflow.
 
+## API Security & Validation Features
+
+This API includes comprehensive security and validation features to ensure data integrity and prevent common web vulnerabilities:
+
+### Input Validation
+- **Model Validation**: All endpoints use DataAnnotations for request validation
+- **Custom Validators**: Business rule validation (e.g., preventing self-feedback)
+- **Range Validation**: Numeric fields validated within acceptable ranges
+- **String Length Validation**: Text fields validated for minimum/maximum lengths
+
+### Input Sanitization
+- **HTML Tag Removal**: Automatic stripping of HTML tags from user input
+- **Script Filtering**: Prevention of JavaScript injection attacks
+- **SQL Injection Prevention**: Filtering of suspicious SQL keywords
+- **Content Validation**: Special character ratio validation to prevent spam/malicious content
+
+### Error Handling
+- **RFC7807 Compliance**: All errors follow Problem Details format for consistent API responses
+- **Detailed Validation Messages**: Clear, actionable error messages for validation failures
+- **Structured Error Responses**: Machine-readable error format for better client integration
+
+### Security Best Practices
+- **Authentication Required**: JWT Bearer token authentication for all protected endpoints
+- **Authorization**: Role-based access control for different user types (Employee, Manager, HR, Admin)
+- **Input Sanitization**: Automatic cleaning of user-generated content
+- **Validation Layers**: Multiple validation layers (model, business logic, data integrity)
+
+### Example Validation Error Response
+```json
+{
+  "type": "https://tools.ietf.org/html/rfc7807",
+  "title": "Validation failed",
+  "detail": "One or more validation errors occurred",
+  "status": 400,
+  "instance": "/api/feedback",
+  "errors": {
+    "Content": ["Feedback content must be between 10 and 2000 characters"],
+    "Rating": ["Rating must be between 1 and 5"]
+  }
+}
+```
+
+For detailed API endpoint documentation including validation requirements, see `endpoints.md`.
+
 Notes
 - The stub signing key stored in the `JWT_SIGNING_KEY` environment variable is treated as a plain UTF-8 string (do not base64-decode it).
 - This auth stub is for local development and testing only. Do not use it in production.

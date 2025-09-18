@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using CPR.Application.Contracts;
 using CPR.Application.Services;
+using CPR.Application.Repositories;
 using CPR.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,9 +12,9 @@ namespace CPR.Infrastructure.Services
     public class GoalService : IGoalService
     {
         private readonly CPR.Infrastructure.Data.CprDbContext _db;
-        private readonly CPR.Infrastructure.Repositories.GoalsRepository _repo;
+        private readonly CPR.Application.Repositories.IGoalsRepository _repo;
 
-        public GoalService(CPR.Infrastructure.Data.CprDbContext db, CPR.Infrastructure.Repositories.GoalsRepository repo)
+        public GoalService(CPR.Infrastructure.Data.CprDbContext db, CPR.Application.Repositories.IGoalsRepository repo)
         {
             _db = db;
             _repo = repo;

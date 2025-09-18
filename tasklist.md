@@ -1,9 +1,9 @@
 # Tasklist — CPR
 
 Progress (update after each iteration)
-- Iteration: 10
+- Iteration: 11
 - Status: Complete
-- Notes: Iteration 10 completed (2025-09-17) — Feedback requests fully implemented with POST /feedback/request, GET /me/feedback/request, and GET /me/feedback/request/todo. Includes user-centric endpoints, JWT authentication, comprehensive validation, EF Core navigation properties, and full test coverage (40/40 integration tests passing, 31/31 unit tests passing).
+- Notes: Iteration 11 completed (2025-09-18) — Feedback submit & read fully implemented with POST /api/feedback and GET /api/me/feedback. Includes project association, streamlined payload, optimized response format, proper visibility rules, comprehensive validation, and full test coverage (45/45 unit tests, 48/48 integration tests, 5/5 contract tests passing).
 
 Guidelines
 - Each iteration is incremental: implement, test, and deploy the listed items.
@@ -135,9 +135,23 @@ Iterations
     - 31/31 unit tests passing with no regressions
     - Clean architecture principles maintained throughout implementation
 
-- [ ] Iteration 11 — Feedback submit & read
-  - Scope: POST /feedback, GET /feedback/me
+- [x] Iteration 11 — Feedback submit & read
+  - Scope: POST /api/feedback, GET /api/me/feedback
   - Acceptance: Submit feedback and retrieve it (visibility rules respected).
+  - Status: Complete (2025-09-18)
+  - Notes: Fully implemented feedback submission and retrieval system with:
+    - POST /api/feedback - Submit feedback with project association, streamlined payload (removed fromEmployeeId, renamed toEmployeeId to employeeId), self-feedback prevention, comprehensive validation, and automatic content sanitization
+    - GET /api/me/feedback - Retrieve feedback addressed to current user with optimized MyFeedbackDto (excludes redundant toEmployee information), proper visibility rules ensuring users only see feedback addressed to them
+    - Enhanced validation and error handling with ProblemDetails format
+    - JWT authentication with employee ID extraction from claims
+    - EF Core navigation properties for efficient queries
+    - Repository/Service pattern with proper separation of concerns
+    - Database schema with Feedback entity and navigation properties
+    - Automatic input sanitization to prevent XSS attacks
+    - Comprehensive error handling and HTTP status codes
+    - 45/45 unit tests passing, 48/48 integration tests passing, 5/5 contract tests passing
+    - Clean architecture principles maintained throughout implementation
+    - API documentation updated to reflect current structure
 
 - [ ] Iteration 12 — Manager views
   - Scope: GET /team, GET /team/members/{employee_id}, GET /team/goals
