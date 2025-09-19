@@ -8,6 +8,12 @@ namespace CPR.Infrastructure.Data
     {
         public CprDbContext(DbContextOptions<CprDbContext> options) : base(options) { }
 
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.ConfigureWarnings(warnings =>
+                warnings.Ignore(Microsoft.EntityFrameworkCore.Diagnostics.RelationalEventId.PendingModelChangesWarning));
+        }
+
         public DbSet<User> Users { get; set; }
         public DbSet<Goal> Goals { get; set; }
         public DbSet<Employee> Employees { get; set; }
@@ -49,24 +55,6 @@ namespace CPR.Infrastructure.Data
                 b.Property(u => u.IsDeleted).HasColumnName("is_deleted");
                 b.Property(u => u.DeletedBy).HasColumnName("deleted_by");
                 b.Property(u => u.DeletedAt).HasColumnName("deleted_at");
-
-                // Seed: sample user
-                b.HasData(new User
-                {
-                    Id = Guid.Parse("11111111-1111-1111-1111-111111111111"),
-                    UserName = "jane.smith",
-                    PasswordHash = "$2b$12$.........................", // placeholder
-                    DisplayName = "Jane Smith",
-                    CreatedAt = DateTimeOffset.Parse("2025-09-05T00:00:00Z")
-                },
-                new User
-                {
-                    Id = Guid.Parse("22222222-2222-2222-2222-222222222222"),
-                    UserName = "john.doe",
-                    PasswordHash = "$2b$12$.........................", // placeholder
-                    DisplayName = "John Doe",
-                    CreatedAt = DateTimeOffset.Parse("2025-09-05T00:00:00Z")
-                });
             });
 
             modelBuilder.Entity<Employee>(b =>
@@ -98,26 +86,6 @@ namespace CPR.Infrastructure.Data
                     .WithMany(e => e.DirectReports)
                     .HasForeignKey(e => e.ManagerId)
                     .OnDelete(DeleteBehavior.Restrict);
-
-                // Seed: sample employee linked to seeded user
-                b.HasData(new Employee
-                {
-                    Id = Guid.Parse("33333333-3333-3333-3333-333333333333"),
-                    UserId = Guid.Parse("11111111-1111-1111-1111-111111111111"),
-                    ManagerId = null,
-                    Title = "Senior Software Engineer",
-                    Department = "Engineering",
-                    CreatedAt = DateTimeOffset.Parse("2025-09-05T00:00:00Z")
-                },
-                new Employee
-                {
-                    Id = Guid.Parse("44444444-4444-4444-4444-444444444444"),
-                    UserId = Guid.Parse("22222222-2222-2222-2222-222222222222"),
-                    ManagerId = Guid.Parse("33333333-3333-3333-3333-333333333333"), // Jane is John's manager
-                    Title = "Software Engineer",
-                    Department = "Engineering",
-                    CreatedAt = DateTimeOffset.Parse("2025-09-05T00:00:00Z")
-                });
             });
 
             modelBuilder.Entity<Goal>(b =>
@@ -148,17 +116,6 @@ namespace CPR.Infrastructure.Data
                 b.Property(g => g.IsDeleted).HasColumnName("is_deleted");
                 b.Property(g => g.DeletedBy).HasColumnName("deleted_by");
                 b.Property(g => g.DeletedAt).HasColumnName("deleted_at");
-
-                // Seed: sample goal
-                b.HasData(new Goal
-                {
-                    Id = Guid.Parse("22222222-2222-2222-2222-222222222222"),
-                    EmployeeId = Guid.Parse("11111111-1111-1111-1111-111111111111"),
-                    Title = "Improve unit test coverage",
-                    Description = "Add tests for critical services",
-                    Status = "open",
-                    CreatedAt = DateTimeOffset.Parse("2025-09-05T00:00:00Z")
-                });
             });
 
             // Basic mappings for additional entities (table name + created_at default)
@@ -195,33 +152,6 @@ namespace CPR.Infrastructure.Data
                 b.Property(c => c.IsDeleted).HasColumnName("is_deleted");
                 b.Property(c => c.DeletedBy).HasColumnName("deleted_by");
                 b.Property(c => c.DeletedAt).HasColumnName("deleted_at");
-                // Seed: minimal career paths
-                b.HasData(
-                    new CareerPath
-                    {
-                        Id = Guid.Parse("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaa1"),
-                        Title = "Technology",
-                        Description = "Engineering, architecture and platform roles",
-                        CreatedBy = Guid.Parse("11111111-1111-1111-1111-111111111111"),
-                        CreatedAt = DateTimeOffset.Parse("2025-09-05T00:00:00Z")
-                    },
-                    new CareerPath
-                    {
-                        Id = Guid.Parse("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaa2"),
-                        Title = "People",
-                        Description = "HR, people operations and employee development",
-                        CreatedBy = Guid.Parse("11111111-1111-1111-1111-111111111111"),
-                        CreatedAt = DateTimeOffset.Parse("2025-09-05T00:00:00Z")
-                    },
-                    new CareerPath
-                    {
-                        Id = Guid.Parse("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaa3"),
-                        Title = "Finance",
-                        Description = "Financial planning, reporting and analysis",
-                        CreatedBy = Guid.Parse("11111111-1111-1111-1111-111111111111"),
-                        CreatedAt = DateTimeOffset.Parse("2025-09-05T00:00:00Z")
-                    }
-                );
             });
 
             modelBuilder.Entity<CareerTrack>(b =>
@@ -239,16 +169,6 @@ namespace CPR.Infrastructure.Data
                 b.Property(c => c.IsDeleted).HasColumnName("is_deleted");
                 b.Property(c => c.DeletedBy).HasColumnName("deleted_by");
                 b.Property(c => c.DeletedAt).HasColumnName("deleted_at");
-                // Seed: minimal career track for Technology
-                b.HasData(new CareerTrack
-                {
-                    Id = Guid.Parse("bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbb001"),
-                    Title = "Software Engineering",
-                    Description = "Software development and engineering roles",
-                    CareerPathId = Guid.Parse("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaa1"),
-                    CreatedBy = Guid.Parse("11111111-1111-1111-1111-111111111111"),
-                    CreatedAt = DateTimeOffset.Parse("2025-09-05T00:00:00Z")
-                });
             });
 
             modelBuilder.Entity<Position>(b =>
@@ -267,15 +187,6 @@ namespace CPR.Infrastructure.Data
                 b.Property(p => p.IsDeleted).HasColumnName("is_deleted");
                 b.Property(p => p.DeletedBy).HasColumnName("deleted_by");
                 b.Property(p => p.DeletedAt).HasColumnName("deleted_at");
-                // Seed: sample position
-                b.HasData(new Position
-                {
-                    Id = Guid.Parse("cccccccc-cccc-cccc-cccc-cccccccc0001"),
-                    Title = "Senior Software Engineer",
-                    CareerTrackId = Guid.Parse("bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbb001"),
-                    CreatedBy = Guid.Parse("11111111-1111-1111-1111-111111111111"),
-                    CreatedAt = DateTimeOffset.Parse("2025-09-05T00:00:00Z")
-                });
             });
 
             modelBuilder.Entity<SkillCategory>(b =>
@@ -292,25 +203,6 @@ namespace CPR.Infrastructure.Data
                 b.Property(s => s.IsDeleted).HasColumnName("is_deleted");
                 b.Property(s => s.DeletedBy).HasColumnName("deleted_by");
                 b.Property(s => s.DeletedAt).HasColumnName("deleted_at");
-                // Seed: skill categories
-                b.HasData(
-                    new SkillCategory
-                    {
-                        Id = Guid.Parse("dddddddd-dddd-dddd-dddd-dddddddddd01"),
-                        Title = "Technical",
-                        Description = "Technical skills and competencies",
-                        CreatedBy = Guid.Parse("11111111-1111-1111-1111-111111111111"),
-                        CreatedAt = DateTimeOffset.Parse("2025-09-05T00:00:00Z")
-                    },
-                    new SkillCategory
-                    {
-                        Id = Guid.Parse("dddddddd-dddd-dddd-dddd-dddddddddd02"),
-                        Title = "Leadership",
-                        Description = "Leadership and communication skills",
-                        CreatedBy = Guid.Parse("11111111-1111-1111-1111-111111111111"),
-                        CreatedAt = DateTimeOffset.Parse("2025-09-05T00:00:00Z")
-                    }
-                );
             });
 
             modelBuilder.Entity<Skill>(b =>
@@ -328,27 +220,6 @@ namespace CPR.Infrastructure.Data
                 b.Property(s => s.IsDeleted).HasColumnName("is_deleted");
                 b.Property(s => s.DeletedBy).HasColumnName("deleted_by");
                 b.Property(s => s.DeletedAt).HasColumnName("deleted_at");
-                // Seed: sample skills
-                b.HasData(
-                    new Skill
-                    {
-                        Id = Guid.Parse("eeeeeeee-eeee-eeee-eeee-eeeeeeee0001"),
-                        Title = "Unit Testing",
-                        Description = "Writing unit and integration tests",
-                        CategoryId = Guid.Parse("dddddddd-dddd-dddd-dddd-dddddddddd01"),
-                        CreatedBy = Guid.Parse("11111111-1111-1111-1111-111111111111"),
-                        CreatedAt = DateTimeOffset.Parse("2025-09-05T00:00:00Z")
-                    },
-                    new Skill
-                    {
-                        Id = Guid.Parse("eeeeeeee-eeee-eeee-eeee-eeeeeeee0002"),
-                        Title = "Communication",
-                        Description = "Verbal and written communication skills",
-                        CategoryId = Guid.Parse("dddddddd-dddd-dddd-dddd-dddddddddd02"),
-                        CreatedBy = Guid.Parse("11111111-1111-1111-1111-111111111111"),
-                        CreatedAt = DateTimeOffset.Parse("2025-09-05T00:00:00Z")
-                    }
-                );
             });
 
             modelBuilder.Entity<SkillLevel>(b =>
@@ -367,36 +238,6 @@ namespace CPR.Infrastructure.Data
                 b.Property(s => s.IsDeleted).HasColumnName("is_deleted");
                 b.Property(s => s.DeletedBy).HasColumnName("deleted_by");
                 b.Property(s => s.DeletedAt).HasColumnName("deleted_at");
-                // Seed: skill levels for Unit Testing
-                b.HasData(
-                    new SkillLevel
-                    {
-                        Id = Guid.Parse("ffffffff-ffff-ffff-ffff-ffffffff0001"),
-                        Title = "Beginner",
-                        SkillId = Guid.Parse("eeeeeeee-eeee-eeee-eeee-eeeeeeee0001"),
-                        Value = 1,
-                        CreatedBy = Guid.Parse("11111111-1111-1111-1111-111111111111"),
-                        CreatedAt = DateTimeOffset.Parse("2025-09-05T00:00:00Z")
-                    },
-                    new SkillLevel
-                    {
-                        Id = Guid.Parse("ffffffff-ffff-ffff-ffff-ffffffff0002"),
-                        Title = "Intermediate",
-                        SkillId = Guid.Parse("eeeeeeee-eeee-eeee-eeee-eeeeeeee0001"),
-                        Value = 3,
-                        CreatedBy = Guid.Parse("11111111-1111-1111-1111-111111111111"),
-                        CreatedAt = DateTimeOffset.Parse("2025-09-05T00:00:00Z")
-                    },
-                    new SkillLevel
-                    {
-                        Id = Guid.Parse("ffffffff-ffff-ffff-ffff-ffffffff0003"),
-                        Title = "Advanced",
-                        SkillId = Guid.Parse("eeeeeeee-eeee-eeee-eeee-eeeeeeee0001"),
-                        Value = 5,
-                        CreatedBy = Guid.Parse("11111111-1111-1111-1111-111111111111"),
-                        CreatedAt = DateTimeOffset.Parse("2025-09-05T00:00:00Z")
-                    }
-                );
             });
 
             modelBuilder.Entity<Department>(b =>
@@ -416,15 +257,6 @@ namespace CPR.Infrastructure.Data
                 b.Property(d => d.IsDeleted).HasColumnName("is_deleted");
                 b.Property(d => d.DeletedBy).HasColumnName("deleted_by");
                 b.Property(d => d.DeletedAt).HasColumnName("deleted_at");
-                // Seed: sample department
-                b.HasData(new Department
-                {
-                    Id = Guid.Parse("99999999-9999-9999-9999-999999999901"),
-                    Name = "Engineering",
-                    Code = "ENG",
-                    CreatedBy = Guid.Parse("11111111-1111-1111-1111-111111111111"),
-                    CreatedAt = DateTimeOffset.Parse("2025-09-05T00:00:00Z")
-                });
             });
 
             modelBuilder.Entity<Location>(b =>
@@ -447,16 +279,6 @@ namespace CPR.Infrastructure.Data
                 b.Property(l => l.IsDeleted).HasColumnName("is_deleted");
                 b.Property(l => l.DeletedBy).HasColumnName("deleted_by");
                 b.Property(l => l.DeletedAt).HasColumnName("deleted_at");
-                // Seed: sample location
-                b.HasData(new Location
-                {
-                    Id = Guid.Parse("88888888-8888-8888-8888-888888888801"),
-                    Name = "Headquarters",
-                    City = "Remote",
-                    Country = "Global",
-                    CreatedBy = Guid.Parse("11111111-1111-1111-1111-111111111111"),
-                    CreatedAt = DateTimeOffset.Parse("2025-09-05T00:00:00Z")
-                });
             });
 
             modelBuilder.Entity<Project>(b =>
@@ -476,15 +298,6 @@ namespace CPR.Infrastructure.Data
                 b.Property(p => p.IsDeleted).HasColumnName("is_deleted");
                 b.Property(p => p.DeletedBy).HasColumnName("deleted_by");
                 b.Property(p => p.DeletedAt).HasColumnName("deleted_at");
-                // Seed: sample project
-                b.HasData(new Project
-                {
-                    Id = Guid.Parse("77777777-7777-7777-7777-777777777701"),
-                    Code = "PRJ-001",
-                    Title = "Sample Project",
-                    CreatedBy = Guid.Parse("11111111-1111-1111-1111-111111111111"),
-                    CreatedAt = DateTimeOffset.Parse("2025-09-05T00:00:00Z")
-                });
             });
 
             modelBuilder.Entity<ProjectRole>(b =>
@@ -502,15 +315,6 @@ namespace CPR.Infrastructure.Data
                 b.Property(r => r.IsDeleted).HasColumnName("is_deleted");
                 b.Property(r => r.DeletedBy).HasColumnName("deleted_by");
                 b.Property(r => r.DeletedAt).HasColumnName("deleted_at");
-                // Seed: sample project role
-                b.HasData(new ProjectRole
-                {
-                    Id = Guid.Parse("66666666-6666-6666-6666-666666666601"),
-                    Title = "Tech Lead",
-                    PositionId = Guid.Parse("cccccccc-cccc-cccc-cccc-cccccccc0001"),
-                    CreatedBy = Guid.Parse("11111111-1111-1111-1111-111111111111"),
-                    CreatedAt = DateTimeOffset.Parse("2025-09-05T00:00:00Z")
-                });
             });
 
             modelBuilder.Entity<GoalTask>(b =>
@@ -571,32 +375,6 @@ namespace CPR.Infrastructure.Data
                 b.Property(fr => fr.IsDeleted).HasColumnName("is_deleted");
                 b.Property(fr => fr.DeletedBy).HasColumnName("deleted_by");
                 b.Property(fr => fr.DeletedAt).HasColumnName("deleted_at");
-
-                // Seed: sample feedback request
-                b.HasData(new FeedbackRequest
-                {
-                    Id = Guid.Parse("55555555-5555-5555-5555-555555555555"),
-                    RequestorId = Guid.Parse("33333333-3333-3333-3333-333333333333"), // Jane Smith (requestor)
-                    EmployeeId = Guid.Parse("44444444-4444-4444-4444-444444444444"), // John Doe (recipient)
-                    ProjectId = null,
-                    GoalId = null,
-                    Message = "Test feedback request",
-                    DueDate = DateTimeOffset.Parse("2025-10-01T00:00:00Z"),
-                    CreatedBy = Guid.Parse("11111111-1111-1111-1111-111111111111"), // Jane Smith's user ID
-                    CreatedAt = DateTimeOffset.Parse("2025-09-05T00:00:00Z")
-                },
-                new FeedbackRequest
-                {
-                    Id = Guid.Parse("66666666-6666-6666-6666-666666666666"),
-                    RequestorId = Guid.Parse("44444444-4444-4444-4444-444444444444"), // John Doe (requestor)
-                    EmployeeId = Guid.Parse("33333333-3333-3333-3333-333333333333"), // Jane Smith (recipient)
-                    ProjectId = null,
-                    GoalId = null,
-                    Message = "Please provide feedback to me",
-                    DueDate = DateTimeOffset.Parse("2025-10-15T00:00:00Z"),
-                    CreatedBy = Guid.Parse("22222222-2222-2222-2222-222222222222"), // John Doe's user ID
-                    CreatedAt = DateTimeOffset.Parse("2025-09-06T00:00:00Z")
-                });
             });
 
             modelBuilder.Entity<EmployeeToSkill>(b =>
@@ -638,19 +416,6 @@ namespace CPR.Infrastructure.Data
                 b.Property(p => p.IsDeleted).HasColumnName("is_deleted");
                 b.Property(p => p.DeletedBy).HasColumnName("deleted_by");
                 b.Property(p => p.DeletedAt).HasColumnName("deleted_at");
-                // Seed: position to skill relationships
-                b.HasData(new PositionToSkill
-                {
-                    Id = Guid.Parse("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaa0001"),
-                    PositionId = Guid.Parse("cccccccc-cccc-cccc-cccc-cccccccc0001"), // Senior Software Engineer
-                    SkillId = Guid.Parse("eeeeeeee-eeee-eeee-eeee-eeeeeeee0001"), // Unit Testing
-                    SkillLevelId = Guid.Parse("ffffffff-ffff-ffff-ffff-ffffffff0001"), // Beginner
-                    Weight = 1.0m,
-                    IsMandatory = true,
-                    Rationale = "Essential for code quality and reliability",
-                    CreatedBy = Guid.Parse("11111111-1111-1111-1111-111111111111"),
-                    CreatedAt = DateTimeOffset.Parse("2025-09-05T00:00:00Z")
-                });
             });
 
             modelBuilder.Entity<ProjectTeam>(b =>

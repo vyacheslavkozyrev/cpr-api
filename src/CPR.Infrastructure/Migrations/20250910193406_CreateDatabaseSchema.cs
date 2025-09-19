@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace CPR.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class CreateInitial : Migration
+    public partial class CreateDatabaseSchema : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -589,94 +589,6 @@ namespace CPR.Infrastructure.Migrations
                 table: "users",
                 column: "user_name",
                 unique: true);
-
-            migrationBuilder.InsertData(
-                table: "career_paths",
-                columns: new[] { "id", "created_at", "created_by", "deleted_at", "deleted_by", "description", "is_deleted", "modified_at", "modified_by", "title" },
-                values: new object[,]
-                {
-                    { new Guid("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaa1"), new DateTimeOffset(new DateTime(2025, 9, 5, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), new Guid("11111111-1111-1111-1111-111111111111"), null, null, "Engineering, architecture and platform roles", false, null, null, "Technology" },
-                    { new Guid("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaa2"), new DateTimeOffset(new DateTime(2025, 9, 5, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), new Guid("11111111-1111-1111-1111-111111111111"), null, null, "HR, people operations and employee development", false, null, null, "People" },
-                    { new Guid("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaa3"), new DateTimeOffset(new DateTime(2025, 9, 5, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), new Guid("11111111-1111-1111-1111-111111111111"), null, null, "Financial planning, reporting and analysis", false, null, null, "Finance" }
-                });
-
-            migrationBuilder.InsertData(
-                table: "career_tracks",
-                columns: new[] { "id", "career_path_id", "created_at", "created_by", "deleted_at", "deleted_by", "description", "is_deleted", "modified_at", "modified_by", "title" },
-                values: new object[] { new Guid("bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbb001"), new Guid("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaa1"), new DateTimeOffset(new DateTime(2025, 9, 5, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), new Guid("11111111-1111-1111-1111-111111111111"), null, null, "Software development and engineering roles", false, null, null, "Software Engineering" });
-
-            migrationBuilder.InsertData(
-                table: "departments",
-                columns: new[] { "id", "code", "created_at", "created_by", "deleted_at", "deleted_by", "description", "is_deleted", "manager_id", "modified_at", "modified_by", "name", "parent_department_id" },
-                values: new object[] { new Guid("99999999-9999-9999-9999-999999999901"), "ENG", new DateTimeOffset(new DateTime(2025, 9, 5, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), new Guid("11111111-1111-1111-1111-111111111111"), null, null, null, false, null, null, null, "Engineering", null });
-
-            migrationBuilder.InsertData(
-                table: "employees",
-                columns: new[] { "id", "created_at", "created_by", "deleted_at", "deleted_by", "department", "is_deleted", "manager_id", "modified_at", "modified_by", "title", "user_id" },
-                values: new object[] { new Guid("33333333-3333-3333-3333-333333333333"), new DateTimeOffset(new DateTime(2025, 9, 5, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), null, null, null, "Engineering", false, null, null, null, "Senior Software Engineer", new Guid("11111111-1111-1111-1111-111111111111") });
-
-            migrationBuilder.InsertData(
-                table: "goals",
-                columns: new[] { "id", "employee_id", "related_skill_id", "related_skill_level_id", "created_at", "created_by", "deleted_at", "deleted_by", "description", "is_deleted", "modified_at", "modified_by", "status", "title", "progress_percent", "is_completed" },
-                values: new object[] { new Guid("22222222-2222-2222-2222-222222222222"), new Guid("33333333-3333-3333-3333-333333333333"), null, null, new DateTimeOffset(new DateTime(2025, 9, 5, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), null, null, null, "Add tests for critical services", false, null, null, "open", "Improve unit test coverage", 0.00m, false });
-
-            migrationBuilder.InsertData(
-                table: "locations",
-                columns: new[] { "id", "address", "city", "contact_phone", "country", "created_at", "created_by", "deleted_at", "deleted_by", "is_deleted", "modified_at", "modified_by", "name", "postal_code", "region", "timezone" },
-                values: new object[] { new Guid("88888888-8888-8888-8888-888888888801"), null, "Remote", null, "Global", new DateTimeOffset(new DateTime(2025, 9, 5, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), new Guid("11111111-1111-1111-1111-111111111111"), null, null, false, null, null, "Headquarters", null, null, null });
-
-            migrationBuilder.InsertData(
-                table: "positions",
-                columns: new[] { "id", "career_track_id", "created_at", "created_by", "deleted_at", "deleted_by", "description", "expectations", "is_deleted", "modified_at", "modified_by", "title" },
-                values: new object[] { new Guid("cccccccc-cccc-cccc-cccc-cccccccc0001"), new Guid("bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbb001"), new DateTimeOffset(new DateTime(2025, 9, 5, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), new Guid("11111111-1111-1111-1111-111111111111"), null, null, null, null, false, null, null, "Senior Software Engineer" });
-
-            migrationBuilder.InsertData(
-                table: "project_roles",
-                columns: new[] { "id", "created_at", "created_by", "deleted_at", "deleted_by", "description", "is_deleted", "modified_at", "modified_by", "position_id", "title" },
-                values: new object[] { new Guid("66666666-6666-6666-6666-666666666601"), new DateTimeOffset(new DateTime(2025, 9, 5, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), new Guid("11111111-1111-1111-1111-111111111111"), null, null, null, false, null, null, new Guid("cccccccc-cccc-cccc-cccc-cccccccc0001"), "Tech Lead" });
-
-            migrationBuilder.InsertData(
-                table: "projects",
-                columns: new[] { "id", "code", "created_at", "created_by", "deleted_at", "deleted_by", "description", "is_deleted", "modified_at", "modified_by", "owner_id", "sponsor_id", "title" },
-                values: new object[] { new Guid("77777777-7777-7777-7777-777777777701"), "PRJ-001", new DateTimeOffset(new DateTime(2025, 9, 5, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), new Guid("11111111-1111-1111-1111-111111111111"), null, null, null, false, null, null, null, null, "Sample Project" });
-
-            migrationBuilder.InsertData(
-                table: "skill_categories",
-                columns: new[] { "id", "created_at", "created_by", "deleted_at", "deleted_by", "description", "is_deleted", "modified_at", "modified_by", "title" },
-                values: new object[,]
-                {
-                    { new Guid("dddddddd-dddd-dddd-dddd-dddddddddd01"), new DateTimeOffset(new DateTime(2025, 9, 5, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), new Guid("11111111-1111-1111-1111-111111111111"), null, null, "Technical skills and competencies", false, null, null, "Technical" },
-                    { new Guid("dddddddd-dddd-dddd-dddd-dddddddddd02"), new DateTimeOffset(new DateTime(2025, 9, 5, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), new Guid("11111111-1111-1111-1111-111111111111"), null, null, "Leadership and communication skills", false, null, null, "Leadership" }
-                });
-
-            migrationBuilder.InsertData(
-                table: "skill_levels",
-                columns: new[] { "id", "created_at", "created_by", "deleted_at", "deleted_by", "description", "is_deleted", "modified_at", "modified_by", "skill_id", "title", "value" },
-                values: new object[,]
-                {
-                    { new Guid("ffffffff-ffff-ffff-ffff-ffffffff0001"), new DateTimeOffset(new DateTime(2025, 9, 5, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), new Guid("11111111-1111-1111-1111-111111111111"), null, null, null, false, null, null, new Guid("eeeeeeee-eeee-eeee-eeee-eeeeeeee0001"), "Beginner", 1 },
-                    { new Guid("ffffffff-ffff-ffff-ffff-ffffffff0002"), new DateTimeOffset(new DateTime(2025, 9, 5, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), new Guid("11111111-1111-1111-1111-111111111111"), null, null, null, false, null, null, new Guid("eeeeeeee-eeee-eeee-eeee-eeeeeeee0001"), "Intermediate", 3 },
-                    { new Guid("ffffffff-ffff-ffff-ffff-ffffffff0003"), new DateTimeOffset(new DateTime(2025, 9, 5, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), new Guid("11111111-1111-1111-1111-111111111111"), null, null, null, false, null, null, new Guid("eeeeeeee-eeee-eeee-eeee-eeeeeeee0001"), "Advanced", 5 }
-                });
-
-            migrationBuilder.InsertData(
-                table: "skills",
-                columns: new[] { "id", "category_id", "created_at", "created_by", "deleted_at", "deleted_by", "description", "is_deleted", "modified_at", "modified_by", "title" },
-                values: new object[,]
-                {
-                    { new Guid("eeeeeeee-eeee-eeee-eeee-eeeeeeee0001"), new Guid("dddddddd-dddd-dddd-dddd-dddddddddd01"), new DateTimeOffset(new DateTime(2025, 9, 5, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), new Guid("11111111-1111-1111-1111-111111111111"), null, null, "Writing unit and integration tests", false, null, null, "Unit Testing" },
-                    { new Guid("eeeeeeee-eeee-eeee-eeee-eeeeeeee0002"), new Guid("dddddddd-dddd-dddd-dddd-dddddddddd02"), new DateTimeOffset(new DateTime(2025, 9, 5, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), new Guid("11111111-1111-1111-1111-111111111111"), null, null, "Verbal and written communication skills", false, null, null, "Communication" }
-                });
-
-            migrationBuilder.InsertData(
-                table: "position_to_skill",
-                columns: new[] { "id", "position_id", "skill_id", "skill_level_id", "weight", "is_mandatory", "rationale", "created_at", "created_by", "deleted_at", "deleted_by", "is_deleted", "modified_at", "modified_by" },
-                values: new object[] { new Guid("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaa0001"), new Guid("cccccccc-cccc-cccc-cccc-cccccccc0001"), new Guid("eeeeeeee-eeee-eeee-eeee-eeeeeeee0001"), new Guid("ffffffff-ffff-ffff-ffff-ffffffff0001"), 1.0m, true, "Essential for code quality and reliability", new DateTimeOffset(new DateTime(2025, 9, 5, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), new Guid("11111111-1111-1111-1111-111111111111"), null, null, false, null, null });
-
-            migrationBuilder.InsertData(
-                table: "users",
-                columns: new[] { "id", "created_at", "created_by", "deleted_at", "deleted_by", "display_name", "is_deleted", "modified_at", "modified_by", "password_hash", "user_name" },
-                values: new object[] { new Guid("11111111-1111-1111-1111-111111111111"), new DateTimeOffset(new DateTime(2025, 9, 5, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), null, null, null, "Jane Smith", false, null, null, "$2b$12$.........................", "jane.smith" });
         }
 
         /// <inheritdoc />

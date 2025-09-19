@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CPR.Infrastructure.Migrations
 {
     [DbContext(typeof(CprDbContext))]
-    [Migration("20250910193406_CreateInitial")]
-    partial class CreateInitial
+    [Migration("20250910193406_CreateDatabaseSchema")]
+    partial class CreateDatabaseSchema
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
