@@ -155,7 +155,7 @@ namespace CPR.Infrastructure.Migrations
                     user_id = table.Column<Guid>(type: "uuid", nullable: false),
                     manager_id = table.Column<Guid>(type: "uuid", nullable: true),
                     title = table.Column<string>(type: "text", nullable: true),
-                    department = table.Column<string>(type: "text", nullable: true),
+                    department_id = table.Column<Guid>(type: "uuid", nullable: true),
                     created_by = table.Column<Guid>(type: "uuid", nullable: true),
                     created_at = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "now()"),
                     modified_by = table.Column<Guid>(type: "uuid", nullable: true),
@@ -167,6 +167,11 @@ namespace CPR.Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_employees", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_employees_departments_department_id",
+                        column: x => x.department_id,
+                        principalTable: "departments",
+                        principalColumn: "id");
                 });
             // Indexes for employees
             migrationBuilder.CreateIndex(
@@ -178,6 +183,11 @@ namespace CPR.Infrastructure.Migrations
                 name: "IX_employees_manager_id",
                 table: "employees",
                 column: "manager_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_employees_department_id",
+                table: "employees",
+                column: "department_id");
 
             migrationBuilder.CreateTable(
                 name: "feedback",
