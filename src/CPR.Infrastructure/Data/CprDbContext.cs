@@ -65,7 +65,7 @@ namespace CPR.Infrastructure.Data
                 b.Property(e => e.UserId).HasColumnName("user_id").IsRequired();
                 b.Property(e => e.ManagerId).HasColumnName("manager_id");
                 b.Property(e => e.Title).HasColumnName("title");
-                b.Property(e => e.Department).HasColumnName("department");
+                b.Property(e => e.DepartmentId).HasColumnName("department_id");
 
                 b.Property(e => e.CreatedBy).HasColumnName("created_by");
                 b.Property(e => e.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("CURRENT_TIMESTAMP");
@@ -80,6 +80,12 @@ namespace CPR.Infrastructure.Data
                     .WithMany()
                     .HasForeignKey(e => e.UserId)
                     .OnDelete(DeleteBehavior.Restrict);
+
+                // Configure relationship to Department
+                b.HasOne(e => e.Department)
+                    .WithMany()
+                    .HasForeignKey(e => e.DepartmentId)
+                    .OnDelete(DeleteBehavior.SetNull);
 
                 // Configure self-referencing relationship for Manager
                 b.HasOne(e => e.Manager)

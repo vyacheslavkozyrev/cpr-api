@@ -52,7 +52,7 @@ namespace CPR.Infrastructure.Services
                     Id = employee.Id,
                     DisplayName = employee.User?.DisplayName ?? employee.User?.UserName ?? "Unknown",
                     Title = employee.Title,
-                    Department = employee.Department,
+                    Department = employee.Department?.Name,
                     ActiveGoalsCount = activeGoalsCount,
                     LatestFeedbackRating = latestFeedback?.Rating,
                     LastFeedbackDate = latestFeedback?.CreatedAt
@@ -94,7 +94,7 @@ namespace CPR.Infrastructure.Services
                     UserId = employee.UserId,
                     DisplayName = employee.User?.DisplayName ?? employee.User?.UserName ?? "Unknown",
                     Title = employee.Title,
-                    Department = employee.Department,
+                    Department = employee.Department?.Name,
                     ManagerId = employee.ManagerId,
                     ManagerName = null // Will be populated if needed
                 },
