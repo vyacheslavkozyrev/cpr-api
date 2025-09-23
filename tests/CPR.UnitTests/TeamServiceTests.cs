@@ -89,9 +89,11 @@ namespace CPR.UnitTests.Services
 
             // Create test data - manager with no direct reports
             var managerUser = new User { Id = Guid.NewGuid(), UserName = "manager", DisplayName = "Manager User", PasswordHash = "hashedpassword", IsDeleted = false };
-            var manager = new Employee { Id = managerId, UserId = managerUser.Id, Title = "Manager", IsDeleted = false };
+            var managerPosition = new Position { Id = Guid.NewGuid(), Title = "Manager", CareerTrackId = new Guid("22e5ed0b-43c4-4ce6-829d-3943e4b7bdd1"), IsDeleted = false };
+            var manager = new Employee { Id = managerId, UserId = managerUser.Id, PositionId = managerPosition.Id, IsDeleted = false };
 
             _dbContext.Users.Add(managerUser);
+            _dbContext.Positions.Add(managerPosition);
             _dbContext.Employees.Add(manager);
             await _dbContext.SaveChangesAsync();
 
@@ -115,12 +117,17 @@ namespace CPR.UnitTests.Services
 
             var engineeringDept = new Department { Id = new Guid("fff11111-1111-1111-1111-111111111111"), Name = "Engineering", Code = "ENG", IsDeleted = false };
 
-            var manager = new Employee { Id = managerId, UserId = managerUser.Id, Title = "Manager", IsDeleted = false };
-            var member = new Employee { Id = memberId, UserId = memberUser.Id, Title = "Developer", DepartmentId = engineeringDept.Id, ManagerId = managerId, IsDeleted = false };
+            var managerPosition = new Position { Id = Guid.NewGuid(), Title = "Manager", CareerTrackId = new Guid("22e5ed0b-43c4-4ce6-829d-3943e4b7bdd1"), IsDeleted = false };
+            var memberPosition = new Position { Id = Guid.NewGuid(), Title = "Developer", CareerTrackId = new Guid("22e5ed0b-43c4-4ce6-829d-3943e4b7bdd1"), IsDeleted = false };
+
+            var manager = new Employee { Id = managerId, UserId = managerUser.Id, PositionId = managerPosition.Id, IsDeleted = false };
+            var member = new Employee { Id = memberId, UserId = memberUser.Id, PositionId = memberPosition.Id, DepartmentId = engineeringDept.Id, ManagerId = managerId, IsDeleted = false };
 
             _dbContext.Users.Add(managerUser);
             _dbContext.Users.Add(memberUser);
             _dbContext.Departments.Add(engineeringDept);
+            _dbContext.Positions.Add(managerPosition);
+            _dbContext.Positions.Add(memberPosition);
             _dbContext.Employees.Add(manager);
             _dbContext.Employees.Add(member);
             await _dbContext.SaveChangesAsync();
@@ -146,9 +153,14 @@ namespace CPR.UnitTests.Services
             var managerUser = new User { Id = Guid.NewGuid(), UserName = "manager", DisplayName = "Manager User", PasswordHash = "hashedpassword", IsDeleted = false };
             var memberUser = new User { Id = Guid.NewGuid(), UserName = "member", DisplayName = "Member User", PasswordHash = "hashedpassword", IsDeleted = false };
 
-            var manager = new Employee { Id = managerId, UserId = managerUser.Id, Title = "Manager", IsDeleted = false };
-            var member = new Employee { Id = memberId, UserId = memberUser.Id, Title = "Developer", ManagerId = Guid.NewGuid(), IsDeleted = false }; // Different manager
+            var managerPosition = new Position { Id = Guid.NewGuid(), Title = "Manager", CareerTrackId = new Guid("22e5ed0b-43c4-4ce6-829d-3943e4b7bdd1"), IsDeleted = false };
+            var memberPosition = new Position { Id = Guid.NewGuid(), Title = "Developer", CareerTrackId = new Guid("22e5ed0b-43c4-4ce6-829d-3943e4b7bdd1"), IsDeleted = false };
 
+            var manager = new Employee { Id = managerId, UserId = managerUser.Id, PositionId = managerPosition.Id, IsDeleted = false };
+            var member = new Employee { Id = memberId, UserId = memberUser.Id, PositionId = memberPosition.Id, ManagerId = Guid.NewGuid(), IsDeleted = false }; // Different manager
+
+            _dbContext.Positions.Add(managerPosition);
+            _dbContext.Positions.Add(memberPosition);
             _dbContext.Users.Add(managerUser);
             _dbContext.Users.Add(memberUser);
             _dbContext.Employees.Add(manager);
@@ -175,9 +187,13 @@ namespace CPR.UnitTests.Services
             var employee1User = new User { Id = Guid.NewGuid(), UserName = "employee1", DisplayName = "Employee 1", PasswordHash = "hashedpassword", IsDeleted = false };
             var employee2User = new User { Id = Guid.NewGuid(), UserName = "employee2", DisplayName = "Employee 2", PasswordHash = "hashedpassword", IsDeleted = false };
 
-            var manager = new Employee { Id = managerId, UserId = managerUser.Id, Title = "Manager", IsDeleted = false };
-            var employee1 = new Employee { Id = employee1Id, UserId = employee1User.Id, Title = "Developer", ManagerId = managerId, IsDeleted = false };
-            var employee2 = new Employee { Id = employee2Id, UserId = employee2User.Id, Title = "Designer", ManagerId = managerId, IsDeleted = false };
+            var managerPosition = new Position { Id = Guid.NewGuid(), Title = "Manager", CareerTrackId = new Guid("22e5ed0b-43c4-4ce6-829d-3943e4b7bdd1"), IsDeleted = false };
+            var employee1Position = new Position { Id = Guid.NewGuid(), Title = "Developer", CareerTrackId = new Guid("22e5ed0b-43c4-4ce6-829d-3943e4b7bdd1"), IsDeleted = false };
+            var employee2Position = new Position { Id = Guid.NewGuid(), Title = "Designer", CareerTrackId = new Guid("22e5ed0b-43c4-4ce6-829d-3943e4b7bdd1"), IsDeleted = false };
+
+            var manager = new Employee { Id = managerId, UserId = managerUser.Id, PositionId = managerPosition.Id, IsDeleted = false };
+            var employee1 = new Employee { Id = employee1Id, UserId = employee1User.Id, PositionId = employee1Position.Id, ManagerId = managerId, IsDeleted = false };
+            var employee2 = new Employee { Id = employee2Id, UserId = employee2User.Id, PositionId = employee2Position.Id, ManagerId = managerId, IsDeleted = false };
 
             var goal1 = new Goal { Id = Guid.NewGuid(), EmployeeId = employee1Id, Title = "Complete project", IsCompleted = false, IsDeleted = false };
             var goal2 = new Goal { Id = Guid.NewGuid(), EmployeeId = employee2Id, Title = "Learn new technology", IsCompleted = true, IsDeleted = false };
@@ -185,6 +201,9 @@ namespace CPR.UnitTests.Services
             _dbContext.Users.Add(managerUser);
             _dbContext.Users.Add(employee1User);
             _dbContext.Users.Add(employee2User);
+            _dbContext.Positions.Add(managerPosition);
+            _dbContext.Positions.Add(employee1Position);
+            _dbContext.Positions.Add(employee2Position);
             _dbContext.Employees.Add(manager);
             _dbContext.Employees.Add(employee1);
             _dbContext.Employees.Add(employee2);
@@ -214,11 +233,16 @@ namespace CPR.UnitTests.Services
             var managerUser = new User { Id = Guid.NewGuid(), UserName = "manager", DisplayName = "Manager User", PasswordHash = "hashedpassword", IsDeleted = false };
             var employeeUser = new User { Id = Guid.NewGuid(), UserName = "employee", DisplayName = "Employee User", PasswordHash = "hashedpassword", IsDeleted = false };
 
-            var manager = new Employee { Id = managerId, UserId = managerUser.Id, Title = "Manager", IsDeleted = false };
-            var employee = new Employee { Id = employeeId, UserId = employeeUser.Id, Title = "Developer", ManagerId = managerId, IsDeleted = false };
+            var managerPosition = new Position { Id = Guid.NewGuid(), Title = "Manager", CareerTrackId = new Guid("22e5ed0b-43c4-4ce6-829d-3943e4b7bdd1"), IsDeleted = false };
+            var employeePosition = new Position { Id = Guid.NewGuid(), Title = "Developer", CareerTrackId = new Guid("22e5ed0b-43c4-4ce6-829d-3943e4b7bdd1"), IsDeleted = false };
+
+            var manager = new Employee { Id = managerId, UserId = managerUser.Id, PositionId = managerPosition.Id, IsDeleted = false };
+            var employee = new Employee { Id = employeeId, UserId = employeeUser.Id, PositionId = employeePosition.Id, ManagerId = managerId, IsDeleted = false };
 
             _dbContext.Users.Add(managerUser);
             _dbContext.Users.Add(employeeUser);
+            _dbContext.Positions.Add(managerPosition);
+            _dbContext.Positions.Add(employeePosition);
             _dbContext.Employees.Add(manager);
             _dbContext.Employees.Add(employee);
             await _dbContext.SaveChangesAsync();
@@ -238,9 +262,11 @@ namespace CPR.UnitTests.Services
 
             // Create test data in the in-memory database
             var employeeUser = new User { Id = Guid.NewGuid(), UserName = "employee", DisplayName = "Employee User", PasswordHash = "hashedpassword", IsDeleted = false };
-            var employee = new Employee { Id = employeeId, UserId = employeeUser.Id, Title = "Developer", IsDeleted = false };
+            var employeePosition = new Position { Id = Guid.NewGuid(), Title = "Developer", CareerTrackId = new Guid("22e5ed0b-43c4-4ce6-829d-3943e4b7bdd1"), IsDeleted = false };
+            var employee = new Employee { Id = employeeId, UserId = employeeUser.Id, PositionId = employeePosition.Id, IsDeleted = false };
 
             _dbContext.Users.Add(employeeUser);
+            _dbContext.Positions.Add(employeePosition);
             _dbContext.Employees.Add(employee);
             await _dbContext.SaveChangesAsync();
 
@@ -262,11 +288,16 @@ namespace CPR.UnitTests.Services
             var managerUser = new User { Id = Guid.NewGuid(), UserName = "manager", DisplayName = "Manager User", PasswordHash = "hashedpassword", IsDeleted = false };
             var memberUser = new User { Id = Guid.NewGuid(), UserName = "member", DisplayName = "Member User", PasswordHash = "hashedpassword", IsDeleted = false };
 
-            var manager = new Employee { Id = managerId, UserId = managerUser.Id, Title = "Manager", IsDeleted = false };
-            var member = new Employee { Id = memberId, UserId = memberUser.Id, Title = "Developer", ManagerId = managerId, IsDeleted = false };
+            var managerPosition = new Position { Id = Guid.NewGuid(), Title = "Manager", CareerTrackId = new Guid("22e5ed0b-43c4-4ce6-829d-3943e4b7bdd1"), IsDeleted = false };
+            var memberPosition = new Position { Id = Guid.NewGuid(), Title = "Developer", CareerTrackId = new Guid("22e5ed0b-43c4-4ce6-829d-3943e4b7bdd1"), IsDeleted = false };
+
+            var manager = new Employee { Id = managerId, UserId = managerUser.Id, PositionId = managerPosition.Id, IsDeleted = false };
+            var member = new Employee { Id = memberId, UserId = memberUser.Id, PositionId = memberPosition.Id, ManagerId = managerId, IsDeleted = false };
 
             _dbContext.Users.Add(managerUser);
             _dbContext.Users.Add(memberUser);
+            _dbContext.Positions.Add(managerPosition);
+            _dbContext.Positions.Add(memberPosition);
             _dbContext.Employees.Add(manager);
             _dbContext.Employees.Add(member);
             await _dbContext.SaveChangesAsync();
@@ -289,11 +320,16 @@ namespace CPR.UnitTests.Services
             var managerUser = new User { Id = Guid.NewGuid(), UserName = "manager", DisplayName = "Manager User", PasswordHash = "hashedpassword", IsDeleted = false };
             var memberUser = new User { Id = Guid.NewGuid(), UserName = "member", DisplayName = "Member User", PasswordHash = "hashedpassword", IsDeleted = false };
 
-            var manager = new Employee { Id = managerId, UserId = managerUser.Id, Title = "Manager", IsDeleted = false };
-            var member = new Employee { Id = memberId, UserId = memberUser.Id, Title = "Developer", ManagerId = Guid.NewGuid(), IsDeleted = false }; // Different manager
+            var managerPosition = new Position { Id = Guid.NewGuid(), Title = "Manager", CareerTrackId = new Guid("22e5ed0b-43c4-4ce6-829d-3943e4b7bdd1"), IsDeleted = false };
+            var memberPosition = new Position { Id = Guid.NewGuid(), Title = "Developer", CareerTrackId = new Guid("22e5ed0b-43c4-4ce6-829d-3943e4b7bdd1"), IsDeleted = false };
+
+            var manager = new Employee { Id = managerId, UserId = managerUser.Id, PositionId = managerPosition.Id, IsDeleted = false };
+            var member = new Employee { Id = memberId, UserId = memberUser.Id, PositionId = memberPosition.Id, ManagerId = Guid.NewGuid(), IsDeleted = false }; // Different manager
 
             _dbContext.Users.Add(managerUser);
             _dbContext.Users.Add(memberUser);
+            _dbContext.Positions.Add(managerPosition);
+            _dbContext.Positions.Add(memberPosition);
             _dbContext.Employees.Add(manager);
             _dbContext.Employees.Add(member);
             await _dbContext.SaveChangesAsync();

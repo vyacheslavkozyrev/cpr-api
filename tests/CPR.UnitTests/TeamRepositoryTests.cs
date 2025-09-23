@@ -144,8 +144,8 @@ namespace CPR.UnitTests.Repositories
         public async Task IsDirectReportAsync_ReturnsTrue_WhenValidRelationship()
         {
             // Arrange
-            var manager = _context.Employees.First(e => e.Title == "Manager");
-            var employee = _context.Employees.First(e => e.Title == "Developer");
+            var manager = _context.Employees.Include(e => e.Position).First(e => e.Position.Title == "Manager");
+            var employee = _context.Employees.Include(e => e.Position).First(e => e.Position.Title == "Developer");
 
             // Act
             var result = await _repository.IsDirectReportAsync(manager.Id, employee.Id);
