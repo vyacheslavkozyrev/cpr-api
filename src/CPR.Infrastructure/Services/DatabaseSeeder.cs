@@ -30,8 +30,9 @@ namespace CPR.Infrastructure.Services
             _logger.LogInformation("Starting database seeding...");
 
             await SeedDepartmentsAsync();
-            await SeedUsersAndEmployeesAsync();
             await SeedCareerPathsAndTracksAsync();
+            await SeedPositionsAsync();
+            await SeedUsersAndEmployeesAsync();
             await SeedSkillsAndCategoriesAsync();
             await SeedProjectsAsync();
 
@@ -534,7 +535,7 @@ namespace CPR.Infrastructure.Services
             await _context.CareerPaths.AddRangeAsync(careerPaths);
             await _context.SaveChangesAsync();
 
-            // Add some key career tracks from the migration
+            // Add all career tracks referenced by positions from the migration
             var careerTracks = new[]
             {
                 new CareerTrack
@@ -557,6 +558,76 @@ namespace CPR.Infrastructure.Services
                     Title = "Technology Track 3",
                     Description = "Specialized track 3 within technology career path",
                     CareerPathId = new Guid("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa")
+                },
+                new CareerTrack
+                {
+                    Id = new Guid("d7556322-667b-4062-96e1-c6773eccfc04"),
+                    Title = "Technology Track 3",
+                    Description = "Specialized track 3 within technology career path",
+                    CareerPathId = new Guid("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa")
+                },
+                new CareerTrack
+                {
+                    Id = new Guid("d533dd42-c223-4b34-9ddd-6e257f8016b8"),
+                    Title = "Technology Track 4",
+                    Description = "Specialized track 4 within technology career path",
+                    CareerPathId = new Guid("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa")
+                },
+                new CareerTrack
+                {
+                    Id = new Guid("7875db90-71b6-4e06-a7cf-53a3a77f10a0"),
+                    Title = "Technology Track 5",
+                    Description = "Specialized track 5 within technology career path",
+                    CareerPathId = new Guid("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa")
+                },
+                new CareerTrack
+                {
+                    Id = new Guid("e4441805-32e1-4714-9ae7-5688c9115ef4"),
+                    Title = "Technology Track 6",
+                    Description = "Specialized track 6 within technology career path",
+                    CareerPathId = new Guid("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa")
+                },
+                new CareerTrack
+                {
+                    Id = new Guid("c5409a70-d866-465e-9d56-3da4684c54d3"),
+                    Title = "Technology Track 7",
+                    Description = "Specialized track 7 within technology career path",
+                    CareerPathId = new Guid("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa")
+                },
+                new CareerTrack
+                {
+                    Id = new Guid("0c60eaad-dab3-426e-92f4-eafcd91db208"),
+                    Title = "Technology Track 8",
+                    Description = "Specialized track 8 within technology career path",
+                    CareerPathId = new Guid("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa")
+                },
+                new CareerTrack
+                {
+                    Id = new Guid("bdb35ab2-9c08-4a4f-952f-17fbe0b04e9f"),
+                    Title = "Technology Track 9",
+                    Description = "Specialized track 9 within technology career path",
+                    CareerPathId = new Guid("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa")
+                },
+                new CareerTrack
+                {
+                    Id = new Guid("43a12f91-e50a-480d-a865-1085f53adeb6"),
+                    Title = "Technology Track 10",
+                    Description = "Specialized track 10 within technology career path",
+                    CareerPathId = new Guid("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa")
+                },
+                new CareerTrack
+                {
+                    Id = new Guid("22e5ed0b-43c4-4ce6-829d-3943e4b7bdd1"),
+                    Title = "Technology Track 1",
+                    Description = "Specialized track 1 within technology career path",
+                    CareerPathId = new Guid("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa")
+                },
+                new CareerTrack
+                {
+                    Id = new Guid("0cf603ee-4fb6-42d6-b1f3-e3057bb80c4c"),
+                    Title = "Technology Track 2",
+                    Description = "Specialized track 2 within technology career path",
+                    CareerPathId = new Guid("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa")
                 }
             };
 
@@ -564,6 +635,426 @@ namespace CPR.Infrastructure.Services
             await _context.SaveChangesAsync();
 
             _logger.LogInformation("Seeded {PathCount} career paths and {TrackCount} career tracks.", careerPaths.Length, careerTracks.Length);
+        }
+
+        private async Task SeedPositionsAsync()
+        {
+            if (await _context.Positions.AnyAsync())
+            {
+                _logger.LogInformation("Positions already exist, skipping seeding.");
+                return;
+            }
+
+            _logger.LogInformation("Seeding positions...");
+
+            var positions = new[]
+            {
+                new Position
+                {
+                    Id = new Guid("06091429-d5c5-47f7-9f85-3034618325c5"),
+                    CareerTrackId = new Guid("0c60eaad-dab3-426e-92f4-eafcd91db208"),
+                    Title = "Technology Track 8 Position 5",
+                    Description = "Role description for position 5 in Technology Track 8",
+                    Expectations = "Key expectations and responsibilities for this position"
+                },
+                new Position
+                {
+                    Id = new Guid("0a3ddc39-af6b-487d-9bac-2d9dd0bee554"),
+                    CareerTrackId = new Guid("c5409a70-d866-465e-9d56-3da4684c54d3"),
+                    Title = "Technology Track 7 Position 3",
+                    Description = "Role description for position 3 in Technology Track 7",
+                    Expectations = "Key expectations and responsibilities for this position"
+                },
+                new Position
+                {
+                    Id = new Guid("0b5e0e9d-6920-4037-8312-0f3e78d0088a"),
+                    CareerTrackId = new Guid("0c60eaad-dab3-426e-92f4-eafcd91db208"),
+                    Title = "Technology Track 8 Position 2",
+                    Description = "Role description for position 2 in Technology Track 8",
+                    Expectations = "Key expectations and responsibilities for this position"
+                },
+                new Position
+                {
+                    Id = new Guid("0ecfa16b-8d67-4298-be82-06fb0be2c1a7"),
+                    CareerTrackId = new Guid("43a12f91-e50a-480d-a865-1085f53adeb6"),
+                    Title = "Technology Track 10 Position 2",
+                    Description = "Role description for position 2 in Technology Track 10",
+                    Expectations = "Key expectations and responsibilities for this position"
+                },
+                new Position
+                {
+                    Id = new Guid("148802ce-fe15-42a7-b6ca-33d9ea320448"),
+                    CareerTrackId = new Guid("e4441805-32e1-4714-9ae7-5688c9115ef4"),
+                    Title = "Technology Track 6 Position 3",
+                    Description = "Role description for position 3 in Technology Track 6",
+                    Expectations = "Key expectations and responsibilities for this position"
+                },
+                new Position
+                {
+                    Id = new Guid("15e1ba17-e786-4a86-bbc1-1ada3f47b6df"),
+                    CareerTrackId = new Guid("bdb35ab2-9c08-4a4f-952f-17fbe0b04e9f"),
+                    Title = "Technology Track 9 Position 1",
+                    Description = "Role description for position 1 in Technology Track 9",
+                    Expectations = "Key expectations and responsibilities for this position"
+                },
+                new Position
+                {
+                    Id = new Guid("24582967-5515-4000-a390-bce4aa59d460"),
+                    CareerTrackId = new Guid("0cf603ee-4fb6-42d6-b1f3-e3057bb80c4c"),
+                    Title = "Technology Track 2 Position 4",
+                    Description = "Role description for position 4 in Technology Track 2",
+                    Expectations = "Key expectations and responsibilities for this position"
+                },
+                new Position
+                {
+                    Id = new Guid("37ea7352-b7f8-43f0-a377-138fb40a6d0d"),
+                    CareerTrackId = new Guid("d533dd42-c223-4b34-9ddd-6e257f8016b8"),
+                    Title = "Technology Track 4 Position 4",
+                    Description = "Role description for position 4 in Technology Track 4",
+                    Expectations = "Key expectations and responsibilities for this position"
+                },
+                new Position
+                {
+                    Id = new Guid("40f80e0b-f128-493a-99ce-5e1c765cc87f"),
+                    CareerTrackId = new Guid("e4441805-32e1-4714-9ae7-5688c9115ef4"),
+                    Title = "Technology Track 6 Position 1",
+                    Description = "Role description for position 1 in Technology Track 6",
+                    Expectations = "Key expectations and responsibilities for this position"
+                },
+                new Position
+                {
+                    Id = new Guid("4152e8ef-9424-49f3-8b86-3dd87b89c8bf"),
+                    CareerTrackId = new Guid("c5409a70-d866-465e-9d56-3da4684c54d3"),
+                    Title = "Technology Track 7 Position 2",
+                    Description = "Role description for position 2 in Technology Track 7",
+                    Expectations = "Key expectations and responsibilities for this position"
+                },
+                new Position
+                {
+                    Id = new Guid("48316a63-4812-4a04-ae3c-97248556d3f8"),
+                    CareerTrackId = new Guid("7875db90-71b6-4e06-a7cf-53a3a77f10a0"),
+                    Title = "Technology Track 5 Position 1",
+                    Description = "Role description for position 1 in Technology Track 5",
+                    Expectations = "Key expectations and responsibilities for this position"
+                },
+                new Position
+                {
+                    Id = new Guid("4c7ded1f-7dd8-47b7-8b63-35020100ba19"),
+                    CareerTrackId = new Guid("bdb35ab2-9c08-4a4f-952f-17fbe0b04e9f"),
+                    Title = "Technology Track 9 Position 2",
+                    Description = "Role description for position 2 in Technology Track 9",
+                    Expectations = "Key expectations and responsibilities for this position"
+                },
+                new Position
+                {
+                    Id = new Guid("4e064c81-2d4d-4dfa-b95d-419fc13b72ca"),
+                    CareerTrackId = new Guid("7875db90-71b6-4e06-a7cf-53a3a77f10a0"),
+                    Title = "Technology Track 5 Position 4",
+                    Description = "Role description for position 4 in Technology Track 5",
+                    Expectations = "Key expectations and responsibilities for this position"
+                },
+                new Position
+                {
+                    Id = new Guid("4fea9a06-63a6-4f4e-bc81-e89ba6709295"),
+                    CareerTrackId = new Guid("d533dd42-c223-4b34-9ddd-6e257f8016b8"),
+                    Title = "Technology Track 4 Position 3",
+                    Description = "Role description for position 3 in Technology Track 4",
+                    Expectations = "Key expectations and responsibilities for this position"
+                },
+                new Position
+                {
+                    Id = new Guid("5284d661-4c72-40d1-8cc5-56e08a6138d0"),
+                    CareerTrackId = new Guid("0cf603ee-4fb6-42d6-b1f3-e3057bb80c4c"),
+                    Title = "Technology Track 2 Position 5",
+                    Description = "Role description for position 5 in Technology Track 2",
+                    Expectations = "Key expectations and responsibilities for this position"
+                },
+                new Position
+                {
+                    Id = new Guid("570d12e2-911e-4adc-a98a-373e4c8aab53"),
+                    CareerTrackId = new Guid("22e5ed0b-43c4-4ce6-829d-3943e4b7bdd1"),
+                    Title = "Technology Track 1 Position 1",
+                    Description = "Role description for position 1 in Technology Track 1",
+                    Expectations = "Key expectations and responsibilities for this position"
+                },
+                new Position
+                {
+                    Id = new Guid("6073c789-4512-499c-84c6-0195e87c60bc"),
+                    CareerTrackId = new Guid("0c60eaad-dab3-426e-92f4-eafcd91db208"),
+                    Title = "Technology Track 8 Position 3",
+                    Description = "Role description for position 3 in Technology Track 8",
+                    Expectations = "Key expectations and responsibilities for this position"
+                },
+                new Position
+                {
+                    Id = new Guid("6f33e923-834d-4639-a88a-9fdec61215f4"),
+                    CareerTrackId = new Guid("bdb35ab2-9c08-4a4f-952f-17fbe0b04e9f"),
+                    Title = "Technology Track 9 Position 5",
+                    Description = "Role description for position 5 in Technology Track 9",
+                    Expectations = "Key expectations and responsibilities for this position"
+                },
+                new Position
+                {
+                    Id = new Guid("7573b182-5813-411a-91ee-b5beeef80e1a"),
+                    CareerTrackId = new Guid("d533dd42-c223-4b34-9ddd-6e257f8016b8"),
+                    Title = "Technology Track 4 Position 1",
+                    Description = "Role description for position 1 in Technology Track 4",
+                    Expectations = "Key expectations and responsibilities for this position"
+                },
+                new Position
+                {
+                    Id = new Guid("78d6f12b-d42c-4af5-991b-f2b069305f2a"),
+                    CareerTrackId = new Guid("0cf603ee-4fb6-42d6-b1f3-e3057bb80c4c"),
+                    Title = "Technology Track 2 Position 1",
+                    Description = "Role description for position 1 in Technology Track 2",
+                    Expectations = "Key expectations and responsibilities for this position"
+                },
+                new Position
+                {
+                    Id = new Guid("7ad2dbb8-acc3-43bc-a9e5-48c166713822"),
+                    CareerTrackId = new Guid("0cf603ee-4fb6-42d6-b1f3-e3057bb80c4c"),
+                    Title = "Technology Track 2 Position 2",
+                    Description = "Role description for position 2 in Technology Track 2",
+                    Expectations = "Key expectations and responsibilities for this position"
+                },
+                new Position
+                {
+                    Id = new Guid("7b018a08-132c-46ee-bbe1-d4a4320eab2a"),
+                    CareerTrackId = new Guid("7875db90-71b6-4e06-a7cf-53a3a77f10a0"),
+                    Title = "Technology Track 5 Position 2",
+                    Description = "Role description for position 2 in Technology Track 5",
+                    Expectations = "Key expectations and responsibilities for this position"
+                },
+                new Position
+                {
+                    Id = new Guid("80d23551-e51e-405a-9339-8a6f52a0c6bd"),
+                    CareerTrackId = new Guid("d7556322-667b-4062-96e1-c6773eccfc04"),
+                    Title = "Technology Track 3 Position 5",
+                    Description = "Role description for position 5 in Technology Track 3",
+                    Expectations = "Key expectations and responsibilities for this position"
+                },
+                new Position
+                {
+                    Id = new Guid("835c2609-0c27-446a-9fe7-779326c9f1f6"),
+                    CareerTrackId = new Guid("d533dd42-c223-4b34-9ddd-6e257f8016b8"),
+                    Title = "Technology Track 4 Position 2",
+                    Description = "Role description for position 2 in Technology Track 4",
+                    Expectations = "Key expectations and responsibilities for this position"
+                },
+                new Position
+                {
+                    Id = new Guid("8ef2121e-e2c5-4514-b16a-dda651fb1c50"),
+                    CareerTrackId = new Guid("22e5ed0b-43c4-4ce6-829d-3943e4b7bdd1"),
+                    Title = "Technology Track 1 Position 3",
+                    Description = "Role description for position 3 in Technology Track 1",
+                    Expectations = "Key expectations and responsibilities for this position"
+                },
+                new Position
+                {
+                    Id = new Guid("901c89ea-a073-48c6-ab32-c414914b8f2e"),
+                    CareerTrackId = new Guid("bdb35ab2-9c08-4a4f-952f-17fbe0b04e9f"),
+                    Title = "Technology Track 9 Position 4",
+                    Description = "Role description for position 4 in Technology Track 9",
+                    Expectations = "Key expectations and responsibilities for this position"
+                },
+                new Position
+                {
+                    Id = new Guid("948cd97b-7376-45ee-91f3-b511a456bb58"),
+                    CareerTrackId = new Guid("d533dd42-c223-4b34-9ddd-6e257f8016b8"),
+                    Title = "Technology Track 4 Position 5",
+                    Description = "Role description for position 5 in Technology Track 4",
+                    Expectations = "Key expectations and responsibilities for this position"
+                },
+                new Position
+                {
+                    Id = new Guid("a35f6bd9-652e-42d6-b137-929c3b1bd791"),
+                    CareerTrackId = new Guid("d7556322-667b-4062-96e1-c6773eccfc04"),
+                    Title = "Technology Track 3 Position 4",
+                    Description = "Role description for position 4 in Technology Track 3",
+                    Expectations = "Key expectations and responsibilities for this position"
+                },
+                new Position
+                {
+                    Id = new Guid("aa00c283-1af1-4397-bc34-2f674bda4852"),
+                    CareerTrackId = new Guid("22e5ed0b-43c4-4ce6-829d-3943e4b7bdd1"),
+                    Title = "Technology Track 1 Position 5",
+                    Description = "Role description for position 5 in Technology Track 1",
+                    Expectations = "Key expectations and responsibilities for this position"
+                },
+                new Position
+                {
+                    Id = new Guid("ab42e7b3-caf3-417d-80f9-62422e089596"),
+                    CareerTrackId = new Guid("22e5ed0b-43c4-4ce6-829d-3943e4b7bdd1"),
+                    Title = "Technology Track 1 Position 2",
+                    Description = "Role description for position 2 in Technology Track 1",
+                    Expectations = "Key expectations and responsibilities for this position"
+                },
+                new Position
+                {
+                    Id = new Guid("ac69cf26-aa02-481c-ac06-5ccd9dfec7f0"),
+                    CareerTrackId = new Guid("bdb35ab2-9c08-4a4f-952f-17fbe0b04e9f"),
+                    Title = "Technology Track 9 Position 3",
+                    Description = "Role description for position 3 in Technology Track 9",
+                    Expectations = "Key expectations and responsibilities for this position"
+                },
+                new Position
+                {
+                    Id = new Guid("ad711f5b-08c2-43b3-b503-d9e25c545119"),
+                    CareerTrackId = new Guid("0c60eaad-dab3-426e-92f4-eafcd91db208"),
+                    Title = "Technology Track 8 Position 4",
+                    Description = "Role description for position 4 in Technology Track 8",
+                    Expectations = "Key expectations and responsibilities for this position"
+                },
+                new Position
+                {
+                    Id = new Guid("aeb133ad-e366-4b7a-be19-a86659e423f8"),
+                    CareerTrackId = new Guid("7875db90-71b6-4e06-a7cf-53a3a77f10a0"),
+                    Title = "Technology Track 5 Position 5",
+                    Description = "Role description for position 5 in Technology Track 5",
+                    Expectations = "Key expectations and responsibilities for this position"
+                },
+                new Position
+                {
+                    Id = new Guid("b28f0718-03af-4a80-9d0b-6034e52a2ef0"),
+                    CareerTrackId = new Guid("c5409a70-d866-465e-9d56-3da4684c54d3"),
+                    Title = "Technology Track 7 Position 4",
+                    Description = "Role description for position 4 in Technology Track 7",
+                    Expectations = "Key expectations and responsibilities for this position"
+                },
+                new Position
+                {
+                    Id = new Guid("b4c4445e-2bc2-441b-8fb9-ef5a9e6e0696"),
+                    CareerTrackId = new Guid("43a12f91-e50a-480d-a865-1085f53adeb6"),
+                    Title = "Technology Track 10 Position 3",
+                    Description = "Role description for position 3 in Technology Track 10",
+                    Expectations = "Key expectations and responsibilities for this position"
+                },
+                new Position
+                {
+                    Id = new Guid("b56b213e-fcc1-4e1c-8653-e24a52a7e28d"),
+                    CareerTrackId = new Guid("0c60eaad-dab3-426e-92f4-eafcd91db208"),
+                    Title = "Technology Track 8 Position 1",
+                    Description = "Role description for position 1 in Technology Track 8",
+                    Expectations = "Key expectations and responsibilities for this position"
+                },
+                new Position
+                {
+                    Id = new Guid("b707fc9a-2442-4ad7-b8bd-0567f87ef5a1"),
+                    CareerTrackId = new Guid("43a12f91-e50a-480d-a865-1085f53adeb6"),
+                    Title = "Technology Track 10 Position 5",
+                    Description = "Role description for position 5 in Technology Track 10",
+                    Expectations = "Key expectations and responsibilities for this position"
+                },
+                new Position
+                {
+                    Id = new Guid("bf563729-a2eb-4716-ab53-9b1497f2fa2a"),
+                    CareerTrackId = new Guid("e4441805-32e1-4714-9ae7-5688c9115ef4"),
+                    Title = "Technology Track 6 Position 4",
+                    Description = "Role description for position 4 in Technology Track 6",
+                    Expectations = "Key expectations and responsibilities for this position"
+                },
+                new Position
+                {
+                    Id = new Guid("ca70ee84-c88f-4352-b80d-914a9cd33674"),
+                    CareerTrackId = new Guid("43a12f91-e50a-480d-a865-1085f53adeb6"),
+                    Title = "Technology Track 10 Position 1",
+                    Description = "Role description for position 1 in Technology Track 10",
+                    Expectations = "Key expectations and responsibilities for this position"
+                },
+                new Position
+                {
+                    Id = new Guid("cf1ac4b7-4c13-4a72-8772-211bb1832ae0"),
+                    CareerTrackId = new Guid("d7556322-667b-4062-96e1-c6773eccfc04"),
+                    Title = "Technology Track 3 Position 2",
+                    Description = "Role description for position 2 in Technology Track 3",
+                    Expectations = "Key expectations and responsibilities for this position"
+                },
+                new Position
+                {
+                    Id = new Guid("d38d1988-8914-4453-826f-063b5bc016c0"),
+                    CareerTrackId = new Guid("e4441805-32e1-4714-9ae7-5688c9115ef4"),
+                    Title = "Technology Track 6 Position 5",
+                    Description = "Role description for position 5 in Technology Track 6",
+                    Expectations = "Key expectations and responsibilities for this position"
+                },
+                new Position
+                {
+                    Id = new Guid("d8f594a3-1e3c-466f-a178-1e16ddb9a2ca"),
+                    CareerTrackId = new Guid("e4441805-32e1-4714-9ae7-5688c9115ef4"),
+                    Title = "Technology Track 6 Position 2",
+                    Description = "Role description for position 2 in Technology Track 6",
+                    Expectations = "Key expectations and responsibilities for this position"
+                },
+                new Position
+                {
+                    Id = new Guid("da04a0f8-bf20-45f7-af85-3595cc2f7f15"),
+                    CareerTrackId = new Guid("d7556322-667b-4062-96e1-c6773eccfc04"),
+                    Title = "Technology Track 3 Position 3",
+                    Description = "Role description for position 3 in Technology Track 3",
+                    Expectations = "Key expectations and responsibilities for this position"
+                },
+                new Position
+                {
+                    Id = new Guid("e3e2e045-ae6e-4629-810d-2720e750eb9c"),
+                    CareerTrackId = new Guid("0cf603ee-4fb6-42d6-b1f3-e3057bb80c4c"),
+                    Title = "Technology Track 2 Position 3",
+                    Description = "Role description for position 3 in Technology Track 2",
+                    Expectations = "Key expectations and responsibilities for this position"
+                },
+                new Position
+                {
+                    Id = new Guid("e9fa3feb-cf51-411f-adc0-8244e61a831d"),
+                    CareerTrackId = new Guid("c5409a70-d866-465e-9d56-3da4684c54d3"),
+                    Title = "Technology Track 7 Position 1",
+                    Description = "Role description for position 1 in Technology Track 7",
+                    Expectations = "Key expectations and responsibilities for this position"
+                },
+                new Position
+                {
+                    Id = new Guid("eec819f7-a4f5-4b2a-a1f6-328bb889c6c5"),
+                    CareerTrackId = new Guid("43a12f91-e50a-480d-a865-1085f53adeb6"),
+                    Title = "Technology Track 10 Position 4",
+                    Description = "Role description for position 4 in Technology Track 10",
+                    Expectations = "Key expectations and responsibilities for this position"
+                },
+                new Position
+                {
+                    Id = new Guid("f2208214-d7c6-4db4-98ea-99e097576ef8"),
+                    CareerTrackId = new Guid("22e5ed0b-43c4-4ce6-829d-3943e4b7bdd1"),
+                    Title = "Technology Track 1 Position 4",
+                    Description = "Role description for position 4 in Technology Track 1",
+                    Expectations = "Key expectations and responsibilities for this position"
+                },
+                new Position
+                {
+                    Id = new Guid("f640cd3f-6e9d-4dc8-9c4f-acbbcd34ad24"),
+                    CareerTrackId = new Guid("c5409a70-d866-465e-9d56-3da4684c54d3"),
+                    Title = "Technology Track 7 Position 5",
+                    Description = "Role description for position 5 in Technology Track 7",
+                    Expectations = "Key expectations and responsibilities for this position"
+                },
+                new Position
+                {
+                    Id = new Guid("f75f7943-1667-4438-a27d-93408f39f49d"),
+                    CareerTrackId = new Guid("7875db90-71b6-4e06-a7cf-53a3a77f10a0"),
+                    Title = "Technology Track 5 Position 3",
+                    Description = "Role description for position 3 in Technology Track 5",
+                    Expectations = "Key expectations and responsibilities for this position"
+                },
+                new Position
+                {
+                    Id = new Guid("fab1f5ce-59b0-4261-a359-b4ec60e9f606"),
+                    CareerTrackId = new Guid("d7556322-667b-4062-96e1-c6773eccfc04"),
+                    Title = "Technology Track 3 Position 1",
+                    Description = "Role description for position 1 in Technology Track 3",
+                    Expectations = "Key expectations and responsibilities for this position"
+                }
+            };
+
+            await _context.Positions.AddRangeAsync(positions);
+            await _context.SaveChangesAsync();
+
+            _logger.LogInformation("Seeded {PositionCount} positions.", positions.Length);
         }
 
         private async Task SeedSkillsAndCategoriesAsync()
