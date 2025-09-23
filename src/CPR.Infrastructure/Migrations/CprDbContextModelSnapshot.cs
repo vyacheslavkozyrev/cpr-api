@@ -1475,9 +1475,9 @@ namespace CPR.Infrastructure.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("deleted_by");
 
-                    b.Property<string>("Department")
-                        .HasColumnType("text")
-                        .HasColumnName("department");
+                    b.Property<Guid?>("DepartmentId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("department_id");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean")
