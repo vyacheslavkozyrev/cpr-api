@@ -18,8 +18,8 @@ namespace CPR.UnitTests
         private GoalsController CreateController(string employeeId)
         {
             var userService = new Mock<IUserService>();
-            userService.Setup(s => s.GetCurrentUserProfile(It.IsAny<ClaimsPrincipal>()))
-                .Returns(new Api.Models.UserProfile { EmployeeId = employeeId });
+            userService.Setup(s => s.GetCurrentUserProfileAsync(It.IsAny<ClaimsPrincipal>()))
+                .ReturnsAsync(new Api.Models.UserProfile { EmployeeId = employeeId });
 
             var goalService = new Mock<IGoalService>();
             goalService.Setup(s => s.CreateGoalAsync(It.IsAny<Guid>(), It.IsAny<CreateGoalDto>()))
