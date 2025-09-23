@@ -32,6 +32,7 @@ namespace CPR.Infrastructure.Services
         {
             var directReports = await _repo.GetDirectReports(managerEmployeeId)
                 .Include(e => e.User)
+                .Include(e => e.Position)
                 .ToListAsync();
 
             var teamMembers = new List<TeamMemberDto>();
@@ -51,7 +52,7 @@ namespace CPR.Infrastructure.Services
                 {
                     Id = employee.Id,
                     DisplayName = employee.User?.DisplayName ?? employee.User?.UserName ?? "Unknown",
-                    Title = employee.Title,
+                    Title = employee.Position?.Title,
                     Department = employee.Department?.Name,
                     ActiveGoalsCount = activeGoalsCount,
                     LatestFeedbackRating = latestFeedback?.Rating,
@@ -93,7 +94,7 @@ namespace CPR.Infrastructure.Services
                     Id = employee.Id,
                     UserId = employee.UserId,
                     DisplayName = employee.User?.DisplayName ?? employee.User?.UserName ?? "Unknown",
-                    Title = employee.Title,
+                    Title = employee.Position?.Title,
                     Department = employee.Department?.Name,
                     ManagerId = employee.ManagerId,
                     ManagerName = null // Will be populated if needed

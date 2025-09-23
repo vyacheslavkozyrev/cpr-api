@@ -64,7 +64,7 @@ namespace CPR.Infrastructure.Data
                 b.Property(e => e.Id).HasColumnName("id");
                 b.Property(e => e.UserId).HasColumnName("user_id").IsRequired();
                 b.Property(e => e.ManagerId).HasColumnName("manager_id");
-                b.Property(e => e.Title).HasColumnName("title");
+                b.Property(e => e.PositionId).HasColumnName("position_id");
                 b.Property(e => e.DepartmentId).HasColumnName("department_id");
 
                 b.Property(e => e.CreatedBy).HasColumnName("created_by");

@@ -36,6 +36,7 @@ namespace CPR.Infrastructure.Repositories
             return await _db.Employees
                 .Include(e => e.User)
                 .Include(e => e.Department)
+                .Include(e => e.Position)
                 .FirstOrDefaultAsync(e => e.Id == employeeId && !e.IsDeleted);
         }
 

@@ -52,10 +52,18 @@ namespace CPR.UnitTests.Services
             var employee1User = new User { Id = Guid.NewGuid(), UserName = "employee1", DisplayName = "Employee 1", PasswordHash = "hashedpassword", IsDeleted = false };
             var employee2User = new User { Id = Guid.NewGuid(), UserName = "employee2", DisplayName = "Employee 2", PasswordHash = "hashedpassword", IsDeleted = false };
 
-            var manager = new Employee { Id = managerId, UserId = managerUser.Id, Title = "Manager", IsDeleted = false };
-            var employee1 = new Employee { Id = employee1Id, UserId = employee1User.Id, Title = "Developer", ManagerId = managerId, IsDeleted = false };
-            var employee2 = new Employee { Id = employee2Id, UserId = employee2User.Id, Title = "Designer", ManagerId = managerId, IsDeleted = false };
+            // Create positions
+            var managerPosition = new Position { Id = Guid.NewGuid(), Title = "Manager", CareerTrackId = Guid.NewGuid() };
+            var developerPosition = new Position { Id = Guid.NewGuid(), Title = "Developer", CareerTrackId = Guid.NewGuid() };
+            var designerPosition = new Position { Id = Guid.NewGuid(), Title = "Designer", CareerTrackId = Guid.NewGuid() };
 
+            var manager = new Employee { Id = managerId, UserId = managerUser.Id, PositionId = managerPosition.Id, IsDeleted = false };
+            var employee1 = new Employee { Id = employee1Id, UserId = employee1User.Id, PositionId = developerPosition.Id, ManagerId = managerId, IsDeleted = false };
+            var employee2 = new Employee { Id = employee2Id, UserId = employee2User.Id, PositionId = designerPosition.Id, ManagerId = managerId, IsDeleted = false };
+
+            _dbContext.Positions.Add(managerPosition);
+            _dbContext.Positions.Add(developerPosition);
+            _dbContext.Positions.Add(designerPosition);
             _dbContext.Users.Add(managerUser);
             _dbContext.Users.Add(employee1User);
             _dbContext.Users.Add(employee2User);

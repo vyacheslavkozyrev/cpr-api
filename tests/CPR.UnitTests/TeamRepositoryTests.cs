@@ -36,12 +36,17 @@ namespace CPR.UnitTests.Repositories
             var employee1User = new User { Id = Guid.NewGuid(), UserName = "employee1", DisplayName = "Employee 1", PasswordHash = "hashedpassword" };
             var employee2User = new User { Id = Guid.NewGuid(), UserName = "employee2", DisplayName = "Employee 2", PasswordHash = "hashedpassword" };
 
+            // Create positions
+            var managerPosition = new Position { Id = Guid.NewGuid(), Title = "Manager", CareerTrackId = Guid.NewGuid() };
+            var developerPosition = new Position { Id = Guid.NewGuid(), Title = "Developer", CareerTrackId = Guid.NewGuid() };
+            var designerPosition = new Position { Id = Guid.NewGuid(), Title = "Designer", CareerTrackId = Guid.NewGuid() };
+
             // Create employees
             var manager = new Employee
             {
                 Id = Guid.NewGuid(),
                 UserId = managerUser.Id,
-                Title = "Manager",
+                PositionId = managerPosition.Id,
                 DepartmentId = new Guid("fff11111-1111-1111-1111-111111111111") // Engineering
             };
 
@@ -50,7 +55,7 @@ namespace CPR.UnitTests.Repositories
                 Id = Guid.NewGuid(),
                 UserId = employee1User.Id,
                 ManagerId = manager.Id,
-                Title = "Developer",
+                PositionId = developerPosition.Id,
                 DepartmentId = new Guid("fff11111-1111-1111-1111-111111111111") // Engineering
             };
 
@@ -59,10 +64,11 @@ namespace CPR.UnitTests.Repositories
                 Id = Guid.NewGuid(),
                 UserId = employee2User.Id,
                 ManagerId = manager.Id,
-                Title = "Designer",
+                PositionId = designerPosition.Id,
                 DepartmentId = new Guid("fff77777-7777-7777-7777-777777777777") // Product
             };
 
+            _context.Positions.AddRange(managerPosition, developerPosition, designerPosition);
             _context.Users.AddRange(managerUser, employee1User, employee2User);
             _context.Employees.AddRange(manager, employee1, employee2);
             _context.SaveChanges();
@@ -72,7 +78,7 @@ namespace CPR.UnitTests.Repositories
         public void GetDirectReports_ReturnsCorrectEmployees()
         {
             // Arrange
-            var manager = _context.Employees.First(e => e.Title == "Manager");
+            var manager = _context.Employees.Include(e => e.Position).First(e => e.Position.Title == "Manager");
 
             // Act
             var directReports = _repository.GetDirectReports(manager.Id).ToList();
@@ -86,7 +92,7 @@ namespace CPR.UnitTests.Repositories
         public async Task GetEmployeeWithDetailsAsync_ReturnsEmployee_WhenExists()
         {
             // Arrange
-            var employee = _context.Employees.First(e => e.Title == "Developer");
+            var employee = _context.Employees.Include(e => e.Position).First(e => e.Position.Title == "Developer");
 
             // Act
             var result = await _repository.GetEmployeeWithDetailsAsync(employee.Id);
@@ -94,7 +100,7 @@ namespace CPR.UnitTests.Repositories
             // Assert
             Assert.NotNull(result);
             Assert.Equal(employee.Id, result.Id);
-            Assert.Equal(employee.Title, result.Title);
+            Assert.Equal(employee.Position.Title, result.Position.Title);
             Assert.NotNull(result.User);
             Assert.Equal(employee.UserId, result.User.Id);
         }
@@ -121,7 +127,7 @@ namespace CPR.UnitTests.Repositories
             // Assert
             Assert.NotNull(result);
             Assert.Equal(user.Id, result.UserId);
-            Assert.Equal("Manager", result.Title);
+            Assert.Equal("Manager", result.Position.Title);
         }
 
         [Fact]
@@ -152,7 +158,7 @@ namespace CPR.UnitTests.Repositories
         public async Task IsDirectReportAsync_ReturnsFalse_WhenInvalidRelationship()
         {
             // Arrange
-            var manager = _context.Employees.First(e => e.Title == "Manager");
+            var manager = _context.Employees.Include(e => e.Position).First(e => e.Position.Title == "Manager");
             var otherManagerId = Guid.NewGuid();
 
             // Act
@@ -166,7 +172,7 @@ namespace CPR.UnitTests.Repositories
         public async Task IsDirectReportAsync_ReturnsFalse_WhenEmployeeNotDirectReport()
         {
             // Arrange
-            var manager1 = _context.Employees.First(e => e.Title == "Manager");
+            var manager1 = _context.Employees.Include(e => e.Position).First(e => e.Position.Title == "Manager");
             var manager2Id = Guid.NewGuid();
 
             // Act
