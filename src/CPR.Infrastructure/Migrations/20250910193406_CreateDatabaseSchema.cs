@@ -148,13 +148,35 @@ namespace CPR.Infrastructure.Migrations
 
 
             migrationBuilder.CreateTable(
+                name: "positions",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
+                    title = table.Column<string>(type: "text", nullable: false),
+                    description = table.Column<string>(type: "text", nullable: true),
+                    expectations = table.Column<string>(type: "text", nullable: true),
+                    career_track_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    created_by = table.Column<Guid>(type: "uuid", nullable: true),
+                    created_at = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "now()"),
+                    modified_by = table.Column<Guid>(type: "uuid", nullable: true),
+                    modified_at = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
+                    is_deleted = table.Column<bool>(type: "boolean", nullable: false),
+                    deleted_by = table.Column<Guid>(type: "uuid", nullable: true),
+                    deleted_at = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_positions", x => x.id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "employees",
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
                     user_id = table.Column<Guid>(type: "uuid", nullable: false),
                     manager_id = table.Column<Guid>(type: "uuid", nullable: true),
-                    title = table.Column<string>(type: "text", nullable: true),
+                    position_id = table.Column<Guid>(type: "uuid", nullable: true),
                     department_id = table.Column<Guid>(type: "uuid", nullable: true),
                     created_by = table.Column<Guid>(type: "uuid", nullable: true),
                     created_at = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "now()"),
@@ -172,6 +194,11 @@ namespace CPR.Infrastructure.Migrations
                         column: x => x.department_id,
                         principalTable: "departments",
                         principalColumn: "id");
+                    table.ForeignKey(
+                        name: "FK_employees_positions_position_id",
+                        column: x => x.position_id,
+                        principalTable: "positions",
+                        principalColumn: "id");
                 });
             // Indexes for employees
             migrationBuilder.CreateIndex(
@@ -188,6 +215,11 @@ namespace CPR.Infrastructure.Migrations
                 name: "IX_employees_department_id",
                 table: "employees",
                 column: "department_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_employees_position_id",
+                table: "employees",
+                column: "position_id");
 
             migrationBuilder.CreateTable(
                 name: "feedback",
@@ -375,28 +407,6 @@ namespace CPR.Infrastructure.Migrations
                 table: "position_to_skill",
                 columns: new[] { "position_id", "skill_id" },
                 unique: true);
-
-            migrationBuilder.CreateTable(
-                name: "positions",
-                columns: table => new
-                {
-                    id = table.Column<Guid>(type: "uuid", nullable: false),
-                    title = table.Column<string>(type: "text", nullable: false),
-                    description = table.Column<string>(type: "text", nullable: true),
-                    expectations = table.Column<string>(type: "text", nullable: true),
-                    career_track_id = table.Column<Guid>(type: "uuid", nullable: false),
-                    created_by = table.Column<Guid>(type: "uuid", nullable: true),
-                    created_at = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "now()"),
-                    modified_by = table.Column<Guid>(type: "uuid", nullable: true),
-                    modified_at = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
-                    is_deleted = table.Column<bool>(type: "boolean", nullable: false),
-                    deleted_by = table.Column<Guid>(type: "uuid", nullable: true),
-                    deleted_at = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_positions", x => x.id);
-                });
 
             migrationBuilder.CreateTable(
                 name: "project_roles",
@@ -645,11 +655,15 @@ namespace CPR.Infrastructure.Migrations
                 name: "IX_employees_user_id",
                 table: "employees");
 
+            migrationBuilder.DropIndex(
+                name: "IX_employees_position_id",
+                table: "employees");
+
             migrationBuilder.DropTable(
                 name: "employees");
 
             migrationBuilder.DropTable(
-                name: "employees");
+                name: "positions");
 
             migrationBuilder.DropTable(
                 name: "feedback");
@@ -686,9 +700,6 @@ namespace CPR.Infrastructure.Migrations
                 name: "IX_position_to_skill_position_id",
                 table: "position_to_skill");
 
-
-            migrationBuilder.DropTable(
-                name: "positions");
 
             migrationBuilder.DropTable(
                 name: "project_roles");
