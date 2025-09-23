@@ -37,7 +37,7 @@ namespace CPR.Api.Controllers
         [Authorize]
         public async Task<IActionResult> Create([FromBody] CreateGoalDto dto)
         {
-            var profile = _userService.GetCurrentUserProfile(User);
+            var profile = await _userService.GetCurrentUserProfileAsync(User);
             if (profile == null) return Unauthorized();
             if (!Guid.TryParse(profile.EmployeeId, out var ownerId)) return Unauthorized();
 
@@ -52,7 +52,7 @@ namespace CPR.Api.Controllers
         [Authorize]
         public async Task<IActionResult> GetMine([FromQuery] int page = 1, [FromQuery] int per_page = 20)
         {
-            var profile = _userService.GetCurrentUserProfile(User);
+            var profile = await _userService.GetCurrentUserProfileAsync(User);
             if (profile == null) return Unauthorized();
             if (!Guid.TryParse(profile.EmployeeId, out var ownerId)) return Unauthorized();
             if (page < 1) { await Task.Yield(); throw new ArgumentOutOfRangeException(nameof(page)); }
@@ -70,7 +70,7 @@ namespace CPR.Api.Controllers
         [Authorize]
         public async Task<IActionResult> GetById(Guid id)
         {
-            var profile = _userService.GetCurrentUserProfile(User);
+            var profile = await _userService.GetCurrentUserProfileAsync(User);
             if (profile == null) return Unauthorized();
             if (!Guid.TryParse(profile.EmployeeId, out var ownerId)) return Unauthorized();
 
@@ -88,7 +88,7 @@ namespace CPR.Api.Controllers
         [Authorize]
         public async Task<IActionResult> Patch(Guid id, [FromBody] UpdateGoalDto dto)
         {
-            var profile = _userService.GetCurrentUserProfile(User);
+            var profile = await _userService.GetCurrentUserProfileAsync(User);
             if (profile == null) return Unauthorized();
             if (!Guid.TryParse(profile.EmployeeId, out var ownerId)) return Unauthorized();
 
@@ -104,7 +104,7 @@ namespace CPR.Api.Controllers
         [Authorize]
         public async Task<IActionResult> Delete(Guid id)
         {
-            var profile = _userService.GetCurrentUserProfile(User);
+            var profile = await _userService.GetCurrentUserProfileAsync(User);
             if (profile == null) return Unauthorized();
             if (!Guid.TryParse(profile.EmployeeId, out var ownerId)) return Unauthorized();
 
@@ -121,7 +121,7 @@ namespace CPR.Api.Controllers
         [Authorize]
         public async Task<IActionResult> AddTask(Guid id, [FromBody] CreateGoalTaskDto dto)
         {
-            var profile = _userService.GetCurrentUserProfile(User);
+            var profile = await _userService.GetCurrentUserProfileAsync(User);
             if (profile == null) return Unauthorized();
             if (!Guid.TryParse(profile.EmployeeId, out var ownerId)) return Unauthorized();
 
@@ -139,7 +139,7 @@ namespace CPR.Api.Controllers
         [Authorize]
         public async Task<IActionResult> PatchTask(Guid id, Guid taskId, [FromBody] UpdateGoalTaskDto dto)
         {
-            var profile = _userService.GetCurrentUserProfile(User);
+            var profile = await _userService.GetCurrentUserProfileAsync(User);
             if (profile == null) return Unauthorized();
             if (!Guid.TryParse(profile.EmployeeId, out var ownerId)) return Unauthorized();
 

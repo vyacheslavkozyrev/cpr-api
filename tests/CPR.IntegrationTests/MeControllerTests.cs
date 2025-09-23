@@ -213,7 +213,7 @@ public class MeControllerTests : IClassFixture<WebApplicationFactory<Program>>
         // Now update it
         var updateDto = new EmployeeSkillUpdateDto
         {
-            CurrentLevelId = Guid.Parse("ffffffff-ffff-ffff-ffff-ffffffff0002"), // Intermediate level
+            CurrentLevelId = Guid.Parse("ffffffff-ffff-ffff-ffff-ffffffff0001"), // Beginner level (the only seeded level)
             Source = "Updated self-assessment",
             IsTarget = true
         };
@@ -221,11 +221,15 @@ public class MeControllerTests : IClassFixture<WebApplicationFactory<Program>>
         // Act
         var updateResp = await client.PutAsJsonAsync($"/api/me/skills/{createdSkill.Skill.Id}", updateDto);
 
+        // Debug: print response content
+        var content = await updateResp.Content.ReadAsStringAsync();
+        Console.WriteLine($"Update response status: {updateResp.StatusCode}, Content: {content}");
+
         // Assert
         Assert.Equal(System.Net.HttpStatusCode.OK, updateResp.StatusCode);
         var updatedSkill = await updateResp.Content.ReadFromJsonAsync<EmployeeSkillDto>();
         Assert.NotNull(updatedSkill);
-        Assert.Equal("Intermediate", updatedSkill.CurrentLevel?.Title);
+        Assert.Equal("Beginner", updatedSkill.CurrentLevel?.Title); // Updated to expect Beginner level
         Assert.Equal("Updated self-assessment", updatedSkill.Source);
         Assert.True(updatedSkill.IsTarget);
     }

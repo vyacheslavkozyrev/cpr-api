@@ -92,7 +92,7 @@ namespace CPR.IntegrationTests
                 Id = Guid.Parse("bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb"),
                 UserId = managerUser.Id,
                 Title = "Manager",
-                Department = "Engineering",
+                DepartmentId = Guid.Parse("fff11111-1111-1111-1111-111111111111"), // Engineering
                 IsDeleted = false
             };
 
@@ -112,7 +112,7 @@ namespace CPR.IntegrationTests
                 UserId = employeeUser.Id,
                 ManagerId = managerEmployee.Id,
                 Title = "Developer",
-                Department = "Engineering",
+                DepartmentId = Guid.Parse("fff11111-1111-1111-1111-111111111111"), // Engineering
                 IsDeleted = false
             };
 

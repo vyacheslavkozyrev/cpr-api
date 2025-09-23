@@ -35,9 +35,9 @@ public class MeController : ControllerBase
     /// <returns>User profile object with basic details and position.</returns>
     [Authorize]
     [HttpGet]
-    public IActionResult Get()
+    public async Task<IActionResult> Get()
     {
-        var profile = _userService.GetCurrentUserProfile(User);
+        var profile = await _userService.GetCurrentUserProfileAsync(User);
         if (profile == null) return Unauthorized();
 
         return Ok(profile);
@@ -52,7 +52,7 @@ public class MeController : ControllerBase
     [ProducesResponseType(typeof(EmployeeSkillDto[]), 200)]
     public async Task<IActionResult> GetSkills()
     {
-        var profile = _userService.GetCurrentUserProfile(User);
+        var profile = await _userService.GetCurrentUserProfileAsync(User);
         if (profile == null) return Unauthorized();
 
         if (!Guid.TryParse(profile.EmployeeId, out var employeeId))
@@ -76,7 +76,7 @@ public class MeController : ControllerBase
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
 
-        var profile = _userService.GetCurrentUserProfile(User);
+        var profile = await _userService.GetCurrentUserProfileAsync(User);
         if (profile == null) return Unauthorized();
 
         if (!Guid.TryParse(profile.EmployeeId, out var employeeId))
@@ -113,7 +113,7 @@ public class MeController : ControllerBase
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
 
-        var profile = _userService.GetCurrentUserProfile(User);
+        var profile = await _userService.GetCurrentUserProfileAsync(User);
         if (profile == null) return Unauthorized();
 
         if (!Guid.TryParse(profile.EmployeeId, out var employeeId))

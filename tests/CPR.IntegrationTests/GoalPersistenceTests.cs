@@ -61,7 +61,7 @@ namespace CPR.IntegrationTests
                     Id = testEmployeeId,
                     UserId = testUser.Id,
                     Title = "Test Employee",
-                    Department = "Engineering",
+                    DepartmentId = Guid.Parse("fff11111-1111-1111-1111-111111111111"), // Engineering
                     IsDeleted = false
                 };
 

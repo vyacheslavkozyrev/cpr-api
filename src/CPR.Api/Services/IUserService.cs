@@ -11,5 +11,5 @@ public interface IUserService
     /// <summary>
     /// Returns a minimal user profile for the current principal
     /// </summary>
-    UserProfile? GetCurrentUserProfile(ClaimsPrincipal user);
+    Task<UserProfile?> GetCurrentUserProfileAsync(ClaimsPrincipal user);
 }

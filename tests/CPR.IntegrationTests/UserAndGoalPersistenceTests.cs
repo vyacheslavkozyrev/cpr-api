@@ -46,7 +46,7 @@ namespace CPR.IntegrationTests
                 Id = Guid.NewGuid(),
                 UserId = user.Id,
                 Title = "Engineer",
-                Department = "Engineering",
+                DepartmentId = Guid.Parse("fff11111-1111-1111-1111-111111111111"), // Engineering
                 CreatedAt = DateTimeOffset.UtcNow
             };
             db.Employees.Add(employee);

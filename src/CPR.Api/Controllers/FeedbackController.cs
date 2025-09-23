@@ -45,7 +45,7 @@ public class FeedbackController : ControllerBase
             return BadRequest(ModelState);
         }
 
-        var profile = _userService.GetCurrentUserProfile(User);
+        var profile = await _userService.GetCurrentUserProfileAsync(User);
         if (profile == null)
         {
             return Unauthorized();
@@ -111,7 +111,7 @@ public class FeedbackController : ControllerBase
             return BadRequest(problemDetails);
         }
 
-        var profile = _userService.GetCurrentUserProfile(User);
+        var profile = await _userService.GetCurrentUserProfileAsync(User);
         if (profile == null)
         {
             return Problem(
@@ -191,7 +191,7 @@ public class MeFeedbackController : ControllerBase
     [ProducesResponseType(typeof(Microsoft.AspNetCore.Mvc.ProblemDetails), 400)]
     public async Task<IActionResult> GetSentRequests()
     {
-        var profile = _userService.GetCurrentUserProfile(User);
+        var profile = await _userService.GetCurrentUserProfileAsync(User);
         if (profile == null)
         {
             return Problem(
@@ -233,7 +233,7 @@ public class MeFeedbackController : ControllerBase
     [ProducesResponseType(typeof(Microsoft.AspNetCore.Mvc.ProblemDetails), 400)]
     public async Task<IActionResult> GetTodoRequests()
     {
-        var profile = _userService.GetCurrentUserProfile(User);
+        var profile = await _userService.GetCurrentUserProfileAsync(User);
         if (profile == null)
         {
             return Problem(
@@ -275,7 +275,7 @@ public class MeFeedbackController : ControllerBase
     [ProducesResponseType(typeof(Microsoft.AspNetCore.Mvc.ProblemDetails), 400)]
     public async Task<IActionResult> GetMyFeedback()
     {
-        var profile = _userService.GetCurrentUserProfile(User);
+        var profile = await _userService.GetCurrentUserProfileAsync(User);
         if (profile == null)
         {
             return Problem(

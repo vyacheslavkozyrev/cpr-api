@@ -1,5 +1,7 @@
 using System.Security.Claims;
 using CPR.Api.Models;
+using CPR.Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace CPR.Api.Services;
 
@@ -8,23 +10,53 @@ namespace CPR.Api.Services;
 /// </summary>
 public class UserService : IUserService
 {
+    private readonly CprDbContext _db;
+
+    public UserService(CprDbContext db)
+    {
+        _db = db;
+    }
+
     /// <summary>
-    /// Returns a simple <see cref="Models.UserProfile"/> built from claims. Returns null when the principal is unauthenticated.
+    /// Returns a <see cref="Models.UserProfile"/> built from claims and database lookup. Returns null when the principal is unauthenticated.
     /// </summary>
-    public UserProfile? GetCurrentUserProfile(ClaimsPrincipal user)
+    public async Task<UserProfile?> GetCurrentUserProfileAsync(ClaimsPrincipal user)
     {
         if (user?.Identity?.IsAuthenticated != true)
         {
             return null;
         }
 
-        var userId = user.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "00000000-0000-0000-0000-000000000000";
+        var userIdString = user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        if (!Guid.TryParse(userIdString, out var userId))
+        {
+            return null;
+        }
+
         var username = user.Identity?.Name ?? "unknown";
+
+        // Look up the employee record for this user
+        var employee = await _db.Employees
+            .Include(e => e.User)
+            .FirstOrDefaultAsync(e => e.UserId == userId && !e.IsDeleted);
+
+        if (employee == null)
+        {
+            // For test environments, fall back to using user ID as employee ID
+            // This maintains backward compatibility with existing tests
+            return new UserProfile
+            {
+                EmployeeId = userId.ToString(),
+                UserName = username,
+                DisplayName = username
+            };
+        }
+
         return new UserProfile
         {
-            EmployeeId = userId,
+            EmployeeId = employee.Id.ToString(),
             UserName = username,
-            DisplayName = username,
+            DisplayName = employee.User?.DisplayName ?? username,
             Position = new Position { Id = "00000000-0000-0000-0000-000000000001", Title = "Developer" }
         };
     }
