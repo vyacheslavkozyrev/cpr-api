@@ -105,11 +105,14 @@ namespace CPR.UnitTests.Services
             var managerUser = new User { Id = Guid.NewGuid(), UserName = "manager", DisplayName = "Manager User", PasswordHash = "hashedpassword", IsDeleted = false };
             var memberUser = new User { Id = Guid.NewGuid(), UserName = "member", DisplayName = "Member User", PasswordHash = "hashedpassword", IsDeleted = false };
 
+            var engineeringDept = new Department { Id = new Guid("fff11111-1111-1111-1111-111111111111"), Name = "Engineering", Code = "ENG", IsDeleted = false };
+
             var manager = new Employee { Id = managerId, UserId = managerUser.Id, Title = "Manager", IsDeleted = false };
-            var member = new Employee { Id = memberId, UserId = memberUser.Id, Title = "Developer", Department = "Engineering", ManagerId = managerId, IsDeleted = false };
+            var member = new Employee { Id = memberId, UserId = memberUser.Id, Title = "Developer", DepartmentId = engineeringDept.Id, ManagerId = managerId, IsDeleted = false };
 
             _dbContext.Users.Add(managerUser);
             _dbContext.Users.Add(memberUser);
+            _dbContext.Departments.Add(engineeringDept);
             _dbContext.Employees.Add(manager);
             _dbContext.Employees.Add(member);
             await _dbContext.SaveChangesAsync();

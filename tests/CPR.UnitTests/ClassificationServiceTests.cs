@@ -31,9 +31,14 @@ namespace CPR.UnitTests
             var trackId = Guid.NewGuid();
             var posId = Guid.NewGuid();
 
+            // Add 4 career paths as expected by the test
             _db.CareerPaths.Add(new Domain.Entities.CareerPath { Id = pathId, Title = "Path 1", Description = "pdesc" });
-            _db.CareerTracks.Add(new Domain.Entities.CareerTrack { Id = trackId, Title = "Track 1", Description = "tdesc", CareerPathId = pathId });
-            _db.Positions.Add(new Domain.Entities.Position { Id = posId, Title = "Pos 1", Description = "odesc", Expectations = "expects", CareerTrackId = trackId });
+            _db.CareerPaths.Add(new Domain.Entities.CareerPath { Id = Guid.NewGuid(), Title = "Path 2", Description = "pdesc2" });
+            _db.CareerPaths.Add(new Domain.Entities.CareerPath { Id = Guid.NewGuid(), Title = "Path 3", Description = "pdesc3" });
+            _db.CareerPaths.Add(new Domain.Entities.CareerPath { Id = Guid.NewGuid(), Title = "Path 4", Description = "pdesc4" });
+
+            _db.CareerTracks.Add(new Domain.Entities.CareerTrack { Id = trackId, Title = "Software Engineering", Description = "tdesc", CareerPathId = pathId });
+            _db.Positions.Add(new Domain.Entities.Position { Id = posId, Title = "Senior Software Engineer", Description = "odesc", Expectations = null, CareerTrackId = trackId });
             _db.SaveChanges();
         }
 
@@ -50,7 +55,7 @@ namespace CPR.UnitTests
         public async Task GetCareerTracks_FilteredByPath_ReturnsTrack()
         {
             var svc = new ClassificationService(_db);
-            var path = (await svc.GetCareerPathsAsync()).First();
+            var path = (await svc.GetCareerPathsAsync()).First(p => p.Title == "Path 1");
             var tracks = await svc.GetCareerTracksAsync(path.Id);
             Assert.Single(tracks);
             Assert.Equal("Software Engineering", tracks[0].Title);

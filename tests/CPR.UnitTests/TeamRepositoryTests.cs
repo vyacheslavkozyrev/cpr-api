@@ -42,7 +42,7 @@ namespace CPR.UnitTests.Repositories
                 Id = Guid.NewGuid(),
                 UserId = managerUser.Id,
                 Title = "Manager",
-                Department = "Engineering"
+                DepartmentId = new Guid("fff11111-1111-1111-1111-111111111111") // Engineering
             };
 
             var employee1 = new Employee
@@ -51,7 +51,7 @@ namespace CPR.UnitTests.Repositories
                 UserId = employee1User.Id,
                 ManagerId = manager.Id,
                 Title = "Developer",
-                Department = "Engineering"
+                DepartmentId = new Guid("fff11111-1111-1111-1111-111111111111") // Engineering
             };
 
             var employee2 = new Employee
@@ -60,7 +60,7 @@ namespace CPR.UnitTests.Repositories
                 UserId = employee2User.Id,
                 ManagerId = manager.Id,
                 Title = "Designer",
-                Department = "Design"
+                DepartmentId = new Guid("fff77777-7777-7777-7777-777777777777") // Product
             };
 
             _context.Users.AddRange(managerUser, employee1User, employee2User);
