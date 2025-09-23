@@ -65,7 +65,10 @@ namespace CPR.UnitTests
         public async Task GetPositions_FilteredByTrack_ReturnsPosition_WithExpectations()
         {
             var svc = new ClassificationService(_db);
-            var track = (await svc.GetCareerTracksAsync((await svc.GetCareerPathsAsync()).First().Id)).First();
+            var paths = await svc.GetCareerPathsAsync();
+            var path = paths.First(p => p.Title == "Path 1");
+            var tracks = await svc.GetCareerTracksAsync(path.Id);
+            var track = tracks.First();
             var positions = await svc.GetPositionsAsync(track.Id);
             Assert.Single(positions);
             Assert.Equal("Senior Software Engineer", positions[0].Title);
