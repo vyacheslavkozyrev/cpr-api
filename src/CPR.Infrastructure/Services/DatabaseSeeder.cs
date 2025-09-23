@@ -312,140 +312,140 @@ namespace CPR.Infrastructure.Services
                 {
                     Id = new Guid("004e1f8b-1ea3-4e27-a373-ed82f85147cc"),
                     UserId = users[0].Id,
-                    Title = "Employee Role 43",
+                    PositionId = new Guid("06091429-d5c5-47f7-9f85-3034618325c5"),
                     DepartmentId = financeDept?.Id
                 },
                 new Employee
                 {
                     Id = new Guid("0353f880-f993-4b3a-a7c2-41e7c58f0aa6"),
                     UserId = users[1].Id,
-                    Title = "Employee Role 55",
+                    PositionId = new Guid("0a3ddc39-af6b-487d-9bac-2d9dd0bee554"),
                     DepartmentId = operationsDept?.Id
                 },
                 new Employee
                 {
                     Id = new Guid("03c21dc8-d3cf-4d69-91fa-6e85c99c26e3"),
                     UserId = users[2].Id,
-                    Title = "Employee Role 45",
+                    PositionId = new Guid("0b5e0e9d-6920-4037-8312-0f3e78d0088a"),
                     DepartmentId = operationsDept?.Id
                 },
                 new Employee
                 {
                     Id = new Guid("05532608-3d3f-4e0a-8a18-39565f10df9c"),
                     UserId = users[3].Id,
-                    Title = "Employee Role 50",
+                    PositionId = new Guid("0ecfa16b-8d67-4298-be82-06fb0be2c1a7"),
                     DepartmentId = qaDept?.Id
                 },
                 new Employee
                 {
                     Id = new Guid("0a0bcaa0-7069-45e5-859d-86c0ac3c6804"),
                     UserId = users[4].Id,
-                    Title = "Employee Role 69",
+                    PositionId = new Guid("148802ce-fe15-42a7-b6ca-33d9ea320448"),
                     DepartmentId = securityDept?.Id
                 },
                 new Employee
                 {
                     Id = new Guid("0b1b37d7-776b-4564-8be1-0b3a38ef22e4"),
                     UserId = users[5].Id,
-                    Title = "Employee Role 20",
+                    PositionId = new Guid("15e1ba17-e786-4a86-bbc1-1ada3f47b6df"),
                     DepartmentId = qaDept?.Id
                 },
                 new Employee
                 {
                     Id = new Guid("0b7715cf-b9ad-4da2-b4ab-b2c681ad078b"),
                     UserId = users[6].Id,
-                    Title = "Employee Role 90",
+                    PositionId = new Guid("24582967-5515-4000-a390-bce4aa59d460"),
                     DepartmentId = qaDept?.Id
                 },
                 new Employee
                 {
                     Id = new Guid("0b797477-9c18-4a58-ab94-b888a67db592"),
                     UserId = users[7].Id,
-                    Title = "Employee Role 35",
+                    PositionId = new Guid("37ea7352-b7f8-43f0-a377-138fb40a6d0d"),
                     DepartmentId = operationsDept?.Id
                 },
                 new Employee
                 {
                     Id = new Guid("0bdca7e8-6a57-4bc2-aeaa-4eea19fb6a3c"),
                     UserId = users[8].Id,
-                    Title = "Employee Role 82",
+                    PositionId = new Guid("40f80e0b-f128-493a-99ce-5e1c765cc87f"),
                     DepartmentId = hrDept?.Id
                 },
                 new Employee
                 {
                     Id = new Guid("0c8b8b8b-8b8b-4b8b-8b8b-8b8b8b8b8b8b"),
                     UserId = users[9].Id,
-                    Title = "Senior Software Engineer",
+                    PositionId = new Guid("4152e8ef-9424-49f3-8b86-3dd87b89c8bf"),
                     DepartmentId = engineeringDept?.Id
                 },
                 new Employee
                 {
                     Id = new Guid("0d9d9d9d-9d9d-4d9d-9d9d-9d9d9d9d9d9d"),
                     UserId = users[10].Id,
-                    Title = "HR Manager",
+                    PositionId = new Guid("48316a63-4812-4a04-ae3c-97248556d3f8"),
                     DepartmentId = hrDept?.Id
                 },
                 new Employee
                 {
                     Id = new Guid("0e0e0e0e-0e0e-4e0e-0e0e-0e0e0e0e0e0e"),
                     UserId = users[11].Id,
-                    Title = "Product Manager",
+                    PositionId = new Guid("4c7ded1f-7dd8-47b7-8b63-35020100ba19"),
                     DepartmentId = productDept?.Id
                 },
                 new Employee
                 {
                     Id = new Guid("0f0f0f0f-0f0f-4f0f-0f0f-0f0f0f0f0f0f"),
                     UserId = users[12].Id,
-                    Title = "Legal Counsel",
+                    PositionId = new Guid("4e064c81-2d4d-4dfa-b95d-419fc13b72ca"),
                     DepartmentId = legalDept?.Id
                 },
                 new Employee
                 {
                     Id = new Guid("10101010-1010-4101-0101-010101010101"),
                     UserId = users[13].Id,
-                    Title = "Finance Analyst",
+                    PositionId = new Guid("4fea9a06-63a6-4f4e-bc81-e89ba6709295"),
                     DepartmentId = financeDept?.Id
                 },
                 new Employee
                 {
                     Id = new Guid("11111111-1111-4111-1111-111111111111"),
                     UserId = users[14].Id,
-                    Title = "Marketing Specialist",
+                    PositionId = new Guid("5284d661-4c72-40d1-8cc5-56e08a6138d0"),
                     DepartmentId = marketingDept?.Id
                 },
                 new Employee
                 {
                     Id = new Guid("12121212-1212-4121-2121-212121212121"),
                     UserId = users[15].Id,
-                    Title = "Sales Representative",
+                    PositionId = new Guid("570d12e2-911e-4adc-a98a-373e4c8aab53"),
                     DepartmentId = salesDept?.Id
                 },
                 new Employee
                 {
                     Id = new Guid("13131313-1313-4131-3131-313131313131"),
                     UserId = users[16].Id,
-                    Title = "Operations Manager",
+                    PositionId = new Guid("6073c789-4512-499c-84c6-0195e87c60bc"),
                     DepartmentId = operationsDept?.Id
                 },
                 new Employee
                 {
                     Id = new Guid("14141414-1414-4141-4141-414141414141"),
                     UserId = users[17].Id,
-                    Title = "Security Analyst",
+                    PositionId = new Guid("6f33e923-834d-4639-a88a-9fdec61215f4"),
                     DepartmentId = securityDept?.Id
                 },
                 new Employee
                 {
                     Id = new Guid("15151515-1515-4151-5151-515151515151"),
                     UserId = users[18].Id,
-                    Title = "QA Engineer",
+                    PositionId = new Guid("7573b182-5813-411a-91ee-b5beeef80e1a"),
                     DepartmentId = qaDept?.Id
                 },
                 new Employee
                 {
                     Id = new Guid("16161616-1616-4161-6161-616161616161"),
                     UserId = users[19].Id,
-                    Title = "Software Engineer",
+                    PositionId = new Guid("78d6f12b-d42c-4af5-991b-f2b069305f2a"),
                     DepartmentId = engineeringDept?.Id,
                     ManagerId = users[9].Id // Reports to Senior Software Engineer
                 }
