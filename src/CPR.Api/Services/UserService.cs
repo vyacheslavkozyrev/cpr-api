@@ -8,14 +8,9 @@ namespace CPR.Api.Services;
 /// <summary>
 /// Default <see cref="IUserService"/> implementation that extracts a minimal profile from the current ClaimsPrincipal.
 /// </summary>
-public class UserService : IUserService
+public class UserService(CprDbContext db) : IUserService
 {
-    private readonly CprDbContext _db;
-
-    public UserService(CprDbContext db)
-    {
-        _db = db;
-    }
+    private readonly CprDbContext _db = db;
 
     /// <summary>
     /// Returns a <see cref="Models.UserProfile"/> built from claims and database lookup. Returns null when the principal is unauthenticated.
