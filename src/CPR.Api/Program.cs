@@ -10,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Hellang.Middleware.ProblemDetails;
 using CPR.Infrastructure.Data;
+using CPR.Infrastructure.Services;
 using System;
 using System.IO;
 using System.Reflection;
@@ -133,6 +134,16 @@ builder.Services.AddProblemDetails(options =>
 });
 
 var app = builder.Build();
+
+// Seed the database on startup (only in development)
+if (app.Environment.IsDevelopment())
+{
+    using (var scope = app.Services.CreateScope())
+    {
+        var seeder = scope.ServiceProvider.GetRequiredService<DatabaseSeeder>();
+        await seeder.SeedAsync();
+    }
+}
 
 // Enable Swagger UI in development
 if (app.Environment.IsDevelopment())

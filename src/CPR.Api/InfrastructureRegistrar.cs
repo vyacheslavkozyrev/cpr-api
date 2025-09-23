@@ -24,6 +24,10 @@ namespace CPR.Api
             services.AddScoped<CPR.Application.Services.IClassificationService, CPR.Infrastructure.Services.ClassificationService>();
             services.AddScoped<CPR.Application.Services.IFeedbackService, CPR.Infrastructure.Services.FeedbackService>();
             services.AddScoped<CPR.Application.Services.ITeamService, CPR.Infrastructure.Services.TeamService>();
+
+            // Register database seeder
+            services.AddScoped<CPR.Infrastructure.Services.DatabaseSeeder>();
+
             return services;
         }
     }
