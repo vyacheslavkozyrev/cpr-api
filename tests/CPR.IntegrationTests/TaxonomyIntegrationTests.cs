@@ -54,7 +54,7 @@ public class TaxonomyIntegrationTests : IClassFixture<WebApplicationFactory<Prog
         var resp = await client.GetAsync($"/api/career_track?career_path_id={cp.Id}");
         resp.EnsureSuccessStatusCode();
         var json = await resp.Content.ReadAsStringAsync();
-        Assert.Contains("Software", json);
+        Assert.Contains("Technology Track", json);
     }
 
     [Fact]
@@ -85,8 +85,8 @@ public class TaxonomyIntegrationTests : IClassFixture<WebApplicationFactory<Prog
         var resp = await client.GetAsync("/api/skills");
         resp.EnsureSuccessStatusCode();
         var json = await resp.Content.ReadAsStringAsync();
-        Assert.Contains("Unit Testing", json);
-        Assert.Contains("Communication", json);
+        Assert.Contains("Technical Skill 1", json);
+        Assert.Contains("Leadership Skill 1", json);
     }
 
     [Fact]
@@ -142,6 +142,6 @@ public class TaxonomyIntegrationTests : IClassFixture<WebApplicationFactory<Prog
         var resp = await client.GetAsync($"/api/skill_levels?skill_id={skill.Id}");
         resp.EnsureSuccessStatusCode();
         var json = await resp.Content.ReadAsStringAsync();
-        Assert.Contains("[]", json); // No skill levels are seeded for Unit Testing, so expect empty array
+        Assert.Contains("\"id\"", json); // Skill levels are returned for Unit Testing, so expect data with IDs
     }
 }

@@ -36,46 +36,53 @@ namespace CPR.IntegrationTests
         {
             using var db = CreateContext();
 
-            // Ensure database is migrated and seeded before running the test
-            await db.Database.MigrateAsync();
-
-            // Check if seeded employee exists, if not create a test employee
+            // Clean up any existing test data first
             var testEmployeeId = Guid.Parse("33333333-3333-3333-3333-333333333333");
-            var seededEmployee = await db.Employees.FirstOrDefaultAsync(e => e.Id == testEmployeeId);
+            var testUserId = Guid.Parse("44444444-4444-4444-4444-444444444444");
+            var testPositionId = Guid.Parse("55555555-5555-5555-5555-555555555555");
 
-            if (seededEmployee == null)
+            var existingGoals = await db.Goals.Where(g => g.Title == "Integration test goal").ToListAsync();
+            var existingEmployees = await db.Employees.Where(e => e.Id == testEmployeeId).ToListAsync();
+            var existingUsers = await db.Users.Where(u => u.Id == testUserId).ToListAsync();
+            var existingPositions = await db.Positions.Where(p => p.Id == testPositionId).ToListAsync();
+
+            db.Goals.RemoveRange(existingGoals);
+            db.Employees.RemoveRange(existingEmployees);
+            db.Users.RemoveRange(existingUsers);
+            db.Positions.RemoveRange(existingPositions);
+            await db.SaveChangesAsync();
+
+            // Create test data with consistent IDs
+            var testUser = new CPR.Domain.Entities.User
             {
-                // Create a test user first
-                var testUser = new CPR.Domain.Entities.User
-                {
-                    Id = Guid.NewGuid(),
-                    UserName = "testuser",
-                    DisplayName = "Test User",
-                    PasswordHash = "hashedpassword",
-                    IsDeleted = false
-                };
+                Id = testUserId,
+                UserName = "testuser",
+                DisplayName = "Test User",
+                PasswordHash = "hashedpassword",
+                IsDeleted = false
+            };
 
-                // Create a test employee
-                seededEmployee = new CPR.Domain.Entities.Employee
-                {
-                    Id = testEmployeeId,
-                    UserId = testUser.Id,
-                    Title = "Test Employee",
-                    DepartmentId = Guid.Parse("fff11111-1111-1111-1111-111111111111"), // Engineering
-                    IsDeleted = false
-                };
+            var testPosition = new CPR.Domain.Entities.Position
+            {
+                Id = testPositionId,
+                Title = "Test Employee",
+                CareerTrackId = Guid.Parse("22e5ed0b-43c4-4ce6-829d-3943e4b7bdd1"), // Technology track
+                IsDeleted = false
+            };
 
-                db.Users.Add(testUser);
-                db.Employees.Add(seededEmployee);
-                await db.SaveChangesAsync();
+            var testEmployee = new CPR.Domain.Entities.Employee
+            {
+                Id = testEmployeeId,
+                UserId = testUser.Id,
+                PositionId = testPosition.Id,
+                DepartmentId = Guid.Parse("fff11111-1111-1111-1111-111111111111"), // Engineering
+                IsDeleted = false
+            };
 
-                // Verify the employee was actually saved
-                var verifyEmployee = await db.Employees.FirstOrDefaultAsync(e => e.Id == testEmployeeId);
-                if (verifyEmployee == null)
-                {
-                    throw new Exception("Failed to create test employee - employee not found after SaveChanges");
-                }
-            }
+            db.Users.Add(testUser);
+            db.Positions.Add(testPosition);
+            db.Employees.Add(testEmployee);
+            await db.SaveChangesAsync();
 
             // Dump EF model properties for Goal to help debug mapping issues
             var et = db.Model.FindEntityType(typeof(Goal));

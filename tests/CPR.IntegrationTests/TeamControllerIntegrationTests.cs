@@ -79,9 +79,11 @@ namespace CPR.IntegrationTests
                 // Clean up any existing test data first
                 var existingUsers = await db.Users.Where(u => u.Id == Guid.Parse("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa") || u.Id == Guid.Parse("cccccccc-cccc-cccc-cccc-cccccccccccc")).ToListAsync();
                 var existingEmployees = await db.Employees.Where(e => e.UserId == Guid.Parse("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa") || e.UserId == Guid.Parse("cccccccc-cccc-cccc-cccc-cccccccccccc")).ToListAsync();
+                var existingPositions = await db.Positions.Where(p => p.Id == Guid.Parse("99999999-9999-9999-9999-999999999999") || p.Id == Guid.Parse("88888888-8888-8888-8888-888888888888")).ToListAsync();
 
                 db.Employees.RemoveRange(existingEmployees);
                 db.Users.RemoveRange(existingUsers);
+                db.Positions.RemoveRange(existingPositions);
                 await db.SaveChangesAsync();
 
                 // Create manager user and employee (use different IDs to avoid conflict with seeded data)
@@ -94,11 +96,19 @@ namespace CPR.IntegrationTests
                     IsDeleted = false
                 };
 
+                var managerPosition = new CPR.Domain.Entities.Position
+                {
+                    Id = Guid.Parse("99999999-9999-9999-9999-999999999999"),
+                    Title = "Manager",
+                    CareerTrackId = Guid.Parse("22e5ed0b-43c4-4ce6-829d-3943e4b7bdd1"), // Technology track
+                    IsDeleted = false
+                };
+
                 var managerEmployee = new CPR.Domain.Entities.Employee
                 {
                     Id = Guid.Parse("bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb"),
                     UserId = managerUser.Id,
-                    Title = "Manager",
+                    PositionId = managerPosition.Id,
                     DepartmentId = Guid.Parse("fff11111-1111-1111-1111-111111111111"), // Engineering
                     IsDeleted = false
                 };
@@ -113,12 +123,20 @@ namespace CPR.IntegrationTests
                     IsDeleted = false
                 };
 
+                var employeePosition = new CPR.Domain.Entities.Position
+                {
+                    Id = Guid.Parse("88888888-8888-8888-8888-888888888888"),
+                    Title = "Developer",
+                    CareerTrackId = Guid.Parse("22e5ed0b-43c4-4ce6-829d-3943e4b7bdd1"), // Technology track
+                    IsDeleted = false
+                };
+
                 var employee = new CPR.Domain.Entities.Employee
                 {
                     Id = Guid.Parse("dddddddd-dddd-dddd-dddd-dddddddddddd"),
                     UserId = employeeUser.Id,
                     ManagerId = managerEmployee.Id,
-                    Title = "Developer",
+                    PositionId = employeePosition.Id,
                     DepartmentId = Guid.Parse("fff11111-1111-1111-1111-111111111111"), // Engineering
                     IsDeleted = false
                 };
@@ -129,6 +147,8 @@ namespace CPR.IntegrationTests
                 // Add entities
                 db.Users.Add(managerUser);
                 db.Users.Add(employeeUser);
+                db.Positions.Add(managerPosition);
+                db.Positions.Add(employeePosition);
                 db.Employees.Add(managerEmployee);
                 db.Employees.Add(employee);
                 await db.SaveChangesAsync();

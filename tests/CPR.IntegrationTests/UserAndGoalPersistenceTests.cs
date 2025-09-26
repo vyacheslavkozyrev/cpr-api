@@ -41,11 +41,21 @@ namespace CPR.IntegrationTests
             db.Users.Add(user);
             await db.SaveChangesAsync();
 
+            // Create a position for the employee
+            var position = new Position
+            {
+                Id = Guid.NewGuid(),
+                Title = "Engineer",
+                CareerTrackId = Guid.Parse("570d12e2-911e-4adc-a98a-373e4c8aab53"), // Technology track
+                CreatedAt = DateTimeOffset.UtcNow
+            };
+            db.Positions.Add(position);
+
             var employee = new Employee
             {
                 Id = Guid.NewGuid(),
                 UserId = user.Id,
-                Title = "Engineer",
+                PositionId = position.Id,
                 DepartmentId = Guid.Parse("fff11111-1111-1111-1111-111111111111"), // Engineering
                 CreatedAt = DateTimeOffset.UtcNow
             };
