@@ -24,7 +24,7 @@ public class TokenGeneratorSmokeTests : IClassFixture<WebApplicationFactory<Prog
         // ensure the test host uses the same signing key
         System.Environment.SetEnvironmentVariable("JWT_SIGNING_KEY", key);
         var client = _factory.CreateClient();
-        var userId = "00000000-0000-0000-0000-000000000123";
+        var userId = "679add6e-6c29-4e00-b6a5-b69c8e0f3445";
         var token = CPR.Api.Auth.TokenGenerator.CreateToken(userId, key);
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
@@ -41,6 +41,7 @@ public class TokenGeneratorSmokeTests : IClassFixture<WebApplicationFactory<Prog
         else if (root.TryGetProperty("employeeId", out var p2)) returnedId = p2.GetString();
         else if (root.TryGetProperty("EmployeeId", out var p3)) returnedId = p3.GetString();
 
-        Assert.Equal(userId, returnedId);
+        // The /api/me endpoint returns the Employee ID, not the User ID from the JWT token
+        Assert.Equal("004e1f8b-1ea3-4e27-a373-ed82f85147cc", returnedId);
     }
 }

@@ -40,7 +40,7 @@ namespace CPR.IntegrationTests
             {
                 Title = "Goal for negative test",
                 Description = "integration test negative",
-                EmployeeId = Guid.Parse("33333333-3333-3333-3333-333333333333")
+                EmployeeId = Guid.Parse("004e1f8b-1ea3-4e27-a373-ed82f85147cc")
             };
 
             var createResp = await client.PostAsJsonAsync("/api/goals", createGoal);
@@ -68,7 +68,7 @@ namespace CPR.IntegrationTests
             {
                 Title = "Goal owned by seeded user",
                 Description = "integration test negative",
-                EmployeeId = Guid.Parse("33333333-3333-3333-3333-333333333333")
+                EmployeeId = Guid.Parse("004e1f8b-1ea3-4e27-a373-ed82f85147cc")
             };
 
             var createResp = await client.PostAsJsonAsync("/api/goals", createGoal);
@@ -96,7 +96,7 @@ namespace CPR.IntegrationTests
         {
             var key = "test-key";
             Environment.SetEnvironmentVariable("JWT_SIGNING_KEY", key);
-            var userId = "33333333-3333-3333-3333-333333333333";
+            var userId = "004e1f8b-1ea3-4e27-a373-ed82f85147cc";
             using var h = new System.Security.Cryptography.HMACSHA256(System.Text.Encoding.UTF8.GetBytes(key));
             var sig = Convert.ToBase64String(h.ComputeHash(System.Text.Encoding.UTF8.GetBytes(userId)));
             return userId + "." + sig;
@@ -106,7 +106,7 @@ namespace CPR.IntegrationTests
         {
             var key = "test-key";
             Environment.SetEnvironmentVariable("JWT_SIGNING_KEY", key);
-            var userId = "44444444-4444-4444-4444-444444444444";
+            var userId = "0353f880-f993-4b3a-a7c2-41e7c58f0aa6";
             using var h = new System.Security.Cryptography.HMACSHA256(System.Text.Encoding.UTF8.GetBytes(key));
             var sig = Convert.ToBase64String(h.ComputeHash(System.Text.Encoding.UTF8.GetBytes(userId)));
             return userId + "." + sig;

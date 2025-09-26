@@ -28,7 +28,7 @@ namespace CPR.IntegrationTests
             {
                 Title = "Goal for task patch",
                 Description = "integration test",
-                EmployeeId = Guid.Parse("33333333-3333-3333-3333-333333333333")
+                EmployeeId = Guid.Parse("004e1f8b-1ea3-4e27-a373-ed82f85147cc")
             };
 
             var createResp = await client.PostAsJsonAsync("/api/goals", createGoal);
@@ -78,7 +78,7 @@ namespace CPR.IntegrationTests
             var key = "test-key";
             Environment.SetEnvironmentVariable("JWT_SIGNING_KEY", key);
             // Use seeded employee id so the controller can parse EmployeeId as a Guid
-            var userId = "33333333-3333-3333-3333-333333333333";
+            var userId = "004e1f8b-1ea3-4e27-a373-ed82f85147cc";
             using var h = new System.Security.Cryptography.HMACSHA256(System.Text.Encoding.UTF8.GetBytes(key));
             var sig = Convert.ToBase64String(h.ComputeHash(System.Text.Encoding.UTF8.GetBytes(userId)));
             return userId + "." + sig;

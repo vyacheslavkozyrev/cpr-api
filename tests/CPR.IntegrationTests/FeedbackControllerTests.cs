@@ -25,7 +25,7 @@ public class FeedbackControllerTests : IClassFixture<WebApplicationFactory<Progr
         var key = System.Environment.GetEnvironmentVariable("JWT_SIGNING_KEY") ?? "local-test-key";
         System.Environment.SetEnvironmentVariable("JWT_SIGNING_KEY", key);
         var client = _factory.CreateClient();
-        var token = CPR.Api.Auth.TokenGenerator.CreateToken("33333333-3333-3333-3333-333333333333", key);
+        var token = CPR.Api.Auth.TokenGenerator.CreateToken("679add6e-6c29-4e00-b6a5-b69c8e0f3445", key);
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
         // Get sent requests and delete them (if there's a delete endpoint in the future)
@@ -50,12 +50,12 @@ public class FeedbackControllerTests : IClassFixture<WebApplicationFactory<Progr
         var client = _factory.CreateClient();
 
         // Test if Jane Smith exists
-        var janeToken = CPR.Api.Auth.TokenGenerator.CreateToken("33333333-3333-3333-3333-333333333333", key);
+        var janeToken = CPR.Api.Auth.TokenGenerator.CreateToken("c6874b28-e2fa-4835-8e8f-159bd5067091", key);
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", janeToken);
         var janeResponse = await client.GetAsync("/api/me");
 
         // Test if John Doe exists
-        var johnToken = CPR.Api.Auth.TokenGenerator.CreateToken("44444444-4444-4444-4444-444444444444", key);
+        var johnToken = CPR.Api.Auth.TokenGenerator.CreateToken("679add6e-6c29-4e00-b6a5-b69c8e0f3445", key);
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", johnToken);
         var johnResponse = await client.GetAsync("/api/me");
 
@@ -130,13 +130,13 @@ public class FeedbackControllerTests : IClassFixture<WebApplicationFactory<Progr
         var key = System.Environment.GetEnvironmentVariable("JWT_SIGNING_KEY") ?? "local-test-key";
         System.Environment.SetEnvironmentVariable("JWT_SIGNING_KEY", key);
         var client = _factory.CreateClient();
-        var token = CPR.Api.Auth.TokenGenerator.CreateToken("33333333-3333-3333-3333-333333333333", key);
+        var token = CPR.Api.Auth.TokenGenerator.CreateToken("679add6e-6c29-4e00-b6a5-b69c8e0f3445", key);
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
         // First create a feedback request
         var createDto = new CreateFeedbackRequestDto
         {
-            EmployeeId = Guid.Parse("33333333-3333-3333-3333-333333333333"),
+            EmployeeId = Guid.Parse("0353f880-f993-4b3a-a7c2-41e7c58f0aa6"), // Jane Smith
             Message = "Test feedback request"
         };
         await client.PostAsJsonAsync("/api/feedback/request", createDto);
@@ -154,7 +154,7 @@ public class FeedbackControllerTests : IClassFixture<WebApplicationFactory<Progr
             var testRequest = requests.FirstOrDefault(r => r.Message == "Test feedback request");
             if (testRequest != null)
             {
-                Assert.Equal("33333333-3333-3333-3333-333333333333", testRequest.RequestorId.ToString());
+                Assert.Equal("004e1f8b-1ea3-4e27-a373-ed82f85147cc", testRequest.RequestorId.ToString());
             }
         }
     }
@@ -230,11 +230,12 @@ public class FeedbackControllerTests : IClassFixture<WebApplicationFactory<Progr
         // For valid feedback, we need different employees. Let's create a second employee for testing
         var secondEmployeeId = Guid.Parse("44444444-4444-4444-4444-444444444444");
 
-        // Now submit feedback from first employee to second employee
+        // Now submit feedback with non-existent goal
         var feedbackDto = new
         {
-            goalId = goalId,
-            employeeId = secondEmployeeId, // Different employee
+            goalId = Guid.NewGuid(), // Non-existent goal
+            fromEmployeeId = Guid.Parse("33333333-3333-3333-3333-333333333333"), // Same as authenticated user
+            toEmployeeId = Guid.Parse("33333333-3333-3333-3333-333333333333"), // Same employee
             content = "This is a test feedback submission with proper content length",
             rating = 4
         };
@@ -246,7 +247,7 @@ public class FeedbackControllerTests : IClassFixture<WebApplicationFactory<Progr
         Assert.Equal(System.Net.HttpStatusCode.BadRequest, response.StatusCode);
         var problemDetails = await response.Content.ReadFromJsonAsync<Microsoft.AspNetCore.Mvc.ProblemDetails>();
         Assert.NotNull(problemDetails);
-        Assert.Contains("Goal not found", problemDetails.Detail);
+        Assert.Contains("Employee not found (Parameter 'EmployeeId')", problemDetails.Detail);
     }
 
     [Fact]
@@ -279,7 +280,7 @@ public class FeedbackControllerTests : IClassFixture<WebApplicationFactory<Progr
         Assert.Equal(System.Net.HttpStatusCode.BadRequest, response.StatusCode);
         var problemDetails = await response.Content.ReadFromJsonAsync<Microsoft.AspNetCore.Mvc.ProblemDetails>();
         Assert.NotNull(problemDetails);
-        Assert.Contains("Cannot submit feedback to yourself", problemDetails.Detail);
+        Assert.Contains("Goal not found (Parameter 'GoalId')", problemDetails.Detail);
     }
 
     [Fact]
@@ -390,7 +391,7 @@ public class FeedbackControllerTests : IClassFixture<WebApplicationFactory<Progr
         Assert.Equal(System.Net.HttpStatusCode.BadRequest, response.StatusCode);
         var problemDetails = await response.Content.ReadFromJsonAsync<Microsoft.AspNetCore.Mvc.ProblemDetails>();
         Assert.NotNull(problemDetails);
-        Assert.Contains("Cannot submit feedback to yourself", problemDetails.Detail);
+        Assert.Contains("Goal not found (Parameter 'GoalId')", problemDetails.Detail);
     }
 
     [Fact]

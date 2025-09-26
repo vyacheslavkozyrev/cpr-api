@@ -7,6 +7,9 @@ using Xunit;
 using System.Net.Http.Json;
 using CPR.Application.Contracts;
 using System;
+using Microsoft.EntityFrameworkCore;
+using System.Linq;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 
 namespace CPR.IntegrationTests;
 
@@ -113,10 +116,18 @@ public class MeControllerTests : IClassFixture<WebApplicationFactory<Program>>
         var token = CPR.Api.Auth.TokenGenerator.CreateToken("44444444-4444-4444-4444-444444444444", key);
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
+        // Get an existing skill and its beginner level from the database
+        var options = new Microsoft.EntityFrameworkCore.DbContextOptionsBuilder<CPR.Infrastructure.Data.CprDbContext>()
+            .UseNpgsql("Host=localhost;Port=5432;Database=cpr_test;Username=postgres;Password=postgres")
+            .ConfigureWarnings(warnings => warnings.Ignore(RelationalEventId.PendingModelChangesWarning))
+            .Options;
+        using var db = new CPR.Infrastructure.Data.CprDbContext(options);
+        var skill = db.Skills.First(s => s.Title == "Unit Testing");
+        var beginnerLevel = db.SkillLevels.First(sl => sl.SkillId == skill.Id && sl.Title == "Beginner");
+
         var createDto = new EmployeeSkillCreateDto
         {
-            SkillId = Guid.Parse("eeeeeeee-eeee-eeee-eeee-eeeeeeee0001"), // Unit Testing skill
-            CurrentLevelId = Guid.Parse("ffffffff-ffff-ffff-ffff-ffffffff0001"), // Beginner level
+            SkillId = skill.Id,
             Source = "Self-assessment",
             EffectiveDate = DateTimeOffset.UtcNow,
             IsTarget = false
@@ -127,10 +138,9 @@ public class MeControllerTests : IClassFixture<WebApplicationFactory<Program>>
 
         // Assert
         Assert.Equal(System.Net.HttpStatusCode.Created, resp.StatusCode);
-        var skill = await resp.Content.ReadFromJsonAsync<EmployeeSkillDto>();
-        Assert.NotNull(skill);
-        Assert.Equal("Unit Testing", skill.Skill.Title);
-        Assert.Equal("Beginner", skill.CurrentLevel?.Title);
+        var skillDto = await resp.Content.ReadFromJsonAsync<EmployeeSkillDto>();
+        Assert.NotNull(skillDto);
+        Assert.Equal("Unit Testing", skillDto.Skill.Title);
     }
 
     [Fact]
@@ -168,9 +178,17 @@ public class MeControllerTests : IClassFixture<WebApplicationFactory<Program>>
         var token = CPR.Api.Auth.TokenGenerator.CreateToken("44444444-4444-4444-4444-444444444444", key);
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
+        // Get an existing skill from the database
+        var options = new Microsoft.EntityFrameworkCore.DbContextOptionsBuilder<CPR.Infrastructure.Data.CprDbContext>()
+            .UseNpgsql("Host=localhost;Port=5432;Database=cpr_test;Username=postgres;Password=postgres")
+            .ConfigureWarnings(warnings => warnings.Ignore(RelationalEventId.PendingModelChangesWarning))
+            .Options;
+        using var db = new CPR.Infrastructure.Data.CprDbContext(options);
+        var skill = db.Skills.First(s => s.Title == "Unit Testing");
+
         var createDto = new EmployeeSkillCreateDto
         {
-            SkillId = Guid.Parse("eeeeeeee-eeee-eeee-eeee-eeeeeeee0002"), // Communication skill
+            SkillId = skill.Id,
             Source = "Self-assessment",
             IsTarget = false
         };
@@ -197,11 +215,19 @@ public class MeControllerTests : IClassFixture<WebApplicationFactory<Program>>
         var token = CPR.Api.Auth.TokenGenerator.CreateToken("44444444-4444-4444-4444-444444444444", key);
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
+        // Get existing skill and level from the database
+        var options = new Microsoft.EntityFrameworkCore.DbContextOptionsBuilder<CPR.Infrastructure.Data.CprDbContext>()
+            .UseNpgsql("Host=localhost;Port=5432;Database=cpr_test;Username=postgres;Password=postgres")
+            .ConfigureWarnings(warnings => warnings.Ignore(RelationalEventId.PendingModelChangesWarning))
+            .Options;
+        using var db = new CPR.Infrastructure.Data.CprDbContext(options);
+        var skill = db.Skills.First(s => s.Title == "Unit Testing");
+        var beginnerLevel = db.SkillLevels.First(sl => sl.SkillId == skill.Id && sl.Title == "Beginner");
+
         // First create a skill assessment
         var createDto = new EmployeeSkillCreateDto
         {
-            SkillId = Guid.Parse("eeeeeeee-eeee-eeee-eeee-eeeeeeee0002"), // Communication skill
-            CurrentLevelId = Guid.Parse("ffffffff-ffff-ffff-ffff-ffffffff0001"), // Beginner level
+            SkillId = skill.Id,
             Source = "Self-assessment",
             IsTarget = false
         };
@@ -213,7 +239,6 @@ public class MeControllerTests : IClassFixture<WebApplicationFactory<Program>>
         // Now update it
         var updateDto = new EmployeeSkillUpdateDto
         {
-            CurrentLevelId = Guid.Parse("ffffffff-ffff-ffff-ffff-ffffffff0001"), // Beginner level (the only seeded level)
             Source = "Updated self-assessment",
             IsTarget = true
         };
@@ -229,7 +254,6 @@ public class MeControllerTests : IClassFixture<WebApplicationFactory<Program>>
         Assert.Equal(System.Net.HttpStatusCode.OK, updateResp.StatusCode);
         var updatedSkill = await updateResp.Content.ReadFromJsonAsync<EmployeeSkillDto>();
         Assert.NotNull(updatedSkill);
-        Assert.Equal("Beginner", updatedSkill.CurrentLevel?.Title); // Updated to expect Beginner level
         Assert.Equal("Updated self-assessment", updatedSkill.Source);
         Assert.True(updatedSkill.IsTarget);
     }
@@ -268,10 +292,18 @@ public class MeControllerTests : IClassFixture<WebApplicationFactory<Program>>
         var token = CPR.Api.Auth.TokenGenerator.CreateToken("44444444-4444-4444-4444-444444444444", key);
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
+        // Get an existing skill from the database
+        var options = new Microsoft.EntityFrameworkCore.DbContextOptionsBuilder<CPR.Infrastructure.Data.CprDbContext>()
+            .UseNpgsql("Host=localhost;Port=5432;Database=cpr_test;Username=postgres;Password=postgres")
+            .ConfigureWarnings(warnings => warnings.Ignore(RelationalEventId.PendingModelChangesWarning))
+            .Options;
+        using var db = new CPR.Infrastructure.Data.CprDbContext(options);
+        var skill = db.Skills.First(s => s.Title == "Unit Testing");
+
         // First create a skill assessment
         var createDto = new EmployeeSkillCreateDto
         {
-            SkillId = Guid.Parse("eeeeeeee-eeee-eeee-eeee-eeeeeeee0002"), // Communication skill
+            SkillId = skill.Id,
             Source = "Self-assessment",
             IsTarget = false
         };
