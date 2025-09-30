@@ -11,31 +11,7 @@ using System.Collections.Generic;
 
 namespace CPR.IntegrationTests
 {
-    public class CustomWebApplicationFactory : WebApplicationFactory<Program>
-    {
-        static CustomWebApplicationFactory()
-        {
-            // Set environment variables at the class level to ensure they're available
-            Environment.SetEnvironmentVariable("DATABASE_NAME", "cpr_test");
-            Environment.SetEnvironmentVariable("JWT_SIGNING_KEY", "test-key");
-        }
-
-        protected override void ConfigureWebHost(Microsoft.AspNetCore.Hosting.IWebHostBuilder builder)
-        {
-            // Ensure the environment variables are still set
-            Environment.SetEnvironmentVariable("DATABASE_NAME", "cpr_test");
-            Environment.SetEnvironmentVariable("JWT_SIGNING_KEY", "test-key");
-
-            builder.ConfigureAppConfiguration((context, config) =>
-            {
-                // Ensure the environment variables are available in configuration
-                context.Configuration["JWT_SIGNING_KEY"] = "test-key";
-                context.Configuration["DATABASE_NAME"] = "cpr_test";
-            });
-        }
-    }
-
-    [Collection("IntegrationTestCollection")]
+    [Collection("SequentialIntegrationTestCollection")]
     public class TeamControllerIntegrationTests : IClassFixture<CustomWebApplicationFactory>, IClassFixture<DatabaseCleanupFixture>
     {
         static TeamControllerIntegrationTests()

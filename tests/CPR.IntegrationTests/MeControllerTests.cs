@@ -289,7 +289,7 @@ public class MeControllerTests : IClassFixture<WebApplicationFactory<Program>>
         var key = System.Environment.GetEnvironmentVariable("JWT_SIGNING_KEY") ?? "local-test-key";
         System.Environment.SetEnvironmentVariable("JWT_SIGNING_KEY", key);
         var client = _factory.CreateClient();
-        var token = CPR.Api.Auth.TokenGenerator.CreateToken("44444444-4444-4444-4444-444444444444", key);
+        var token = CPR.Api.Auth.TokenGenerator.CreateToken("679add6e-6c29-4e00-b6a5-b69c8e0f3445", key);
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
         // Get an existing skill from the database

@@ -1,92 +1,92 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TestRun id="1279e6e8-be77-4fdf-8783-3fd3add0536c" name="vyach@VYACHESLAV-LAPT 2025-09-18 13:51:21" runUser="VYACHESLAV-LAPT\vyach" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
-  <Times creation="2025-09-18T13:51:21.6482460-05:00" queuing="2025-09-18T13:51:21.6482467-05:00" start="2025-09-18T13:51:19.7526347-05:00" finish="2025-09-18T13:51:22.7148594-05:00" />
-  <TestSettings name="default" id="4cd57921-bcf1-4c14-8dba-71bdb5f2a9ae">
-    <Deployment runDeploymentRoot="vyach_VYACHESLAV-LAPT_2025-09-18_13_51_21" />
+<TestRun id="e165d50e-e365-44ba-84ba-95af7e63bcff" name="vyach@VYACHESLAV-LAPT 2025-09-26 17:51:59" runUser="VYACHESLAV-LAPT\vyach" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2025-09-26T17:51:59.9632467-05:00" queuing="2025-09-26T17:51:59.9632471-05:00" start="2025-09-26T17:51:56.6481519-05:00" finish="2025-09-26T17:52:00.1526977-05:00" />
+  <TestSettings name="default" id="008831c0-2a2d-444a-8454-8ec7c41a62fe">
+    <Deployment runDeploymentRoot="vyach_VYACHESLAV-LAPT_2025-09-26_17_51_59" />
   </TestSettings>
   <Results>
-    <UnitTestResult executionId="f0cf9f1c-31cd-493c-89a1-2b2dbbb4f0c9" testId="ee4c9f89-f238-56ec-3a15-49a685a646f4" testName="CPR.IntegrationTests.FeedbackControllerTests.GetTodoRequests_WithValidToken_ReturnsRequests" computerName="VYACHESLAV-LAPT" duration="00:00:00.0537200" startTime="2025-09-18T13:51:22.5342485-05:00" endTime="2025-09-18T13:51:22.5342487-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f0cf9f1c-31cd-493c-89a1-2b2dbbb4f0c9" />
-    <UnitTestResult executionId="b6f5811b-3145-4aeb-ae21-4490b2c9bc16" testId="d56d3058-bd1c-d798-0ea3-cc6686dc7c76" testName="CPR.IntegrationTests.FeedbackControllerTests.SubmitFeedback_WithSelfFeedback_ReturnsBadRequest" computerName="VYACHESLAV-LAPT" duration="00:00:00.0036700" startTime="2025-09-18T13:51:22.6403568-05:00" endTime="2025-09-18T13:51:22.6403569-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b6f5811b-3145-4aeb-ae21-4490b2c9bc16" />
-    <UnitTestResult executionId="9eecc605-f7b0-4323-8b2a-bb67f7bb8b67" testId="f6141590-a703-295f-1627-e66a236312b3" testName="CPR.IntegrationTests.FeedbackControllerTests.SubmitFeedback_WithMaliciousContent_ReturnsBadRequest" computerName="VYACHESLAV-LAPT" duration="00:00:00.0313323" startTime="2025-09-18T13:51:22.5657490-05:00" endTime="2025-09-18T13:51:22.5657491-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="9eecc605-f7b0-4323-8b2a-bb67f7bb8b67" />
-    <UnitTestResult executionId="3bd3a6a6-ab00-47ae-82c0-56437c423d65" testId="ae2baf5f-ed77-a3c0-4409-3aa9d6f608ef" testName="CPR.IntegrationTests.FeedbackControllerTests.CreateFeedbackRequest_WithValidData_ReturnsCreated" computerName="VYACHESLAV-LAPT" duration="00:00:00.0266862" startTime="2025-09-18T13:51:22.5925544-05:00" endTime="2025-09-18T13:51:22.5925547-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="3bd3a6a6-ab00-47ae-82c0-56437c423d65" />
-    <UnitTestResult executionId="1f9d7308-8972-4c7d-b06d-e3f13cd95450" testId="3aade6ca-ec47-4cee-3b47-ad933911d26f" testName="CPR.IntegrationTests.FeedbackControllerTests.GetMyFeedback_WithoutAuth_ReturnsUnauthorized" computerName="VYACHESLAV-LAPT" duration="00:00:00.2509683" startTime="2025-09-18T13:51:21.0941464-05:00" endTime="2025-09-18T13:51:21.0941668-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1f9d7308-8972-4c7d-b06d-e3f13cd95450" />
-    <UnitTestResult executionId="fc8c2d31-480a-478b-9370-2e4c9291d920" testId="a1909a95-cfcf-e163-1184-69393c008254" testName="CPR.IntegrationTests.FeedbackControllerTests.GetSentRequests_WithValidToken_ReturnsRequests" computerName="VYACHESLAV-LAPT" duration="00:00:01.3478721" startTime="2025-09-18T13:51:22.4677583-05:00" endTime="2025-09-18T13:51:22.4677585-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="fc8c2d31-480a-478b-9370-2e4c9291d920" />
-    <UnitTestResult executionId="518aabb8-7b56-4d30-9645-1285188340fc" testId="45d374f6-d353-b8ab-8f38-5ad1bb340066" testName="CPR.IntegrationTests.FeedbackControllerTests.SubmitFeedback_WithoutAuth_ReturnsUnauthorized" computerName="VYACHESLAV-LAPT" duration="00:00:00.0251866" startTime="2025-09-18T13:51:21.1197764-05:00" endTime="2025-09-18T13:51:21.1197766-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="518aabb8-7b56-4d30-9645-1285188340fc" />
-    <UnitTestResult executionId="becc735a-daf1-4242-872f-55e0fadb0ce4" testId="eb99d772-e52d-33d1-5b56-17a9dfc45d29" testName="CPR.IntegrationTests.FeedbackControllerTests.SubmitFeedback_WithInvalidRating_ReturnsBadRequest" computerName="VYACHESLAV-LAPT" duration="00:00:00.0124841" startTime="2025-09-18T13:51:22.6052160-05:00" endTime="2025-09-18T13:51:22.6052165-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="becc735a-daf1-4242-872f-55e0fadb0ce4" />
-    <UnitTestResult executionId="c949e86b-392c-482a-8c41-88aa36455a1e" testId="61a9fa9c-b995-7f12-49f9-8116acddfade" testName="CPR.IntegrationTests.FeedbackControllerTests.GetMyFeedback_WithValidToken_ReturnsFeedback" computerName="VYACHESLAV-LAPT" duration="00:00:00.0090784" startTime="2025-09-18T13:51:22.6365487-05:00" endTime="2025-09-18T13:51:22.6365488-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c949e86b-392c-482a-8c41-88aa36455a1e" />
-    <UnitTestResult executionId="ce382ffa-ee55-4192-add7-2973a77d79fe" testId="553e17d0-eeee-fe28-b906-035531c28253" testName="CPR.IntegrationTests.FeedbackControllerTests.CreateFeedbackRequest_WithInvalidEmployeeId_ReturnsBadRequest" computerName="VYACHESLAV-LAPT" duration="00:00:00.0125271" startTime="2025-09-18T13:51:22.4804050-05:00" endTime="2025-09-18T13:51:22.4804052-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ce382ffa-ee55-4192-add7-2973a77d79fe" />
-    <UnitTestResult executionId="f99fb2eb-07cf-4436-a88c-7a8fc678a61b" testId="0de86132-3051-187e-70f1-4a17e5d53ce7" testName="CPR.IntegrationTests.FeedbackControllerTests.FeedbackEndpoints_WithoutAuth_ReturnsUnauthorized" computerName="VYACHESLAV-LAPT" duration="00:00:00.0025105" startTime="2025-09-18T13:51:22.6234254-05:00" endTime="2025-09-18T13:51:22.6234255-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f99fb2eb-07cf-4436-a88c-7a8fc678a61b" />
-    <UnitTestResult executionId="27ffee9a-11ed-4a8b-a541-0a7016af849f" testId="2fbf2db1-a558-a0e3-f310-db98f5460421" testName="CPR.IntegrationTests.FeedbackControllerTests.SubmitFeedback_WithContentTooShort_ReturnsBadRequest" computerName="VYACHESLAV-LAPT" duration="00:00:00.0037327" startTime="2025-09-18T13:51:22.6272865-05:00" endTime="2025-09-18T13:51:22.6272867-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="27ffee9a-11ed-4a8b-a541-0a7016af849f" />
-    <UnitTestResult executionId="814d9043-329e-4869-88f2-ad4fbf6717d8" testId="7ef2c649-79f6-7ef0-6e46-1bc8688c5122" testName="CPR.IntegrationTests.FeedbackControllerTests.SubmitFeedback_WithNonExistentEmployee_ReturnsBadRequest" computerName="VYACHESLAV-LAPT" duration="00:00:00.0153751" startTime="2025-09-18T13:51:22.6207862-05:00" endTime="2025-09-18T13:51:22.6207863-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="814d9043-329e-4869-88f2-ad4fbf6717d8" />
+    <UnitTestResult executionId="d9e1d905-821d-4283-b251-a8004b17dbc6" testId="3aade6ca-ec47-4cee-3b47-ad933911d26f" testName="CPR.IntegrationTests.FeedbackControllerTests.GetMyFeedback_WithoutAuth_ReturnsUnauthorized" computerName="VYACHESLAV-LAPT" duration="00:00:00.3859500" startTime="2025-09-26T17:51:59.1544926-05:00" endTime="2025-09-26T17:51:59.1545079-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d9e1d905-821d-4283-b251-a8004b17dbc6" />
+    <UnitTestResult executionId="3bf31802-96c7-456a-9680-1a22525b737c" testId="ae2baf5f-ed77-a3c0-4409-3aa9d6f608ef" testName="CPR.IntegrationTests.FeedbackControllerTests.CreateFeedbackRequest_WithValidData_ReturnsCreated" computerName="VYACHESLAV-LAPT" duration="00:00:00.0276724" startTime="2025-09-26T17:51:59.9021861-05:00" endTime="2025-09-26T17:51:59.9021863-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="3bf31802-96c7-456a-9680-1a22525b737c" />
+    <UnitTestResult executionId="7c9ed359-1ee9-41d3-bcaa-630ebce00bbd" testId="d56d3058-bd1c-d798-0ea3-cc6686dc7c76" testName="CPR.IntegrationTests.FeedbackControllerTests.SubmitFeedback_WithSelfFeedback_ReturnsBadRequest" computerName="VYACHESLAV-LAPT" duration="00:00:00.0133170" startTime="2025-09-26T17:52:00.0284474-05:00" endTime="2025-09-26T17:52:00.0284476-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="7c9ed359-1ee9-41d3-bcaa-630ebce00bbd" />
+    <UnitTestResult executionId="312972f8-6bc4-4719-9426-43b14abc89a8" testId="7ef2c649-79f6-7ef0-6e46-1bc8688c5122" testName="CPR.IntegrationTests.FeedbackControllerTests.SubmitFeedback_WithNonExistentEmployee_ReturnsBadRequest" computerName="VYACHESLAV-LAPT" duration="00:00:00.0197724" startTime="2025-09-26T17:51:59.9442832-05:00" endTime="2025-09-26T17:51:59.9442834-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="312972f8-6bc4-4719-9426-43b14abc89a8" />
+    <UnitTestResult executionId="b2b884b5-f6f9-41d6-be2d-84e3511ee6fa" testId="553e17d0-eeee-fe28-b906-035531c28253" testName="CPR.IntegrationTests.FeedbackControllerTests.CreateFeedbackRequest_WithInvalidEmployeeId_ReturnsBadRequest" computerName="VYACHESLAV-LAPT" duration="00:00:00.0132390" startTime="2025-09-26T17:51:59.6580199-05:00" endTime="2025-09-26T17:51:59.6580200-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b2b884b5-f6f9-41d6-be2d-84e3511ee6fa" />
+    <UnitTestResult executionId="f1ecedca-694d-45e0-a20e-08211ff0a386" testId="2fbf2db1-a558-a0e3-f310-db98f5460421" testName="CPR.IntegrationTests.FeedbackControllerTests.SubmitFeedback_WithContentTooShort_ReturnsBadRequest" computerName="VYACHESLAV-LAPT" duration="00:00:00.0083537" startTime="2025-09-26T17:51:59.9546624-05:00" endTime="2025-09-26T17:51:59.9546625-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f1ecedca-694d-45e0-a20e-08211ff0a386" />
+    <UnitTestResult executionId="9e9d159c-451c-49aa-a8e8-4f391f37bd6a" testId="eb99d772-e52d-33d1-5b56-17a9dfc45d29" testName="CPR.IntegrationTests.FeedbackControllerTests.SubmitFeedback_WithInvalidRating_ReturnsBadRequest" computerName="VYACHESLAV-LAPT" duration="00:00:00.0220380" startTime="2025-09-26T17:51:59.9243831-05:00" endTime="2025-09-26T17:51:59.9243833-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="9e9d159c-451c-49aa-a8e8-4f391f37bd6a" />
+    <UnitTestResult executionId="b256b7b0-adce-4f6d-8677-f8ff8c7222a5" testId="45d374f6-d353-b8ab-8f38-5ad1bb340066" testName="CPR.IntegrationTests.FeedbackControllerTests.SubmitFeedback_WithoutAuth_ReturnsUnauthorized" computerName="VYACHESLAV-LAPT" duration="00:00:00.0259978" startTime="2025-09-26T17:51:59.1809045-05:00" endTime="2025-09-26T17:51:59.1809050-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b256b7b0-adce-4f6d-8677-f8ff8c7222a5" />
+    <UnitTestResult executionId="5512d849-f55a-4a7a-8b82-9e0d159e98ab" testId="0de86132-3051-187e-70f1-4a17e5d53ce7" testName="CPR.IntegrationTests.FeedbackControllerTests.FeedbackEndpoints_WithoutAuth_ReturnsUnauthorized" computerName="VYACHESLAV-LAPT" duration="00:00:00.0018251" startTime="2025-09-26T17:51:59.9491968-05:00" endTime="2025-09-26T17:51:59.9491969-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="5512d849-f55a-4a7a-8b82-9e0d159e98ab" />
+    <UnitTestResult executionId="5954032e-5a51-4ce3-bcb4-479447231855" testId="f6141590-a703-295f-1627-e66a236312b3" testName="CPR.IntegrationTests.FeedbackControllerTests.SubmitFeedback_WithMaliciousContent_ReturnsBadRequest" computerName="VYACHESLAV-LAPT" duration="00:00:00.1717104" startTime="2025-09-26T17:51:59.8743527-05:00" endTime="2025-09-26T17:51:59.8743529-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="5954032e-5a51-4ce3-bcb4-479447231855" />
+    <UnitTestResult executionId="f7e6e579-463f-43df-968c-0170ea73c179" testId="a1909a95-cfcf-e163-1184-69393c008254" testName="CPR.IntegrationTests.FeedbackControllerTests.GetSentRequests_WithValidToken_ReturnsRequests" computerName="VYACHESLAV-LAPT" duration="00:00:00.4636039" startTime="2025-09-26T17:51:59.6445964-05:00" endTime="2025-09-26T17:51:59.6445965-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f7e6e579-463f-43df-968c-0170ea73c179" />
+    <UnitTestResult executionId="3792000f-eb90-40e3-92f3-384c8d8cf1e2" testId="61a9fa9c-b995-7f12-49f9-8116acddfade" testName="CPR.IntegrationTests.FeedbackControllerTests.GetMyFeedback_WithValidToken_ReturnsFeedback" computerName="VYACHESLAV-LAPT" duration="00:00:00.0602237" startTime="2025-09-26T17:52:00.0150154-05:00" endTime="2025-09-26T17:52:00.0150156-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="3792000f-eb90-40e3-92f3-384c8d8cf1e2" />
+    <UnitTestResult executionId="70f1f05c-c2c4-4e12-85b0-debf313d3617" testId="ee4c9f89-f238-56ec-3a15-49a685a646f4" testName="CPR.IntegrationTests.FeedbackControllerTests.GetTodoRequests_WithValidToken_ReturnsRequests" computerName="VYACHESLAV-LAPT" duration="00:00:00.0443994" startTime="2025-09-26T17:51:59.7024945-05:00" endTime="2025-09-26T17:51:59.7024946-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="70f1f05c-c2c4-4e12-85b0-debf313d3617" />
   </Results>
   <TestDefinitions>
     <UnitTest name="CPR.IntegrationTests.FeedbackControllerTests.GetTodoRequests_WithValidToken_ReturnsRequests" storage="d:\projects\cpr\tests\cpr.integrationtests\bin\debug\net9.0\cpr.integrationtests.dll" id="ee4c9f89-f238-56ec-3a15-49a685a646f4">
-      <Execution id="f0cf9f1c-31cd-493c-89a1-2b2dbbb4f0c9" />
+      <Execution id="70f1f05c-c2c4-4e12-85b0-debf313d3617" />
       <TestMethod codeBase="D:\projects\CPR\tests\CPR.IntegrationTests\bin\Debug\net9.0\CPR.IntegrationTests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="CPR.IntegrationTests.FeedbackControllerTests" name="GetTodoRequests_WithValidToken_ReturnsRequests" />
     </UnitTest>
     <UnitTest name="CPR.IntegrationTests.FeedbackControllerTests.SubmitFeedback_WithInvalidRating_ReturnsBadRequest" storage="d:\projects\cpr\tests\cpr.integrationtests\bin\debug\net9.0\cpr.integrationtests.dll" id="eb99d772-e52d-33d1-5b56-17a9dfc45d29">
-      <Execution id="becc735a-daf1-4242-872f-55e0fadb0ce4" />
+      <Execution id="9e9d159c-451c-49aa-a8e8-4f391f37bd6a" />
       <TestMethod codeBase="D:\projects\CPR\tests\CPR.IntegrationTests\bin\Debug\net9.0\CPR.IntegrationTests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="CPR.IntegrationTests.FeedbackControllerTests" name="SubmitFeedback_WithInvalidRating_ReturnsBadRequest" />
     </UnitTest>
     <UnitTest name="CPR.IntegrationTests.FeedbackControllerTests.SubmitFeedback_WithNonExistentEmployee_ReturnsBadRequest" storage="d:\projects\cpr\tests\cpr.integrationtests\bin\debug\net9.0\cpr.integrationtests.dll" id="7ef2c649-79f6-7ef0-6e46-1bc8688c5122">
-      <Execution id="814d9043-329e-4869-88f2-ad4fbf6717d8" />
+      <Execution id="312972f8-6bc4-4719-9426-43b14abc89a8" />
       <TestMethod codeBase="D:\projects\CPR\tests\CPR.IntegrationTests\bin\Debug\net9.0\CPR.IntegrationTests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="CPR.IntegrationTests.FeedbackControllerTests" name="SubmitFeedback_WithNonExistentEmployee_ReturnsBadRequest" />
     </UnitTest>
     <UnitTest name="CPR.IntegrationTests.FeedbackControllerTests.GetSentRequests_WithValidToken_ReturnsRequests" storage="d:\projects\cpr\tests\cpr.integrationtests\bin\debug\net9.0\cpr.integrationtests.dll" id="a1909a95-cfcf-e163-1184-69393c008254">
-      <Execution id="fc8c2d31-480a-478b-9370-2e4c9291d920" />
+      <Execution id="f7e6e579-463f-43df-968c-0170ea73c179" />
       <TestMethod codeBase="D:\projects\CPR\tests\CPR.IntegrationTests\bin\Debug\net9.0\CPR.IntegrationTests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="CPR.IntegrationTests.FeedbackControllerTests" name="GetSentRequests_WithValidToken_ReturnsRequests" />
     </UnitTest>
     <UnitTest name="CPR.IntegrationTests.FeedbackControllerTests.GetMyFeedback_WithoutAuth_ReturnsUnauthorized" storage="d:\projects\cpr\tests\cpr.integrationtests\bin\debug\net9.0\cpr.integrationtests.dll" id="3aade6ca-ec47-4cee-3b47-ad933911d26f">
-      <Execution id="1f9d7308-8972-4c7d-b06d-e3f13cd95450" />
+      <Execution id="d9e1d905-821d-4283-b251-a8004b17dbc6" />
       <TestMethod codeBase="D:\projects\CPR\tests\CPR.IntegrationTests\bin\Debug\net9.0\CPR.IntegrationTests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="CPR.IntegrationTests.FeedbackControllerTests" name="GetMyFeedback_WithoutAuth_ReturnsUnauthorized" />
     </UnitTest>
     <UnitTest name="CPR.IntegrationTests.FeedbackControllerTests.SubmitFeedback_WithoutAuth_ReturnsUnauthorized" storage="d:\projects\cpr\tests\cpr.integrationtests\bin\debug\net9.0\cpr.integrationtests.dll" id="45d374f6-d353-b8ab-8f38-5ad1bb340066">
-      <Execution id="518aabb8-7b56-4d30-9645-1285188340fc" />
+      <Execution id="b256b7b0-adce-4f6d-8677-f8ff8c7222a5" />
       <TestMethod codeBase="D:\projects\CPR\tests\CPR.IntegrationTests\bin\Debug\net9.0\CPR.IntegrationTests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="CPR.IntegrationTests.FeedbackControllerTests" name="SubmitFeedback_WithoutAuth_ReturnsUnauthorized" />
     </UnitTest>
     <UnitTest name="CPR.IntegrationTests.FeedbackControllerTests.CreateFeedbackRequest_WithInvalidEmployeeId_ReturnsBadRequest" storage="d:\projects\cpr\tests\cpr.integrationtests\bin\debug\net9.0\cpr.integrationtests.dll" id="553e17d0-eeee-fe28-b906-035531c28253">
-      <Execution id="ce382ffa-ee55-4192-add7-2973a77d79fe" />
+      <Execution id="b2b884b5-f6f9-41d6-be2d-84e3511ee6fa" />
       <TestMethod codeBase="D:\projects\CPR\tests\CPR.IntegrationTests\bin\Debug\net9.0\CPR.IntegrationTests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="CPR.IntegrationTests.FeedbackControllerTests" name="CreateFeedbackRequest_WithInvalidEmployeeId_ReturnsBadRequest" />
     </UnitTest>
     <UnitTest name="CPR.IntegrationTests.FeedbackControllerTests.SubmitFeedback_WithSelfFeedback_ReturnsBadRequest" storage="d:\projects\cpr\tests\cpr.integrationtests\bin\debug\net9.0\cpr.integrationtests.dll" id="d56d3058-bd1c-d798-0ea3-cc6686dc7c76">
-      <Execution id="b6f5811b-3145-4aeb-ae21-4490b2c9bc16" />
+      <Execution id="7c9ed359-1ee9-41d3-bcaa-630ebce00bbd" />
       <TestMethod codeBase="D:\projects\CPR\tests\CPR.IntegrationTests\bin\Debug\net9.0\CPR.IntegrationTests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="CPR.IntegrationTests.FeedbackControllerTests" name="SubmitFeedback_WithSelfFeedback_ReturnsBadRequest" />
     </UnitTest>
     <UnitTest name="CPR.IntegrationTests.FeedbackControllerTests.FeedbackEndpoints_WithoutAuth_ReturnsUnauthorized" storage="d:\projects\cpr\tests\cpr.integrationtests\bin\debug\net9.0\cpr.integrationtests.dll" id="0de86132-3051-187e-70f1-4a17e5d53ce7">
-      <Execution id="f99fb2eb-07cf-4436-a88c-7a8fc678a61b" />
+      <Execution id="5512d849-f55a-4a7a-8b82-9e0d159e98ab" />
       <TestMethod codeBase="D:\projects\CPR\tests\CPR.IntegrationTests\bin\Debug\net9.0\CPR.IntegrationTests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="CPR.IntegrationTests.FeedbackControllerTests" name="FeedbackEndpoints_WithoutAuth_ReturnsUnauthorized" />
     </UnitTest>
     <UnitTest name="CPR.IntegrationTests.FeedbackControllerTests.GetMyFeedback_WithValidToken_ReturnsFeedback" storage="d:\projects\cpr\tests\cpr.integrationtests\bin\debug\net9.0\cpr.integrationtests.dll" id="61a9fa9c-b995-7f12-49f9-8116acddfade">
-      <Execution id="c949e86b-392c-482a-8c41-88aa36455a1e" />
+      <Execution id="3792000f-eb90-40e3-92f3-384c8d8cf1e2" />
       <TestMethod codeBase="D:\projects\CPR\tests\CPR.IntegrationTests\bin\Debug\net9.0\CPR.IntegrationTests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="CPR.IntegrationTests.FeedbackControllerTests" name="GetMyFeedback_WithValidToken_ReturnsFeedback" />
     </UnitTest>
     <UnitTest name="CPR.IntegrationTests.FeedbackControllerTests.SubmitFeedback_WithMaliciousContent_ReturnsBadRequest" storage="d:\projects\cpr\tests\cpr.integrationtests\bin\debug\net9.0\cpr.integrationtests.dll" id="f6141590-a703-295f-1627-e66a236312b3">
-      <Execution id="9eecc605-f7b0-4323-8b2a-bb67f7bb8b67" />
+      <Execution id="5954032e-5a51-4ce3-bcb4-479447231855" />
       <TestMethod codeBase="D:\projects\CPR\tests\CPR.IntegrationTests\bin\Debug\net9.0\CPR.IntegrationTests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="CPR.IntegrationTests.FeedbackControllerTests" name="SubmitFeedback_WithMaliciousContent_ReturnsBadRequest" />
     </UnitTest>
     <UnitTest name="CPR.IntegrationTests.FeedbackControllerTests.CreateFeedbackRequest_WithValidData_ReturnsCreated" storage="d:\projects\cpr\tests\cpr.integrationtests\bin\debug\net9.0\cpr.integrationtests.dll" id="ae2baf5f-ed77-a3c0-4409-3aa9d6f608ef">
-      <Execution id="3bd3a6a6-ab00-47ae-82c0-56437c423d65" />
+      <Execution id="3bf31802-96c7-456a-9680-1a22525b737c" />
       <TestMethod codeBase="D:\projects\CPR\tests\CPR.IntegrationTests\bin\Debug\net9.0\CPR.IntegrationTests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="CPR.IntegrationTests.FeedbackControllerTests" name="CreateFeedbackRequest_WithValidData_ReturnsCreated" />
     </UnitTest>
     <UnitTest name="CPR.IntegrationTests.FeedbackControllerTests.SubmitFeedback_WithContentTooShort_ReturnsBadRequest" storage="d:\projects\cpr\tests\cpr.integrationtests\bin\debug\net9.0\cpr.integrationtests.dll" id="2fbf2db1-a558-a0e3-f310-db98f5460421">
-      <Execution id="27ffee9a-11ed-4a8b-a541-0a7016af849f" />
+      <Execution id="f1ecedca-694d-45e0-a20e-08211ff0a386" />
       <TestMethod codeBase="D:\projects\CPR\tests\CPR.IntegrationTests\bin\Debug\net9.0\CPR.IntegrationTests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="CPR.IntegrationTests.FeedbackControllerTests" name="SubmitFeedback_WithContentTooShort_ReturnsBadRequest" />
     </UnitTest>
   </TestDefinitions>
   <TestEntries>
-    <TestEntry testId="ee4c9f89-f238-56ec-3a15-49a685a646f4" executionId="f0cf9f1c-31cd-493c-89a1-2b2dbbb4f0c9" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
-    <TestEntry testId="d56d3058-bd1c-d798-0ea3-cc6686dc7c76" executionId="b6f5811b-3145-4aeb-ae21-4490b2c9bc16" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
-    <TestEntry testId="f6141590-a703-295f-1627-e66a236312b3" executionId="9eecc605-f7b0-4323-8b2a-bb67f7bb8b67" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
-    <TestEntry testId="ae2baf5f-ed77-a3c0-4409-3aa9d6f608ef" executionId="3bd3a6a6-ab00-47ae-82c0-56437c423d65" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
-    <TestEntry testId="3aade6ca-ec47-4cee-3b47-ad933911d26f" executionId="1f9d7308-8972-4c7d-b06d-e3f13cd95450" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
-    <TestEntry testId="a1909a95-cfcf-e163-1184-69393c008254" executionId="fc8c2d31-480a-478b-9370-2e4c9291d920" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
-    <TestEntry testId="45d374f6-d353-b8ab-8f38-5ad1bb340066" executionId="518aabb8-7b56-4d30-9645-1285188340fc" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
-    <TestEntry testId="eb99d772-e52d-33d1-5b56-17a9dfc45d29" executionId="becc735a-daf1-4242-872f-55e0fadb0ce4" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
-    <TestEntry testId="61a9fa9c-b995-7f12-49f9-8116acddfade" executionId="c949e86b-392c-482a-8c41-88aa36455a1e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
-    <TestEntry testId="553e17d0-eeee-fe28-b906-035531c28253" executionId="ce382ffa-ee55-4192-add7-2973a77d79fe" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
-    <TestEntry testId="0de86132-3051-187e-70f1-4a17e5d53ce7" executionId="f99fb2eb-07cf-4436-a88c-7a8fc678a61b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
-    <TestEntry testId="2fbf2db1-a558-a0e3-f310-db98f5460421" executionId="27ffee9a-11ed-4a8b-a541-0a7016af849f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
-    <TestEntry testId="7ef2c649-79f6-7ef0-6e46-1bc8688c5122" executionId="814d9043-329e-4869-88f2-ad4fbf6717d8" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="3aade6ca-ec47-4cee-3b47-ad933911d26f" executionId="d9e1d905-821d-4283-b251-a8004b17dbc6" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="ae2baf5f-ed77-a3c0-4409-3aa9d6f608ef" executionId="3bf31802-96c7-456a-9680-1a22525b737c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="d56d3058-bd1c-d798-0ea3-cc6686dc7c76" executionId="7c9ed359-1ee9-41d3-bcaa-630ebce00bbd" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="7ef2c649-79f6-7ef0-6e46-1bc8688c5122" executionId="312972f8-6bc4-4719-9426-43b14abc89a8" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="553e17d0-eeee-fe28-b906-035531c28253" executionId="b2b884b5-f6f9-41d6-be2d-84e3511ee6fa" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="2fbf2db1-a558-a0e3-f310-db98f5460421" executionId="f1ecedca-694d-45e0-a20e-08211ff0a386" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="eb99d772-e52d-33d1-5b56-17a9dfc45d29" executionId="9e9d159c-451c-49aa-a8e8-4f391f37bd6a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="45d374f6-d353-b8ab-8f38-5ad1bb340066" executionId="b256b7b0-adce-4f6d-8677-f8ff8c7222a5" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="0de86132-3051-187e-70f1-4a17e5d53ce7" executionId="5512d849-f55a-4a7a-8b82-9e0d159e98ab" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="f6141590-a703-295f-1627-e66a236312b3" executionId="5954032e-5a51-4ce3-bcb4-479447231855" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="a1909a95-cfcf-e163-1184-69393c008254" executionId="f7e6e579-463f-43df-968c-0170ea73c179" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="61a9fa9c-b995-7f12-49f9-8116acddfade" executionId="3792000f-eb90-40e3-92f3-384c8d8cf1e2" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="ee4c9f89-f238-56ec-3a15-49a685a646f4" executionId="70f1f05c-c2c4-4e12-85b0-debf313d3617" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
   </TestEntries>
   <TestLists>
     <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
@@ -96,22 +96,398 @@
     <Counters total="13" executed="13" passed="13" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
     <Output>
       <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v2.8.0+6438bb880a (64-bit .NET 9.0.3)&#xD;
-[xUnit.net 00:00:00.62]   Discovering: CPR.IntegrationTests&#xD;
-[xUnit.net 00:00:00.65]   Discovered:  CPR.IntegrationTests&#xD;
-[xUnit.net 00:00:00.65]   Starting:    CPR.IntegrationTests&#xD;
+[xUnit.net 00:00:00.69]   Discovering: CPR.IntegrationTests&#xD;
+[xUnit.net 00:00:00.72]   Discovered:  CPR.IntegrationTests&#xD;
+[xUnit.net 00:00:00.72]   Starting:    CPR.IntegrationTests&#xD;
+info: CPR.Infrastructure.Services.DatabaseSeeder[0]&#xD;
+      Starting database seeding...&#xD;
+info: CPR.Infrastructure.Services.DatabaseSeeder[0]&#xD;
+      Departments already exist, skipping seeding.&#xD;
+info: CPR.Infrastructure.Services.DatabaseSeeder[0]&#xD;
+      Career paths and tracks already exist, skipping seeding.&#xD;
+info: CPR.Infrastructure.Services.DatabaseSeeder[0]&#xD;
+      Positions already exist, skipping seeding.&#xD;
+info: CPR.Infrastructure.Services.DatabaseSeeder[0]&#xD;
+      Users and employees already exist, skipping seeding.&#xD;
+info: CPR.Infrastructure.Services.DatabaseSeeder[0]&#xD;
+      Skill categories and skills already exist, skipping seeding.&#xD;
+info: CPR.Infrastructure.Services.DatabaseSeeder[0]&#xD;
+      Projects already exist, skipping seeding.&#xD;
+info: CPR.Infrastructure.Services.DatabaseSeeder[0]&#xD;
+      Database seeding completed.&#xD;
 info: CPR.Api.Auth.JwtStubAuthenticationHandler[12]&#xD;
       AuthenticationScheme: Stub was challenged.&#xD;
 info: CPR.Api.Auth.JwtStubAuthenticationHandler[12]&#xD;
       AuthenticationScheme: Stub was challenged.&#xD;
-Found 52 todo requests&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.JVw6x28hszONnp4btylLVqT/MmaIs8gQj2i8SOf0LuI=&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: JVw6x28hszONnp4btylLVqT/MmaIs8gQj2i8SOf0LuI=&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Using signing key: local-test-key&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Expected signature: JVw6x28hszONnp4btylLVqT/MmaIs8gQj2i8SOf0LuI=, Received: JVw6x28hszONnp4btylLVqT/MmaIs8gQj2i8SOf0LuI=&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Received token: c6874b28-e2fa-4835-8e8f-159bd5067091.fqcKo3EyO9RWVn+KDxGbBYHLS90b0HbO+nOUAAfVlLc=&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Parsed userId: c6874b28-e2fa-4835-8e8f-159bd5067091, sig: fqcKo3EyO9RWVn+KDxGbBYHLS90b0HbO+nOUAAfVlLc=&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Using signing key: local-test-key&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Expected signature: fqcKo3EyO9RWVn+KDxGbBYHLS90b0HbO+nOUAAfVlLc=, Received: fqcKo3EyO9RWVn+KDxGbBYHLS90b0HbO+nOUAAfVlLc=&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Authentication successful for user: c6874b28-e2fa-4835-8e8f-159bd5067091&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.JVw6x28hszONnp4btylLVqT/MmaIs8gQj2i8SOf0LuI=&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: JVw6x28hszONnp4btylLVqT/MmaIs8gQj2i8SOf0LuI=&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Using signing key: local-test-key&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Expected signature: JVw6x28hszONnp4btylLVqT/MmaIs8gQj2i8SOf0LuI=, Received: JVw6x28hszONnp4btylLVqT/MmaIs8gQj2i8SOf0LuI=&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.JVw6x28hszONnp4btylLVqT/MmaIs8gQj2i8SOf0LuI=&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: JVw6x28hszONnp4btylLVqT/MmaIs8gQj2i8SOf0LuI=&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Using signing key: local-test-key&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Expected signature: JVw6x28hszONnp4btylLVqT/MmaIs8gQj2i8SOf0LuI=, Received: JVw6x28hszONnp4btylLVqT/MmaIs8gQj2i8SOf0LuI=&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.JVw6x28hszONnp4btylLVqT/MmaIs8gQj2i8SOf0LuI=&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: JVw6x28hszONnp4btylLVqT/MmaIs8gQj2i8SOf0LuI=&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Using signing key: local-test-key&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Expected signature: JVw6x28hszONnp4btylLVqT/MmaIs8gQj2i8SOf0LuI=, Received: JVw6x28hszONnp4btylLVqT/MmaIs8gQj2i8SOf0LuI=&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.JVw6x28hszONnp4btylLVqT/MmaIs8gQj2i8SOf0LuI=&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: JVw6x28hszONnp4btylLVqT/MmaIs8gQj2i8SOf0LuI=&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Using signing key: local-test-key&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Expected signature: JVw6x28hszONnp4btylLVqT/MmaIs8gQj2i8SOf0LuI=, Received: JVw6x28hszONnp4btylLVqT/MmaIs8gQj2i8SOf0LuI=&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.JVw6x28hszONnp4btylLVqT/MmaIs8gQj2i8SOf0LuI=&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: JVw6x28hszONnp4btylLVqT/MmaIs8gQj2i8SOf0LuI=&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Using signing key: local-test-key&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Expected signature: JVw6x28hszONnp4btylLVqT/MmaIs8gQj2i8SOf0LuI=, Received: JVw6x28hszONnp4btylLVqT/MmaIs8gQj2i8SOf0LuI=&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Received token: c6874b28-e2fa-4835-8e8f-159bd5067091.fqcKo3EyO9RWVn+KDxGbBYHLS90b0HbO+nOUAAfVlLc=&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Parsed userId: c6874b28-e2fa-4835-8e8f-159bd5067091, sig: fqcKo3EyO9RWVn+KDxGbBYHLS90b0HbO+nOUAAfVlLc=&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Using signing key: local-test-key&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Expected signature: fqcKo3EyO9RWVn+KDxGbBYHLS90b0HbO+nOUAAfVlLc=, Received: fqcKo3EyO9RWVn+KDxGbBYHLS90b0HbO+nOUAAfVlLc=&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Authentication successful for user: c6874b28-e2fa-4835-8e8f-159bd5067091&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.JVw6x28hszONnp4btylLVqT/MmaIs8gQj2i8SOf0LuI=&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: JVw6x28hszONnp4btylLVqT/MmaIs8gQj2i8SOf0LuI=&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Using signing key: local-test-key&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Expected signature: JVw6x28hszONnp4btylLVqT/MmaIs8gQj2i8SOf0LuI=, Received: JVw6x28hszONnp4btylLVqT/MmaIs8gQj2i8SOf0LuI=&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.JVw6x28hszONnp4btylLVqT/MmaIs8gQj2i8SOf0LuI=&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: JVw6x28hszONnp4btylLVqT/MmaIs8gQj2i8SOf0LuI=&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Using signing key: local-test-key&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Expected signature: JVw6x28hszONnp4btylLVqT/MmaIs8gQj2i8SOf0LuI=, Received: JVw6x28hszONnp4btylLVqT/MmaIs8gQj2i8SOf0LuI=&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.JVw6x28hszONnp4btylLVqT/MmaIs8gQj2i8SOf0LuI=&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: JVw6x28hszONnp4btylLVqT/MmaIs8gQj2i8SOf0LuI=&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Using signing key: local-test-key&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Expected signature: JVw6x28hszONnp4btylLVqT/MmaIs8gQj2i8SOf0LuI=, Received: JVw6x28hszONnp4btylLVqT/MmaIs8gQj2i8SOf0LuI=&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445&#xD;
+Found 0 todo requests&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Received token: c6874b28-e2fa-4835-8e8f-159bd5067091.fqcKo3EyO9RWVn+KDxGbBYHLS90b0HbO+nOUAAfVlLc=&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Parsed userId: c6874b28-e2fa-4835-8e8f-159bd5067091, sig: fqcKo3EyO9RWVn+KDxGbBYHLS90b0HbO+nOUAAfVlLc=&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Using signing key: local-test-key&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Expected signature: fqcKo3EyO9RWVn+KDxGbBYHLS90b0HbO+nOUAAfVlLc=, Received: fqcKo3EyO9RWVn+KDxGbBYHLS90b0HbO+nOUAAfVlLc=&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Authentication successful for user: c6874b28-e2fa-4835-8e8f-159bd5067091&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.JVw6x28hszONnp4btylLVqT/MmaIs8gQj2i8SOf0LuI=&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: JVw6x28hszONnp4btylLVqT/MmaIs8gQj2i8SOf0LuI=&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Using signing key: local-test-key&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Expected signature: JVw6x28hszONnp4btylLVqT/MmaIs8gQj2i8SOf0LuI=, Received: JVw6x28hszONnp4btylLVqT/MmaIs8gQj2i8SOf0LuI=&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.JVw6x28hszONnp4btylLVqT/MmaIs8gQj2i8SOf0LuI=&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: JVw6x28hszONnp4btylLVqT/MmaIs8gQj2i8SOf0LuI=&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Using signing key: local-test-key&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Expected signature: JVw6x28hszONnp4btylLVqT/MmaIs8gQj2i8SOf0LuI=, Received: JVw6x28hszONnp4btylLVqT/MmaIs8gQj2i8SOf0LuI=&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.JVw6x28hszONnp4btylLVqT/MmaIs8gQj2i8SOf0LuI=&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: JVw6x28hszONnp4btylLVqT/MmaIs8gQj2i8SOf0LuI=&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Using signing key: local-test-key&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Expected signature: JVw6x28hszONnp4btylLVqT/MmaIs8gQj2i8SOf0LuI=, Received: JVw6x28hszONnp4btylLVqT/MmaIs8gQj2i8SOf0LuI=&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.JVw6x28hszONnp4btylLVqT/MmaIs8gQj2i8SOf0LuI=&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: JVw6x28hszONnp4btylLVqT/MmaIs8gQj2i8SOf0LuI=&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Using signing key: local-test-key&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Expected signature: JVw6x28hszONnp4btylLVqT/MmaIs8gQj2i8SOf0LuI=, Received: JVw6x28hszONnp4btylLVqT/MmaIs8gQj2i8SOf0LuI=&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Received token: c6874b28-e2fa-4835-8e8f-159bd5067091.fqcKo3EyO9RWVn+KDxGbBYHLS90b0HbO+nOUAAfVlLc=&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Parsed userId: c6874b28-e2fa-4835-8e8f-159bd5067091, sig: fqcKo3EyO9RWVn+KDxGbBYHLS90b0HbO+nOUAAfVlLc=&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Using signing key: local-test-key&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Expected signature: fqcKo3EyO9RWVn+KDxGbBYHLS90b0HbO+nOUAAfVlLc=, Received: fqcKo3EyO9RWVn+KDxGbBYHLS90b0HbO+nOUAAfVlLc=&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Authentication successful for user: c6874b28-e2fa-4835-8e8f-159bd5067091&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.JVw6x28hszONnp4btylLVqT/MmaIs8gQj2i8SOf0LuI=&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: JVw6x28hszONnp4btylLVqT/MmaIs8gQj2i8SOf0LuI=&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Using signing key: local-test-key&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Expected signature: JVw6x28hszONnp4btylLVqT/MmaIs8gQj2i8SOf0LuI=, Received: JVw6x28hszONnp4btylLVqT/MmaIs8gQj2i8SOf0LuI=&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.JVw6x28hszONnp4btylLVqT/MmaIs8gQj2i8SOf0LuI=&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: JVw6x28hszONnp4btylLVqT/MmaIs8gQj2i8SOf0LuI=&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Using signing key: local-test-key&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Expected signature: JVw6x28hszONnp4btylLVqT/MmaIs8gQj2i8SOf0LuI=, Received: JVw6x28hszONnp4btylLVqT/MmaIs8gQj2i8SOf0LuI=&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Received token: c6874b28-e2fa-4835-8e8f-159bd5067091.fqcKo3EyO9RWVn+KDxGbBYHLS90b0HbO+nOUAAfVlLc=&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Parsed userId: c6874b28-e2fa-4835-8e8f-159bd5067091, sig: fqcKo3EyO9RWVn+KDxGbBYHLS90b0HbO+nOUAAfVlLc=&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Using signing key: local-test-key&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Expected signature: fqcKo3EyO9RWVn+KDxGbBYHLS90b0HbO+nOUAAfVlLc=, Received: fqcKo3EyO9RWVn+KDxGbBYHLS90b0HbO+nOUAAfVlLc=&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Authentication successful for user: c6874b28-e2fa-4835-8e8f-159bd5067091&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.JVw6x28hszONnp4btylLVqT/MmaIs8gQj2i8SOf0LuI=&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: JVw6x28hszONnp4btylLVqT/MmaIs8gQj2i8SOf0LuI=&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Using signing key: local-test-key&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Expected signature: JVw6x28hszONnp4btylLVqT/MmaIs8gQj2i8SOf0LuI=, Received: JVw6x28hszONnp4btylLVqT/MmaIs8gQj2i8SOf0LuI=&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.JVw6x28hszONnp4btylLVqT/MmaIs8gQj2i8SOf0LuI=&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: JVw6x28hszONnp4btylLVqT/MmaIs8gQj2i8SOf0LuI=&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Using signing key: local-test-key&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Expected signature: JVw6x28hszONnp4btylLVqT/MmaIs8gQj2i8SOf0LuI=, Received: JVw6x28hszONnp4btylLVqT/MmaIs8gQj2i8SOf0LuI=&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Received token: c6874b28-e2fa-4835-8e8f-159bd5067091.fqcKo3EyO9RWVn+KDxGbBYHLS90b0HbO+nOUAAfVlLc=&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Parsed userId: c6874b28-e2fa-4835-8e8f-159bd5067091, sig: fqcKo3EyO9RWVn+KDxGbBYHLS90b0HbO+nOUAAfVlLc=&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Using signing key: local-test-key&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Expected signature: fqcKo3EyO9RWVn+KDxGbBYHLS90b0HbO+nOUAAfVlLc=, Received: fqcKo3EyO9RWVn+KDxGbBYHLS90b0HbO+nOUAAfVlLc=&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Authentication successful for user: c6874b28-e2fa-4835-8e8f-159bd5067091&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.JVw6x28hszONnp4btylLVqT/MmaIs8gQj2i8SOf0LuI=&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: JVw6x28hszONnp4btylLVqT/MmaIs8gQj2i8SOf0LuI=&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Using signing key: local-test-key&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Expected signature: JVw6x28hszONnp4btylLVqT/MmaIs8gQj2i8SOf0LuI=, Received: JVw6x28hszONnp4btylLVqT/MmaIs8gQj2i8SOf0LuI=&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.JVw6x28hszONnp4btylLVqT/MmaIs8gQj2i8SOf0LuI=&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: JVw6x28hszONnp4btylLVqT/MmaIs8gQj2i8SOf0LuI=&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Using signing key: local-test-key&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Expected signature: JVw6x28hszONnp4btylLVqT/MmaIs8gQj2i8SOf0LuI=, Received: JVw6x28hszONnp4btylLVqT/MmaIs8gQj2i8SOf0LuI=&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.JVw6x28hszONnp4btylLVqT/MmaIs8gQj2i8SOf0LuI=&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: JVw6x28hszONnp4btylLVqT/MmaIs8gQj2i8SOf0LuI=&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Using signing key: local-test-key&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Expected signature: JVw6x28hszONnp4btylLVqT/MmaIs8gQj2i8SOf0LuI=, Received: JVw6x28hszONnp4btylLVqT/MmaIs8gQj2i8SOf0LuI=&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445&#xD;
 info: CPR.Api.Auth.JwtStubAuthenticationHandler[12]&#xD;
       AuthenticationScheme: Stub was challenged.&#xD;
 info: CPR.Api.Auth.JwtStubAuthenticationHandler[12]&#xD;
       AuthenticationScheme: Stub was challenged.&#xD;
 info: CPR.Api.Auth.JwtStubAuthenticationHandler[12]&#xD;
       AuthenticationScheme: Stub was challenged.&#xD;
-Skipping feedback retrieval test - feedback submission failed&#xD;
-[xUnit.net 00:00:02.49]   Finished:    CPR.IntegrationTests&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Received token: c6874b28-e2fa-4835-8e8f-159bd5067091.fqcKo3EyO9RWVn+KDxGbBYHLS90b0HbO+nOUAAfVlLc=&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Parsed userId: c6874b28-e2fa-4835-8e8f-159bd5067091, sig: fqcKo3EyO9RWVn+KDxGbBYHLS90b0HbO+nOUAAfVlLc=&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Using signing key: local-test-key&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Expected signature: fqcKo3EyO9RWVn+KDxGbBYHLS90b0HbO+nOUAAfVlLc=, Received: fqcKo3EyO9RWVn+KDxGbBYHLS90b0HbO+nOUAAfVlLc=&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Authentication successful for user: c6874b28-e2fa-4835-8e8f-159bd5067091&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.JVw6x28hszONnp4btylLVqT/MmaIs8gQj2i8SOf0LuI=&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: JVw6x28hszONnp4btylLVqT/MmaIs8gQj2i8SOf0LuI=&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Using signing key: local-test-key&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Expected signature: JVw6x28hszONnp4btylLVqT/MmaIs8gQj2i8SOf0LuI=, Received: JVw6x28hszONnp4btylLVqT/MmaIs8gQj2i8SOf0LuI=&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.JVw6x28hszONnp4btylLVqT/MmaIs8gQj2i8SOf0LuI=&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: JVw6x28hszONnp4btylLVqT/MmaIs8gQj2i8SOf0LuI=&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Using signing key: local-test-key&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Expected signature: JVw6x28hszONnp4btylLVqT/MmaIs8gQj2i8SOf0LuI=, Received: JVw6x28hszONnp4btylLVqT/MmaIs8gQj2i8SOf0LuI=&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Received token: c6874b28-e2fa-4835-8e8f-159bd5067091.fqcKo3EyO9RWVn+KDxGbBYHLS90b0HbO+nOUAAfVlLc=&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Parsed userId: c6874b28-e2fa-4835-8e8f-159bd5067091, sig: fqcKo3EyO9RWVn+KDxGbBYHLS90b0HbO+nOUAAfVlLc=&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Using signing key: local-test-key&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Expected signature: fqcKo3EyO9RWVn+KDxGbBYHLS90b0HbO+nOUAAfVlLc=, Received: fqcKo3EyO9RWVn+KDxGbBYHLS90b0HbO+nOUAAfVlLc=&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Authentication successful for user: c6874b28-e2fa-4835-8e8f-159bd5067091&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.JVw6x28hszONnp4btylLVqT/MmaIs8gQj2i8SOf0LuI=&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: JVw6x28hszONnp4btylLVqT/MmaIs8gQj2i8SOf0LuI=&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Using signing key: local-test-key&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Expected signature: JVw6x28hszONnp4btylLVqT/MmaIs8gQj2i8SOf0LuI=, Received: JVw6x28hszONnp4btylLVqT/MmaIs8gQj2i8SOf0LuI=&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.JVw6x28hszONnp4btylLVqT/MmaIs8gQj2i8SOf0LuI=&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: JVw6x28hszONnp4btylLVqT/MmaIs8gQj2i8SOf0LuI=&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Using signing key: local-test-key&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Expected signature: JVw6x28hszONnp4btylLVqT/MmaIs8gQj2i8SOf0LuI=, Received: JVw6x28hszONnp4btylLVqT/MmaIs8gQj2i8SOf0LuI=&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445&#xD;
+Feedback submission failed, but continuing with retrieval test&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.JVw6x28hszONnp4btylLVqT/MmaIs8gQj2i8SOf0LuI=&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: JVw6x28hszONnp4btylLVqT/MmaIs8gQj2i8SOf0LuI=&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Using signing key: local-test-key&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Expected signature: JVw6x28hszONnp4btylLVqT/MmaIs8gQj2i8SOf0LuI=, Received: JVw6x28hszONnp4btylLVqT/MmaIs8gQj2i8SOf0LuI=&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Received token: c6874b28-e2fa-4835-8e8f-159bd5067091.fqcKo3EyO9RWVn+KDxGbBYHLS90b0HbO+nOUAAfVlLc=&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Parsed userId: c6874b28-e2fa-4835-8e8f-159bd5067091, sig: fqcKo3EyO9RWVn+KDxGbBYHLS90b0HbO+nOUAAfVlLc=&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Using signing key: local-test-key&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Expected signature: fqcKo3EyO9RWVn+KDxGbBYHLS90b0HbO+nOUAAfVlLc=, Received: fqcKo3EyO9RWVn+KDxGbBYHLS90b0HbO+nOUAAfVlLc=&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Authentication successful for user: c6874b28-e2fa-4835-8e8f-159bd5067091&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.JVw6x28hszONnp4btylLVqT/MmaIs8gQj2i8SOf0LuI=&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: JVw6x28hszONnp4btylLVqT/MmaIs8gQj2i8SOf0LuI=&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Using signing key: local-test-key&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Expected signature: JVw6x28hszONnp4btylLVqT/MmaIs8gQj2i8SOf0LuI=, Received: JVw6x28hszONnp4btylLVqT/MmaIs8gQj2i8SOf0LuI=&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.JVw6x28hszONnp4btylLVqT/MmaIs8gQj2i8SOf0LuI=&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: JVw6x28hszONnp4btylLVqT/MmaIs8gQj2i8SOf0LuI=&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Using signing key: local-test-key&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Expected signature: JVw6x28hszONnp4btylLVqT/MmaIs8gQj2i8SOf0LuI=, Received: JVw6x28hszONnp4btylLVqT/MmaIs8gQj2i8SOf0LuI=&#xD;
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]&#xD;
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445&#xD;
+[xUnit.net 00:00:03.09]   Finished:    CPR.IntegrationTests&#xD;
 </StdOut>
     </Output>
   </ResultSummary>

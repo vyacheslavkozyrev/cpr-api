@@ -31,8 +31,24 @@ namespace CPR.IntegrationTests
                 using var db = new CPR.Infrastructure.Data.CprDbContext(options);
                 // Remove rows commonly inserted by tests (identified by title/description markers)
                 db.Goals.RemoveRange(db.Goals.Where(g => g.Title.StartsWith("Integration test") || g.Description == "verify persistence"));
+
                 // Clean up employee skills created by tests
-                db.EmployeeSkills.RemoveRange(db.EmployeeSkills.Where(es => es.EmployeeId == Guid.Parse("33333333-3333-3333-3333-333333333333")));
+                var testEmployeeIds = new[]
+                {
+                    Guid.Parse("33333333-3333-3333-3333-333333333333"), // TestEmployeeId1
+                    Guid.Parse("44444444-4444-4444-4444-444444444444"), // TestEmployeeId2
+                    Guid.Parse("55555555-5555-5555-5555-555555555555"), // TestEmployeeId3
+                    Guid.Parse("66666666-6666-6666-6666-666666666666"), // TestEmployeeId4
+                    Guid.Parse("77777777-7777-7777-7777-777777777777"), // TestEmployeeId5
+                    Guid.Parse("88888888-8888-8888-8888-888888888888")  // TestEmployeeId6
+                };
+
+                db.EmployeeSkills.RemoveRange(db.EmployeeSkills.Where(es => testEmployeeIds.Contains(es.EmployeeId)));
+
+                // Clean up feedback data created by tests
+                db.Feedback.RemoveRange(db.Feedback.Where(f => testEmployeeIds.Contains(f.FromEmployeeId) || testEmployeeIds.Contains(f.ToEmployeeId)));
+                db.FeedbackRequests.RemoveRange(db.FeedbackRequests.Where(fr => testEmployeeIds.Contains(fr.RequestorId) || testEmployeeIds.Contains(fr.EmployeeId)));
+
                 await db.SaveChangesAsync();
 
                 // Set up test data for team management tests
@@ -58,8 +74,24 @@ namespace CPR.IntegrationTests
 
                 using var db = new CPR.Infrastructure.Data.CprDbContext(options);
                 db.Goals.RemoveRange(db.Goals.Where(g => g.Title.StartsWith("Integration test") || g.Description == "verify persistence"));
+
                 // Clean up employee skills created by tests
-                db.EmployeeSkills.RemoveRange(db.EmployeeSkills.Where(es => es.EmployeeId == Guid.Parse("33333333-3333-3333-3333-333333333333")));
+                var testEmployeeIds = new[]
+                {
+                    Guid.Parse("33333333-3333-3333-3333-333333333333"), // TestEmployeeId1
+                    Guid.Parse("44444444-4444-4444-4444-444444444444"), // TestEmployeeId2
+                    Guid.Parse("55555555-5555-5555-5555-555555555555"), // TestEmployeeId3
+                    Guid.Parse("66666666-6666-6666-6666-666666666666"), // TestEmployeeId4
+                    Guid.Parse("77777777-7777-7777-7777-777777777777"), // TestEmployeeId5
+                    Guid.Parse("88888888-8888-8888-8888-888888888888")  // TestEmployeeId6
+                };
+
+                db.EmployeeSkills.RemoveRange(db.EmployeeSkills.Where(es => testEmployeeIds.Contains(es.EmployeeId)));
+
+                // Clean up feedback data created by tests
+                db.Feedback.RemoveRange(db.Feedback.Where(f => testEmployeeIds.Contains(f.FromEmployeeId) || testEmployeeIds.Contains(f.ToEmployeeId)));
+                db.FeedbackRequests.RemoveRange(db.FeedbackRequests.Where(fr => testEmployeeIds.Contains(fr.RequestorId) || testEmployeeIds.Contains(fr.EmployeeId)));
+
                 await db.SaveChangesAsync();
             }
             catch (Exception)
