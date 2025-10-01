@@ -314,14 +314,16 @@ namespace CPR.Infrastructure.Services
                     Id = new Guid("004e1f8b-1ea3-4e27-a373-ed82f85147cc"),
                     UserId = users[0].Id,
                     PositionId = new Guid("06091429-d5c5-47f7-9f85-3034618325c5"),
-                    DepartmentId = financeDept?.Id
+                    DepartmentId = engineeringDept?.Id,
+                    ManagerId = new Guid("0c8b8b8b-8b8b-4b8b-8b8b-8b8b8b8b8b8b") // Reports to Henry Wilson
                 },
                 new Employee
                 {
                     Id = new Guid("0353f880-f993-4b3a-a7c2-41e7c58f0aa6"),
                     UserId = users[1].Id,
                     PositionId = new Guid("0a3ddc39-af6b-487d-9bac-2d9dd0bee554"),
-                    DepartmentId = operationsDept?.Id
+                    DepartmentId = engineeringDept?.Id,
+                    ManagerId = new Guid("0c8b8b8b-8b8b-4b8b-8b8b-8b8b8b8b8b8b") // Reports to Henry Wilson
                 },
                 new Employee
                 {
@@ -448,7 +450,7 @@ namespace CPR.Infrastructure.Services
                     UserId = users[19].Id,
                     PositionId = new Guid("78d6f12b-d42c-4af5-991b-f2b069305f2a"),
                     DepartmentId = engineeringDept?.Id,
-                    ManagerId = users[9].Id // Reports to Senior Software Engineer
+                    ManagerId = new Guid("0c8b8b8b-8b8b-4b8b-8b8b-8b8b8b8b8b8b") // Reports to Henry Wilson (Senior Software Engineer)
                 }
             };
 
