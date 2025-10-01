@@ -41,17 +41,19 @@ public class UserService(CprDbContext db) : IUserService
             // This maintains backward compatibility with existing tests
             return new UserProfile
             {
+                UserId = userId.ToString(),
                 EmployeeId = userId.ToString(),
-                UserName = username,
+                UserName = username, // JWT name claim as fallback
                 DisplayName = username
             };
         }
 
         return new UserProfile
         {
+            UserId = employee.UserId.ToString(),
             EmployeeId = employee.Id.ToString(),
-            UserName = username,
-            DisplayName = employee.User?.DisplayName ?? username,
+            UserName = employee.User?.UserName ?? username,
+            DisplayName = employee.User?.DisplayName ?? employee.User?.UserName ?? username,
             Position = new Position { Id = "00000000-0000-0000-0000-000000000001", Title = "Developer" }
         };
     }

@@ -26,6 +26,12 @@ public class Position
 public class UserProfile
 {
     /// <summary>
+    /// User identifier (GUID string).
+    /// </summary>
+    [JsonPropertyName("user_id")]
+    public string UserId { get; set; } = string.Empty;
+
+    /// <summary>
     /// Employee identifier (GUID string).
     /// </summary>
     [JsonPropertyName("employee_id")]
