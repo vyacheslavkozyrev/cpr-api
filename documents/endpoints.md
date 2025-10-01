@@ -24,6 +24,30 @@ Employees
 - GET /employees/{id} — read employee (manager/admin)
 - GET /employees?department=&manager_id=&page=&size= — list / filters (manager/admin)
 
+### GET /me
+- **Purpose**: Return the current authenticated user's profile information
+- **Authentication**: Required (JWT Bearer token)
+- **Authorization**: Any authenticated user
+- **Response 200** (JSON):
+  ```json
+  {
+    "userId": "GUID - Unique user identifier",
+    "userName": "string - User's login/username",
+    "displayName": "string - User's display name",
+    "employeeId": "GUID - Associated employee record ID",
+    "position": "string - User's job position/title"
+  }
+  ```
+- **Error Responses**:
+  - `401 Unauthorized`: Authentication required
+  - `404 Not Found`: User profile not found
+
+### Notes
+- `userName` and `displayName` are sourced from the database, not JWT claims
+- `userId` is the unique identifier for the user account
+- `employeeId` links to the employee's detailed record
+- `position` reflects the user's current job title
+
 Goals
 - POST /goals — create goal (auth)
 - GET /me/goals — list my goals (auth) (filters: status, page, sort)
@@ -407,9 +431,78 @@ Feedback
 
 ## Manager
 Team & Reports
-- GET /team — list direct reports
-- GET /team/members/{employee_id} — profile + goals + feedback
-- GET /team/goals?status=&overdue=
+- GET /team — list direct reports (manager authorization required)
+- GET /team/members/{employee_id} — profile + goals + feedback (manager authorization required)
+- GET /team/goals?status=&overdue= — team goals overview (manager authorization required)
+
+### GET /team
+- **Purpose**: List all direct reports for the authenticated manager
+- **Authentication**: Required (JWT Bearer token)
+- **Authorization**: Manager role required (users without manager role receive 403 Forbidden)
+- **Response 200** (JSON Array):
+  ```json
+  [
+    {
+      "id": "GUID - Employee ID",
+      "userId": "GUID - Associated user ID",
+      "userName": "string - Employee username",
+      "displayName": "string - Employee display name",
+      "position": "string - Job position/title",
+      "department": "string - Department name",
+      "managerId": "GUID - Manager's employee ID"
+    }
+  ]
+  ```
+- **Error Responses**:
+  - `401 Unauthorized`: Authentication required
+  - `403 Forbidden`: User is not a manager or has no direct reports
+
+### GET /team/members/{employee_id}
+- **Purpose**: Get detailed profile, goals, and feedback for a specific team member
+- **Authentication**: Required (JWT Bearer token)
+- **Authorization**: Manager role required, and employee must be a direct report
+- **Path Parameters**:
+  - `employee_id`: GUID of the employee to retrieve
+- **Response 200** (JSON):
+  ```json
+  {
+    "profile": {
+      "id": "GUID",
+      "userId": "GUID",
+      "userName": "string",
+      "displayName": "string",
+      "position": "string",
+      "department": "string"
+    },
+    "goals": [
+      {
+        "id": "GUID",
+        "title": "string",
+        "status": "string",
+        "deadline": "DateTime (nullable)",
+        "createdAt": "DateTime"
+      }
+    ],
+    "recentFeedback": [
+      {
+        "id": "GUID",
+        "fromEmployeeId": "GUID",
+        "content": "string",
+        "rating": "integer",
+        "createdAt": "DateTime"
+      }
+    ]
+  }
+  ```
+- **Error Responses**:
+  - `401 Unauthorized`: Authentication required
+  - `403 Forbidden`: User is not a manager or employee is not a direct report
+  - `404 Not Found`: Employee not found
+
+### Authorization Notes
+- Manager authorization is determined by the presence of direct reports in the database (employees where ManagerId matches the authenticated user's employee ID)
+- Employees without manager roles receive 403 Forbidden responses
+- All team endpoints require the authenticated user to have established manager-reporter relationships in the database
 
 Approvals & Reviews
 - GET /reviews/pending

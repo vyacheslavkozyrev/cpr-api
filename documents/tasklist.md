@@ -165,8 +165,16 @@ Iterations
 - [x] Iteration 12 — Manager views
   - Scope: GET /team, GET /team/members/{employee_id}, GET /team/goals
   - Acceptance: Manager RBAC tests and integration smoke.
-  - Status: Complete (2025-09-18)
-  - Notes: Fully implemented team management endpoints with comprehensive data aggregation. Includes TeamController with all 3 endpoints, TeamService with rich data processing, TeamRepository for data access, complete DTOs, and full test coverage (unit + integration tests). Features manager RBAC authorization, JWT authentication, team member profiles with skills/goals/feedback/projects, and aggregated team goals with status tracking.
+  - Status: Complete (2025-09-30)
+  - Notes: Fully implemented and tested team management system with comprehensive fixes:
+    - Team endpoints: GET /api/team (team members), GET /api/team/members/{employeeId}, GET /api/team/goals
+    - Manager authorization: Proper RBAC with IsManagerAsync checks (403 Forbidden for non-managers)
+    - Data seeding: Fixed DatabaseSeeder.cs with proper manager-reporter relationships (Henry Wilson has 3 direct reports)
+    - Test fixes: Updated integration tests to use valid seeded employee IDs and dynamic goal creation
+    - Migration cleanup: Removed conflicting SeedData migration, keeping seeding in DatabaseSeeder.cs
+    - User profile fixes: Updated /api/me endpoint to return proper userId, userName, and displayName from database
+    - Full test coverage: All unit tests (31/31) and integration tests (48/48) passing
+    - Authorization validation: Managers access team data (200 OK), employees get 403 Forbidden
 
 - [ ] Iteration 13 — Performance reviews
   - Scope: POST /performance_reviews, GET /performance_reviews/{employee_id}
