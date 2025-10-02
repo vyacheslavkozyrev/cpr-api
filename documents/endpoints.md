@@ -14,6 +14,78 @@ Common query params (used across endpoints):
 
 ---
 
+## Authorization & Roles
+
+The API implements comprehensive Role-Based Access Control (RBAC) with the following role hierarchy:
+
+### **Role Definitions**
+- **Employee**: Basic user role for individual contributors. Can manage their own goals, feedback, and profile.
+- **People Manager**: Extends Employee role. Can view and manage their direct reports' goals, feedback, and team information.
+- **Solution Owner**: Extends People Manager role. Can manage projects and oversee solution-level initiatives.
+- **Director**: Extends Solution Owner role. Can approve promotions and access director-level reports.
+- **Administrator**: Full system access. Can manage users, roles, positions, and all system data.
+
+### **Role-Based Authorization**
+All endpoints require appropriate roles. Authorization is enforced through:
+- `[RequireRole]` attributes on controllers and methods
+- JWT token validation with role claims
+- Database-backed role assignments via `user_to_role` junction table
+
+### **Role Requirements by Endpoint Group**
+
+#### **Employee Endpoints** (Any authenticated user)
+- `GET /me` - Any authenticated user
+- `PATCH /me` - Any authenticated user
+- `POST /goals` - Any authenticated user
+- `GET /me/goals` - Any authenticated user
+- `GET /goals/{id}` - Owner only (or higher roles)
+- `PATCH /goals/{id}` - Owner only (or higher roles)
+- `DELETE /goals/{id}` - Owner only (or Administrator)
+- `POST /goals/{id}/tasks` - Owner only (or higher roles)
+
+#### **Manager Endpoints** (People Manager, Solution Owner, Director, Administrator)
+- `GET /team` - People Manager+
+- `GET /team/members/{employee_id}` - People Manager+
+- `GET /team/goals` - People Manager+
+- `GET /employees/{id}` - People Manager+
+- `GET /employees` - People Manager+
+
+#### **HR/Admin Endpoints** (Administrator only)
+- `GET /users` - Administrator
+- `POST /users` - Administrator
+- `PATCH /users/{id}` - Administrator
+- `DELETE /users/{id}` - Administrator
+- `GET /employees` - Administrator
+- `POST /employees` - Administrator
+- `PATCH /employees/{id}` - Administrator
+- `DELETE /employees/{id}` - Administrator
+- `CRUD /positions` - Administrator
+- `CRUD /career_tracks` - Administrator
+- `CRUD /career_paths` - Administrator
+- `CRUD /skills` - Administrator
+- `POST /position_to_skill` - Administrator
+
+#### **Director Endpoints** (Director, Administrator)
+- `GET /promotions` - Director+
+- `GET /promotions/{id}` - Director+
+- `POST /promotions/{id}/approve` - Director+
+- `POST /promotions/{id}/decline` - Director+
+
+#### **System Endpoints** (Administrator only)
+- `POST /internal/import/users` - Administrator
+- `POST /internal/import/skills` - Administrator
+- `POST /webhook/feedback` - Administrator
+- `POST /jobs/retention/run` - Administrator
+
+### **Authorization Implementation Notes**
+- Users can have multiple roles (many-to-many relationship)
+- Higher-level roles inherit permissions from lower-level roles
+- Role assignments are managed through the `user_to_role` table
+- All authorization failures return `403 Forbidden` with appropriate error messages
+- Authentication is required for all endpoints except health checks
+
+---
+
 ## Employee (self)
 Profile / Users
 - GET /me — return current user's profile (auth)
@@ -49,12 +121,12 @@ Employees
 - `position` reflects the user's current job title
 
 Goals
-- POST /goals — create goal (auth)
-- GET /me/goals — list my goals (auth) (filters: status, page, sort)
-- GET /goals/{id} — read goal (owner/manager/admin)
-- PATCH /goals/{id} — update goal (owner)
-- DELETE /goals/{id} — soft-delete goal (owner/admin)
-- POST /goals/{id}/tasks — add task to goal
+- POST /goals — create goal (any authenticated user)
+- GET /me/goals — list my goals (any authenticated user) (filters: status, page, sort)
+- GET /goals/{id} — read goal (owner or People Manager+)
+- PATCH /goals/{id} — update goal (owner or People Manager+)
+- DELETE /goals/{id} — soft-delete goal (owner or Administrator)
+- POST /goals/{id}/tasks — add task to goal (owner or People Manager+)
 
 ### Contracts & purposes (Goals)
 
@@ -431,14 +503,14 @@ Feedback
 
 ## Manager
 Team & Reports
-- GET /team — list direct reports (manager authorization required)
-- GET /team/members/{employee_id} — profile + goals + feedback (manager authorization required)
-- GET /team/goals?status=&overdue= — team goals overview (manager authorization required)
+- GET /team — list direct reports (People Manager role required)
+- GET /team/members/{employee_id} — profile + goals + feedback (People Manager role required)
+- GET /team/goals?status=&overdue= — team goals overview (People Manager role required)
 
 ### GET /team
 - **Purpose**: List all direct reports for the authenticated manager
 - **Authentication**: Required (JWT Bearer token)
-- **Authorization**: Manager role required (users without manager role receive 403 Forbidden)
+- **Authorization**: People Manager role required (users without People Manager role receive 403 Forbidden)
 - **Response 200** (JSON Array):
   ```json
   [
@@ -500,9 +572,10 @@ Team & Reports
   - `404 Not Found`: Employee not found
 
 ### Authorization Notes
-- Manager authorization is determined by the presence of direct reports in the database (employees where ManagerId matches the authenticated user's employee ID)
-- Employees without manager roles receive 403 Forbidden responses
-- All team endpoints require the authenticated user to have established manager-reporter relationships in the database
+- People Manager role authorization is required for all team management endpoints
+- Role assignments are managed through the `user_to_role` table in the database
+- Users without the People Manager role receive 403 Forbidden responses
+- All team endpoints require the authenticated user to have the People Manager role assigned
 
 Approvals & Reviews
 - GET /reviews/pending
@@ -514,7 +587,7 @@ Feedback moderation
 
 ---
 
-## HR / Admin
+## HR / Admin (Administrator Role Required)
 Users & Employees
 - GET /users; POST /users; PATCH /users/{id}; DELETE /users/{id}
 - GET /employees; POST /employees; PATCH /employees/{id}; DELETE /employees/{id}
@@ -533,7 +606,7 @@ Audit & housekeeping
 
 ---
 
-## Director
+## Director (Director Role Required)
 - GET /promotions — list promotion requests
 - GET /promotions/{id}
 - POST /promotions/{id}/approve
@@ -542,7 +615,7 @@ Audit & housekeeping
 
 ---
 
-## System / Integration
+## System / Integration (Administrator Role Required)
 - POST /internal/import/users
 - POST /internal/import/skills
 - POST /webhook/feedback

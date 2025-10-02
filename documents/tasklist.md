@@ -176,9 +176,12 @@ Iterations
     - Full test coverage: All unit tests (31/31) and integration tests (48/48) passing
     - Authorization validation: Managers access team data (200 OK), employees get 403 Forbidden
 
-- [ ] Iteration 13 — Performance reviews
-  - Scope: POST /performance_reviews, GET /performance_reviews/{employee_id}
-  - Acceptance: Persist reviews and link to goals/feedback; integration test for create/read.
+- [ ] Iteration 13 — Role-Based Access Control (RBAC) System
+  - Scope: Implement comprehensive RBAC with roles table, user-to-role mapping, authorization attributes
+  - Database: roles table (id, title, description, created_at, modified_at, created_by, modified_by, is_deleted, deleted_by, deleted_at), user_to_role junction table (id, user_id, role_id, created_at, modified_at, created_by, modified_by, is_deleted, deleted_by, deleted_at)
+  - Authorization: Role-based attributes on all controllers
+  - Roles: Employee, People Manager, Solution Owner, Director, Administrator
+  - Acceptance: All endpoints properly secured with role-based access control; integration tests for role authorization.
 
 - [ ] Iteration 14 — Promotions (director)
   - Scope: GET /promotions, GET /promotions/{id}, POST /promotions/{id}/approve|decline
