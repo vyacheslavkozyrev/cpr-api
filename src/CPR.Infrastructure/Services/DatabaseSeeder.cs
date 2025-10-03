@@ -29,6 +29,7 @@ namespace CPR.Infrastructure.Services
         {
             _logger.LogInformation("Starting database seeding...");
 
+            await SeedRolesAsync();
             await SeedDepartmentsAsync();
             await SeedCareerPathsAndTracksAsync();
             await SeedPositionsAsync();
@@ -37,6 +38,64 @@ namespace CPR.Infrastructure.Services
             await SeedProjectsAsync();
 
             _logger.LogInformation("Database seeding completed.");
+        }
+
+        private async Task SeedRolesAsync()
+        {
+            if (await _context.Roles.AnyAsync())
+            {
+                _logger.LogInformation("Roles already exist, skipping seeding.");
+                return;
+            }
+
+            _logger.LogInformation("Seeding roles...");
+
+            var roles = new[]
+            {
+                new Role
+                {
+                    Id = new Guid("11111111-1111-1111-1111-111111111111"),
+                    Title = "Employee",
+                    Description = "Basic user role for individual contributors. Can manage their own goals, feedback, and profile."
+                },
+                new Role
+                {
+                    Id = new Guid("22222222-2222-2222-2222-222222222222"),
+                    Title = "People Manager",
+                    Description = "Extends Employee role. Can view and manage their direct reports' goals, feedback, and team information."
+                },
+                new Role
+                {
+                    Id = new Guid("33333333-3333-3333-3333-333333333333"),
+                    Title = "Solution Owner",
+                    Description = "Extends People Manager role. Can manage projects and oversee solution-level initiatives."
+                },
+                new Role
+                {
+                    Id = new Guid("44444444-4444-4444-4444-444444444444"),
+                    Title = "Director",
+                    Description = "Extends Solution Owner role. Can approve promotions and access director-level reports."
+                },
+                new Role
+                {
+                    Id = new Guid("55555555-5555-5555-5555-555555555555"),
+                    Title = "Administrator",
+                    Description = "Full system access. Can manage users, roles, positions, and all system data."
+                }
+            };
+
+            // Set audit fields for roles
+            var systemUserId = Guid.Empty; // System user for seeding
+            foreach (var role in roles)
+            {
+                role.CreatedBy = systemUserId;
+                role.CreatedAt = DateTimeOffset.UtcNow;
+            }
+
+            await _context.Roles.AddRangeAsync(roles);
+            await _context.SaveChangesAsync();
+
+            _logger.LogInformation("Seeded {RoleCount} roles.", roles.Length);
         }
 
         private async Task SeedDepartmentsAsync()
@@ -457,7 +516,73 @@ namespace CPR.Infrastructure.Services
             await _context.Employees.AddRangeAsync(employees);
             await _context.SaveChangesAsync();
 
+            // Assign roles to users
+            await AssignRolesToUsersAsync();
+
             _logger.LogInformation("Seeded {UserCount} users and {EmployeeCount} employees.", users.Length, employees.Length);
+        }
+
+        private async Task AssignRolesToUsersAsync()
+        {
+            _logger.LogInformation("Assigning roles to users...");
+
+            // Get role IDs
+            var employeeRole = await _context.Roles.FirstAsync(r => r.Title == "Employee");
+            var peopleManagerRole = await _context.Roles.FirstAsync(r => r.Title == "People Manager");
+            var administratorRole = await _context.Roles.FirstAsync(r => r.Title == "Administrator");
+
+            // Get user IDs
+            var johnDoeUserId = new Guid("679add6e-6c29-4e00-b6a5-b69c8e0f3445"); // John Doe
+            var janeSmithUserId = new Guid("c6874b28-e2fa-4835-8e8f-159bd5067091"); // Jane Smith
+            var henryWilsonUserId = new Guid("bf694c99-cfa6-4fba-be98-efba28bb4f31"); // Henry Wilson (People Manager)
+
+            var systemUserId = Guid.Empty; // System user for seeding
+
+            // Assign roles
+            var userRoles = new[]
+            {
+                // John Doe - Employee
+                new UserToRole
+                {
+                    Id = Guid.NewGuid(),
+                    UserId = johnDoeUserId,
+                    RoleId = employeeRole.Id,
+                    CreatedBy = systemUserId,
+                    CreatedAt = DateTimeOffset.UtcNow
+                },
+                // Jane Smith - Employee
+                new UserToRole
+                {
+                    Id = Guid.NewGuid(),
+                    UserId = janeSmithUserId,
+                    RoleId = employeeRole.Id,
+                    CreatedBy = systemUserId,
+                    CreatedAt = DateTimeOffset.UtcNow
+                },
+                // Henry Wilson - People Manager
+                new UserToRole
+                {
+                    Id = Guid.NewGuid(),
+                    UserId = henryWilsonUserId,
+                    RoleId = peopleManagerRole.Id,
+                    CreatedBy = systemUserId,
+                    CreatedAt = DateTimeOffset.UtcNow
+                },
+                // System Administrator (for testing) - let's assign to the first user
+                new UserToRole
+                {
+                    Id = Guid.NewGuid(),
+                    UserId = johnDoeUserId,
+                    RoleId = administratorRole.Id,
+                    CreatedBy = systemUserId,
+                    CreatedAt = DateTimeOffset.UtcNow
+                }
+            };
+
+            await _context.UserRoles.AddRangeAsync(userRoles);
+            await _context.SaveChangesAsync();
+
+            _logger.LogInformation("Assigned roles to {UserRoleCount} user-role relationships.", userRoles.Length);
         }
 
         private async Task SeedCareerPathsAndTracksAsync()

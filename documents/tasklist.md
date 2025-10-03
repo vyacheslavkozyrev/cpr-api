@@ -182,6 +182,23 @@ Iterations
     - Updated CprDbContext with proper configurations and relationships
     - Modified CreateDatabaseSchema migration to include roles and user_to_role tables
     - Added foreign key constraints, unique indexes, and soft-delete filtering
+  - [x] Phase 2: Domain Models & Entities ✅
+    - Created IRoleRepository and RoleRepository implementations
+    - Created IUserRoleRepository and UserRoleRepository implementations
+    - Created IRoleService and RoleService implementations
+    - Created RoleDtos.cs with DTOs for role operations
+    - Registered all services and repositories in DI container
+  - [x] Phase 3: Data Seeding ✅
+    - Updated DatabaseSeeder.cs to seed the 5 roles (Employee, People Manager, Solution Owner, Director, Administrator)
+    - Added AssignRolesToUsersAsync method to assign appropriate roles to seeded users
+    - John Doe: Employee + Administrator (for testing)
+    - Jane Smith: Employee
+    - Henry Wilson: People Manager
+  - [ ] Phase 4: Authorization Infrastructure
+    - Create RequireRoleAttribute for role-based authorization
+    - Create RoleAuthorizationHandler for policy-based authorization
+    - Register authorization services in DI container
+    - Test role-based authorization works correctly
   - Scope: Implement comprehensive RBAC with roles table, user-to-role mapping, authorization attributes
   - Database: roles table (id, title, description, created_at, modified_at, created_by, modified_by, is_deleted, deleted_by, deleted_at), user_to_role junction table (id, user_id, role_id, created_at, modified_at, created_by, modified_by, is_deleted, deleted_by, deleted_at)
   - Authorization: Role-based attributes on all controllers
