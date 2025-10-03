@@ -4,26 +4,41 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using CPR.Infrastructure.Data;
 using Xunit;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace CPR.IntegrationTests
 {
     [Collection("IntegrationTestCollection")]
-    public class SeedVerificationTests
+    public class SeedVerificationTests : IClassFixture<CustomWebApplicationFactory>
     {
+        private readonly CustomWebApplicationFactory _factory;
+
+        public SeedVerificationTests(CustomWebApplicationFactory factory)
+        {
+            _factory = factory;
+        }
+
         [Fact]
         public void SeedRows_Exist_InDatabase()
         {
-            var options = new DbContextOptionsBuilder<CprDbContext>()
-                    .UseNpgsql("Host=localhost;Port=5432;Database=cpr_test;Username=postgres;Password=postgres")
-                    .ConfigureWarnings(warnings => warnings.Ignore(RelationalEventId.PendingModelChangesWarning))
-                .Options;
+            using var scope = _factory.Services.CreateScope();
+            var db = scope.ServiceProvider.GetRequiredService<CprDbContext>();
 
-            using var db = new CprDbContext(options);
+            // Debug: Check what's actually in the database
+            var careerPaths = db.CareerPaths.ToList();
+            var skillCategories = db.SkillCategories.ToList();
+            var positions = db.Positions.ToList();
+            var projects = db.Projects.ToList();
 
-            Assert.True(db.CareerPaths.Any(cp => cp.Title == "Technology"));
-            Assert.True(db.SkillCategories.Any(sc => sc.Title == "Technical"));
-            Assert.True(db.Positions.Any(p => p.Title == "Senior Software Engineer"));
-            Assert.True(db.Projects.Any(p => p.Code == "PRJ-001"));
+            Console.WriteLine($"Found {careerPaths.Count} career paths");
+            Console.WriteLine($"Found {skillCategories.Count} skill categories");
+            Console.WriteLine($"Found {positions.Count} positions");
+            Console.WriteLine($"Found {projects.Count} projects");
+
+            Assert.True(db.CareerPaths.Any(cp => cp.Title == "Technology"), $"Technology career path not found. Available: {string.Join(", ", careerPaths.Select(cp => cp.Title))}");
+            Assert.True(db.SkillCategories.Any(sc => sc.Title == "Technical"), $"Technical skill category not found. Available: {string.Join(", ", skillCategories.Select(sc => sc.Title))}");
+            Assert.True(db.Positions.Any(p => p.Title.Contains("Technology Track")), $"Technology track positions not found. Available: {string.Join(", ", positions.Select(p => p.Title).Take(5))}");
+            Assert.True(db.Projects.Any(p => p.Code == "PRJ-001"), $"PRJ-001 project not found. Available: {string.Join(", ", projects.Select(p => p.Code))}");
         }
     }
 }

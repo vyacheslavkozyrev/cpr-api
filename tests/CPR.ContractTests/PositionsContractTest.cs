@@ -6,11 +6,11 @@ using Xunit;
 
 namespace CPR.ContractTests;
 
-public class PositionsContractTest : IClassFixture<WebApplicationFactory<Program>>
+public class PositionsContractTest : IClassFixture<CustomWebApplicationFactory>
 {
-    private readonly WebApplicationFactory<Program> _factory;
+    private readonly CustomWebApplicationFactory _factory;
 
-    public PositionsContractTest(WebApplicationFactory<Program> factory)
+    public PositionsContractTest(CustomWebApplicationFactory factory)
     {
         _factory = factory;
     }

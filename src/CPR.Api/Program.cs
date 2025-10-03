@@ -139,8 +139,8 @@ builder.Services.AddProblemDetails(options =>
 
 var app = builder.Build();
 
-// Seed the database on startup (only in development)
-if (app.Environment.IsDevelopment())
+// Seed the database on startup (only in development, not in test)
+if (app.Environment.IsDevelopment() && !Environment.GetEnvironmentVariable("DATABASE_NAME")?.Contains("test") == true)
 {
     using (var scope = app.Services.CreateScope())
     {

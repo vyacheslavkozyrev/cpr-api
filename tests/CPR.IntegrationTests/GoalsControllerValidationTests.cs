@@ -10,11 +10,11 @@ using Xunit;
 
 namespace CPR.IntegrationTests
 {
-    public class GoalsControllerValidationTests : IClassFixture<WebApplicationFactory<Program>>
+    public class GoalsControllerValidationTests : IClassFixture<CustomWebApplicationFactory>
     {
-        private readonly WebApplicationFactory<Program> _factory;
+        private readonly CustomWebApplicationFactory _factory;
 
-        public GoalsControllerValidationTests(WebApplicationFactory<Program> factory)
+        public GoalsControllerValidationTests(CustomWebApplicationFactory factory)
         {
             _factory = factory;
         }
@@ -65,7 +65,8 @@ namespace CPR.IntegrationTests
         {
             var key = "test-key";
             Environment.SetEnvironmentVariable("JWT_SIGNING_KEY", key);
-            var userId = "test-user";
+            // Use seeded user id (John Doe) who has Employee role
+            var userId = "679add6e-6c29-4e00-b6a5-b69c8e0f3445";
             using var h = new System.Security.Cryptography.HMACSHA256(System.Text.Encoding.UTF8.GetBytes(key));
             var sig = Convert.ToBase64String(h.ComputeHash(System.Text.Encoding.UTF8.GetBytes(userId)));
             return userId + "." + sig;

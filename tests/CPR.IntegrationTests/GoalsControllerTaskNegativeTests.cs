@@ -7,11 +7,11 @@ using Xunit;
 
 namespace CPR.IntegrationTests
 {
-    public class GoalsControllerTaskNegativeTests : IClassFixture<WebApplicationFactory<Program>>
+    public class GoalsControllerTaskNegativeTests : IClassFixture<CustomWebApplicationFactory>
     {
-        private readonly WebApplicationFactory<Program> _factory;
+        private readonly CustomWebApplicationFactory _factory;
 
-        public GoalsControllerTaskNegativeTests(WebApplicationFactory<Program> factory)
+        public GoalsControllerTaskNegativeTests(CustomWebApplicationFactory factory)
         {
             _factory = factory;
         }
@@ -96,7 +96,8 @@ namespace CPR.IntegrationTests
         {
             var key = "test-key";
             Environment.SetEnvironmentVariable("JWT_SIGNING_KEY", key);
-            var userId = "004e1f8b-1ea3-4e27-a373-ed82f85147cc";
+            // Use seeded user id (John Doe) who has Employee role
+            var userId = "679add6e-6c29-4e00-b6a5-b69c8e0f3445";
             using var h = new System.Security.Cryptography.HMACSHA256(System.Text.Encoding.UTF8.GetBytes(key));
             var sig = Convert.ToBase64String(h.ComputeHash(System.Text.Encoding.UTF8.GetBytes(userId)));
             return userId + "." + sig;
@@ -106,7 +107,8 @@ namespace CPR.IntegrationTests
         {
             var key = "test-key";
             Environment.SetEnvironmentVariable("JWT_SIGNING_KEY", key);
-            var userId = "0353f880-f993-4b3a-a7c2-41e7c58f0aa6";
+            // Use seeded user id (Jane Smith) who has Employee role
+            var userId = "c6874b28-e2fa-4835-8e8f-159bd5067091";
             using var h = new System.Security.Cryptography.HMACSHA256(System.Text.Encoding.UTF8.GetBytes(key));
             var sig = Convert.ToBase64String(h.ComputeHash(System.Text.Encoding.UTF8.GetBytes(userId)));
             return userId + "." + sig;

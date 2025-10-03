@@ -30,6 +30,62 @@ namespace CPR.IntegrationTests
             _dbFixture = dbFixture;
         }
 
+        private async Task EnsureTestRolesAssigned()
+        {
+            // Ensure test user roles are assigned for this test
+            var options = new DbContextOptionsBuilder<CPR.Infrastructure.Data.CprDbContext>()
+                .UseNpgsql("Host=localhost;Port=5432;Database=cpr_test;Username=postgres;Password=postgres")
+                .ConfigureWarnings(warnings => warnings.Ignore(RelationalEventId.PendingModelChangesWarning))
+                .Options;
+
+            using var db = new CPR.Infrastructure.Data.CprDbContext(options);
+
+            var managerUserId = Guid.Parse("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa");
+            var employeeUserId = Guid.Parse("cccccccc-cccc-cccc-cccc-cccccccccccc");
+
+            // Check if roles are already assigned
+            var managerRoles = await db.UserRoles.Where(ur => ur.UserId == managerUserId && !ur.IsDeleted).Include(ur => ur.Role).ToListAsync();
+            var employeeRoles = await db.UserRoles.Where(ur => ur.UserId == employeeUserId && !ur.IsDeleted).Include(ur => ur.Role).ToListAsync();
+
+            if (!managerRoles.Any(ur => ur.Role.Title == "People Manager") || !employeeRoles.Any(ur => ur.Role.Title == "Employee"))
+            {
+                // Clean up existing assignments
+                db.UserRoles.RemoveRange(db.UserRoles.Where(ur => ur.UserId == managerUserId || ur.UserId == employeeUserId));
+                await db.SaveChangesAsync();
+
+                // Assign roles
+                var employeeRole = await db.Roles.FirstOrDefaultAsync(r => r.Title == "Employee");
+                var managerRole = await db.Roles.FirstOrDefaultAsync(r => r.Title == "People Manager");
+
+                if (employeeRole != null && managerRole != null)
+                {
+                    var managerUserRole = new CPR.Domain.Entities.UserToRole
+                    {
+                        Id = Guid.NewGuid(),
+                        UserId = managerUserId,
+                        RoleId = managerRole.Id,
+                        CreatedBy = Guid.Empty,
+                        CreatedAt = DateTimeOffset.UtcNow,
+                        IsDeleted = false
+                    };
+
+                    var employeeUserRole = new CPR.Domain.Entities.UserToRole
+                    {
+                        Id = Guid.NewGuid(),
+                        UserId = employeeUserId,
+                        RoleId = employeeRole.Id,
+                        CreatedBy = Guid.Empty,
+                        CreatedAt = DateTimeOffset.UtcNow,
+                        IsDeleted = false
+                    };
+
+                    db.UserRoles.Add(managerUserRole);
+                    db.UserRoles.Add(employeeUserRole);
+                    await db.SaveChangesAsync();
+                }
+            }
+        }
+
         [Fact]
         public async Task GetTeamMembers_WithoutAuth_ReturnsUnauthorized()
         {
@@ -181,6 +237,8 @@ namespace CPR.IntegrationTests
         [Fact]
         public async Task GetTeamGoals_WithAuth_ReturnsOk()
         {
+            await EnsureTestRolesAssigned();
+
             var client = _factory.CreateClient();
             client.DefaultRequestHeaders.Authorization =
                 new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", CreateManagerTestToken());
@@ -205,6 +263,8 @@ namespace CPR.IntegrationTests
         [Fact]
         public async Task GetTeamMemberProfile_WithAuth_ReturnsOk()
         {
+            await EnsureTestRolesAssigned();
+
             var client = _factory.CreateClient();
             client.DefaultRequestHeaders.Authorization =
                 new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", CreateManagerTestToken());
@@ -229,6 +289,8 @@ namespace CPR.IntegrationTests
         [Fact]
         public async Task GetTeamMemberProfile_NonExistentMember_ReturnsNotFound()
         {
+            await EnsureTestRolesAssigned();
+
             var client = _factory.CreateClient();
             client.DefaultRequestHeaders.Authorization =
                 new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", CreateManagerTestToken());

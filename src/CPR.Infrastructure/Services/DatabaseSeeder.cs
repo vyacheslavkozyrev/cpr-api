@@ -29,26 +29,63 @@ namespace CPR.Infrastructure.Services
         {
             _logger.LogInformation("Starting database seeding...");
 
-            await SeedRolesAsync();
-            await SeedDepartmentsAsync();
-            await SeedCareerPathsAndTracksAsync();
-            await SeedPositionsAsync();
-            await SeedUsersAndEmployeesAsync();
-            await SeedSkillsAndCategoriesAsync();
-            await SeedProjectsAsync();
+            // For test environment, always seed roles and users regardless of existing data
+            var databaseName = Environment.GetEnvironmentVariable("DATABASE_NAME");
+            var isTestEnvironment = databaseName?.Contains("test") == true;
+            _logger.LogInformation("Database name from env: '{DatabaseName}', IsTestEnvironment: {IsTestEnvironment}", databaseName, isTestEnvironment);
+
+            if (isTestEnvironment)
+            {
+                // Check if seeding has already been completed by another test instance
+                var seedingCompleted = await _context.Roles.AnyAsync(r => r.Title == "Administrator");
+                if (seedingCompleted)
+                {
+                    _logger.LogInformation("Database already seeded by another test instance, skipping seeding.");
+                    return;
+                }
+
+                _logger.LogInformation("Test environment detected - seeding all data...");
+                await SeedRolesAsync(true);
+                await SeedDepartmentsAsync(true);
+                await SeedCareerPathsAndTracksAsync(true);
+                await SeedPositionsAsync(true);
+                await SeedUsersAndEmployeesAsync(true);
+                await SeedSkillsAndCategoriesAsync(true);
+                await SeedProjectsAsync(true);
+            }
+            else
+            {
+                await SeedRolesAsync();
+                await SeedDepartmentsAsync();
+                await SeedCareerPathsAndTracksAsync();
+                await SeedPositionsAsync();
+                await SeedUsersAndEmployeesAsync();
+                await SeedSkillsAndCategoriesAsync();
+                await SeedProjectsAsync();
+            }
 
             _logger.LogInformation("Database seeding completed.");
         }
 
-        private async Task SeedRolesAsync()
+        private async Task SeedRolesAsync(bool forceSeed = false)
         {
-            if (await _context.Roles.AnyAsync())
+            if (!forceSeed && await _context.Roles.AnyAsync())
             {
                 _logger.LogInformation("Roles already exist, skipping seeding.");
                 return;
             }
 
-            _logger.LogInformation("Seeding roles...");
+            if (forceSeed)
+            {
+                _logger.LogInformation("Force seeding roles...");
+                // Remove existing roles first
+                _context.Roles.RemoveRange(_context.Roles);
+                await _context.SaveChangesAsync();
+            }
+            else
+            {
+                _logger.LogInformation("Seeding roles...");
+            }
 
             var roles = new[]
             {
@@ -98,15 +135,25 @@ namespace CPR.Infrastructure.Services
             _logger.LogInformation("Seeded {RoleCount} roles.", roles.Length);
         }
 
-        private async Task SeedDepartmentsAsync()
+        private async Task SeedDepartmentsAsync(bool forceSeed = false)
         {
-            if (await _context.Departments.AnyAsync())
+            if (!forceSeed && await _context.Departments.AnyAsync())
             {
                 _logger.LogInformation("Departments already exist, skipping seeding.");
                 return;
             }
 
-            _logger.LogInformation("Seeding departments...");
+            if (forceSeed)
+            {
+                _logger.LogInformation("Force seeding departments...");
+                // Remove existing departments first
+                _context.Departments.RemoveRange(_context.Departments);
+                await _context.SaveChangesAsync();
+            }
+            else
+            {
+                _logger.LogInformation("Seeding departments...");
+            }
 
             var departments = new[]
             {
@@ -188,15 +235,27 @@ namespace CPR.Infrastructure.Services
             _logger.LogInformation("Seeded {Count} departments.", departments.Length);
         }
 
-        private async Task SeedUsersAndEmployeesAsync()
+        private async Task SeedUsersAndEmployeesAsync(bool forceSeed = false)
         {
-            if (await _context.Users.AnyAsync() || await _context.Employees.AnyAsync())
+            if (!forceSeed && (await _context.Users.AnyAsync() || await _context.Employees.AnyAsync()))
             {
                 _logger.LogInformation("Users and employees already exist, skipping seeding.");
                 return;
             }
 
-            _logger.LogInformation("Seeding users and employees...");
+            if (forceSeed)
+            {
+                _logger.LogInformation("Force seeding users and employees...");
+                // Clean up existing data
+                _context.UserRoles.RemoveRange(_context.UserRoles);
+                _context.Employees.RemoveRange(_context.Employees);
+                _context.Users.RemoveRange(_context.Users);
+                await _context.SaveChangesAsync();
+            }
+            else
+            {
+                _logger.LogInformation("Seeding users and employees...");
+            }
 
             // Get departments for reference
             var engineeringDept = await _context.Departments.FirstOrDefaultAsync(d => d.Code == "ENG");
@@ -516,15 +575,38 @@ namespace CPR.Infrastructure.Services
             await _context.Employees.AddRangeAsync(employees);
             await _context.SaveChangesAsync();
 
-            // Assign roles to users
-            await AssignRolesToUsersAsync();
+            // Assign roles to users (always do this in test environments)
+            if (forceSeed)
+            {
+                await AssignRolesToUsersAsync(true);
+            }
+            else
+            {
+                await AssignRolesToUsersAsync();
+            }
 
             _logger.LogInformation("Seeded {UserCount} users and {EmployeeCount} employees.", users.Length, employees.Length);
         }
 
-        private async Task AssignRolesToUsersAsync()
+        private async Task AssignRolesToUsersAsync(bool forceSeed = false)
         {
-            _logger.LogInformation("Assigning roles to users...");
+            if (!forceSeed && await _context.UserRoles.AnyAsync())
+            {
+                _logger.LogInformation("User roles already exist, skipping assignment.");
+                return;
+            }
+
+            if (forceSeed)
+            {
+                _logger.LogInformation("Force assigning roles to users...");
+                // Remove existing user roles first
+                _context.UserRoles.RemoveRange(_context.UserRoles);
+                await _context.SaveChangesAsync();
+            }
+            else
+            {
+                _logger.LogInformation("Assigning roles to users...");
+            }
 
             // Get role IDs
             var employeeRole = await _context.Roles.FirstAsync(r => r.Title == "Employee");
@@ -585,15 +667,26 @@ namespace CPR.Infrastructure.Services
             _logger.LogInformation("Assigned roles to {UserRoleCount} user-role relationships.", userRoles.Length);
         }
 
-        private async Task SeedCareerPathsAndTracksAsync()
+        private async Task SeedCareerPathsAndTracksAsync(bool forceSeed = false)
         {
-            if (await _context.CareerPaths.AnyAsync() || await _context.CareerTracks.AnyAsync())
+            if (!forceSeed && (await _context.CareerPaths.AnyAsync() || await _context.CareerTracks.AnyAsync()))
             {
                 _logger.LogInformation("Career paths and tracks already exist, skipping seeding.");
                 return;
             }
 
-            _logger.LogInformation("Seeding career paths and tracks...");
+            if (forceSeed)
+            {
+                _logger.LogInformation("Force seeding career paths and tracks...");
+                // Remove existing data first
+                _context.CareerTracks.RemoveRange(_context.CareerTracks);
+                _context.CareerPaths.RemoveRange(_context.CareerPaths);
+                await _context.SaveChangesAsync();
+            }
+            else
+            {
+                _logger.LogInformation("Seeding career paths and tracks...");
+            }
 
             var careerPaths = new[]
             {
@@ -764,15 +857,25 @@ namespace CPR.Infrastructure.Services
             _logger.LogInformation("Seeded {PathCount} career paths and {TrackCount} career tracks.", careerPaths.Length, careerTracks.Length);
         }
 
-        private async Task SeedPositionsAsync()
+        private async Task SeedPositionsAsync(bool forceSeed = false)
         {
-            if (await _context.Positions.AnyAsync())
+            if (!forceSeed && await _context.Positions.AnyAsync())
             {
                 _logger.LogInformation("Positions already exist, skipping seeding.");
                 return;
             }
 
-            _logger.LogInformation("Seeding positions...");
+            if (forceSeed)
+            {
+                _logger.LogInformation("Force seeding positions...");
+                // Remove existing positions first
+                _context.Positions.RemoveRange(_context.Positions);
+                await _context.SaveChangesAsync();
+            }
+            else
+            {
+                _logger.LogInformation("Seeding positions...");
+            }
 
             var positions = new[]
             {
@@ -1184,15 +1287,26 @@ namespace CPR.Infrastructure.Services
             _logger.LogInformation("Seeded {PositionCount} positions.", positions.Length);
         }
 
-        private async Task SeedSkillsAndCategoriesAsync()
+        private async Task SeedSkillsAndCategoriesAsync(bool forceSeed = false)
         {
-            if (await _context.SkillCategories.AnyAsync() || await _context.Skills.AnyAsync())
+            if (!forceSeed && (await _context.SkillCategories.AnyAsync() || await _context.Skills.AnyAsync()))
             {
                 _logger.LogInformation("Skill categories and skills already exist, skipping seeding.");
                 return;
             }
 
-            _logger.LogInformation("Seeding skill categories and skills...");
+            if (forceSeed)
+            {
+                _logger.LogInformation("Force seeding skill categories and skills...");
+                // Remove existing data first
+                _context.Skills.RemoveRange(_context.Skills);
+                _context.SkillCategories.RemoveRange(_context.SkillCategories);
+                await _context.SaveChangesAsync();
+            }
+            else
+            {
+                _logger.LogInformation("Seeding skill categories and skills...");
+            }
 
             var categories = new[]
             {
@@ -1374,15 +1488,25 @@ namespace CPR.Infrastructure.Services
                 categories.Length, skills.Length, skillLevels.Count);
         }
 
-        private async Task SeedProjectsAsync()
+        private async Task SeedProjectsAsync(bool forceSeed = false)
         {
-            if (await _context.Projects.AnyAsync())
+            if (!forceSeed && await _context.Projects.AnyAsync())
             {
                 _logger.LogInformation("Projects already exist, skipping seeding.");
                 return;
             }
 
-            _logger.LogInformation("Seeding projects...");
+            if (forceSeed)
+            {
+                _logger.LogInformation("Force seeding projects...");
+                // Remove existing projects first
+                _context.Projects.RemoveRange(_context.Projects);
+                await _context.SaveChangesAsync();
+            }
+            else
+            {
+                _logger.LogInformation("Seeding projects...");
+            }
 
             var projects = new[]
             {

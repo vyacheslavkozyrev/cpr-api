@@ -19,7 +19,6 @@ namespace CPR.IntegrationTests
 
         public async Task InitializeAsync()
         {
-            System.Diagnostics.Debug.WriteLine("DatabaseCleanupFixture: InitializeAsync starting");
             // best-effort cleanup before tests run
             try
             {
@@ -48,6 +47,10 @@ namespace CPR.IntegrationTests
                 // Clean up feedback data created by tests
                 db.Feedback.RemoveRange(db.Feedback.Where(f => testEmployeeIds.Contains(f.FromEmployeeId) || testEmployeeIds.Contains(f.ToEmployeeId)));
                 db.FeedbackRequests.RemoveRange(db.FeedbackRequests.Where(fr => testEmployeeIds.Contains(fr.RequestorId) || testEmployeeIds.Contains(fr.EmployeeId)));
+
+                // Clean up test user role assignments
+                var testUserIds = new[] { Guid.Parse("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"), Guid.Parse("cccccccc-cccc-cccc-cccc-cccccccccccc") };
+                db.UserRoles.RemoveRange(db.UserRoles.Where(ur => testUserIds.Contains(ur.UserId)));
 
                 await db.SaveChangesAsync();
 
@@ -92,6 +95,10 @@ namespace CPR.IntegrationTests
                 db.Feedback.RemoveRange(db.Feedback.Where(f => testEmployeeIds.Contains(f.FromEmployeeId) || testEmployeeIds.Contains(f.ToEmployeeId)));
                 db.FeedbackRequests.RemoveRange(db.FeedbackRequests.Where(fr => testEmployeeIds.Contains(fr.RequestorId) || testEmployeeIds.Contains(fr.EmployeeId)));
 
+                // Clean up test user role assignments
+                var testUserIds = new[] { Guid.Parse("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"), Guid.Parse("cccccccc-cccc-cccc-cccc-cccccccccccc") };
+                db.UserRoles.RemoveRange(db.UserRoles.Where(ur => testUserIds.Contains(ur.UserId)));
+
                 await db.SaveChangesAsync();
             }
             catch (Exception)
@@ -102,12 +109,46 @@ namespace CPR.IntegrationTests
 
         private async Task EnsureManagerAndEmployeeRelationship(CPR.Infrastructure.Data.CprDbContext db)
         {
+            Console.WriteLine("DatabaseCleanupFixture: EnsureManagerAndEmployeeRelationship starting");
+
             // Check if test data already exists
             var existingEmployee = await db.Employees.FirstOrDefaultAsync(e => e.UserId == Guid.Parse("cccccccc-cccc-cccc-cccc-cccccccccccc"));
+            Console.WriteLine($"DatabaseCleanupFixture: Existing employee check - found: {existingEmployee != null}");
+
             if (existingEmployee != null)
             {
-                return; // Data already exists
+                Console.WriteLine("DatabaseCleanupFixture: Test data already exists, checking roles...");
+
+                // Check if roles are assigned
+                var managerUserId = Guid.Parse("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa");
+                var employeeUserId = Guid.Parse("cccccccc-cccc-cccc-cccc-cccccccccccc");
+
+                var existingManagerRoles = await db.UserRoles.Where(ur => ur.UserId == managerUserId && !ur.IsDeleted).Include(ur => ur.Role).ToListAsync();
+                var existingEmployeeRoles = await db.UserRoles.Where(ur => ur.UserId == employeeUserId && !ur.IsDeleted).Include(ur => ur.Role).ToListAsync();
+
+                Console.WriteLine($"DatabaseCleanupFixture: Existing manager roles: {string.Join(", ", existingManagerRoles.Select(ur => ur.Role.Title))}");
+                Console.WriteLine($"DatabaseCleanupFixture: Existing employee roles: {string.Join(", ", existingEmployeeRoles.Select(ur => ur.Role.Title))}");
+
+                if (existingManagerRoles.Any(ur => ur.Role.Title == "People Manager") && existingEmployeeRoles.Any(ur => ur.Role.Title == "Employee"))
+                {
+                    Console.WriteLine("DatabaseCleanupFixture: Roles already properly assigned, returning");
+                    return; // Data already exists with proper roles
+                }
+                else
+                {
+                    Console.WriteLine("DatabaseCleanupFixture: Roles not properly assigned, cleaning up and recreating...");
+
+                    // Clean up existing data
+                    db.UserRoles.RemoveRange(db.UserRoles.Where(ur => ur.UserId == managerUserId || ur.UserId == employeeUserId));
+                    db.Employees.RemoveRange(db.Employees.Where(e => e.UserId == managerUserId || e.UserId == employeeUserId));
+                    db.Users.RemoveRange(db.Users.Where(u => u.Id == managerUserId || u.Id == employeeUserId));
+                    db.Positions.RemoveRange(db.Positions.Where(p => p.Id == Guid.Parse("99999999-9999-9999-9999-999999999999") || p.Id == Guid.Parse("88888888-8888-8888-8888-888888888888")));
+                    await db.SaveChangesAsync();
+                    Console.WriteLine("DatabaseCleanupFixture: Cleaned up existing test data");
+                }
             }
+
+            Console.WriteLine("DatabaseCleanupFixture: Creating fresh test data");
 
             // Create manager user and employee
             var managerUser = new CPR.Domain.Entities.User
@@ -174,6 +215,67 @@ namespace CPR.IntegrationTests
 
             await db.SaveChangesAsync();
 
+            // Assign roles to test users
+            var employeeRole = await db.Roles.FirstOrDefaultAsync(r => r.Title == "Employee");
+            var managerRole = await db.Roles.FirstOrDefaultAsync(r => r.Title == "People Manager");
+
+            // If roles don't exist, create them
+            if (employeeRole == null)
+            {
+                employeeRole = new CPR.Domain.Entities.Role
+                {
+                    Id = Guid.Parse("11111111-1111-1111-1111-111111111111"),
+                    Title = "Employee",
+                    Description = "Basic user role for individual contributors.",
+                    CreatedBy = Guid.Empty,
+                    CreatedAt = DateTimeOffset.UtcNow,
+                    IsDeleted = false
+                };
+                db.Roles.Add(employeeRole);
+            }
+
+            if (managerRole == null)
+            {
+                managerRole = new CPR.Domain.Entities.Role
+                {
+                    Id = Guid.Parse("22222222-2222-2222-2222-222222222222"),
+                    Title = "People Manager",
+                    Description = "Manager role for team leads.",
+                    CreatedBy = Guid.Empty,
+                    CreatedAt = DateTimeOffset.UtcNow,
+                    IsDeleted = false
+                };
+                db.Roles.Add(managerRole);
+            }
+
+            await db.SaveChangesAsync();
+
+            System.Diagnostics.Debug.WriteLine($"DatabaseCleanupFixture: Roles ready - Employee: {employeeRole.Title}, Manager: {managerRole.Title}");
+
+            var managerUserRole = new CPR.Domain.Entities.UserToRole
+            {
+                Id = Guid.NewGuid(),
+                UserId = managerUser.Id,
+                RoleId = managerRole.Id,
+                CreatedBy = Guid.Empty, // System
+                CreatedAt = DateTimeOffset.UtcNow,
+                IsDeleted = false
+            };
+
+            var employeeUserRole = new CPR.Domain.Entities.UserToRole
+            {
+                Id = Guid.NewGuid(),
+                UserId = employeeUser.Id,
+                RoleId = employeeRole.Id,
+                CreatedBy = Guid.Empty, // System
+                CreatedAt = DateTimeOffset.UtcNow,
+                IsDeleted = false
+            };
+
+            db.UserRoles.Add(managerUserRole);
+            db.UserRoles.Add(employeeUserRole);
+            await db.SaveChangesAsync();
+
             // Verify data was saved
             var savedManager = await db.Employees.FirstOrDefaultAsync(e => e.UserId == Guid.Parse("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"));
             var savedEmployee = await db.Employees.FirstOrDefaultAsync(e => e.UserId == Guid.Parse("cccccccc-cccc-cccc-cccc-cccccccccccc"));
@@ -182,6 +284,14 @@ namespace CPR.IntegrationTests
             System.Diagnostics.Debug.WriteLine($"DatabaseCleanupFixture: Manager saved: {savedManager != null}, Employee saved: {savedEmployee != null}, Direct reports count: {directReports.Count}");
             if (savedManager != null) System.Diagnostics.Debug.WriteLine($"DatabaseCleanupFixture: Manager ID: {savedManager.Id}, IsDeleted: {savedManager.IsDeleted}");
             if (savedEmployee != null) System.Diagnostics.Debug.WriteLine($"DatabaseCleanupFixture: Employee ID: {savedEmployee.Id}, ManagerId: {savedEmployee.ManagerId}, IsDeleted: {savedEmployee.IsDeleted}");
+
+            // Verify role assignments
+            var managerRoles = await db.UserRoles.Where(ur => ur.UserId == Guid.Parse("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa") && !ur.IsDeleted).Include(ur => ur.Role).ToListAsync();
+            var employeeRoles = await db.UserRoles.Where(ur => ur.UserId == Guid.Parse("cccccccc-cccc-cccc-cccc-cccccccccccc") && !ur.IsDeleted).Include(ur => ur.Role).ToListAsync();
+
+            System.Diagnostics.Debug.WriteLine($"DatabaseCleanupFixture: Manager roles count: {managerRoles.Count}, Employee roles count: {employeeRoles.Count}");
+            foreach (var ur in managerRoles) System.Diagnostics.Debug.WriteLine($"DatabaseCleanupFixture: Manager role: {ur.Role.Title}");
+            foreach (var ur in employeeRoles) System.Diagnostics.Debug.WriteLine($"DatabaseCleanupFixture: Employee role: {ur.Role.Title}");
         }
     }
 }

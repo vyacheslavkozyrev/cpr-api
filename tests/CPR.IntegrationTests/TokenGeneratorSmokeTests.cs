@@ -8,11 +8,11 @@ using Xunit;
 
 namespace CPR.IntegrationTests;
 
-public class TokenGeneratorSmokeTests : IClassFixture<WebApplicationFactory<Program>>
+public class TokenGeneratorSmokeTests : IClassFixture<CustomWebApplicationFactory>
 {
-    private readonly WebApplicationFactory<Program> _factory;
+    private readonly CustomWebApplicationFactory _factory;
 
-    public TokenGeneratorSmokeTests(WebApplicationFactory<Program> factory)
+    public TokenGeneratorSmokeTests(CustomWebApplicationFactory factory)
     {
         _factory = factory;
     }

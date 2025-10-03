@@ -12,11 +12,11 @@ using Xunit;
 
 namespace CPR.IntegrationTests
 {
-    public class UserAndGoalPersistenceTests : IClassFixture<WebApplicationFactory<Program>>
+    public class UserAndGoalPersistenceTests : IClassFixture<CustomWebApplicationFactory>
     {
-        private readonly WebApplicationFactory<Program> _factory;
+        private readonly CustomWebApplicationFactory _factory;
 
-        public UserAndGoalPersistenceTests(WebApplicationFactory<Program> factory)
+        public UserAndGoalPersistenceTests(CustomWebApplicationFactory factory)
         {
             _factory = factory;
         }
