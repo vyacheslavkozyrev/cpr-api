@@ -39,6 +39,11 @@ namespace CPR.IntegrationTests
             Assert.True(db.SkillCategories.Any(sc => sc.Title == "Technical"), $"Technical skill category not found. Available: {string.Join(", ", skillCategories.Select(sc => sc.Title))}");
             Assert.True(db.Positions.Any(p => p.Title.Contains("Technology Track")), $"Technology track positions not found. Available: {string.Join(", ", positions.Select(p => p.Title).Take(5))}");
             Assert.True(db.Projects.Any(p => p.Code == "PRJ-001"), $"PRJ-001 project not found. Available: {string.Join(", ", projects.Select(p => p.Code))}");
+
+            // Verify that Ryan King (user ID: 5950a2be-bdfb-4dcb-9913-1e3e0e022a5c) has Employee role
+            var ryanKingUserId = new Guid("5950a2be-bdfb-4dcb-9913-1e3e0e022a5c");
+            var employeeRoleId = db.Roles.First(r => r.Title == "Employee").Id;
+            Assert.True(db.UserRoles.Any(ur => ur.UserId == ryanKingUserId && ur.RoleId == employeeRoleId), "Ryan King should have Employee role assigned");
         }
     }
 }

@@ -40,7 +40,9 @@ namespace CPR.Infrastructure.Services
                 var seedingCompleted = await _context.Roles.AnyAsync(r => r.Title == "Administrator");
                 if (seedingCompleted)
                 {
-                    _logger.LogInformation("Database already seeded by another test instance, skipping seeding.");
+                    _logger.LogInformation("Database already seeded by another test instance, but ensuring roles are assigned...");
+                    // Still assign roles in case they weren't assigned properly
+                    await AssignRolesToUsersAsync(true);
                     return;
                 }
 
@@ -613,58 +615,84 @@ namespace CPR.Infrastructure.Services
             var peopleManagerRole = await _context.Roles.FirstAsync(r => r.Title == "People Manager");
             var administratorRole = await _context.Roles.FirstAsync(r => r.Title == "Administrator");
 
-            // Get user IDs
-            var johnDoeUserId = new Guid("679add6e-6c29-4e00-b6a5-b69c8e0f3445"); // John Doe
-            var janeSmithUserId = new Guid("c6874b28-e2fa-4835-8e8f-159bd5067091"); // Jane Smith
-            var henryWilsonUserId = new Guid("bf694c99-cfa6-4fba-be98-efba28bb4f31"); // Henry Wilson (People Manager)
+            // Get user IDs - all users from the seed data
+            var userIds = new[]
+            {
+                new Guid("679add6e-6c29-4e00-b6a5-b69c8e0f3445"), // John Doe
+                new Guid("c6874b28-e2fa-4835-8e8f-159bd5067091"), // Jane Smith
+                new Guid("45f0eaae-b3eb-4261-a430-4d9e94ec8e0d"), // Bob Johnson
+                new Guid("e9741b9b-3c66-4462-af46-297810b29403"), // Alice Wilson
+                new Guid("d670f2cf-66a6-4cb6-947f-062c7b089c8d"), // Charlie Brown
+                new Guid("bf428236-361c-4ade-995d-21a62feec86f"), // Diana Prince
+                new Guid("c7746e91-a5e8-4f8b-9f22-f48374ffa2a4"), // Eve Adams
+                new Guid("7567ad7a-174e-461c-bd88-e7489db10317"), // Frank Miller
+                new Guid("5d70d7d5-570e-46fe-91ce-2d6081b365aa"), // Grace Lee
+                new Guid("977f4f1f-b3ce-4244-98fc-2c0d0248de88"), // Henry Wilson (People Manager)
+                new Guid("20c78aa6-077a-4d3b-a7c5-84d561ec3975"), // Iris Davis
+                new Guid("87896109-9ac7-444c-aa79-dfe1dc908a5d"), // Jack Thompson
+                new Guid("81694c14-a96a-4625-b5e5-a9fd034021af"), // Kate Garcia
+                new Guid("7522f469-e697-4e02-bb2f-f7f055c9aacb"), // Liam Anderson
+                new Guid("bf694c99-cfa6-4fba-be98-efba28bb4f31"), // Mia Rodriguez
+                new Guid("879c8ae6-c1c0-4d16-85fb-5dfe698fd108"), // Noah Martinez
+                new Guid("88b6f0d3-298e-4083-84cf-fa7893a0c846"), // Olivia Lopez
+                new Guid("ad92cd5e-5599-4f3c-b2e1-39a49dd6b5bc"), // Peter Gonzalez
+                new Guid("cc230776-dc23-4996-9383-15fee9688215"), // Quinn Hernandez
+                new Guid("5950a2be-bdfb-4dcb-9913-1e3e0e022a5c"), // Ryan King
+                new Guid("a22e8c3a-4ae0-4b59-b766-89a226fa82f0")  // Sara Wright
+            };
 
             var systemUserId = Guid.Empty; // System user for seeding
 
-            // Assign roles
-            var userRoles = new[]
+            // Create role assignments - all users get Employee role by default
+            var userRoles = new List<UserToRole>();
+
+            // Assign Employee role to all users
+            foreach (var userId in userIds)
             {
-                // John Doe - Employee
-                new UserToRole
+                userRoles.Add(new UserToRole
                 {
                     Id = Guid.NewGuid(),
-                    UserId = johnDoeUserId,
+                    UserId = userId,
                     RoleId = employeeRole.Id,
                     CreatedBy = systemUserId,
                     CreatedAt = DateTimeOffset.UtcNow
-                },
-                // Jane Smith - Employee
-                new UserToRole
+                });
+            }
+
+            // Override specific users with higher roles
+            // Henry Wilson - People Manager (he has direct reports)
+            var henryWilsonIndex = userRoles.FindIndex(ur => ur.UserId == new Guid("977f4f1f-b3ce-4244-98fc-2c0d0248de88"));
+            if (henryWilsonIndex >= 0)
+            {
+                userRoles[henryWilsonIndex] = new UserToRole
                 {
                     Id = Guid.NewGuid(),
-                    UserId = janeSmithUserId,
-                    RoleId = employeeRole.Id,
-                    CreatedBy = systemUserId,
-                    CreatedAt = DateTimeOffset.UtcNow
-                },
-                // Henry Wilson - People Manager
-                new UserToRole
-                {
-                    Id = Guid.NewGuid(),
-                    UserId = henryWilsonUserId,
+                    UserId = new Guid("977f4f1f-b3ce-4244-98fc-2c0d0248de88"),
                     RoleId = peopleManagerRole.Id,
                     CreatedBy = systemUserId,
                     CreatedAt = DateTimeOffset.UtcNow
-                },
-                // System Administrator (for testing) - let's assign to the first user
-                new UserToRole
+                };
+            }
+
+            // John Doe - Administrator (for testing purposes)
+            var johnDoeIndex = userRoles.FindIndex(ur => ur.UserId == new Guid("679add6e-6c29-4e00-b6a5-b69c8e0f3445"));
+            if (johnDoeIndex >= 0)
+            {
+                // Add Administrator role in addition to Employee role
+                userRoles.Add(new UserToRole
                 {
                     Id = Guid.NewGuid(),
-                    UserId = johnDoeUserId,
+                    UserId = new Guid("679add6e-6c29-4e00-b6a5-b69c8e0f3445"),
                     RoleId = administratorRole.Id,
                     CreatedBy = systemUserId,
                     CreatedAt = DateTimeOffset.UtcNow
-                }
-            };
+                });
+            }
 
             await _context.UserRoles.AddRangeAsync(userRoles);
             await _context.SaveChangesAsync();
 
-            _logger.LogInformation("Assigned roles to {UserRoleCount} user-role relationships.", userRoles.Length);
+            _logger.LogInformation("Assigned roles to {UserRoleCount} user-role relationships.", userRoles.Count);
         }
 
         private async Task SeedCareerPathsAndTracksAsync(bool forceSeed = false)

@@ -48,7 +48,9 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
             var seeder = new CPR.Infrastructure.Services.DatabaseSeeder(dbContext, logger);
 
             // Check if database is already set up by another test instance
-            var databaseSetupCompleted = dbContext.Roles.Any(r => r.Title == "Administrator");
+            // Check both that roles exist AND that seeded users have roles assigned
+            var databaseSetupCompleted = dbContext.Roles.Any(r => r.Title == "Administrator") && 
+                                         dbContext.UserRoles.Any(ur => ur.UserId == new Guid("5950a2be-bdfb-4dcb-9913-1e3e0e022a5c")); // Ryan King
             if (!databaseSetupCompleted)
             {
                 // Force complete database recreation
