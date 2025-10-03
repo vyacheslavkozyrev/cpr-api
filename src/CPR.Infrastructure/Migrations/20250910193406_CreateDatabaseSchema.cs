@@ -609,11 +609,96 @@ namespace CPR.Infrastructure.Migrations
                 table: "users",
                 column: "user_name",
                 unique: true);
+
+            migrationBuilder.CreateTable(
+                name: "roles",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
+                    title = table.Column<string>(type: "text", nullable: false),
+                    description = table.Column<string>(type: "text", nullable: true),
+                    created_by = table.Column<Guid>(type: "uuid", nullable: true),
+                    created_at = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
+                    modified_by = table.Column<Guid>(type: "uuid", nullable: true),
+                    modified_at = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
+                    is_deleted = table.Column<bool>(type: "boolean", nullable: false),
+                    deleted_by = table.Column<Guid>(type: "uuid", nullable: true),
+                    deleted_at = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_roles", x => x.id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "user_to_role",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
+                    user_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    role_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    created_by = table.Column<Guid>(type: "uuid", nullable: true),
+                    created_at = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
+                    modified_by = table.Column<Guid>(type: "uuid", nullable: true),
+                    modified_at = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
+                    is_deleted = table.Column<bool>(type: "boolean", nullable: false),
+                    deleted_by = table.Column<Guid>(type: "uuid", nullable: true),
+                    deleted_at = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_user_to_role", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_user_to_role_roles_role_id",
+                        column: x => x.role_id,
+                        principalTable: "roles",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_user_to_role_users_user_id",
+                        column: x => x.user_id,
+                        principalTable: "users",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            // Indexes for roles table
+            migrationBuilder.CreateIndex(
+                name: "IX_roles_title",
+                table: "roles",
+                column: "title",
+                unique: true);
+
+            // Indexes for user_to_role table
+            migrationBuilder.CreateIndex(
+                name: "IX_user_to_role_user_id",
+                table: "user_to_role",
+                column: "user_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_user_to_role_role_id",
+                table: "user_to_role",
+                column: "role_id");
+
+            // Unique constraint for user-role combinations (excluding soft-deleted records)
+            migrationBuilder.CreateIndex(
+                name: "UX_user_to_role_user_id_role_id",
+                table: "user_to_role",
+                columns: new[] { "user_id", "role_id" },
+                unique: true)
+                .Annotation("Npgsql:IndexInclude", new[] { "is_deleted" })
+                .Annotation("Npgsql:IndexFilter", "is_deleted = false");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "user_to_role");
+
+            migrationBuilder.DropTable(
+                name: "roles");
+
             migrationBuilder.DropTable(
                 name: "audit_logs");
 

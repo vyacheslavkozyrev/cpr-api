@@ -34,6 +34,8 @@ namespace CPR.Infrastructure.Data
         public DbSet<EmployeeToSkill> EmployeeSkills { get; set; }
         public DbSet<PositionToSkill> PositionToSkills { get; set; }
         public DbSet<ProjectTeam> ProjectTeams { get; set; }
+        public DbSet<Role> Roles { get; set; }
+        public DbSet<UserToRole> UserRoles { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -439,6 +441,54 @@ namespace CPR.Infrastructure.Data
                 b.Property(pt => pt.IsDeleted).HasColumnName("is_deleted");
                 b.Property(pt => pt.DeletedBy).HasColumnName("deleted_by");
                 b.Property(pt => pt.DeletedAt).HasColumnName("deleted_at");
+            });
+
+            modelBuilder.Entity<Role>(b =>
+            {
+                b.ToTable("roles");
+                b.HasKey(r => r.Id);
+                b.Property(r => r.Id).HasColumnName("id");
+                b.Property(r => r.Title).HasColumnName("title").IsRequired();
+                b.Property(r => r.Description).HasColumnName("description");
+                b.Property(r => r.CreatedBy).HasColumnName("created_by");
+                b.Property(r => r.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("CURRENT_TIMESTAMP");
+                b.Property(r => r.ModifiedBy).HasColumnName("modified_by");
+                b.Property(r => r.ModifiedAt).HasColumnName("modified_at");
+                b.Property(r => r.IsDeleted).HasColumnName("is_deleted");
+                b.Property(r => r.DeletedBy).HasColumnName("deleted_by");
+                b.Property(r => r.DeletedAt).HasColumnName("deleted_at");
+            });
+
+            modelBuilder.Entity<UserToRole>(b =>
+            {
+                b.ToTable("user_to_role");
+                b.HasKey(ur => ur.Id);
+                b.Property(ur => ur.Id).HasColumnName("id");
+                b.Property(ur => ur.UserId).HasColumnName("user_id").IsRequired();
+                b.Property(ur => ur.RoleId).HasColumnName("role_id").IsRequired();
+                b.Property(ur => ur.CreatedBy).HasColumnName("created_by");
+                b.Property(ur => ur.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("CURRENT_TIMESTAMP");
+                b.Property(ur => ur.ModifiedBy).HasColumnName("modified_by");
+                b.Property(ur => ur.ModifiedAt).HasColumnName("modified_at");
+                b.Property(ur => ur.IsDeleted).HasColumnName("is_deleted");
+                b.Property(ur => ur.DeletedBy).HasColumnName("deleted_by");
+                b.Property(ur => ur.DeletedAt).HasColumnName("deleted_at");
+
+                // Foreign key relationships
+                b.HasOne(ur => ur.User)
+                    .WithMany(u => u.UserRoles)
+                    .HasForeignKey(ur => ur.UserId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                b.HasOne(ur => ur.Role)
+                    .WithMany(r => r.UserRoles)
+                    .HasForeignKey(ur => ur.RoleId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                // Unique constraint to prevent duplicate user-role assignments
+                b.HasIndex(ur => new { ur.UserId, ur.RoleId })
+                    .IsUnique()
+                    .HasFilter("is_deleted = false");
             });
         }
     }

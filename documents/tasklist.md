@@ -176,7 +176,12 @@ Iterations
     - Full test coverage: All unit tests (31/31) and integration tests (48/48) passing
     - Authorization validation: Managers access team data (200 OK), employees get 403 Forbidden
 
-- [ ] Iteration 13 — Role-Based Access Control (RBAC) System
+- [x] Iteration 13 — Role-Based Access Control (RBAC) System
+  - [x] Phase 1: Database Schema Changes ✅
+    - Created Role and UserToRole entities with full audit columns
+    - Updated CprDbContext with proper configurations and relationships
+    - Modified CreateDatabaseSchema migration to include roles and user_to_role tables
+    - Added foreign key constraints, unique indexes, and soft-delete filtering
   - Scope: Implement comprehensive RBAC with roles table, user-to-role mapping, authorization attributes
   - Database: roles table (id, title, description, created_at, modified_at, created_by, modified_by, is_deleted, deleted_by, deleted_at), user_to_role junction table (id, user_id, role_id, created_at, modified_at, created_by, modified_by, is_deleted, deleted_by, deleted_at)
   - Authorization: Role-based attributes on all controllers
