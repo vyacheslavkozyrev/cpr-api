@@ -40,6 +40,10 @@ builder.Services.AddAuthentication(options =>
 }).AddScheme<Microsoft.AspNetCore.Authentication.AuthenticationSchemeOptions, CPR.Api.Auth.JwtStubAuthenticationHandler>("Stub", options => { });
 
 builder.Services.AddAuthorization();
+
+// Register custom authorization policy provider and handler
+builder.Services.AddSingleton<Microsoft.AspNetCore.Authorization.IAuthorizationPolicyProvider, CPR.Api.Auth.RoleAuthorizationPolicyProvider>();
+builder.Services.AddScoped<Microsoft.AspNetCore.Authorization.IAuthorizationHandler, CPR.Api.Auth.RoleAuthorizationHandler>();
 // Register app services
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<CPR.Api.Services.IUserService, CPR.Api.Services.UserService>();
