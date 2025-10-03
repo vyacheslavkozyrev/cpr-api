@@ -5,6 +5,7 @@ using CPR.Application.Services;
 using CPR.Application.Contracts;
 using System.Security.Claims;
 using CPR.Application.Repositories;
+using CPR.Api.Auth;
 
 namespace CPR.Api.Controllers;
 
@@ -38,6 +39,7 @@ public class TeamController : ControllerBase
     /// </summary>
     /// <returns>List of team members</returns>
     [HttpGet]
+    [RequireRole("People Manager", "Solution Owner", "Director", "Administrator")]
     [ProducesResponseType(typeof(TeamMemberDto[]), 200)]
     [ProducesResponseType(401)]
     [ProducesResponseType(403)]
@@ -82,6 +84,7 @@ public class TeamController : ControllerBase
     /// <param name="employeeId">The employee ID of the team member</param>
     /// <returns>Detailed team member profile</returns>
     [HttpGet("members/{employeeId}")]
+    [RequireRole("People Manager", "Solution Owner", "Director", "Administrator")]
     [ProducesResponseType(typeof(TeamMemberProfileDto), 200)]
     [ProducesResponseType(401)]
     [ProducesResponseType(403)]
@@ -130,6 +133,7 @@ public class TeamController : ControllerBase
     /// </summary>
     /// <returns>Team goals summary</returns>
     [HttpGet("goals")]
+    [RequireRole("People Manager", "Solution Owner", "Director", "Administrator")]
     [ProducesResponseType(typeof(TeamGoalsDto), 200)]
     [ProducesResponseType(401)]
     [ProducesResponseType(403)]

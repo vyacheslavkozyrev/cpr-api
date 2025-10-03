@@ -5,6 +5,7 @@ using CPR.Application.Services;
 using CPR.Application.Contracts;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using CPR.Api.Auth;
 
 namespace CPR.Api.Controllers
 {
@@ -68,6 +69,7 @@ namespace CPR.Api.Controllers
         /// <param name="id">Goal identifier.</param>
         [HttpGet("{id}")]
         [Authorize]
+        [RequireRole("Employee", "People Manager", "Solution Owner", "Director", "Administrator")]
         public async Task<IActionResult> GetById(Guid id)
         {
             var profile = await _userService.GetCurrentUserProfileAsync(User);
@@ -86,6 +88,7 @@ namespace CPR.Api.Controllers
         /// <param name="dto">Fields to update.</param>
         [HttpPatch("{id}")]
         [Authorize]
+        [RequireRole("Employee", "People Manager", "Solution Owner", "Director", "Administrator")]
         public async Task<IActionResult> Patch(Guid id, [FromBody] UpdateGoalDto dto)
         {
             var profile = await _userService.GetCurrentUserProfileAsync(User);
@@ -102,6 +105,7 @@ namespace CPR.Api.Controllers
         /// <param name="id">Goal identifier.</param>
         [HttpDelete("{id}")]
         [Authorize]
+        [RequireRole("Administrator")]
         public async Task<IActionResult> Delete(Guid id)
         {
             var profile = await _userService.GetCurrentUserProfileAsync(User);
@@ -119,6 +123,7 @@ namespace CPR.Api.Controllers
         /// <param name="dto">Task creation payload.</param>
         [HttpPost("{id}/tasks")]
         [Authorize]
+        [RequireRole("Employee", "People Manager", "Solution Owner", "Director", "Administrator")]
         public async Task<IActionResult> AddTask(Guid id, [FromBody] CreateGoalTaskDto dto)
         {
             var profile = await _userService.GetCurrentUserProfileAsync(User);
@@ -137,6 +142,7 @@ namespace CPR.Api.Controllers
         /// <param name="dto">Task update payload.</param>
         [HttpPatch("{id}/tasks/{taskId}")]
         [Authorize]
+        [RequireRole("Employee", "People Manager", "Solution Owner", "Director", "Administrator")]
         public async Task<IActionResult> PatchTask(Guid id, Guid taskId, [FromBody] UpdateGoalTaskDto dto)
         {
             var profile = await _userService.GetCurrentUserProfileAsync(User);

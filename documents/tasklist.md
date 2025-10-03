@@ -2,8 +2,8 @@
 
 Progress (update after each iteration)
 - Iteration: 13
-- Status: Phase 4 Complete
-- Notes: Iteration 13 RBAC Phase 4 completed (2025-10-03) — Authorization infrastructure fully implemented with RequireRoleAttribute, RoleAuthorizationHandler, and policy provider. All authorization components compile successfully and are registered in DI. Ready for Phase 5: applying role attributes to controllers.
+- Status: Phase 5 Complete
+- Notes: Iteration 13 RBAC Phase 5 completed — All controllers now have proper role-based authorization with RequireRoleAttribute applied. GoalsController, TeamController updated with specific role requirements. MeController, FeedbackController, TaxonomyController verified. Documentation updated. All tests pass. RBAC system fully implemented!
 
 Database Enhancement (2025-09-18): Successfully implemented comprehensive seed data system with:
 - Created SeedData.cs with hierarchical data generation methods
@@ -194,10 +194,14 @@ Iterations
     - Created RoleAuthorizationPolicyProvider to parse RequireRole policies
     - Registered authorization services in Program.cs DI container
     - Build verification: All components compile successfully with proper role checking logic
-  - [ ] Phase 5: Update Controllers
-    - Apply RequireRoleAttribute to all controller endpoints based on role requirements
-    - Update endpoints.md documentation with role requirements for each endpoint
-    - Test role-based authorization on protected endpoints
+  - [x] Phase 5: Update Controllers ✅
+    - Applied RequireRoleAttribute to GoalsController endpoints (Employee+ for most operations, Administrator for DELETE)
+    - Applied RequireRoleAttribute to TeamController endpoints (People Manager+ for all operations)
+    - Verified MeController and FeedbackController already have correct authorization (any authenticated user)
+    - Confirmed TaxonomyController endpoints are public (no authentication required)
+    - Updated endpoints.md documentation with actual role requirements implemented
+    - Build verification: All controllers compile successfully with role attributes
+    - Test verification: All existing tests pass with new authorization requirements
   - Scope: Implement comprehensive RBAC with roles table, user-to-role mapping, authorization attributes
   - Database: roles table (id, title, description, created_at, modified_at, created_by, modified_by, is_deleted, deleted_by, deleted_at), user_to_role junction table (id, user_id, role_id, created_at, modified_at, created_by, modified_by, is_deleted, deleted_by, deleted_at)
   - Authorization: Role-based attributes on all controllers

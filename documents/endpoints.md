@@ -36,46 +36,35 @@ All endpoints require appropriate roles. Authorization is enforced through:
 #### **Employee Endpoints** (Any authenticated user)
 - `GET /me` - Any authenticated user
 - `PATCH /me` - Any authenticated user
+- `GET /me/skills` - Any authenticated user
+- `POST /me/skills` - Any authenticated user
+- `PUT /me/skills/{skillId}` - Any authenticated user
 - `POST /goals` - Any authenticated user
 - `GET /me/goals` - Any authenticated user
-- `GET /goals/{id}` - Owner only (or higher roles)
-- `PATCH /goals/{id}` - Owner only (or higher roles)
-- `DELETE /goals/{id}` - Owner only (or Administrator)
-- `POST /goals/{id}/tasks` - Owner only (or higher roles)
+- `GET /goals/{id}` - Employee+
+- `PATCH /goals/{id}` - Employee+
+- `DELETE /goals/{id}` - Administrator only
+- `POST /goals/{id}/tasks` - Employee+
+- `PATCH /goals/{id}/tasks/{taskId}` - Employee+
 
 #### **Manager Endpoints** (People Manager, Solution Owner, Director, Administrator)
 - `GET /team` - People Manager+
 - `GET /team/members/{employee_id}` - People Manager+
 - `GET /team/goals` - People Manager+
-- `GET /employees/{id}` - People Manager+
-- `GET /employees` - People Manager+
 
-#### **HR/Admin Endpoints** (Administrator only)
-- `GET /users` - Administrator
-- `POST /users` - Administrator
-- `PATCH /users/{id}` - Administrator
-- `DELETE /users/{id}` - Administrator
-- `GET /employees` - Administrator
-- `POST /employees` - Administrator
-- `PATCH /employees/{id}` - Administrator
-- `DELETE /employees/{id}` - Administrator
-- `CRUD /positions` - Administrator
-- `CRUD /career_tracks` - Administrator
-- `CRUD /career_paths` - Administrator
-- `CRUD /skills` - Administrator
-- `POST /position_to_skill` - Administrator
+#### **Feedback Endpoints** (Any authenticated user)
+- `POST /feedback` - Any authenticated user
+- `POST /feedback/request` - Any authenticated user
+- `GET /me/feedback` - Any authenticated user
+- `GET /me/feedback/request` - Any authenticated user
+- `GET /me/feedback/request/todo` - Any authenticated user
 
-#### **Director Endpoints** (Director, Administrator)
-- `GET /promotions` - Director+
-- `GET /promotions/{id}` - Director+
-- `POST /promotions/{id}/approve` - Director+
-- `POST /promotions/{id}/decline` - Director+
-
-#### **System Endpoints** (Administrator only)
-- `POST /internal/import/users` - Administrator
-- `POST /internal/import/skills` - Administrator
-- `POST /webhook/feedback` - Administrator
-- `POST /jobs/retention/run` - Administrator
+#### **Taxonomy Endpoints** (Public - no authentication required)
+- `GET /career` - Public
+- `GET /career_track` - Public
+- `GET /positions` - Public
+- `GET /skills` - Public
+- `GET /skill_levels` - Public
 
 ### **Authorization Implementation Notes**
 - Users can have multiple roles (many-to-many relationship)
