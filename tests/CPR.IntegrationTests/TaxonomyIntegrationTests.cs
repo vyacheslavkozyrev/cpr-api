@@ -10,11 +10,11 @@ using Xunit;
 namespace CPR.IntegrationTests;
 
 [Collection("IntegrationTestCollection")]
-public class TaxonomyIntegrationTests : IClassFixture<CustomWebApplicationFactory>
+public class TaxonomyIntegrationTests : IClassFixture<WebApplicationFactory<Program>>
 {
-    private readonly CustomWebApplicationFactory _factory;
+    private readonly WebApplicationFactory<Program> _factory;
 
-    public TaxonomyIntegrationTests(CustomWebApplicationFactory factory)
+    public TaxonomyIntegrationTests(WebApplicationFactory<Program> factory)
     {
         _factory = factory;
     }

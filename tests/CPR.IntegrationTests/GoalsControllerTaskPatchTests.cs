@@ -8,11 +8,11 @@ using Xunit;
 
 namespace CPR.IntegrationTests
 {
-    public class GoalsControllerTaskPatchTests : IClassFixture<CustomWebApplicationFactory>
+    public class GoalsControllerTaskPatchTests : IClassFixture<WebApplicationFactory<Program>>
     {
-        private readonly CustomWebApplicationFactory _factory;
+        private readonly WebApplicationFactory<Program> _factory;
 
-        public GoalsControllerTaskPatchTests(CustomWebApplicationFactory factory)
+        public GoalsControllerTaskPatchTests(WebApplicationFactory<Program> factory)
         {
             _factory = factory;
         }

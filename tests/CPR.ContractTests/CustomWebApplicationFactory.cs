@@ -22,6 +22,7 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
     {
         // Set environment variables at the class level to ensure they're available
         Environment.SetEnvironmentVariable("DATABASE_NAME", "cpr_test");
+        Environment.SetEnvironmentVariable("APP_ENVIRONMENT", "Test");
         Environment.SetEnvironmentVariable("JWT_SIGNING_KEY", "local-test-key");
     }
 
@@ -33,6 +34,7 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
             // Ensure the environment variables are available in configuration
             context.Configuration["JWT_SIGNING_KEY"] = "local-test-key";
             context.Configuration["DATABASE_NAME"] = "cpr_test";
+            context.Configuration["APP_ENVIRONMENT"] = "Test";
         });
     }
 
@@ -49,7 +51,7 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
 
             // Check if database is already set up by another test instance
             // Check both that roles exist AND that seeded users have roles assigned
-            var databaseSetupCompleted = dbContext.Roles.Any(r => r.Title == "Administrator") && 
+            var databaseSetupCompleted = dbContext.Roles.Any(r => r.Title == "Administrator") &&
                                          dbContext.UserRoles.Any(ur => ur.UserId == new Guid("5950a2be-bdfb-4dcb-9913-1e3e0e022a5c")); // Ryan King
             if (!databaseSetupCompleted)
             {

@@ -29,31 +29,40 @@ namespace CPR.Infrastructure.Services
         {
             _logger.LogInformation("Starting database seeding...");
 
-            // For test environment, always seed roles and users regardless of existing data
+            // Check environment to determine seeding behavior
+            var appEnvironment = Environment.GetEnvironmentVariable("APP_ENVIRONMENT");
             var databaseName = Environment.GetEnvironmentVariable("DATABASE_NAME");
-            var isTestEnvironment = databaseName?.Contains("test") == true;
-            _logger.LogInformation("Database name from env: '{DatabaseName}', IsTestEnvironment: {IsTestEnvironment}", databaseName, isTestEnvironment);
+            var isTestEnvironment = appEnvironment?.Equals("Test", StringComparison.OrdinalIgnoreCase) == true;
+            var isDevEnvironment = appEnvironment?.Equals("Development", StringComparison.OrdinalIgnoreCase) == true;
+            _logger.LogInformation("App Environment: '{AppEnvironment}', Database name: '{DatabaseName}', IsTestEnvironment: {IsTestEnvironment}, IsDevEnvironment: {IsDevEnvironment}", appEnvironment, databaseName, isTestEnvironment, isDevEnvironment);
 
-            if (isTestEnvironment)
+            if (isTestEnvironment || isDevEnvironment)
             {
-                // Check if seeding has already been completed by another test instance
-                var seedingCompleted = await _context.Roles.AnyAsync(r => r.Title == "Administrator");
+                // Check if seeding has already been completed
+                var seedingCompleted = false; // Force seeding in test/dev environments
                 if (seedingCompleted)
                 {
-                    _logger.LogInformation("Database already seeded by another test instance, but ensuring roles are assigned...");
-                    // Still assign roles in case they weren't assigned properly
-                    await AssignRolesToUsersAsync(true);
+                    if (isTestEnvironment)
+                    {
+                        _logger.LogInformation("Database already seeded by another test instance, but ensuring roles are assigned...");
+                        // Still assign roles in case they weren't assigned properly
+                        await AssignRolesToUsersAsync(true);
+                    }
+                    else
+                    {
+                        _logger.LogInformation("Database already seeded for development environment.");
+                    }
                     return;
                 }
 
-                _logger.LogInformation("Test environment detected - seeding all data...");
-                await SeedRolesAsync(true);
-                await SeedDepartmentsAsync(true);
-                await SeedCareerPathsAndTracksAsync(true);
-                await SeedPositionsAsync(true);
-                await SeedUsersAndEmployeesAsync(true);
-                await SeedSkillsAndCategoriesAsync(true);
-                await SeedProjectsAsync(true);
+                _logger.LogInformation("{Environment} environment detected - seeding all data...", isTestEnvironment ? "Test" : "Development");
+                // await SeedRolesAsync(); // Skip role seeding in test environment to avoid conflicts
+                await SeedUsersAndEmployeesAsync();
+                await SeedDepartmentsAsync();
+                await SeedCareerPathsAndTracksAsync();
+                await SeedPositionsAsync();
+                await SeedSkillsAndCategoriesAsync();
+                await SeedProjectsAsync();
             }
             else
             {
@@ -71,22 +80,10 @@ namespace CPR.Infrastructure.Services
 
         private async Task SeedRolesAsync(bool forceSeed = false)
         {
-            if (!forceSeed && await _context.Roles.AnyAsync())
+            if (!forceSeed && await _context.Roles.AnyAsync(r => !r.IsDeleted))
             {
                 _logger.LogInformation("Roles already exist, skipping seeding.");
                 return;
-            }
-
-            if (forceSeed)
-            {
-                _logger.LogInformation("Force seeding roles...");
-                // Remove existing roles first
-                _context.Roles.RemoveRange(_context.Roles);
-                await _context.SaveChangesAsync();
-            }
-            else
-            {
-                _logger.LogInformation("Seeding roles...");
             }
 
             var roles = new[]
@@ -131,8 +128,29 @@ namespace CPR.Infrastructure.Services
                 role.CreatedAt = DateTimeOffset.UtcNow;
             }
 
-            await _context.Roles.AddRangeAsync(roles);
-            await _context.SaveChangesAsync();
+            if (forceSeed)
+            {
+                _logger.LogInformation("Force seeding roles...");
+                // Delete existing user-role assignments first due to foreign key constraints
+                await _context.Database.ExecuteSqlRawAsync("DELETE FROM user_to_role");
+                // Delete all existing roles
+                await _context.Database.ExecuteSqlRawAsync("DELETE FROM roles");
+                // Add all roles
+                await _context.Roles.AddRangeAsync(roles);
+                await _context.SaveChangesAsync();
+            }
+            else
+            {
+                _logger.LogInformation("Seeding roles...");
+                // Only add roles that don't already exist
+                var existingRoleIds = await _context.Roles.Where(r => !r.IsDeleted).Select(r => r.Id).ToListAsync();
+                var rolesToAdd = roles.Where(r => !existingRoleIds.Contains(r.Id)).ToArray();
+                if (rolesToAdd.Length > 0)
+                {
+                    await _context.Roles.AddRangeAsync(rolesToAdd);
+                    await _context.SaveChangesAsync();
+                }
+            }
 
             _logger.LogInformation("Seeded {RoleCount} roles.", roles.Length);
         }
@@ -148,9 +166,10 @@ namespace CPR.Infrastructure.Services
             if (forceSeed)
             {
                 _logger.LogInformation("Force seeding departments...");
-                // Remove existing departments first
-                _context.Departments.RemoveRange(_context.Departments);
-                await _context.SaveChangesAsync();
+                // Note: Employees are deleted in SeedUsersAndEmployeesAsync
+                await _context.Positions.ExecuteDeleteAsync();
+                // Remove existing departments
+                await _context.Departments.ExecuteDeleteAsync();
             }
             else
             {
@@ -248,11 +267,16 @@ namespace CPR.Infrastructure.Services
             if (forceSeed)
             {
                 _logger.LogInformation("Force seeding users and employees...");
-                // Clean up existing data
-                _context.UserRoles.RemoveRange(_context.UserRoles);
-                _context.Employees.RemoveRange(_context.Employees);
-                _context.Users.RemoveRange(_context.Users);
-                await _context.SaveChangesAsync();
+                // Clean up existing data in dependency order
+                await _context.GoalTasks.ExecuteDeleteAsync();
+                await _context.Goals.ExecuteDeleteAsync();
+                await _context.FeedbackRequests.ExecuteDeleteAsync();
+                await _context.Feedback.ExecuteDeleteAsync();
+                await _context.EmployeeSkills.ExecuteDeleteAsync();
+                await _context.ProjectTeams.ExecuteDeleteAsync();
+                await _context.UserRoles.ExecuteDeleteAsync();
+                await _context.Employees.ExecuteDeleteAsync();
+                await _context.Users.ExecuteDeleteAsync();
             }
             else
             {
@@ -434,7 +458,7 @@ namespace CPR.Infrastructure.Services
                     Id = new Guid("004e1f8b-1ea3-4e27-a373-ed82f85147cc"),
                     UserId = users[0].Id,
                     PositionId = new Guid("06091429-d5c5-47f7-9f85-3034618325c5"),
-                    DepartmentId = engineeringDept?.Id,
+                    DepartmentId = engineeringDept?.Id ?? new Guid("fff11111-1111-1111-1111-111111111111"),
                     ManagerId = new Guid("0c8b8b8b-8b8b-4b8b-8b8b-8b8b8b8b8b8b") // Reports to Henry Wilson
                 },
                 new Employee
@@ -602,8 +626,7 @@ namespace CPR.Infrastructure.Services
             {
                 _logger.LogInformation("Force assigning roles to users...");
                 // Remove existing user roles first
-                _context.UserRoles.RemoveRange(_context.UserRoles);
-                await _context.SaveChangesAsync();
+                await _context.UserRoles.ExecuteDeleteAsync();
             }
             else
             {
@@ -707,9 +730,8 @@ namespace CPR.Infrastructure.Services
             {
                 _logger.LogInformation("Force seeding career paths and tracks...");
                 // Remove existing data first
-                _context.CareerTracks.RemoveRange(_context.CareerTracks);
-                _context.CareerPaths.RemoveRange(_context.CareerPaths);
-                await _context.SaveChangesAsync();
+                await _context.CareerTracks.ExecuteDeleteAsync();
+                await _context.CareerPaths.ExecuteDeleteAsync();
             }
             else
             {
@@ -897,8 +919,7 @@ namespace CPR.Infrastructure.Services
             {
                 _logger.LogInformation("Force seeding positions...");
                 // Remove existing positions first
-                _context.Positions.RemoveRange(_context.Positions);
-                await _context.SaveChangesAsync();
+                await _context.Positions.ExecuteDeleteAsync();
             }
             else
             {
@@ -1327,9 +1348,8 @@ namespace CPR.Infrastructure.Services
             {
                 _logger.LogInformation("Force seeding skill categories and skills...");
                 // Remove existing data first
-                _context.Skills.RemoveRange(_context.Skills);
-                _context.SkillCategories.RemoveRange(_context.SkillCategories);
-                await _context.SaveChangesAsync();
+                await _context.Skills.ExecuteDeleteAsync();
+                await _context.SkillCategories.ExecuteDeleteAsync();
             }
             else
             {
@@ -1528,8 +1548,7 @@ namespace CPR.Infrastructure.Services
             {
                 _logger.LogInformation("Force seeding projects...");
                 // Remove existing projects first
-                _context.Projects.RemoveRange(_context.Projects);
-                await _context.SaveChangesAsync();
+                await _context.Projects.ExecuteDeleteAsync();
             }
             else
             {

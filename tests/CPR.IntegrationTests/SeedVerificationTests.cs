@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using CPR.Infrastructure.Data;
@@ -9,11 +10,11 @@ using Microsoft.Extensions.DependencyInjection;
 namespace CPR.IntegrationTests
 {
     [Collection("IntegrationTestCollection")]
-    public class SeedVerificationTests : IClassFixture<CustomWebApplicationFactory>
+    public class SeedVerificationTests : IClassFixture<WebApplicationFactory<Program>>
     {
-        private readonly CustomWebApplicationFactory _factory;
+        private readonly WebApplicationFactory<Program> _factory;
 
-        public SeedVerificationTests(CustomWebApplicationFactory factory)
+        public SeedVerificationTests(WebApplicationFactory<Program> factory)
         {
             _factory = factory;
         }

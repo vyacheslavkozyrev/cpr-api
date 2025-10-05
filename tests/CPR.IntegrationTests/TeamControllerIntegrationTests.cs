@@ -12,7 +12,7 @@ using System.Collections.Generic;
 namespace CPR.IntegrationTests
 {
     [Collection("SequentialIntegrationTestCollection")]
-    public class TeamControllerIntegrationTests : IClassFixture<CustomWebApplicationFactory>, IClassFixture<DatabaseCleanupFixture>
+    public class TeamControllerIntegrationTests : IClassFixture<WebApplicationFactory<Program>>, IClassFixture<DatabaseCleanupFixture>
     {
         static TeamControllerIntegrationTests()
         {
@@ -21,10 +21,10 @@ namespace CPR.IntegrationTests
             Environment.SetEnvironmentVariable("DATABASE_NAME", "cpr_test");
         }
 
-        private readonly CustomWebApplicationFactory _factory;
+        private readonly WebApplicationFactory<Program> _factory;
         private readonly DatabaseCleanupFixture _dbFixture;
 
-        public TeamControllerIntegrationTests(CustomWebApplicationFactory factory, DatabaseCleanupFixture dbFixture)
+        public TeamControllerIntegrationTests(WebApplicationFactory<Program> factory, DatabaseCleanupFixture dbFixture)
         {
             _factory = factory;
             _dbFixture = dbFixture;

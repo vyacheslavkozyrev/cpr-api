@@ -12,12 +12,12 @@ using Xunit;
 
 namespace CPR.IntegrationTests
 {
-    public class ValidationTests : IClassFixture<CustomWebApplicationFactory>
+    public class ValidationTests : IClassFixture<WebApplicationFactory<Program>>
     {
-        private readonly CustomWebApplicationFactory _factory;
+        private readonly WebApplicationFactory<Program> _factory;
         private readonly string _testToken;
 
-        public ValidationTests(CustomWebApplicationFactory factory)
+        public ValidationTests(WebApplicationFactory<Program> factory)
         {
             _factory = factory;
             // configure the stub signing key and create a valid test token

@@ -4,6 +4,9 @@ using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Xunit;
+using System.IO;
+using Npgsql;
+using Microsoft.Extensions.Logging;
 
 namespace CPR.IntegrationTests
 {
@@ -16,9 +19,29 @@ namespace CPR.IntegrationTests
     public class DatabaseCleanupFixture : IAsyncLifetime
     {
         private readonly string _connString = "Host=localhost;Port=5432;Database=cpr_test;Username=postgres;Password=postgres";
+        private static bool _globalSetupCompleted = false;
+
+        public static bool IsGlobalSetupCompleted()
+        {
+            return _globalSetupCompleted;
+        }
 
         public async Task InitializeAsync()
         {
+            Console.WriteLine("DatabaseCleanupFixture: InitializeAsync starting");
+            // Global setup: load .env file, create database, run migrations, and seed data
+            if (!_globalSetupCompleted)
+            {
+                Console.WriteLine("DatabaseCleanupFixture: Running global setup");
+                await PerformGlobalDatabaseSetup();
+                _globalSetupCompleted = true;
+                Console.WriteLine("DatabaseCleanupFixture: Global setup completed");
+            }
+            else
+            {
+                Console.WriteLine("DatabaseCleanupFixture: Global setup already completed");
+            }
+
             // best-effort cleanup before tests run
             try
             {
@@ -62,6 +85,159 @@ namespace CPR.IntegrationTests
             {
                 System.Diagnostics.Debug.WriteLine($"DatabaseCleanupFixture: InitializeAsync failed: {ex.Message}");
                 // don't fail initialization solely because cleanup couldn't run; tests should still execute
+            }
+        }
+
+        private async Task PerformGlobalDatabaseSetup()
+        {
+            Console.WriteLine("DatabaseCleanupFixture: PerformGlobalDatabaseSetup starting");
+            try
+            {
+                Console.WriteLine("DatabaseCleanupFixture: Loading .env.test file");
+                LoadEnvFile("d:/projects/CPR/.env.test");
+
+                Console.WriteLine("DatabaseCleanupFixture: Ensuring database exists");
+                await EnsureDatabaseExistsAsync();
+
+                Console.WriteLine("DatabaseCleanupFixture: Running migrations");
+                await RunMigrationsAsync();
+
+                Console.WriteLine("DatabaseCleanupFixture: Seeding database");
+                await SeedDatabaseAsync();
+
+                Console.WriteLine("DatabaseCleanupFixture: PerformGlobalDatabaseSetup completed");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"DatabaseCleanupFixture: PerformGlobalDatabaseSetup failed: {ex.Message}");
+                throw;
+            }
+        }
+
+        private void LoadEnvFile(string envFilePath)
+        {
+            Console.WriteLine($"DatabaseCleanupFixture: LoadEnvFile called with path: {envFilePath}");
+            Console.WriteLine($"DatabaseCleanupFixture: Current directory: {Directory.GetCurrentDirectory()}");
+            Console.WriteLine($"DatabaseCleanupFixture: File exists: {File.Exists(envFilePath)}");
+
+            if (!File.Exists(envFilePath))
+            {
+                // If .env.test doesn't exist, try to load from .env file as fallback
+                envFilePath = "d:/projects/CPR/.env";
+                Console.WriteLine($"DatabaseCleanupFixture: Trying fallback path: {envFilePath}, exists: {File.Exists(envFilePath)}");
+                if (!File.Exists(envFilePath))
+                {
+                    Console.WriteLine("DatabaseCleanupFixture: No .env file found");
+                    return; // No .env file found, use defaults
+                }
+            }
+
+            Console.WriteLine("DatabaseCleanupFixture: Reading env file");
+            foreach (var line in File.ReadAllLines(envFilePath))
+            {
+                var trimmedLine = line.Trim();
+                if (string.IsNullOrEmpty(trimmedLine) || trimmedLine.StartsWith("#"))
+                    continue;
+
+                var parts = trimmedLine.Split('=', 2);
+                if (parts.Length == 2)
+                {
+                    var key = parts[0].Trim();
+                    var value = parts[1].Trim();
+
+                    // Remove quotes if present
+                    if (value.StartsWith("\"") && value.EndsWith("\""))
+                        value = value.Substring(1, value.Length - 2);
+                    else if (value.StartsWith("'") && value.EndsWith("'"))
+                        value = value.Substring(1, value.Length - 2);
+
+                    Console.WriteLine($"DatabaseCleanupFixture: Setting {key}={value}");
+                    Environment.SetEnvironmentVariable(key, value);
+                }
+            }
+        }
+
+        private async Task EnsureDatabaseExistsAsync()
+        {
+            try
+            {
+                // Try to connect to check if database exists
+                var options = new DbContextOptionsBuilder<CPR.Infrastructure.Data.CprDbContext>()
+                    .UseNpgsql(_connString)
+                    .ConfigureWarnings(warnings => warnings.Ignore(RelationalEventId.PendingModelChangesWarning))
+                    .Options;
+
+                using var db = new CPR.Infrastructure.Data.CprDbContext(options);
+                await db.Database.CanConnectAsync();
+                System.Diagnostics.Debug.WriteLine("=== DATABASE EXISTS: cpr_test ===");
+            }
+            catch (Npgsql.NpgsqlException ex) when (ex.SqlState == "3D000") // 3D000 = invalid_catalog_name (database doesn't exist)
+            {
+                System.Diagnostics.Debug.WriteLine("=== DATABASE DOES NOT EXIST, CREATING: cpr_test ===");
+
+                // Extract connection string components to create database
+                var builder = new Npgsql.NpgsqlConnectionStringBuilder(_connString);
+
+                // Connect to postgres database to create our test database
+                var postgresConnectionString = new Npgsql.NpgsqlConnectionStringBuilder(_connString)
+                {
+                    Database = "postgres" // Connect to default postgres database
+                }.ConnectionString;
+
+                using (var postgresConnection = new NpgsqlConnection(postgresConnectionString))
+                {
+                    await postgresConnection.OpenAsync();
+                    using (var command = postgresConnection.CreateCommand())
+                    {
+                        command.CommandText = $"CREATE DATABASE {builder.Database} OWNER {builder.Username}";
+                        await command.ExecuteNonQueryAsync();
+                    }
+                }
+
+                System.Diagnostics.Debug.WriteLine("=== DATABASE CREATED: cpr_test ===");
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"=== DATABASE EXISTENCE CHECK ERROR: {ex.Message} ===");
+                // Continue anyway - the migration will fail if database really doesn't exist
+            }
+        }
+
+        private async Task RunMigrationsAsync()
+        {
+            var options = new DbContextOptionsBuilder<CPR.Infrastructure.Data.CprDbContext>()
+                .UseNpgsql(_connString)
+                .ConfigureWarnings(warnings => warnings.Ignore(RelationalEventId.PendingModelChangesWarning))
+                .Options;
+
+            using var db = new CPR.Infrastructure.Data.CprDbContext(options);
+            await db.Database.MigrateAsync();
+        }
+
+        private async Task SeedDatabaseAsync()
+        {
+            var options = new DbContextOptionsBuilder<CPR.Infrastructure.Data.CprDbContext>()
+                .UseNpgsql(_connString)
+                .ConfigureWarnings(warnings => warnings.Ignore(RelationalEventId.PendingModelChangesWarning))
+                .Options;
+
+            using var db = new CPR.Infrastructure.Data.CprDbContext(options);
+
+            // Check if seeding is needed
+            var databaseSetupCompleted = false; // Force seeding for debugging
+
+            if (!databaseSetupCompleted)
+            {
+                var loggerFactory = LoggerFactory.Create(builder => builder.AddConsole());
+                var logger = loggerFactory.CreateLogger<CPR.Infrastructure.Services.DatabaseSeeder>();
+                var seeder = new CPR.Infrastructure.Services.DatabaseSeeder(db, logger);
+
+                await seeder.SeedAsync();
+                System.Diagnostics.Debug.WriteLine("=== DATABASE SEEDING COMPLETED ===");
+            }
+            else
+            {
+                System.Diagnostics.Debug.WriteLine("=== DATABASE ALREADY SEEDED ===");
             }
         }
 

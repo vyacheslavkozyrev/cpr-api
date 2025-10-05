@@ -10,11 +10,11 @@ using Xunit;
 
 namespace CPR.IntegrationTests
 {
-    public class GoalsControllerValidationTests : IClassFixture<CustomWebApplicationFactory>
+    public class GoalsControllerValidationTests : IClassFixture<WebApplicationFactory<Program>>
     {
-        private readonly CustomWebApplicationFactory _factory;
+        private readonly WebApplicationFactory<Program> _factory;
 
-        public GoalsControllerValidationTests(CustomWebApplicationFactory factory)
+        public GoalsControllerValidationTests(WebApplicationFactory<Program> factory)
         {
             _factory = factory;
         }
