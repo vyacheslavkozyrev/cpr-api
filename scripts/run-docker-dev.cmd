@@ -1,1 +1,0 @@
-docker-compose -f docker/docker-compose.dev.yml --project-name CPR up

@@ -14,13 +14,6 @@ namespace CPR.IntegrationTests
     [Collection("SequentialIntegrationTestCollection")]
     public class TeamControllerIntegrationTests : IClassFixture<WebApplicationFactory<Program>>, IClassFixture<DatabaseCleanupFixture>
     {
-        static TeamControllerIntegrationTests()
-        {
-            // Ensure environment variables are set before any tests run
-            Environment.SetEnvironmentVariable("JWT_SIGNING_KEY", "test-key");
-            Environment.SetEnvironmentVariable("DATABASE_NAME", "cpr_test");
-        }
-
         private readonly WebApplicationFactory<Program> _factory;
         private readonly DatabaseCleanupFixture _dbFixture;
 
@@ -34,7 +27,7 @@ namespace CPR.IntegrationTests
         {
             // Ensure test user roles are assigned for this test
             var options = new DbContextOptionsBuilder<CPR.Infrastructure.Data.CprDbContext>()
-                .UseNpgsql("Host=localhost;Port=5432;Database=cpr_test;Username=postgres;Password=postgres")
+                .UseNpgsql(_dbFixture.ConnectionString)
                 .ConfigureWarnings(warnings => warnings.Ignore(RelationalEventId.PendingModelChangesWarning))
                 .Options;
 
@@ -100,7 +93,7 @@ namespace CPR.IntegrationTests
         {
             // Manually create test data instead of relying on fixture
             var options = new DbContextOptionsBuilder<CPR.Infrastructure.Data.CprDbContext>()
-                .UseNpgsql("Host=localhost;Port=5432;Database=cpr_test;Username=postgres;Password=postgres")
+                .UseNpgsql(_dbFixture.ConnectionString)
                 .ConfigureWarnings(warnings => warnings.Ignore(RelationalEventId.PendingModelChangesWarning))
                 .Options;
 
@@ -271,7 +264,7 @@ namespace CPR.IntegrationTests
 
             // Get the actual employee ID from the database
             var options = new DbContextOptionsBuilder<CPR.Infrastructure.Data.CprDbContext>()
-                .UseNpgsql("Host=localhost;Port=5432;Database=cpr_test;Username=postgres;Password=postgres")
+                .UseNpgsql(_dbFixture.ConnectionString)
                 .ConfigureWarnings(warnings => warnings.Ignore(RelationalEventId.PendingModelChangesWarning))
                 .Options;
 

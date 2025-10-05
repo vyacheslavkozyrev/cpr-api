@@ -18,8 +18,29 @@ namespace CPR.IntegrationTests
 
     public class DatabaseCleanupFixture : IAsyncLifetime
     {
-        private readonly string _connString = "Host=localhost;Port=5432;Database=cpr_test;Username=postgres;Password=postgres";
+        private string? _connString;
         private static bool _globalSetupCompleted = false;
+
+        public string ConnectionString
+        {
+            get
+            {
+                if (_connString == null)
+                {
+                    _connString = CPR.Infrastructure.Data.DatabaseConnection.BuildConnectionString();
+                    Console.WriteLine($"DatabaseCleanupFixture: Built connection string: {_connString}");
+                }
+                return _connString;
+            }
+        }
+
+        public DatabaseCleanupFixture()
+        {
+            Console.WriteLine("DatabaseCleanupFixture: Constructor called");
+            Console.WriteLine($"DatabaseCleanupFixture: DB_HOST={Environment.GetEnvironmentVariable("DB_HOST")}");
+            Console.WriteLine($"DatabaseCleanupFixture: DB_PORT={Environment.GetEnvironmentVariable("DB_PORT")}");
+            Console.WriteLine($"DatabaseCleanupFixture: DB_NAME={Environment.GetEnvironmentVariable("DB_NAME")}");
+        }
 
         public static bool IsGlobalSetupCompleted()
         {
@@ -46,7 +67,7 @@ namespace CPR.IntegrationTests
             try
             {
                 var options = new DbContextOptionsBuilder<CPR.Infrastructure.Data.CprDbContext>()
-                    .UseNpgsql(_connString)
+                    .UseNpgsql(ConnectionString)
                     .ConfigureWarnings(warnings => warnings.Ignore(RelationalEventId.PendingModelChangesWarning))
                     .Options;
 
@@ -95,6 +116,13 @@ namespace CPR.IntegrationTests
             {
                 Console.WriteLine("DatabaseCleanupFixture: Loading .env.test file");
                 LoadEnvFile("d:/projects/CPR/.env.test");
+
+                Console.WriteLine("DatabaseCleanupFixture: Environment variables after loading:");
+                Console.WriteLine($"DatabaseCleanupFixture: DB_HOST={Environment.GetEnvironmentVariable("DB_HOST")}");
+                Console.WriteLine($"DatabaseCleanupFixture: DB_PORT={Environment.GetEnvironmentVariable("DB_PORT")}");
+                Console.WriteLine($"DatabaseCleanupFixture: DB_NAME={Environment.GetEnvironmentVariable("DB_NAME")}");
+                Console.WriteLine($"DatabaseCleanupFixture: DB_USER={Environment.GetEnvironmentVariable("DB_USER")}");
+                Console.WriteLine($"DatabaseCleanupFixture: DB_PASSWORD={Environment.GetEnvironmentVariable("DB_PASSWORD")}");
 
                 Console.WriteLine("DatabaseCleanupFixture: Ensuring database exists");
                 await EnsureDatabaseExistsAsync();
@@ -163,7 +191,7 @@ namespace CPR.IntegrationTests
             {
                 // Try to connect to check if database exists
                 var options = new DbContextOptionsBuilder<CPR.Infrastructure.Data.CprDbContext>()
-                    .UseNpgsql(_connString)
+                    .UseNpgsql(ConnectionString)
                     .ConfigureWarnings(warnings => warnings.Ignore(RelationalEventId.PendingModelChangesWarning))
                     .Options;
 
@@ -176,10 +204,10 @@ namespace CPR.IntegrationTests
                 System.Diagnostics.Debug.WriteLine("=== DATABASE DOES NOT EXIST, CREATING: cpr_test ===");
 
                 // Extract connection string components to create database
-                var builder = new Npgsql.NpgsqlConnectionStringBuilder(_connString);
+                var builder = new Npgsql.NpgsqlConnectionStringBuilder(ConnectionString);
 
                 // Connect to postgres database to create our test database
-                var postgresConnectionString = new Npgsql.NpgsqlConnectionStringBuilder(_connString)
+                var postgresConnectionString = new Npgsql.NpgsqlConnectionStringBuilder(ConnectionString)
                 {
                     Database = "postgres" // Connect to default postgres database
                 }.ConnectionString;
@@ -206,7 +234,7 @@ namespace CPR.IntegrationTests
         private async Task RunMigrationsAsync()
         {
             var options = new DbContextOptionsBuilder<CPR.Infrastructure.Data.CprDbContext>()
-                .UseNpgsql(_connString)
+                .UseNpgsql(ConnectionString)
                 .ConfigureWarnings(warnings => warnings.Ignore(RelationalEventId.PendingModelChangesWarning))
                 .Options;
 
@@ -217,7 +245,7 @@ namespace CPR.IntegrationTests
         private async Task SeedDatabaseAsync()
         {
             var options = new DbContextOptionsBuilder<CPR.Infrastructure.Data.CprDbContext>()
-                .UseNpgsql(_connString)
+                .UseNpgsql(ConnectionString)
                 .ConfigureWarnings(warnings => warnings.Ignore(RelationalEventId.PendingModelChangesWarning))
                 .Options;
 
@@ -247,7 +275,7 @@ namespace CPR.IntegrationTests
             try
             {
                 var options = new DbContextOptionsBuilder<CPR.Infrastructure.Data.CprDbContext>()
-                    .UseNpgsql(_connString)
+                    .UseNpgsql(ConnectionString)
                     .ConfigureWarnings(warnings => warnings.Ignore(RelationalEventId.PendingModelChangesWarning))
                     .Options;
 

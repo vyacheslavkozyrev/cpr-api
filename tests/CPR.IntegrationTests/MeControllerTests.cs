@@ -13,13 +13,15 @@ using Microsoft.EntityFrameworkCore.Diagnostics;
 
 namespace CPR.IntegrationTests;
 
-public class MeControllerTests : IClassFixture<WebApplicationFactory<Program>>
+public class MeControllerTests : IClassFixture<WebApplicationFactory<Program>>, IClassFixture<DatabaseCleanupFixture>
 {
     private readonly WebApplicationFactory<Program> _factory;
+    private readonly DatabaseCleanupFixture _dbFixture;
 
-    public MeControllerTests(WebApplicationFactory<Program> factory)
+    public MeControllerTests(WebApplicationFactory<Program> factory, DatabaseCleanupFixture dbFixture)
     {
         _factory = factory;
+        _dbFixture = dbFixture;
     }
 
     private async Task CleanupEmployeeSkills()
@@ -118,7 +120,7 @@ public class MeControllerTests : IClassFixture<WebApplicationFactory<Program>>
 
         // Get an existing skill and its beginner level from the database
         var options = new Microsoft.EntityFrameworkCore.DbContextOptionsBuilder<CPR.Infrastructure.Data.CprDbContext>()
-            .UseNpgsql("Host=localhost;Port=5432;Database=cpr_test;Username=postgres;Password=postgres")
+            .UseNpgsql(_dbFixture.ConnectionString)
             .ConfigureWarnings(warnings => warnings.Ignore(RelationalEventId.PendingModelChangesWarning))
             .Options;
         using var db = new CPR.Infrastructure.Data.CprDbContext(options);
@@ -180,7 +182,7 @@ public class MeControllerTests : IClassFixture<WebApplicationFactory<Program>>
 
         // Get an existing skill from the database
         var options = new Microsoft.EntityFrameworkCore.DbContextOptionsBuilder<CPR.Infrastructure.Data.CprDbContext>()
-            .UseNpgsql("Host=localhost;Port=5432;Database=cpr_test;Username=postgres;Password=postgres")
+            .UseNpgsql(_dbFixture.ConnectionString)
             .ConfigureWarnings(warnings => warnings.Ignore(RelationalEventId.PendingModelChangesWarning))
             .Options;
         using var db = new CPR.Infrastructure.Data.CprDbContext(options);
@@ -217,7 +219,7 @@ public class MeControllerTests : IClassFixture<WebApplicationFactory<Program>>
 
         // Get existing skill and level from the database
         var options = new Microsoft.EntityFrameworkCore.DbContextOptionsBuilder<CPR.Infrastructure.Data.CprDbContext>()
-            .UseNpgsql("Host=localhost;Port=5432;Database=cpr_test;Username=postgres;Password=postgres")
+            .UseNpgsql(_dbFixture.ConnectionString)
             .ConfigureWarnings(warnings => warnings.Ignore(RelationalEventId.PendingModelChangesWarning))
             .Options;
         using var db = new CPR.Infrastructure.Data.CprDbContext(options);
@@ -294,7 +296,7 @@ public class MeControllerTests : IClassFixture<WebApplicationFactory<Program>>
 
         // Get an existing skill from the database
         var options = new Microsoft.EntityFrameworkCore.DbContextOptionsBuilder<CPR.Infrastructure.Data.CprDbContext>()
-            .UseNpgsql("Host=localhost;Port=5432;Database=cpr_test;Username=postgres;Password=postgres")
+            .UseNpgsql(_dbFixture.ConnectionString)
             .ConfigureWarnings(warnings => warnings.Ignore(RelationalEventId.PendingModelChangesWarning))
             .Options;
         using var db = new CPR.Infrastructure.Data.CprDbContext(options);

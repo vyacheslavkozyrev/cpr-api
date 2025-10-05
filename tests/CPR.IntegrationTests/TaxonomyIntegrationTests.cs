@@ -10,13 +10,15 @@ using Xunit;
 namespace CPR.IntegrationTests;
 
 [Collection("IntegrationTestCollection")]
-public class TaxonomyIntegrationTests : IClassFixture<WebApplicationFactory<Program>>
+public class TaxonomyIntegrationTests : IClassFixture<WebApplicationFactory<Program>>, IClassFixture<DatabaseCleanupFixture>
 {
     private readonly WebApplicationFactory<Program> _factory;
+    private readonly DatabaseCleanupFixture _dbFixture;
 
-    public TaxonomyIntegrationTests(WebApplicationFactory<Program> factory)
+    public TaxonomyIntegrationTests(WebApplicationFactory<Program> factory, DatabaseCleanupFixture dbFixture)
     {
         _factory = factory;
+        _dbFixture = dbFixture;
     }
 
     [Fact]
@@ -45,7 +47,7 @@ public class TaxonomyIntegrationTests : IClassFixture<WebApplicationFactory<Prog
 
         // find Technology career path id from DB
         var options = new Microsoft.EntityFrameworkCore.DbContextOptionsBuilder<CPR.Infrastructure.Data.CprDbContext>()
-            .UseNpgsql("Host=localhost;Port=5432;Database=cpr_test;Username=postgres;Password=postgres")
+            .UseNpgsql(_dbFixture.ConnectionString)
             .ConfigureWarnings(warnings => warnings.Ignore(RelationalEventId.PendingModelChangesWarning))
             .Options;
         using var db = new CPR.Infrastructure.Data.CprDbContext(options);
@@ -99,7 +101,7 @@ public class TaxonomyIntegrationTests : IClassFixture<WebApplicationFactory<Prog
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
         var options = new Microsoft.EntityFrameworkCore.DbContextOptionsBuilder<CPR.Infrastructure.Data.CprDbContext>()
-            .UseNpgsql("Host=localhost;Port=5432;Database=cpr_test;Username=postgres;Password=postgres")
+            .UseNpgsql(_dbFixture.ConnectionString)
             .ConfigureWarnings(warnings => warnings.Ignore(RelationalEventId.PendingModelChangesWarning))
             .Options;
         var resp = await client.GetAsync($"/api/skills?position_id={Guid.NewGuid()}");
@@ -133,7 +135,7 @@ public class TaxonomyIntegrationTests : IClassFixture<WebApplicationFactory<Prog
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
         var options = new Microsoft.EntityFrameworkCore.DbContextOptionsBuilder<CPR.Infrastructure.Data.CprDbContext>()
-            .UseNpgsql("Host=localhost;Port=5432;Database=cpr_test;Username=postgres;Password=postgres")
+            .UseNpgsql(_dbFixture.ConnectionString)
             .ConfigureWarnings(warnings => warnings.Ignore(RelationalEventId.PendingModelChangesWarning))
             .Options;
         using var db = new CPR.Infrastructure.Data.CprDbContext(options);

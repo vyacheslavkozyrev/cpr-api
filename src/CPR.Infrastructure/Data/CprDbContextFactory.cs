@@ -16,9 +16,7 @@ namespace CPR.Infrastructure.Data
                 .AddEnvironmentVariables()
                 .Build();
 
-            var connectionString = configuration.GetConnectionString("Default") ??
-                configuration["DATABASE_URL"] ??
-                "Host=localhost;Port=5432;Database=cpr_dev;Username=postgres;Password=postgres";
+            var connectionString = DatabaseConnection.GetConnectionString(configuration);
 
             var optionsBuilder = new DbContextOptionsBuilder<CprDbContext>();
             optionsBuilder.UseNpgsql(connectionString);

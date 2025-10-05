@@ -108,9 +108,7 @@ builder.Services.AddSwaggerGen(options =>
 builder.Services.AddSwaggerExamplesFromAssemblyOf<CPR.Api.Swagger.Examples.PositionsExample>();
 builder.Services.AddInfrastructure();
 
-var dbName = Environment.GetEnvironmentVariable("DATABASE_NAME") ?? "cpr_dev";
-var defaultConn = $"Host=localhost;Port=5432;Database={dbName};Username=postgres;Password=postgres";
-var connectionString = builder.Configuration.GetConnectionString("Default") ?? builder.Configuration["DATABASE_URL"] ?? defaultConn;
+var connectionString = CPR.Infrastructure.Data.DatabaseConnection.GetConnectionString(builder.Configuration);
 
 builder.Services.AddDbContext<CprDbContext>(options =>
     options.UseNpgsql(connectionString)

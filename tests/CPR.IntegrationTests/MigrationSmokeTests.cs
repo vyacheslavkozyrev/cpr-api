@@ -11,6 +11,7 @@ using System;
 
 namespace CPR.IntegrationTests
 {
+    [Collection("IntegrationTestCollection")]
     public class MigrationSmokeTests : IClassFixture<WebApplicationFactory<Program>>
     {
         private readonly WebApplicationFactory<Program> _factory;
@@ -23,6 +24,7 @@ namespace CPR.IntegrationTests
         [Fact]
         public void MigrationsHistory_Contains_AddSeedData()
         {
+            Console.WriteLine("MigrationSmokeTests: Test starting");
             using var scope = _factory.Services.CreateScope();
             var db = scope.ServiceProvider.GetRequiredService<CprDbContext>();
 
