@@ -18,6 +18,9 @@ using Swashbuckle.AspNetCore.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Load environment variables from .env file if it exists
+LoadEnvFile();
+
 // Reduce noisy framework logging during test runs
 // (tests and TestServer pick up this configuration via Program)
 // Apply broader Microsoft/System filters to suppress verbose EF Core and ASP.NET logs
@@ -137,14 +140,11 @@ builder.Services.AddProblemDetails(options =>
 
 var app = builder.Build();
 
-// Seed the database on startup (only in development, not in test)
-if (app.Environment.IsDevelopment() && !Environment.GetEnvironmentVariable("DATABASE_NAME")?.Contains("test") == true)
+// Seed the database on startup
+using (var scope = app.Services.CreateScope())
 {
-    using (var scope = app.Services.CreateScope())
-    {
-        var seeder = scope.ServiceProvider.GetRequiredService<DatabaseSeeder>();
-        await seeder.SeedAsync();
-    }
+    var seeder = scope.ServiceProvider.GetRequiredService<DatabaseSeeder>();
+    await seeder.SeedAsync();
 }
 
 // Enable Swagger UI in development
@@ -169,3 +169,39 @@ app.MapGet("/", () => Results.Ok(new { message = "CPR API - running" }));
 app.MapControllers();
 
 app.Run();
+
+static void LoadEnvFile()
+{
+    var envFilePath = "d:/projects/CPR/.env.dev";
+    if (!File.Exists(envFilePath))
+    {
+        // Try .env as fallback
+        envFilePath = "d:/projects/CPR/.env";
+        if (!File.Exists(envFilePath))
+        {
+            return; // No .env file found
+        }
+    }
+
+    foreach (var line in File.ReadAllLines(envFilePath))
+    {
+        var trimmedLine = line.Trim();
+        if (string.IsNullOrEmpty(trimmedLine) || trimmedLine.StartsWith("#"))
+            continue;
+
+        var parts = trimmedLine.Split('=', 2);
+        if (parts.Length == 2)
+        {
+            var key = parts[0].Trim();
+            var value = parts[1].Trim();
+
+            // Remove quotes if present
+            if (value.StartsWith("\"") && value.EndsWith("\""))
+                value = value.Substring(1, value.Length - 2);
+            else if (value.StartsWith("'") && value.EndsWith("'"))
+                value = value.Substring(1, value.Length - 2);
+
+            Environment.SetEnvironmentVariable(key, value);
+        }
+    }
+}

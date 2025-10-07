@@ -330,8 +330,18 @@ namespace CPR.IntegrationTests
                 var existingManagerRoles = await db.UserRoles.Where(ur => ur.UserId == managerUserId && !ur.IsDeleted).Include(ur => ur.Role).ToListAsync();
                 var existingEmployeeRoles = await db.UserRoles.Where(ur => ur.UserId == employeeUserId && !ur.IsDeleted).Include(ur => ur.Role).ToListAsync();
 
-                Console.WriteLine($"DatabaseCleanupFixture: Existing manager roles: {string.Join(", ", existingManagerRoles.Select(ur => ur.Role.Title))}");
-                Console.WriteLine($"DatabaseCleanupFixture: Existing employee roles: {string.Join(", ", existingEmployeeRoles.Select(ur => ur.Role.Title))}");
+                Console.WriteLine($"DatabaseCleanupFixture: Existing manager roles count: {existingManagerRoles.Count}");
+                Console.WriteLine($"DatabaseCleanupFixture: Existing employee roles count: {existingEmployeeRoles.Count}");
+                foreach (var ur in existingManagerRoles)
+                {
+                    Console.WriteLine($"DatabaseCleanupFixture: Manager role - RoleId: {ur.RoleId}, Role: {(ur.Role != null ? ur.Role.Title : "NULL")}");
+                }
+                foreach (var ur in existingEmployeeRoles)
+                {
+                    Console.WriteLine($"DatabaseCleanupFixture: Employee role - RoleId: {ur.RoleId}, Role: {(ur.Role != null ? ur.Role.Title : "NULL")}");
+                }
+                Console.WriteLine($"DatabaseCleanupFixture: Existing manager roles: {string.Join(", ", existingManagerRoles.Where(ur => ur.Role != null).Select(ur => ur.Role.Title))}");
+                Console.WriteLine($"DatabaseCleanupFixture: Existing employee roles: {string.Join(", ", existingEmployeeRoles.Where(ur => ur.Role != null).Select(ur => ur.Role.Title))}");
 
                 if (existingManagerRoles.Any(ur => ur.Role.Title == "People Manager") && existingEmployeeRoles.Any(ur => ur.Role.Title == "Employee"))
                 {
