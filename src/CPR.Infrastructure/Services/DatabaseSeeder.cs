@@ -31,20 +31,21 @@ namespace CPR.Infrastructure.Services
 
             // Check environment to determine seeding behavior
             var aspnetcoreEnvironment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
-            var isDevEnvironment = aspnetcoreEnvironment?.Equals("Development", StringComparison.OrdinalIgnoreCase) == true;
-            _logger.LogInformation("ASP.NET Core Environment: '{AspNetCoreEnvironment}', IsDevEnvironment: {IsDevEnvironment}", aspnetcoreEnvironment, isDevEnvironment);
+            var isDevOrTestEnvironment = aspnetcoreEnvironment?.Equals("Development", StringComparison.OrdinalIgnoreCase) == true
+                || aspnetcoreEnvironment?.Equals("Test", StringComparison.OrdinalIgnoreCase) == true;
+            _logger.LogInformation("ASP.NET Core Environment: '{AspNetCoreEnvironment}', IsDevOrTestEnvironment: {IsDevOrTestEnvironment}", aspnetcoreEnvironment, isDevOrTestEnvironment);
 
-            if (isDevEnvironment)
+            if (isDevOrTestEnvironment)
             {
                 // Check if seeding has already been completed
-                var seedingCompleted = false; // Force seeding in development environment
+                var seedingCompleted = false; // Force seeding in development/test environment
                 if (seedingCompleted)
                 {
-                    _logger.LogInformation("Database already seeded for development environment.");
+                    _logger.LogInformation("Database already seeded for {Environment} environment.", aspnetcoreEnvironment);
                     return;
                 }
 
-                _logger.LogInformation("Development environment detected - seeding all data...");
+                _logger.LogInformation("{Environment} environment detected - seeding all data...", aspnetcoreEnvironment);
                 await SeedRolesAsync();
                 await SeedDepartmentsAsync();
                 await SeedLocationsAsync();
@@ -714,7 +715,22 @@ namespace CPR.Infrastructure.Services
             var securityDept = await _context.Departments.FirstOrDefaultAsync(d => d.Code == "SEC");
             var qaDept = await _context.Departments.FirstOrDefaultAsync(d => d.Code == "QA");
 
-            // Get all users
+            // Get all users - Use specific GUIDs instead of relying on array index order
+            // This ensures consistent employee-to-user mapping regardless of database query order
+            var johnDoeUserId = new Guid("679add6e-6c29-4e00-b6a5-b69c8e0f3445"); // user 0
+            var janeSmithUserId = new Guid("c6874b28-e2fa-4835-8e8f-159bd5067091"); // user 1
+            var bobJohnsonUserId = new Guid("45f0eaae-b3eb-4261-a430-4d9e94ec8e0d"); // user 2
+            var aliceWilsonUserId = new Guid("e9741b9b-3c66-4462-af46-297810b29403"); // user 3
+            var charlieBrownUserId = new Guid("d670f2cf-66a6-4cb6-947f-062c7b089c8d"); // user 4
+            var dianaPrinceUserId = new Guid("bf428236-361c-4ade-995d-21a62feec86f"); // user 5
+            var eveAdamsUserId = new Guid("c7746e91-a5e8-4f8b-9f22-f48374ffa2a4"); // user 6
+            var frankMillerUserId = new Guid("7567ad7a-174e-461c-bd88-e7489db10317"); // user 7
+            var graceLeeUserId = new Guid("5d70d7d5-570e-46fe-91ce-2d6081b365aa"); // user 8
+            var henryWilsonUserId = new Guid("977f4f1f-b3ce-4244-98fc-2c0d0248de88"); // user 9
+            var irisDavisUserId = new Guid("20c78aa6-077a-4d3b-a7c5-84d561ec3975"); // user 10
+
+            // For remaining employees, userIds array is populated from database query
+            // Order doesn't matter for them as they aren't referenced in tests
             var allUsers = await _context.Users.Where(u => !u.IsDeleted).ToListAsync();
             var userIds = allUsers.Select(u => u.Id).ToList();
 
@@ -744,107 +760,107 @@ namespace CPR.Infrastructure.Services
 
             var employees = new[]
             {
-                // VP of Engineering - Top of Engineering org (user 0)
+                // VP of Engineering - Top of Engineering org (John Doe)
                 new Employee
                 {
                     Id = vpEngId,
-                    UserId = userIds[0],
+                    UserId = johnDoeUserId,
                     PositionId = new Guid("aa00c283-1af1-4397-bc34-2f674bda4852"), // VP of Engineering
                     DepartmentId = engineeringDept?.Id,
                     ManagerId = null // Reports to CEO (not in system)
                 },
                 
-                // Senior Director of DevOps Engineering - reports to VP (user 1)
+                // Senior Director of DevOps Engineering - reports to VP (Jane Smith)
                 new Employee
                 {
                     Id = seniorDirDevOpsId,
-                    UserId = userIds[1],
+                    UserId = janeSmithUserId,
                     PositionId = new Guid("aeb133ad-e366-4b7a-be19-a86659e423f8"), // Senior Director of DevOps Engineering
                     DepartmentId = engineeringDept?.Id,
                     ManagerId = vpEngId
                 },
                 
-                // Director of Frontend Engineering - reports to VP (user 2)
+                // Director of Frontend Engineering - reports to VP (Bob Johnson)
                 new Employee
                 {
                     Id = dirFrontendId,
-                    UserId = userIds[2],
+                    UserId = bobJohnsonUserId,
                     PositionId = new Guid("06091429-d5c5-47f7-9f85-3034618325c5"), // Director of Frontend Engineering
                     DepartmentId = engineeringDept?.Id,
                     ManagerId = vpEngId
                 },
                 
-                // Director of Backend Engineering - reports to VP (user 3)
+                // Director of Backend Engineering - reports to VP (Alice Wilson)
                 new Employee
                 {
                     Id = dirBackendId,
-                    UserId = userIds[3],
+                    UserId = aliceWilsonUserId,
                     PositionId = new Guid("6f33e923-834d-4639-a88a-9fdec61215f4"), // Director of Backend Engineering
                     DepartmentId = engineeringDept?.Id,
                     ManagerId = vpEngId
                 },
                 
-                // Director of Mobile Engineering - reports to VP (user 4)
+                // Director of Mobile Engineering - reports to VP (Charlie Brown)
                 new Employee
                 {
                     Id = dirMobileId,
-                    UserId = userIds[4],
+                    UserId = charlieBrownUserId,
                     PositionId = new Guid("f640cd3f-6e9d-4dc8-9c4f-acbbcd34ad24"), // Director of Mobile Engineering
                     DepartmentId = engineeringDept?.Id,
                     ManagerId = vpEngId
                 },
                 
-                // Director of Infrastructure Engineering - reports to Senior Dir DevOps (user 5)
+                // Director of Infrastructure Engineering - reports to Senior Dir DevOps (Diana Prince)
                 new Employee
                 {
                     Id = dirInfraId,
-                    UserId = userIds[5],
+                    UserId = dianaPrinceUserId,
                     PositionId = new Guid("948cd97b-7376-45ee-91f3-b511a456bb58"), // Director of Infrastructure Engineering
                     DepartmentId = engineeringDept?.Id,
                     ManagerId = seniorDirDevOpsId
                 },
                 
-                // Director of Security Engineering - reports to VP (user 6)
+                // Director of Security Engineering - reports to VP (Eve Adams)
                 new Employee
                 {
                     Id = dirSecurityId,
-                    UserId = userIds[6],
+                    UserId = eveAdamsUserId,
                     PositionId = new Guid("80d23551-e51e-405a-9339-8a6f52a0c6bd"), // Director of Security Engineering
                     DepartmentId = securityDept?.Id,
                     ManagerId = vpEngId
                 },
                 
-                // Director of Platform Engineering - reports to VP (user 7)
+                // Director of Platform Engineering - reports to VP (Frank Miller)
                 new Employee
                 {
                     Id = dirPlatformId,
-                    UserId = userIds[7],
+                    UserId = frankMillerUserId,
                     PositionId = new Guid("5284d661-4c72-40d1-8cc5-56e08a6138d0"), // Director of Platform Engineering
                     DepartmentId = engineeringDept?.Id,
                     ManagerId = vpEngId
                 },
                 
-                // Director of ML Engineering - reports to VP (user 8)
+                // Director of ML Engineering - reports to VP (Grace Lee)
                 new Employee
                 {
                     Id = dirMLId,
-                    UserId = userIds[8],
+                    UserId = graceLeeUserId,
                     PositionId = new Guid("b707fc9a-2442-4ad7-b8bd-0567f87ef5a1"), // Director of ML Engineering
                     DepartmentId = engineeringDept?.Id,
                     ManagerId = vpEngId
                 },
                 
-                // Director of Technical Support - reports to VP (user 9)
+                // Director of Technical Support - reports to VP (Henry Wilson)
                 new Employee
                 {
                     Id = dirSupportId,
-                    UserId = userIds[9],
+                    UserId = henryWilsonUserId,
                     PositionId = new Guid("d38d1988-8914-4453-826f-063b5bc016c0"), // Director of Technical Support
                     DepartmentId = engineeringDept?.Id,
                     ManagerId = vpEngId
                 },
                 
-                // Director of DevOps Engineering - reports to Senior Dir DevOps (user 10)
+                // Director of DevOps Engineering - reports to Senior Dir DevOps (Iris Davis)
                 new Employee
                 {
                     Id = dirDevOpsId,
@@ -2822,13 +2838,24 @@ namespace CPR.Infrastructure.Services
             // Helper function to get skill level by skill and level title
             Guid GetSkillLevelId(Guid skillId, string levelTitle)
             {
-                return skillLevels.First(sl => sl.SkillId == skillId && sl.Title == levelTitle).Id;
+                var skillLevel = skillLevels.FirstOrDefault(sl => sl.SkillId == skillId && sl.Title == levelTitle);
+                if (skillLevel == null)
+                {
+                    var skill = skills.FirstOrDefault(s => s.Id == skillId);
+                    throw new InvalidOperationException($"Skill level not found: skill='{skill?.Title ?? skillId.ToString()}', level='{levelTitle}'. Available levels: {string.Join(", ", skillLevels.Where(sl => sl.SkillId == skillId).Select(sl => sl.Title))}");
+                }
+                return skillLevel.Id;
             }
 
             // Helper function to get skill by title
             Guid GetSkillId(string skillTitle)
             {
-                return skills.First(s => s.Title == skillTitle).Id;
+                var skill = skills.FirstOrDefault(s => s.Title == skillTitle);
+                if (skill == null)
+                {
+                    throw new InvalidOperationException($"Skill not found: '{skillTitle}'. Available skills: {string.Join(", ", skills.Select(s => s.Title).OrderBy(t => t))}");
+                }
+                return skill.Id;
             }
 
             var positionToSkills = new List<PositionToSkill>();

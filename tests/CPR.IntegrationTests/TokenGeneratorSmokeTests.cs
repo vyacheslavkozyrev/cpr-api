@@ -8,13 +8,16 @@ using Xunit;
 
 namespace CPR.IntegrationTests;
 
-public class TokenGeneratorSmokeTests : IClassFixture<WebApplicationFactory<Program>>
+[Collection("SequentialIntegrationTestCollection")]
+public class TokenGeneratorSmokeTests : IClassFixture<CustomWebApplicationFactory>, IClassFixture<DatabaseCleanupFixture>
 {
-    private readonly WebApplicationFactory<Program> _factory;
+    private readonly CustomWebApplicationFactory _factory;
+    private readonly DatabaseCleanupFixture _dbFixture;
 
-    public TokenGeneratorSmokeTests(WebApplicationFactory<Program> factory)
+    public TokenGeneratorSmokeTests(CustomWebApplicationFactory factory, DatabaseCleanupFixture dbFixture)
     {
         _factory = factory;
+        _dbFixture = dbFixture;
     }
 
     [Fact]
@@ -42,6 +45,7 @@ public class TokenGeneratorSmokeTests : IClassFixture<WebApplicationFactory<Prog
         else if (root.TryGetProperty("EmployeeId", out var p3)) returnedId = p3.GetString();
 
         // The /api/me endpoint returns the Employee ID, not the User ID from the JWT token
-        Assert.Equal("004e1f8b-1ea3-4e27-a373-ed82f85147cc", returnedId);
+        // John Doe is VP of Engineering with employee ID 00000000-0000-0000-0000-000000000001
+        Assert.Equal("00000000-0000-0000-0000-000000000001", returnedId);
     }
 }

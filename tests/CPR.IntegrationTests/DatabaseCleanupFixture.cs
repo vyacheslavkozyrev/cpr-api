@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
@@ -20,6 +21,7 @@ namespace CPR.IntegrationTests
     {
         private string? _connString;
         private static bool _globalSetupCompleted = false;
+        private static readonly SemaphoreSlim _setupLock = new SemaphoreSlim(1, 1);
 
         public string ConnectionString
         {
@@ -50,17 +52,27 @@ namespace CPR.IntegrationTests
         public async Task InitializeAsync()
         {
             Console.WriteLine("DatabaseCleanupFixture: InitializeAsync starting");
-            // Global setup: load .env file, create database, run migrations, and seed data
-            if (!_globalSetupCompleted)
+
+            // Use lock to prevent multiple test collections from seeding simultaneously
+            await _setupLock.WaitAsync();
+            try
             {
-                Console.WriteLine("DatabaseCleanupFixture: Running global setup");
-                await PerformGlobalDatabaseSetup();
-                _globalSetupCompleted = true;
-                Console.WriteLine("DatabaseCleanupFixture: Global setup completed");
+                // Global setup: load .env file, create database, run migrations, and seed data
+                if (!_globalSetupCompleted)
+                {
+                    Console.WriteLine("DatabaseCleanupFixture: Running global setup");
+                    await PerformGlobalDatabaseSetup();
+                    _globalSetupCompleted = true;
+                    Console.WriteLine("DatabaseCleanupFixture: Global setup completed");
+                }
+                else
+                {
+                    Console.WriteLine("DatabaseCleanupFixture: Global setup already completed");
+                }
             }
-            else
+            finally
             {
-                Console.WriteLine("DatabaseCleanupFixture: Global setup already completed");
+                _setupLock.Release();
             }
 
             // best-effort cleanup before tests run
@@ -98,8 +110,8 @@ namespace CPR.IntegrationTests
 
                 await db.SaveChangesAsync();
 
-                // Set up test data for team management tests
-                await EnsureManagerAndEmployeeRelationship(db);
+                // NOTE: EnsureManagerAndEmployeeRelationship is now called by individual tests that need it
+                // instead of here, to avoid creating test employees before the main seed runs
                 System.Diagnostics.Debug.WriteLine("DatabaseCleanupFixture: InitializeAsync completed");
             }
             catch (Exception ex)
@@ -251,22 +263,13 @@ namespace CPR.IntegrationTests
 
             using var db = new CPR.Infrastructure.Data.CprDbContext(options);
 
-            // Check if seeding is needed
-            var databaseSetupCompleted = false; // Force seeding for debugging
+            // Seed data - the seeder already has logic to skip if data exists
+            var loggerFactory = LoggerFactory.Create(builder => builder.AddConsole());
+            var logger = loggerFactory.CreateLogger<CPR.Infrastructure.Services.DatabaseSeeder>();
+            var seeder = new CPR.Infrastructure.Services.DatabaseSeeder(db, logger);
 
-            if (!databaseSetupCompleted)
-            {
-                var loggerFactory = LoggerFactory.Create(builder => builder.AddConsole());
-                var logger = loggerFactory.CreateLogger<CPR.Infrastructure.Services.DatabaseSeeder>();
-                var seeder = new CPR.Infrastructure.Services.DatabaseSeeder(db, logger);
-
-                await seeder.SeedAsync();
-                System.Diagnostics.Debug.WriteLine("=== DATABASE SEEDING COMPLETED ===");
-            }
-            else
-            {
-                System.Diagnostics.Debug.WriteLine("=== DATABASE ALREADY SEEDED ===");
-            }
+            await seeder.SeedAsync();
+            System.Diagnostics.Debug.WriteLine("=== DATABASE SEEDING COMPLETED ===");
         }
 
         public async Task DisposeAsync()

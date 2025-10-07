@@ -28,7 +28,7 @@ namespace CPR.IntegrationTests
             {
                 Title = "Goal for task patch",
                 Description = "integration test",
-                EmployeeId = Guid.Parse("004e1f8b-1ea3-4e27-a373-ed82f85147cc")
+                EmployeeId = Guid.Parse("00000000-0000-0000-0000-000000000001") // John Doe - VP of Engineering
             };
 
             var createResp = await client.PostAsJsonAsync("/api/goals", createGoal);

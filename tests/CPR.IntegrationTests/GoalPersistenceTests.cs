@@ -26,8 +26,8 @@ namespace CPR.IntegrationTests
             using var scope = _factory.Services.CreateScope();
             var db = scope.ServiceProvider.GetRequiredService<CprDbContext>();
 
-            // Use a seeded employee (John Doe)
-            var seededEmployeeId = new Guid("004e1f8b-1ea3-4e27-a373-ed82f85147cc");
+            // Use a seeded employee (John Doe - VP of Engineering)
+            var seededEmployeeId = new Guid("00000000-0000-0000-0000-000000000001");
 
             // Clean up any existing test goals
             var existingGoals = await db.Goals.Where(g => g.Title.StartsWith("Integration test")).ToListAsync();

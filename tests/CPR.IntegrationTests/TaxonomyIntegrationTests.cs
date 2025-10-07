@@ -56,7 +56,7 @@ public class TaxonomyIntegrationTests : IClassFixture<WebApplicationFactory<Prog
         var resp = await client.GetAsync($"/api/career_track?career_path_id={cp.Id}");
         resp.EnsureSuccessStatusCode();
         var json = await resp.Content.ReadAsStringAsync();
-        Assert.Contains("Technology Track", json);
+        Assert.Contains("Software Engineering", json);
     }
 
     [Fact]
@@ -87,8 +87,8 @@ public class TaxonomyIntegrationTests : IClassFixture<WebApplicationFactory<Prog
         var resp = await client.GetAsync("/api/skills");
         resp.EnsureSuccessStatusCode();
         var json = await resp.Content.ReadAsStringAsync();
-        Assert.Contains("Technical Skill 1", json);
-        Assert.Contains("Leadership Skill 1", json);
+        Assert.Contains("Software Development", json); // Real technical skill from seeder
+        Assert.Contains("Communication and Influence", json); // Real leadership skill from seeder
     }
 
     [Fact]
@@ -139,11 +139,11 @@ public class TaxonomyIntegrationTests : IClassFixture<WebApplicationFactory<Prog
             .ConfigureWarnings(warnings => warnings.Ignore(RelationalEventId.PendingModelChangesWarning))
             .Options;
         using var db = new CPR.Infrastructure.Data.CprDbContext(options);
-        var skill = db.Skills.First(s => s.Title == "Unit Testing");
+        var skill = db.Skills.First(s => s.Title == "System Architecture"); // Using an existing skill from seed data
 
         var resp = await client.GetAsync($"/api/skill_levels?skill_id={skill.Id}");
         resp.EnsureSuccessStatusCode();
         var json = await resp.Content.ReadAsStringAsync();
-        Assert.Contains("\"id\"", json); // Skill levels are returned for Unit Testing, so expect data with IDs
+        Assert.Contains("\"id\"", json); // Skill levels are returned for System Architecture, so expect data with IDs
     }
 }

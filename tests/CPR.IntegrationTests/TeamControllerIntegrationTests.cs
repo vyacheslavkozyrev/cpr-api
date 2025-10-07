@@ -176,6 +176,19 @@ namespace CPR.IntegrationTests
                 db.Positions.Add(employeePosition);
                 db.Employees.Add(managerEmployee);
                 db.Employees.Add(employee);
+
+                // Assign "People Manager" role to the manager user to allow access to team endpoints
+                var peopleManagerRole = await db.Roles.FirstOrDefaultAsync(r => r.Title == "People Manager");
+                if (peopleManagerRole != null)
+                {
+                    var userRole = new CPR.Domain.Entities.UserToRole
+                    {
+                        UserId = managerUser.Id,
+                        RoleId = peopleManagerRole.Id
+                    };
+                    db.UserRoles.Add(userRole);
+                }
+
                 await db.SaveChangesAsync();
 
                 System.Diagnostics.Debug.WriteLine("Test data created successfully");

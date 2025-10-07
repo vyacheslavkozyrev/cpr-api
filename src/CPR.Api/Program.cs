@@ -19,7 +19,7 @@ using Swashbuckle.AspNetCore.Filters;
 var builder = WebApplication.CreateBuilder(args);
 
 // Load environment variables from .env file if it exists
-LoadEnvFile();
+LoadEnvFile(builder.Environment.EnvironmentName);
 
 // Reduce noisy framework logging during test runs
 // (tests and TestServer pick up this configuration via Program)
@@ -170,9 +170,22 @@ app.MapControllers();
 
 app.Run();
 
-static void LoadEnvFile()
+static void LoadEnvFile(string environmentName)
 {
-    var envFilePath = "d:/projects/CPR/.env.dev";
+    // Determine which .env file to load based on environment
+    // Test -> .env.test
+    // Development -> .env.dev
+    // Production -> .env (or .env.prod)
+    var envFileName = environmentName.ToLowerInvariant() switch
+    {
+        "test" => ".env.test",
+        "development" => ".env.dev",
+        "production" => ".env.prod",
+        _ => ".env.dev" // default to dev
+    };
+
+    var envFilePath = Path.Combine("d:/projects/CPR", envFileName);
+
     if (!File.Exists(envFilePath))
     {
         // Try .env as fallback

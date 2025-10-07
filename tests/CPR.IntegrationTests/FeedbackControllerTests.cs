@@ -93,7 +93,7 @@ public class FeedbackControllerTests : IClassFixture<WebApplicationFactory<Progr
 
         var createDto = new CreateFeedbackRequestDto
         {
-            EmployeeId = Guid.Parse("0353f880-f993-4b3a-a7c2-41e7c58f0aa6"), // Request feedback from another employee
+            EmployeeId = Guid.Parse("00000000-0000-0000-0000-000000000002"), // Request feedback from Jane Smith (Senior Director DevOps)
             Message = "Please provide feedback on my recent project work",
             DueDate = DateTimeOffset.UtcNow.AddDays(7)
         };
@@ -105,8 +105,8 @@ public class FeedbackControllerTests : IClassFixture<WebApplicationFactory<Progr
         Assert.Equal(System.Net.HttpStatusCode.Created, response.StatusCode);
         var result = await response.Content.ReadFromJsonAsync<FeedbackRequestDto>();
         Assert.NotNull(result);
-        Assert.Equal("004e1f8b-1ea3-4e27-a373-ed82f85147cc", result.RequestorId.ToString());
-        Assert.Equal("0353f880-f993-4b3a-a7c2-41e7c58f0aa6", result.EmployeeId.ToString());
+        Assert.Equal("00000000-0000-0000-0000-000000000001", result.RequestorId.ToString()); // John Doe - VP of Engineering
+        Assert.Equal("00000000-0000-0000-0000-000000000002", result.EmployeeId.ToString()); // Jane Smith - Senior Director DevOps
         Assert.Equal("Please provide feedback on my recent project work", result.Message);
     }
 
@@ -165,7 +165,7 @@ public class FeedbackControllerTests : IClassFixture<WebApplicationFactory<Progr
             var testRequest = requests.FirstOrDefault(r => r.Message == "Test feedback request");
             if (testRequest != null)
             {
-                Assert.Equal("004e1f8b-1ea3-4e27-a373-ed82f85147cc", testRequest.RequestorId.ToString());
+                Assert.Equal("00000000-0000-0000-0000-000000000001", testRequest.RequestorId.ToString()); // John Doe - VP of Engineering
             }
         }
     }
@@ -238,7 +238,7 @@ public class FeedbackControllerTests : IClassFixture<WebApplicationFactory<Progr
         {
             Title = "Test goal for non-existent employee",
             Description = "Goal for testing non-existent employee validation",
-            EmployeeId = Guid.Parse("004e1f8b-1ea3-4e27-a373-ed82f85147cc"), // John Doe's employee ID
+            EmployeeId = Guid.Parse("00000000-0000-0000-0000-000000000001"), // John Doe - VP of Engineering
             Deadline = DateTime.UtcNow.AddDays(7),
             Priority = 5,
             Visibility = "private"
@@ -286,7 +286,7 @@ public class FeedbackControllerTests : IClassFixture<WebApplicationFactory<Progr
         var feedbackDto = new
         {
             goalId = goalId,
-            employeeId = Guid.Parse("004e1f8b-1ea3-4e27-a373-ed82f85147cc"), // Same as authenticated user's employee ID
+            employeeId = Guid.Parse("00000000-0000-0000-0000-000000000001"), // John Doe - Same as authenticated user's employee ID
             content = "This is self-feedback which should be rejected",
             rating = 3
         };
@@ -395,7 +395,7 @@ public class FeedbackControllerTests : IClassFixture<WebApplicationFactory<Progr
         {
             Title = "Test goal for malicious content",
             Description = "Goal for testing malicious content validation",
-            EmployeeId = Guid.Parse("004e1f8b-1ea3-4e27-a373-ed82f85147cc"), // John Doe's employee ID
+            EmployeeId = Guid.Parse("00000000-0000-0000-0000-000000000001"), // John Doe - VP of Engineering
             Deadline = DateTime.UtcNow.AddDays(7),
             Priority = 5,
             Visibility = "private"
@@ -410,7 +410,7 @@ public class FeedbackControllerTests : IClassFixture<WebApplicationFactory<Progr
         var feedbackDto = new
         {
             goalId = goalId,
-            employeeId = Guid.Parse("0353f880-f993-4b3a-a7c2-41e7c58f0aa6"), // Valid employee (Jane Smith)
+            employeeId = Guid.Parse("00000000-0000-0000-0000-000000000002"), // Valid employee (Jane Smith - Senior Director DevOps)
             content = "This content has <script>alert('xss')</script> malicious script tags that should be rejected",
             rating = 3
         };
