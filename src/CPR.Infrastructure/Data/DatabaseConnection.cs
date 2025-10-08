@@ -7,11 +7,11 @@ namespace CPR.Infrastructure.Data
     {
         public static string BuildConnectionString(string defaultHost = "localhost", string defaultPort = "5432", string defaultDatabase = "cpr_dev")
         {
-            var dbHost = Environment.GetEnvironmentVariable("DB_HOST") ?? defaultHost;
-            var dbPort = Environment.GetEnvironmentVariable("DB_PORT") ?? defaultPort;
-            var dbName = Environment.GetEnvironmentVariable("DB_NAME") ?? defaultDatabase;
-            var dbUser = Environment.GetEnvironmentVariable("DB_USER") ?? "postgres";
-            var dbPassword = Environment.GetEnvironmentVariable("DB_PASSWORD") ?? "postgres";
+            var dbHost = Environment.GetEnvironmentVariable("POSTGRES_HOST") ?? defaultHost;
+            var dbPort = Environment.GetEnvironmentVariable("POSTGRES_PORT") ?? defaultPort;
+            var dbName = Environment.GetEnvironmentVariable("POSTGRES_DB") ?? defaultDatabase;
+            var dbUser = Environment.GetEnvironmentVariable("POSTGRES_USER") ?? "postgres";
+            var dbPassword = Environment.GetEnvironmentVariable("POSTGRES_PASSWORD") ?? "postgres";
 
             return $"Host={dbHost};Port={dbPort};Database={dbName};Username={dbUser};Password={dbPassword}";
         }

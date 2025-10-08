@@ -39,9 +39,9 @@ namespace CPR.IntegrationTests
         public DatabaseCleanupFixture()
         {
             Console.WriteLine("DatabaseCleanupFixture: Constructor called");
-            Console.WriteLine($"DatabaseCleanupFixture: DB_HOST={Environment.GetEnvironmentVariable("DB_HOST")}");
-            Console.WriteLine($"DatabaseCleanupFixture: DB_PORT={Environment.GetEnvironmentVariable("DB_PORT")}");
-            Console.WriteLine($"DatabaseCleanupFixture: DB_NAME={Environment.GetEnvironmentVariable("DB_NAME")}");
+            Console.WriteLine($"DatabaseCleanupFixture: POSTGRES_HOST={Environment.GetEnvironmentVariable("POSTGRES_HOST")}");
+            Console.WriteLine($"DatabaseCleanupFixture: POSTGRES_PORT={Environment.GetEnvironmentVariable("POSTGRES_PORT")}");
+            Console.WriteLine($"DatabaseCleanupFixture: POSTGRES_DB={Environment.GetEnvironmentVariable("POSTGRES_DB")}");
         }
 
         public static bool IsGlobalSetupCompleted()
@@ -130,11 +130,11 @@ namespace CPR.IntegrationTests
                 LoadEnvFile("d:/projects/CPR/.env.test");
 
                 Console.WriteLine("DatabaseCleanupFixture: Environment variables after loading:");
-                Console.WriteLine($"DatabaseCleanupFixture: DB_HOST={Environment.GetEnvironmentVariable("DB_HOST")}");
-                Console.WriteLine($"DatabaseCleanupFixture: DB_PORT={Environment.GetEnvironmentVariable("DB_PORT")}");
-                Console.WriteLine($"DatabaseCleanupFixture: DB_NAME={Environment.GetEnvironmentVariable("DB_NAME")}");
-                Console.WriteLine($"DatabaseCleanupFixture: DB_USER={Environment.GetEnvironmentVariable("DB_USER")}");
-                Console.WriteLine($"DatabaseCleanupFixture: DB_PASSWORD={Environment.GetEnvironmentVariable("DB_PASSWORD")}");
+                Console.WriteLine($"DatabaseCleanupFixture: POSTGRES_HOST={Environment.GetEnvironmentVariable("POSTGRES_HOST")}");
+                Console.WriteLine($"DatabaseCleanupFixture: POSTGRES_PORT={Environment.GetEnvironmentVariable("POSTGRES_PORT")}");
+                Console.WriteLine($"DatabaseCleanupFixture: POSTGRES_DB={Environment.GetEnvironmentVariable("POSTGRES_DB")}");
+                Console.WriteLine($"DatabaseCleanupFixture: POSTGRES_USER={Environment.GetEnvironmentVariable("POSTGRES_USER")}");
+                Console.WriteLine($"DatabaseCleanupFixture: POSTGRES_PASSWORD={Environment.GetEnvironmentVariable("POSTGRES_PASSWORD")}");
 
                 Console.WriteLine("DatabaseCleanupFixture: Ensuring database exists");
                 await EnsureDatabaseExistsAsync();

@@ -140,11 +140,14 @@ builder.Services.AddProblemDetails(options =>
 
 var app = builder.Build();
 
-// Seed the database on startup
-using (var scope = app.Services.CreateScope())
+// Seed the database on startup (but not in Test environment - tests handle their own seeding)
+if (!app.Environment.IsEnvironment("Test"))
 {
-    var seeder = scope.ServiceProvider.GetRequiredService<DatabaseSeeder>();
-    await seeder.SeedAsync();
+    using (var scope = app.Services.CreateScope())
+    {
+        var seeder = scope.ServiceProvider.GetRequiredService<DatabaseSeeder>();
+        await seeder.SeedAsync();
+    }
 }
 
 // Enable Swagger UI in development

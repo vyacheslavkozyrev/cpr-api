@@ -13,15 +13,19 @@ using System.Net;
 
 namespace CPR.IntegrationTests
 {
-    public class GoalControllerProblemDetailsTests
+    public class GoalControllerProblemDetailsTests : IClassFixture<CustomWebApplicationFactory>, IClassFixture<DatabaseCleanupFixture>
     {
+        private readonly CustomWebApplicationFactory _factory;
+
+        public GoalControllerProblemDetailsTests(CustomWebApplicationFactory factory, DatabaseCleanupFixture dbFixture)
+        {
+            _factory = factory;
+        }
+
         [Fact]
         public async Task CreateGoal_WhenServiceThrowsArgumentNull_Returns400ProblemDetails()
         {
-            var factory = new WebApplicationFactory<Program>()
-                .WithWebHostBuilder(builder => builder.UseEnvironment("Production"));
-
-            var client = factory.CreateClient();
+            var client = _factory.CreateClient();
 
             // Call test middleware endpoint that throws ArgumentNullException; ProblemDetails should map to 400
             var resp = await client.GetAsync("/__test/throw/argnull");
@@ -33,10 +37,7 @@ namespace CPR.IntegrationTests
         [Fact]
         public async Task GetMine_WhenServiceThrowsArgumentOutOfRange_Returns400ProblemDetails()
         {
-            var factory = new WebApplicationFactory<Program>()
-                .WithWebHostBuilder(builder => builder.UseEnvironment("Production"));
-
-            var client = factory.CreateClient();
+            var client = _factory.CreateClient();
 
             // Call test middleware endpoint that throws ArgumentOutOfRangeException; ProblemDetails should map to 400
             var resp = await client.GetAsync("/__test/throw/argout");
