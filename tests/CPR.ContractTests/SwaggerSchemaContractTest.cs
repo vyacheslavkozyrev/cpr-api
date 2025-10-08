@@ -1,16 +1,18 @@
+using System;
 using System.Net.Http.Headers;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.AspNetCore.Hosting;
 using Xunit;
 
 namespace CPR.ContractTests;
 
-public class SwaggerSchemaContractTest : IClassFixture<WebApplicationFactory<Program>>
+public class SwaggerSchemaContractTest : IClassFixture<CustomWebApplicationFactory>
 {
-    private readonly WebApplicationFactory<Program> _factory;
+    private readonly CustomWebApplicationFactory _factory;
 
-    public SwaggerSchemaContractTest(WebApplicationFactory<Program> factory)
+    public SwaggerSchemaContractTest(CustomWebApplicationFactory factory)
     {
         _factory = factory;
     }

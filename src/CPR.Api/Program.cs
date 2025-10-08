@@ -150,8 +150,8 @@ if (!app.Environment.IsEnvironment("Test"))
     }
 }
 
-// Enable Swagger UI in development
-if (app.Environment.IsDevelopment())
+// Enable Swagger UI in development and test environments
+if (app.Environment.IsDevelopment() || app.Environment.IsEnvironment("Test"))
 {
     app.UseSwagger();
     app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "CPR API v1"));

@@ -57,17 +57,17 @@ namespace CPR.IntegrationTests
             await _setupLock.WaitAsync();
             try
             {
-                // Global setup: load .env file, create database, run migrations, and seed data
+                // Global setup: load .env file, delete & recreate database, run migrations, and seed data
                 if (!_globalSetupCompleted)
                 {
-                    Console.WriteLine("DatabaseCleanupFixture: Running global setup");
+                    Console.WriteLine("DatabaseCleanupFixture: Running global setup (with database deletion)");
                     await PerformGlobalDatabaseSetup();
                     _globalSetupCompleted = true;
                     Console.WriteLine("DatabaseCleanupFixture: Global setup completed");
                 }
                 else
                 {
-                    Console.WriteLine("DatabaseCleanupFixture: Global setup already completed");
+                    Console.WriteLine("DatabaseCleanupFixture: Global setup already completed (skipping)");
                 }
             }
             finally
@@ -136,6 +136,9 @@ namespace CPR.IntegrationTests
                 Console.WriteLine($"DatabaseCleanupFixture: POSTGRES_USER={Environment.GetEnvironmentVariable("POSTGRES_USER")}");
                 Console.WriteLine($"DatabaseCleanupFixture: POSTGRES_PASSWORD={Environment.GetEnvironmentVariable("POSTGRES_PASSWORD")}");
 
+                Console.WriteLine("DatabaseCleanupFixture: Deleting existing database if present");
+                await DeleteDatabaseIfExistsAsync();
+
                 Console.WriteLine("DatabaseCleanupFixture: Ensuring database exists");
                 await EnsureDatabaseExistsAsync();
 
@@ -194,6 +197,51 @@ namespace CPR.IntegrationTests
                     Console.WriteLine($"DatabaseCleanupFixture: Setting {key}={value}");
                     Environment.SetEnvironmentVariable(key, value);
                 }
+            }
+        }
+
+        private async Task DeleteDatabaseIfExistsAsync()
+        {
+            try
+            {
+                var builder = new Npgsql.NpgsqlConnectionStringBuilder(ConnectionString);
+                var databaseName = builder.Database;
+
+                // Connect to postgres database to drop our test database
+                var postgresConnectionString = new Npgsql.NpgsqlConnectionStringBuilder(ConnectionString)
+                {
+                    Database = "postgres" // Connect to default postgres database
+                }.ConnectionString;
+
+                using (var postgresConnection = new NpgsqlConnection(postgresConnectionString))
+                {
+                    await postgresConnection.OpenAsync();
+
+                    // Terminate existing connections to the database
+                    using (var terminateCommand = postgresConnection.CreateCommand())
+                    {
+                        terminateCommand.CommandText = $@"
+                            SELECT pg_terminate_backend(pg_stat_activity.pid)
+                            FROM pg_stat_activity
+                            WHERE pg_stat_activity.datname = '{databaseName}'
+                            AND pid <> pg_backend_pid();";
+                        await terminateCommand.ExecuteNonQueryAsync();
+                    }
+
+                    // Drop the database if it exists
+                    using (var dropCommand = postgresConnection.CreateCommand())
+                    {
+                        dropCommand.CommandText = $"DROP DATABASE IF EXISTS {databaseName}";
+                        await dropCommand.ExecuteNonQueryAsync();
+                    }
+                }
+
+                Console.WriteLine($"=== DATABASE DELETED: {databaseName} ===");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"=== DATABASE DELETION WARNING: {ex.Message} ===");
+                // Continue anyway - the database might not exist
             }
         }
 

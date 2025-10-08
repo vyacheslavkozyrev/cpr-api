@@ -13,12 +13,12 @@ using Microsoft.EntityFrameworkCore.Diagnostics;
 
 namespace CPR.IntegrationTests;
 
-public class MeControllerTests : IClassFixture<WebApplicationFactory<Program>>, IClassFixture<DatabaseCleanupFixture>
+public class MeControllerTests : IClassFixture<CustomWebApplicationFactory>, IClassFixture<DatabaseCleanupFixture>
 {
-    private readonly WebApplicationFactory<Program> _factory;
+    private readonly CustomWebApplicationFactory _factory;
     private readonly DatabaseCleanupFixture _dbFixture;
 
-    public MeControllerTests(WebApplicationFactory<Program> factory, DatabaseCleanupFixture dbFixture)
+    public MeControllerTests(CustomWebApplicationFactory factory, DatabaseCleanupFixture dbFixture)
     {
         _factory = factory;
         _dbFixture = dbFixture;
