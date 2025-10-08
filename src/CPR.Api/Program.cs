@@ -145,6 +145,13 @@ if (!app.Environment.IsEnvironment("Test"))
 {
     using (var scope = app.Services.CreateScope())
     {
+        var dbContext = scope.ServiceProvider.GetRequiredService<CprDbContext>();
+
+        // Run migrations to ensure schema is up to date
+        // Note: Migrate() will automatically create the database if it doesn't exist
+        dbContext.Database.Migrate();
+
+        // Seed the database
         var seeder = scope.ServiceProvider.GetRequiredService<DatabaseSeeder>();
         await seeder.SeedAsync();
     }
