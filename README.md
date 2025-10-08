@@ -1,52 +1,339 @@
-# CPR — Career & Performance Review
+# CPR — Career & Performance Review API
 
-Local dev
+A comprehensive API for managing career progression, performance reviews, skills assessment, and employee feedback.
 
-1. Start local Postgres and pgAdmin for dev:
-   docker-compose -f docker-compose.dev.yml up -d
+## Prerequisites
 
-2. Open the API project and run:
-   dotnet restore
-   dotnet build
-   dotnet run --project src\CPR.Api
+- **.NET 9.0 SDK** - [Download](https://dotnet.microsoft.com/download/dotnet/9.0)
+- **Docker Desktop** - [Download](https://www.docker.com/products/docker-desktop)
+- **PostgreSQL Client** (optional, for manual DB management) - [Download](https://www.postgresql.org/download/)
+- **PowerShell 5.1+** (Windows) or **PowerShell Core** (cross-platform)
 
-3. Run tests:
-   dotnet test src\CPR.sln
+## Technology Stack
 
-Conventions
-- See `conventions.md` for rules about config, secrets and coding conventions.
+### Backend
+- **ASP.NET Core 9.0** - Web API framework
+- **Entity Framework Core 9.0** - ORM for database access
+- **Npgsql** - PostgreSQL provider for EF Core
+- **Swashbuckle (Swagger)** - API documentation and testing UI
 
-Authentication: local stub token
+### Database
+- **PostgreSQL 16** - Primary database
+- **pgAdmin 4** - Database management tool (included in Docker)
 
-This project includes a development-only authentication stub that accepts HMAC-signed tokens.
-The token format is: `{userId}.{base64Signature}`
-where signature = `HMACSHA256(UTF8Bytes(JWT_SIGNING_KEY), UTF8Bytes(userId))`.
+### Testing
+- **xUnit** - Testing framework
+- **Microsoft.AspNetCore.Mvc.Testing** - Integration testing
+- **WebApplicationFactory** - Test host for API testing
 
-1) Start the API with a known signing key (PowerShell):
+### Infrastructure
+- **Docker & Docker Compose** - Containerization for PostgreSQL and pgAdmin
+- **HMAC Authentication** - Development stub for user authentication
 
+## Project Structure
+
+```
+CPR/
+├── src/
+│   ├── CPR.Api/              # ASP.NET Core Web API
+│   │   ├── Controllers/      # API endpoints
+│   │   ├── Auth/            # Authentication handlers
+│   │   ├── Services/        # Application services
+│   │   └── Swagger/         # Swagger configuration & examples
+│   ├── CPR.Application/      # Business logic layer
+│   │   ├── Contracts/       # DTOs and interfaces
+│   │   ├── Services/        # Business services
+│   │   └── Repositories/    # Repository interfaces
+│   ├── CPR.Domain/          # Domain entities
+│   │   └── Entities/        # Core business entities
+│   └── CPR.Infrastructure/   # Data access layer
+│       ├── Data/            # DbContext and configurations
+│       ├── Repositories/    # Repository implementations
+│       ├── Services/        # Infrastructure services (seeding, etc.)
+│       └── Migrations/      # EF Core migrations
+├── tests/
+│   ├── CPR.UnitTests/       # Unit tests
+│   ├── CPR.IntegrationTests/ # Integration tests (API + DB)
+│   └── CPR.ContractTests/   # API contract tests
+├── scripts/
+│   ├── run-api.cmd          # Run API (no auth)
+│   ├── run-api-as-employee.cmd  # Run API as Eve Adams (employee)
+│   ├── run-api-as-manager.cmd   # Run API as Henry Wilson (manager)
+│   ├── generate-token.ps1   # Generate HMAC auth token
+│   ├── run-tests.cmd        # Run all tests
+│   └── run-docker-dev.cmd   # Start Docker containers
+├── docker/
+│   ├── docker-compose.dev.yml   # Dev environment (port 5432)
+│   └── docker-compose.test.yml  # Test environment (port 5433)
+├── documents/               # Documentation
+│   ├── conventions.md       # Coding conventions
+│   ├── endpoints.md         # API endpoint documentation
+│   └── ...
+├── .env.dev                 # Development environment variables
+├── .env.test                # Test environment variables
+└── README.md
+```
+
+## Environment Configuration
+
+The project uses environment-specific `.env` files:
+
+- **`.env.dev`** - Development database (cpr_dev on port 5432)
+- **`.env.test`** - Test database (cpr_test on port 5433)
+
+Variables used:
+```env
+POSTGRES_HOST=localhost
+POSTGRES_PORT=5432         # 5433 for test
+POSTGRES_DB=cpr_dev        # cpr_test for test
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=postgres
+JWT_SIGNING_KEY=local-test-key
+```
+
+## Quick Start
+
+### 1. Start Docker Containers
+
+**For Development:**
 ```powershell
-$env:JWT_SIGNING_KEY = 'test-signing-key-12345'
-$env:ASPNETCORE_ENVIRONMENT = 'Development'
+cd scripts
+.\run-docker-dev.cmd
+```
+Or manually:
+```powershell
+docker-compose -f docker/docker-compose.dev.yml up -d
+```
+
+This starts:
+- PostgreSQL on `localhost:5432` (dev) and `localhost:5433` (test)
+- pgAdmin on `http://localhost:5050` (admin@admin.com / admin)
+
+**For Testing Only:**
+```powershell
+docker-compose -f docker/docker-compose.test.yml up -d
+```
+
+### 2. Run the API
+
+**Option A: Run without authentication (public endpoints only)**
+```powershell
+cd scripts
+.\run-api.cmd
+```
+
+**Option B: Run as Employee (Eve Adams)**
+```powershell
+cd scripts
+.\run-api-as-employee.cmd
+```
+- User: Eve Adams (Director of Security Engineering)
+- User ID: `c7746e91-a5e8-4f8b-9f22-f48374ffa2a4`
+- Token automatically copied to clipboard
+
+**Option C: Run as Manager (Henry Wilson)**
+```powershell
+cd scripts
+.\run-api-as-manager.cmd
+```
+- User: Henry Wilson (Director of Technical Support)
+- User ID: `977f4f1f-b3ce-4244-98fc-2c0d0248de88`
+- Token automatically copied to clipboard
+
+**Option D: Manual run**
+```powershell
 dotnet run --project src\CPR.Api --urls "http://localhost:5000"
 ```
 
-2) Generate a token (PowerShell):
+The API will:
+1. Load environment variables from `.env.dev`
+2. Run database migrations (create schema if needed)
+3. Seed initial data (roles, users, skills, etc.)
+4. Start on `http://localhost:5000`
+5. Swagger UI available at `http://localhost:5000/swagger`
 
+### 3. Access Swagger UI
+
+1. Open `http://localhost:5000/swagger`
+2. Click **Authorize** button
+3. Paste the token (from clipboard if using run-api-as-*.cmd)
+4. Click **Authorize** then **Close**
+5. Test protected endpoints like `/api/me`
+
+### 4. Run Tests
+
+**Run all tests:**
 ```powershell
-# signingKey must match the server's JWT_SIGNING_KEY string
-$signingKey = 'test-signing-key-12345'
-$userId = '00000000-0000-0000-0000-000000000123'
+cd scripts
+.\run-tests.cmd
+```
+
+**Run specific test suites:**
+```powershell
+# Unit tests only
+dotnet test tests\CPR.UnitTests\CPR.UnitTests.csproj
+
+# Integration tests only
+dotnet test tests\CPR.IntegrationTests\CPR.IntegrationTests.csproj
+
+# Contract tests only
+dotnet test tests\CPR.ContractTests\CPR.ContractTests.csproj
+```
+
+**Test Summary:**
+- **Unit Tests**: ~30+ tests - Business logic validation
+- **Integration Tests**: 55 tests - Full API + Database scenarios
+- **Contract Tests**: 5 tests - API contract validation & Swagger schema
+
+All tests run from empty databases and handle their own setup/cleanup automatically.
+
+## Authentication
+
+### Development Authentication Stub
+
+The API uses HMAC-signed tokens for development:
+
+**Token Format:** `{userId}.{base64Signature}`
+
+Where: `signature = HMACSHA256(JWT_SIGNING_KEY, userId)`
+
+### Generate Token Manually
+
+Use the provided script:
+```powershell
+.\scripts\generate-token.ps1 -UserId "c7746e91-a5e8-4f8b-9f22-f48374ffa2a4"
+```
+
+Or manually in PowerShell:
+```powershell
+$signingKey = 'local-test-key'
+$userId = 'c7746e91-a5e8-4f8b-9f22-f48374ffa2a4'
 $hmac = [System.Security.Cryptography.HMACSHA256]::new([System.Text.Encoding]::UTF8.GetBytes($signingKey))
 $sig = $hmac.ComputeHash([System.Text.Encoding]::UTF8.GetBytes($userId))
 $token = $userId + '.' + [Convert]::ToBase64String($sig)
+Write-Host "Token: $token"
 Set-Clipboard $token
-Write-Host "Token generated and copied to clipboard (length=$($token.Length))"
 ```
 
-3) Authorize in Swagger (open http://localhost:5000/swagger):
+### Pre-seeded Users
 
-- Click "Authorize". In the input field paste the raw token only (the value produced by the generation step), e.g. `00000000-0000-0000-0000-000000000123.<base64signature>` — do NOT include the `Bearer ` prefix (Swagger UI will add it automatically).
-- Click "Authorize" then close the dialog and call protected endpoints like `/me`.
+The database is automatically seeded with test users:
+
+| Name | Role | User ID | Employee ID |
+|------|------|---------|-------------|
+| Ryan King | Administrator | `5950a2be-bdfb-4dcb-9913-1e3e0e022a5c` | `...001` |
+| Sarah Johnson | Contributor | `f4c8e7a2-1b3d-4e6f-9a2c-8d7e6f5a4b3c` | `...002` |
+| Eve Adams | Contributor (Security Dir) | `c7746e91-a5e8-4f8b-9f22-f48374ffa2a4` | `...007` |
+| Henry Wilson | Contributor (Support Dir) | `977f4f1f-b3ce-4244-98fc-2c0d0248de88` | `...00a` |
+
+## Database Management
+
+### Access pgAdmin
+1. Open `http://localhost:5050`
+2. Login: `admin@admin.com` / `admin`
+3. Add server:
+   - Host: `postgres` (Docker network) or `localhost` (from host)
+   - Port: `5432` (dev) or `5433` (test)
+   - Username: `postgres`
+   - Password: `postgres`
+
+### Run Migrations Manually
+```powershell
+# Apply all pending migrations
+dotnet ef database update --project src\CPR.Infrastructure --startup-project src\CPR.Api
+
+# Create a new migration
+dotnet ef migrations add MigrationName --project src\CPR.Infrastructure --startup-project src\CPR.Api
+
+# Rollback to specific migration
+dotnet ef database update PreviousMigrationName --project src\CPR.Infrastructure --startup-project src\CPR.Api
+```
+
+### Reset Database
+```powershell
+# Drop and recreate (will lose all data)
+dotnet ef database drop --project src\CPR.Infrastructure --startup-project src\CPR.Api --force
+dotnet ef database update --project src\CPR.Infrastructure --startup-project src\CPR.Api
+```
+
+Or using Docker:
+```powershell
+docker-compose -f docker/docker-compose.dev.yml down -v
+docker-compose -f docker/docker-compose.dev.yml up -d
+```
+
+## Common Tasks
+
+### Build Solution
+```powershell
+dotnet build src\CPR.sln
+```
+
+### Clean Build
+```powershell
+dotnet clean src\CPR.sln
+dotnet build src\CPR.sln
+```
+
+### Watch Mode (Auto-reload)
+```powershell
+dotnet watch --project src\CPR.Api
+```
+
+### View Logs
+```powershell
+# Docker logs
+docker-compose -f docker/docker-compose.dev.yml logs -f
+
+# Specific container
+docker logs cpr-postgres-dev -f
+```
+
+## Troubleshooting
+
+### API fails to start: "relation does not exist"
+**Solution:** Drop and recreate the database:
+```powershell
+# In pgAdmin or psql
+DROP DATABASE IF EXISTS cpr_dev;
+# Then restart the API - it will recreate and seed automatically
+```
+
+### Tests fail after running ContractTests
+**Solution:** Tests are now isolated - IntegrationTests automatically recreate their database. If issues persist:
+```powershell
+# Recreate test database
+docker-compose -f docker/docker-compose.test.yml down -v
+docker-compose -f docker/docker-compose.test.yml up -d
+```
+
+### Port already in use
+**Solution:** Stop existing PostgreSQL instances:
+```powershell
+# Check what's using the port
+netstat -ano | findstr :5432
+
+# Stop Docker containers
+docker-compose -f docker/docker-compose.dev.yml down
+```
+
+### Migration conflicts
+**Solution:** Reset migration history:
+```powershell
+dotnet ef database drop --project src\CPR.Infrastructure --startup-project src\CPR.Api --force
+dotnet ef database update --project src\CPR.Infrastructure --startup-project src\CPR.Api
+```
+
+## Additional Documentation
+
+- **[Conventions](documents/conventions.md)** - Coding standards and best practices
+- **[API Endpoints](documents/endpoints.md)** - Detailed endpoint documentation
+- **[Data Model](documents/data.md)** - Database schema and relationships
+- **[User Stories](documents/stories.md)** - Feature requirements
+
+## License
+
+Internal project - All rights reserved
 
 4) Call `/me` from PowerShell (no Swagger):
 
