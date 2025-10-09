@@ -1,9 +1,9 @@
 # Tasklist — CPR
 
 Progress (update after each iteration)
-- Iteration: 14
-- Status: **Complete** ✅
-- Notes: Iteration 14 Project Management (Solution Owner Role) — Fully implemented and tested (2025-10-09). Successfully implemented project management system with major database schema refactoring. Created 8 DTOs with validation, refactored project_roles and project_teams schema (ProjectRole now has project_id instead of position_id, ProjectTeam no longer has project_id), implemented IProjectService with 11 methods, created ProjectsController with 11 RESTful endpoints (read operations open to all authenticated users, write operations require Solution Owner role), enhanced seed data with 10 diverse projects and 100 project roles. **All tests passing: Unit: 22/22 (ProjectService), Integration: 52/52 (ProjectsController), Contract: 16/16 (11 Projects + 5 existing)**. Database successfully recreated with new schema. Note: Solution Owner role (not "Project Owner") is used for authorization. Created run-api-as-solution-owner.cmd script for testing. **Next**: Iteration 15 - Positions & position->skill mapping.
+- Iteration: 15
+- Status: **In Progress** ⏳
+- Notes: Iteration 15 Taxonomy Management (Administrator CUD Operations) — Phase 1 ✅ Complete: Created 17 new DTOs (1 read, 6 create, 6 update, 2 mapping, 2 position-skill) with comprehensive validation attributes. Phase 2 ✅ Complete: Extended IClassificationService with 24 method signatures, implemented all methods in ClassificationService with validation, soft delete pattern, partial updates, and referential integrity checks. All builds successful. Phase 3 (In Progress): Adding 21 endpoints to TaxonomyController (1 GET /skill_categories + 20 Administrator CUD operations). Phase 4 (Pending): Testing (~167 new tests: 74 unit, 73 integration, 20 contract). **Previous Iteration**: Iteration 14 Project Management (Solution Owner Role) — Complete ✅ (2025-10-09).
 
 Database Enhancement (2025-09-18): Successfully implemented comprehensive seed data system with:
 - Created SeedData.cs with hierarchical data generation methods
@@ -309,7 +309,7 @@ Iterations
 
 - [ ] Iteration 15 — Taxonomy Management (Administrator CUD Operations)
   - Goal: Implement Create, Update, and Delete operations for taxonomy entities (career paths, career tracks, positions, skill categories, skills, skill levels) restricted to Administrator role only.
-  - Status: **Planned**
+  - Status: **In Progress** - Phase 1 ✅ Complete, Phase 2 ✅ Complete, Phase 3 (Controller) In Progress (2025-10-09)
   - Scope:
     - **Career Path Management (Administrator role required)**:
       - POST /api/career — Create a new career path
