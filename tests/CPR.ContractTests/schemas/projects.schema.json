@@ -1,0 +1,71 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "array",
+    "items": {
+        "type": "object",
+        "required": [
+            "id",
+            "code",
+            "title",
+            "createdAt",
+            "roles",
+            "team"
+        ],
+        "properties": {
+            "id": {
+                "type": "string",
+                "format": "uuid"
+            },
+            "code": {
+                "type": "string"
+            },
+            "title": {
+                "type": "string"
+            },
+            "description": {
+                "type": [
+                    "string",
+                    "null"
+                ]
+            },
+            "ownerId": {
+                "type": [
+                    "string",
+                    "null"
+                ],
+                "format": "uuid"
+            },
+            "sponsorId": {
+                "type": [
+                    "string",
+                    "null"
+                ],
+                "format": "uuid"
+            },
+            "createdAt": {
+                "type": "string",
+                "format": "date-time"
+            },
+            "modifiedAt": {
+                "type": [
+                    "string",
+                    "null"
+                ],
+                "format": "date-time"
+            },
+            "roles": {
+                "type": "array",
+                "items": {
+                    "type": "object"
+                }
+            },
+            "team": {
+                "type": "array",
+                "items": {
+                    "type": "object"
+                }
+            }
+        },
+        "additionalProperties": false
+    }
+}
