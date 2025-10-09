@@ -86,7 +86,7 @@ namespace CPR.Api.Controllers
         /// <param name="dto">Project creation payload</param>
         /// <returns>Created project</returns>
         [HttpPost]
-        [RequireRole("Project Owner")]
+        [RequireRole("Solution Owner")]
         [ProducesResponseType(typeof(ProjectDto), 201)]
         [ProducesResponseType(400)]
         [ProducesResponseType(401)]
@@ -115,7 +115,7 @@ namespace CPR.Api.Controllers
         /// <param name="dto">Project update payload</param>
         /// <returns>Updated project</returns>
         [HttpPut("{id}")]
-        [RequireRole("Project Owner")]
+        [RequireRole("Solution Owner")]
         [ProducesResponseType(typeof(ProjectDto), 200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(401)]
@@ -149,7 +149,7 @@ namespace CPR.Api.Controllers
         /// <param name="id">Project identifier</param>
         /// <returns>No content on success</returns>
         [HttpDelete("{id}")]
-        [RequireRole("Project Owner")]
+        [RequireRole("Solution Owner")]
         [ProducesResponseType(204)]
         [ProducesResponseType(401)]
         [ProducesResponseType(403)]
@@ -212,7 +212,7 @@ namespace CPR.Api.Controllers
         /// <param name="dto">Project role creation payload</param>
         /// <returns>Created project role</returns>
         [HttpPost("{id}/roles")]
-        [RequireRole("Project Owner")]
+        [RequireRole("Solution Owner")]
         [ProducesResponseType(typeof(ProjectRoleDto), 201)]
         [ProducesResponseType(400)]
         [ProducesResponseType(401)]
@@ -250,7 +250,7 @@ namespace CPR.Api.Controllers
         /// <param name="dto">Project role update payload</param>
         /// <returns>Updated project role</returns>
         [HttpPut("{id}/roles/{roleId}")]
-        [RequireRole("Project Owner")]
+        [RequireRole("Solution Owner")]
         [ProducesResponseType(typeof(ProjectRoleDto), 200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(401)]
@@ -285,7 +285,7 @@ namespace CPR.Api.Controllers
         /// <param name="roleId">Role identifier</param>
         /// <returns>No content on success</returns>
         [HttpDelete("{id}/roles/{roleId}")]
-        [RequireRole("Project Owner")]
+        [RequireRole("Solution Owner")]
         [ProducesResponseType(204)]
         [ProducesResponseType(401)]
         [ProducesResponseType(403)]
@@ -348,7 +348,7 @@ namespace CPR.Api.Controllers
         /// <param name="dto">Project team assignment payload</param>
         /// <returns>Created project team assignment</returns>
         [HttpPost("{id}/team")]
-        [RequireRole("Project Owner")]
+        [RequireRole("Solution Owner")]
         [ProducesResponseType(typeof(ProjectTeamDto), 201)]
         [ProducesResponseType(400)]
         [ProducesResponseType(401)]
@@ -385,7 +385,7 @@ namespace CPR.Api.Controllers
         /// <param name="teamMemberId">Team member identifier</param>
         /// <returns>No content on success</returns>
         [HttpDelete("{id}/team/{teamMemberId}")]
-        [RequireRole("Project Owner")]
+        [RequireRole("Solution Owner")]
         [ProducesResponseType(204)]
         [ProducesResponseType(401)]
         [ProducesResponseType(403)]
