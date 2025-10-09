@@ -1,0 +1,2139 @@
+==> Running unit tests
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+  CPR.Domain -> D:\projects\CPR\src\CPR.Domain\bin\Debug\net9.0\CPR.Domain.dll
+  CPR.Application -> D:\projects\CPR\src\CPR.Application\bin\Debug\net9.0\CPR.Application.dll
+  CPR.Infrastructure -> D:\projects\CPR\src\CPR.Infrastructure\bin\Debug\net9.0\CPR.Infrastructure.dll
+  CPR.Api -> D:\projects\CPR\src\CPR.Api\bin\Debug\net9.0\CPR.Api.dll
+  CPR.UnitTests -> D:\projects\CPR\tests\CPR.UnitTests\bin\Debug\net9.0\CPR.UnitTests.dll
+Test run for D:\projects\CPR\tests\CPR.UnitTests\bin\Debug\net9.0\CPR.UnitTests.dll (.NETCoreApp,Version=v9.0)
+VSTest version 17.13.0 (x64)
+
+Starting test execution, please wait...
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:    84, Skipped:     0, Total:    84, Duration: 1 s - CPR.UnitTests.dll (net9.0)
+
+Workload updates are available. Run `dotnet workload list` for more information.
+==> Running contract tests
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+  CPR.Domain -> D:\projects\CPR\src\CPR.Domain\bin\Debug\net9.0\CPR.Domain.dll
+  CPR.Application -> D:\projects\CPR\src\CPR.Application\bin\Debug\net9.0\CPR.Application.dll
+  CPR.Infrastructure -> D:\projects\CPR\src\CPR.Infrastructure\bin\Debug\net9.0\CPR.Infrastructure.dll
+  CPR.Api -> D:\projects\CPR\src\CPR.Api\bin\Debug\net9.0\CPR.Api.dll
+  CPR.ContractTests -> D:\projects\CPR\tests\CPR.ContractTests\bin\Debug\net9.0\CPR.ContractTests.dll
+Test run for D:\projects\CPR\tests\CPR.ContractTests\bin\Debug\net9.0\CPR.ContractTests.dll (.NETCoreApp,Version=v9.0)
+VSTest version 17.13.0 (x64)
+
+Starting test execution, please wait...
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:    16, Skipped:     0, Total:    16, Duration: 2 s - CPR.ContractTests.dll (net9.0)
+
+Workload updates are available. Run `dotnet workload list` for more information.
+==> Running integration tests (DATABASE_NAME=cpr_test)
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+  CPR.Domain -> D:\projects\CPR\src\CPR.Domain\bin\Debug\net9.0\CPR.Domain.dll
+  CPR.Application -> D:\projects\CPR\src\CPR.Application\bin\Debug\net9.0\CPR.Application.dll
+  CPR.Infrastructure -> D:\projects\CPR\src\CPR.Infrastructure\bin\Debug\net9.0\CPR.Infrastructure.dll
+  CPR.Api -> D:\projects\CPR\src\CPR.Api\bin\Debug\net9.0\CPR.Api.dll
+  CPR.IntegrationTests -> D:\projects\CPR\tests\CPR.IntegrationTests\bin\Debug\net9.0\CPR.IntegrationTests.dll
+Test run for D:\projects\CPR\tests\CPR.IntegrationTests\bin\Debug\net9.0\CPR.IntegrationTests.dll (.NETCoreApp,Version=v9.0)
+VSTest version 17.13.0 (x64)
+
+Starting test execution, please wait...
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v2.8.0+6438bb880a (64-bit .NET 9.0.3)
+[xUnit.net 00:00:00.07]   Discovering: CPR.IntegrationTests
+[xUnit.net 00:00:00.10]   Discovered:  CPR.IntegrationTests
+[xUnit.net 00:00:00.10]   Starting:    CPR.IntegrationTests
+DatabaseCleanupFixture: Constructor called
+DatabaseCleanupFixture: POSTGRES_HOST=
+DatabaseCleanupFixture: POSTGRES_PORT=
+DatabaseCleanupFixture: POSTGRES_DB=
+DatabaseCleanupFixture: Constructor called
+DatabaseCleanupFixture: Constructor called
+DatabaseCleanupFixture: POSTGRES_HOST=
+DatabaseCleanupFixture: POSTGRES_HOST=
+DatabaseCleanupFixture: POSTGRES_PORT=
+DatabaseCleanupFixture: POSTGRES_PORT=
+DatabaseCleanupFixture: Constructor called
+DatabaseCleanupFixture: POSTGRES_HOST=
+DatabaseCleanupFixture: Constructor called
+DatabaseCleanupFixture: POSTGRES_PORT=
+DatabaseCleanupFixture: POSTGRES_HOST=
+DatabaseCleanupFixture: POSTGRES_DB=
+DatabaseCleanupFixture: POSTGRES_PORT=
+DatabaseCleanupFixture: POSTGRES_DB=
+DatabaseCleanupFixture: Constructor called
+DatabaseCleanupFixture: POSTGRES_HOST=
+DatabaseCleanupFixture: POSTGRES_PORT=
+DatabaseCleanupFixture: Constructor called
+DatabaseCleanupFixture: POSTGRES_DB=
+DatabaseCleanupFixture: POSTGRES_HOST=
+DatabaseCleanupFixture: POSTGRES_PORT=
+DatabaseCleanupFixture: POSTGRES_DB=
+DatabaseCleanupFixture: POSTGRES_DB=
+DatabaseCleanupFixture: POSTGRES_DB=
+DatabaseCleanupFixture: InitializeAsync starting
+DatabaseCleanupFixture: InitializeAsync starting
+DatabaseCleanupFixture: InitializeAsync starting
+DatabaseCleanupFixture: InitializeAsync starting
+DatabaseCleanupFixture: InitializeAsync starting
+DatabaseCleanupFixture: InitializeAsync starting
+DatabaseCleanupFixture: InitializeAsync starting
+DatabaseCleanupFixture: Running global setup (with database deletion)
+DatabaseCleanupFixture: PerformGlobalDatabaseSetup starting
+DatabaseCleanupFixture: Loading .env.test file
+DatabaseCleanupFixture: LoadEnvFile called with path: d:/projects/CPR/.env.test
+DatabaseCleanupFixture: Current directory: D:\projects\CPR\tests\CPR.IntegrationTests\bin\Debug\net9.0
+DatabaseCleanupFixture: File exists: True
+DatabaseCleanupFixture: Reading env file
+DatabaseCleanupFixture: Setting POSTGRES_HOST=localhost
+DatabaseCleanupFixture: Setting POSTGRES_PORT=5433
+DatabaseCleanupFixture: Setting POSTGRES_DB=cpr_test
+DatabaseCleanupFixture: Setting POSTGRES_USER=postgres
+DatabaseCleanupFixture: Setting POSTGRES_PASSWORD=postgres
+DatabaseCleanupFixture: Setting ASPNETCORE_ENVIRONMENT=Test
+DatabaseCleanupFixture: Environment variables after loading:
+DatabaseCleanupFixture: POSTGRES_HOST=localhost
+DatabaseCleanupFixture: POSTGRES_PORT=5433
+DatabaseCleanupFixture: POSTGRES_DB=cpr_test
+DatabaseCleanupFixture: POSTGRES_USER=postgres
+DatabaseCleanupFixture: POSTGRES_PASSWORD=postgres
+DatabaseCleanupFixture: Deleting existing database if present
+DatabaseCleanupFixture: Built connection string: Host=localhost;Port=5433;Database=cpr_test;Username=postgres;Password=postgres
+=== DATABASE DELETED: cpr_test ===
+DatabaseCleanupFixture: Ensuring database exists
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: test-user.e6mk8zKQIpwaFJFKO+wMZ2Xt73mfdQlvOiP7fijZJf0=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: test-user, sig: e6mk8zKQIpwaFJFKO+wMZ2Xt73mfdQlvOiP7fijZJf0=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: e6mk8zKQIpwaFJFKO+wMZ2Xt73mfdQlvOiP7fijZJf0=, Received: e6mk8zKQIpwaFJFKO+wMZ2Xt73mfdQlvOiP7fijZJf0=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=, Received: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: test-user
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=, Received: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: test-user.e6mk8zKQIpwaFJFKO+wMZ2Xt73mfdQlvOiP7fijZJf0=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: test-user, sig: e6mk8zKQIpwaFJFKO+wMZ2Xt73mfdQlvOiP7fijZJf0=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: e6mk8zKQIpwaFJFKO+wMZ2Xt73mfdQlvOiP7fijZJf0=, Received: e6mk8zKQIpwaFJFKO+wMZ2Xt73mfdQlvOiP7fijZJf0=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: test-user
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=, Received: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: test-user.e6mk8zKQIpwaFJFKO+wMZ2Xt73mfdQlvOiP7fijZJf0=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: test-user, sig: e6mk8zKQIpwaFJFKO+wMZ2Xt73mfdQlvOiP7fijZJf0=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: e6mk8zKQIpwaFJFKO+wMZ2Xt73mfdQlvOiP7fijZJf0=, Received: e6mk8zKQIpwaFJFKO+wMZ2Xt73mfdQlvOiP7fijZJf0=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: test-user
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=, Received: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+DatabaseCleanupFixture: Running migrations
+DatabaseCleanupFixture: Seeding database
+info: CPR.Infrastructure.Services.DatabaseSeeder[0]
+      Starting database seeding...
+info: CPR.Infrastructure.Services.DatabaseSeeder[0]
+      ASP.NET Core Environment: 'Test', IsDevOrTestEnvironment: True
+info: CPR.Infrastructure.Services.DatabaseSeeder[0]
+      Test environment detected - seeding all data...
+  Passed CPR.IntegrationTests.SampleIntegrationTest.CanRun [13 ms]
+  Passed CPR.IntegrationTests.GoalsControllerValidationTests.Post_TitleTooLong_Returns400 [360 ms]
+  Passed CPR.IntegrationTests.ValidationTests.Post_InvalidEmployeeId_Returns400 [366 ms]
+  Passed CPR.IntegrationTests.GoalsControllerValidationTests.Post_DescriptionTooLong_Returns400 [5 ms]
+  Passed CPR.IntegrationTests.ValidationTests.Post_InvalidVisibility_Returns400 [3 ms]
+  Passed CPR.IntegrationTests.GoalsControllerValidationTests.Post_InvalidDeadlineFormat_Returns400 [7 ms]
+  Passed CPR.IntegrationTests.GoalsControllerValidationTests.Post_MissingTitle_Returns400 [1 ms]
+  Passed CPR.IntegrationTests.ValidationTests.Post_PriorityOutOfRange_Returns400 [8 ms]
+info: CPR.Infrastructure.Services.DatabaseSeeder[0]
+      Seeding roles...
+info: CPR.Infrastructure.Services.DatabaseSeeder[0]
+      Seeded 5 roles.
+info: CPR.Infrastructure.Services.DatabaseSeeder[0]
+      Seeding departments...
+info: CPR.Infrastructure.Services.DatabaseSeeder[0]
+      Seeded 10 departments.
+info: CPR.Infrastructure.Services.DatabaseSeeder[0]
+      Seeding locations...
+info: CPR.Infrastructure.Services.DatabaseSeeder[0]
+      Seeded 5 locations.
+info: CPR.Infrastructure.Services.DatabaseSeeder[0]
+      Seeding users...
+info: CPR.Infrastructure.Services.DatabaseSeeder[0]
+      Assigning roles to users...
+info: CPR.Infrastructure.Services.DatabaseSeeder[0]
+      Assigned roles to 22 user-role relationships.
+info: CPR.Infrastructure.Services.DatabaseSeeder[0]
+      Seeded 55 users.
+info: CPR.Infrastructure.Services.DatabaseSeeder[0]
+      Seeding career paths and tracks...
+info: CPR.Infrastructure.Services.DatabaseSeeder[0]
+      Seeded 10 career paths and 43 career tracks.
+info: CPR.Infrastructure.Services.DatabaseSeeder[0]
+      Seeding positions...
+info: CPR.Infrastructure.Services.DatabaseSeeder[0]
+      Seeded 50 positions.
+info: CPR.Infrastructure.Services.DatabaseSeeder[0]
+      Seeding employees...
+info: CPR.Infrastructure.Services.DatabaseSeeder[0]
+      Seeded 55 employees.
+info: CPR.Infrastructure.Services.DatabaseSeeder[0]
+      Seeding skill categories and skills...
+info: CPR.Infrastructure.Services.DatabaseSeeder[0]
+      Seeded 5 skill categories, 25 skills, and 125 skill levels.
+info: CPR.Infrastructure.Services.DatabaseSeeder[0]
+      Seeding projects...
+info: CPR.Infrastructure.Services.DatabaseSeeder[0]
+      Seeded 10 projects.
+info: CPR.Infrastructure.Services.DatabaseSeeder[0]
+      Seeding project roles...
+info: CPR.Infrastructure.Services.DatabaseSeeder[0]
+      Seeded 100 project roles.
+info: CPR.Infrastructure.Services.DatabaseSeeder[0]
+      Seeding position-to-skill mappings...
+info: CPR.Infrastructure.Services.DatabaseSeeder[0]
+      Seeded 460 position-to-skill mappings for 50 positions.
+info: CPR.Infrastructure.Services.DatabaseSeeder[0]
+      Seeding employee-to-skill mappings...
+info: CPR.Infrastructure.Services.DatabaseSeeder[0]
+      Seeded 659 employee-to-skill mappings for 55 employees.
+info: CPR.Infrastructure.Services.DatabaseSeeder[0]
+      Database seeding completed.
+DatabaseCleanupFixture: PerformGlobalDatabaseSetup completed
+DatabaseCleanupFixture: Global setup completed
+DatabaseCleanupFixture: Global setup already completed (skipping)
+DatabaseCleanupFixture: Global setup already completed (skipping)
+DatabaseCleanupFixture: Global setup already completed (skipping)
+DatabaseCleanupFixture: Global setup already completed (skipping)
+DatabaseCleanupFixture: Built connection string: Host=localhost;Port=5433;Database=cpr_test;Username=postgres;Password=postgres
+DatabaseCleanupFixture: Built connection string: Host=localhost;Port=5433;Database=cpr_test;Username=postgres;Password=postgres
+DatabaseCleanupFixture: Built connection string: Host=localhost;Port=5433;Database=cpr_test;Username=postgres;Password=postgres
+DatabaseCleanupFixture: Built connection string: Host=localhost;Port=5433;Database=cpr_test;Username=postgres;Password=postgres
+DatabaseCleanupFixture: Global setup already completed (skipping)
+DatabaseCleanupFixture: Built connection string: Host=localhost;Port=5433;Database=cpr_test;Username=postgres;Password=postgres
+DatabaseCleanupFixture: Global setup already completed (skipping)
+DatabaseCleanupFixture: Built connection string: Host=localhost;Port=5433;Database=cpr_test;Username=postgres;Password=postgres
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=, Received: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[12]
+      AuthenticationScheme: Stub was challenged.
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 33333333-3333-3333-3333-333333333333.SIfh4XilcwPXw8GiRP+lYyk36urOxZ5hytkRan2kais=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 33333333-3333-3333-3333-333333333333, sig: SIfh4XilcwPXw8GiRP+lYyk36urOxZ5hytkRan2kais=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: SIfh4XilcwPXw8GiRP+lYyk36urOxZ5hytkRan2kais=, Received: SIfh4XilcwPXw8GiRP+lYyk36urOxZ5hytkRan2kais=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 33333333-3333-3333-3333-333333333333
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=, Received: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[12]
+      AuthenticationScheme: Stub was challenged.
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=, Received: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+  Passed CPR.IntegrationTests.GoalControllerProblemDetailsTests.CreateGoal_WhenServiceThrowsArgumentNull_Returns400ProblemDetails [88 ms]
+  Passed CPR.IntegrationTests.GoalControllerProblemDetailsTests.GetMine_WhenServiceThrowsArgumentOutOfRange_Returns400ProblemDetails [6 ms]
+  Passed CPR.IntegrationTests.FeedbackControllerTests.GetMyFeedback_WithoutAuth_ReturnsUnauthorized [92 ms]
+  Passed CPR.IntegrationTests.FeedbackControllerTests.SubmitFeedback_WithoutAuth_ReturnsUnauthorized [11 ms]
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 41c3319a-6cbd-4b57-93ee-4e8641eb28db.huuQrO8N2FaiKee7096MJcLYnnl4PLJIZX2CRZLStjg=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 41c3319a-6cbd-4b57-93ee-4e8641eb28db, sig: huuQrO8N2FaiKee7096MJcLYnnl4PLJIZX2CRZLStjg=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: huuQrO8N2FaiKee7096MJcLYnnl4PLJIZX2CRZLStjg=, Received: huuQrO8N2FaiKee7096MJcLYnnl4PLJIZX2CRZLStjg=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 41c3319a-6cbd-4b57-93ee-4e8641eb28db
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: c6874b28-e2fa-4835-8e8f-159bd5067091.WrybXa4N+al3H/70IXKHEqIMmZVnUoqzoasBe4RXJmY=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: c6874b28-e2fa-4835-8e8f-159bd5067091, sig: WrybXa4N+al3H/70IXKHEqIMmZVnUoqzoasBe4RXJmY=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: WrybXa4N+al3H/70IXKHEqIMmZVnUoqzoasBe4RXJmY=, Received: WrybXa4N+al3H/70IXKHEqIMmZVnUoqzoasBe4RXJmY=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: c6874b28-e2fa-4835-8e8f-159bd5067091
+MigrationSmokeTests: Test starting
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 44444444-4444-4444-4444-444444444444.o8Gh1M8MMj2QRqZaObHuVkrb8kcRB1ndr1fnE6hE3Xw=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 44444444-4444-4444-4444-444444444444, sig: o8Gh1M8MMj2QRqZaObHuVkrb8kcRB1ndr1fnE6hE3Xw=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: o8Gh1M8MMj2QRqZaObHuVkrb8kcRB1ndr1fnE6hE3Xw=, Received: o8Gh1M8MMj2QRqZaObHuVkrb8kcRB1ndr1fnE6hE3Xw=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 44444444-4444-4444-4444-444444444444
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=, Received: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=, Received: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Checking role authorization for user 679add6e-6c29-4e00-b6a5-b69c8e0f3445 requiring roles: Employee, People Manager, Solution Owner, Director, Administrator
+info: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Checking role authorization for user 679add6e-6c29-4e00-b6a5-b69c8e0f3445 requiring roles: Employee, People Manager, Solution Owner, Director, Administrator
+info: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Authorization succeeded for user 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Authorization succeeded for user 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=, Received: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=, Received: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=, Received: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=, Received: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=, Received: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: c6874b28-e2fa-4835-8e8f-159bd5067091.WrybXa4N+al3H/70IXKHEqIMmZVnUoqzoasBe4RXJmY=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: c6874b28-e2fa-4835-8e8f-159bd5067091, sig: WrybXa4N+al3H/70IXKHEqIMmZVnUoqzoasBe4RXJmY=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: WrybXa4N+al3H/70IXKHEqIMmZVnUoqzoasBe4RXJmY=, Received: WrybXa4N+al3H/70IXKHEqIMmZVnUoqzoasBe4RXJmY=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: c6874b28-e2fa-4835-8e8f-159bd5067091
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=, Received: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: c6874b28-e2fa-4835-8e8f-159bd5067091.WrybXa4N+al3H/70IXKHEqIMmZVnUoqzoasBe4RXJmY=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=, Received: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: c6874b28-e2fa-4835-8e8f-159bd5067091, sig: WrybXa4N+al3H/70IXKHEqIMmZVnUoqzoasBe4RXJmY=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: WrybXa4N+al3H/70IXKHEqIMmZVnUoqzoasBe4RXJmY=, Received: WrybXa4N+al3H/70IXKHEqIMmZVnUoqzoasBe4RXJmY=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: c6874b28-e2fa-4835-8e8f-159bd5067091
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=, Received: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Checking role authorization for user c6874b28-e2fa-4835-8e8f-159bd5067091 requiring roles: Employee, People Manager, Solution Owner, Director, Administrator
+info: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Checking role authorization for user 679add6e-6c29-4e00-b6a5-b69c8e0f3445 requiring roles: Employee, People Manager, Solution Owner, Director, Administrator
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=, Received: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Authorization succeeded for user 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Authorization succeeded for user c6874b28-e2fa-4835-8e8f-159bd5067091
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 44444444-4444-4444-4444-444444444444.o8Gh1M8MMj2QRqZaObHuVkrb8kcRB1ndr1fnE6hE3Xw=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 44444444-4444-4444-4444-444444444444, sig: o8Gh1M8MMj2QRqZaObHuVkrb8kcRB1ndr1fnE6hE3Xw=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: o8Gh1M8MMj2QRqZaObHuVkrb8kcRB1ndr1fnE6hE3Xw=, Received: o8Gh1M8MMj2QRqZaObHuVkrb8kcRB1ndr1fnE6hE3Xw=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 44444444-4444-4444-4444-444444444444
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[13]
+      AuthenticationScheme: Stub was forbidden.
+warn: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Authorization failed: User ID claim not found or invalid
+Found 0 todo requests
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[12]
+      AuthenticationScheme: Stub was challenged.
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: c6874b28-e2fa-4835-8e8f-159bd5067091.WrybXa4N+al3H/70IXKHEqIMmZVnUoqzoasBe4RXJmY=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: c6874b28-e2fa-4835-8e8f-159bd5067091, sig: WrybXa4N+al3H/70IXKHEqIMmZVnUoqzoasBe4RXJmY=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: WrybXa4N+al3H/70IXKHEqIMmZVnUoqzoasBe4RXJmY=, Received: WrybXa4N+al3H/70IXKHEqIMmZVnUoqzoasBe4RXJmY=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=, Received: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: c6874b28-e2fa-4835-8e8f-159bd5067091
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+  Passed CPR.IntegrationTests.GoalPersistenceTests.CanCreateAndReadGoal [283 ms]
+  Passed CPR.IntegrationTests.UserAndGoalPersistenceTests.CanCreateUserAndGoal [361 ms]
+  Passed CPR.IntegrationTests.MigrationSmokeTests.MigrationsHistory_Contains_AddSeedData [82 ms]
+  Passed CPR.IntegrationTests.FeedbackControllerTests.GetSentRequests_WithValidToken_ReturnsRequests [276 ms]
+  Passed CPR.IntegrationTests.FeedbackControllerTests.CreateFeedbackRequest_WithInvalidEmployeeId_ReturnsBadRequest [7 ms]
+  Passed CPR.IntegrationTests.GoalsControllerTaskNegativeTests.PatchTask_ByDifferentEmployee_ReturnsForbidden [447 ms]
+  Passed CPR.IntegrationTests.FeedbackControllerTests.GetTodoRequests_WithValidToken_ReturnsRequests [61 ms]
+info: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Checking role authorization for user 679add6e-6c29-4e00-b6a5-b69c8e0f3445 requiring roles: Employee, People Manager, Solution Owner, Director, Administrator
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=, Received: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Authorization succeeded for user 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=, Received: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=, Received: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=, Received: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Checking role authorization for user 679add6e-6c29-4e00-b6a5-b69c8e0f3445 requiring roles: Employee, People Manager, Solution Owner, Director, Administrator
+Update response status: OK, Content: {"id":"53452d5c-5206-47f5-ab6d-83ca882b2da3","employeeId":"44444444-4444-4444-4444-444444444444","skill":{"id":"eeeeeeee-eeee-eeee-eeee-eeeeeeee0001","title":"Software Development","description":"Ability to design, develop, and maintain software applications","categoryId":"ccc11111-1111-1111-1111-111111111111"},"currentLevel":null,"targetLevel":null,"source":"Updated self-assessment","effectiveDate":"2025-10-09T20:15:48.268384+00:00","isTarget":true,"createdAt":"2025-10-09T20:15:48.268385+00:00","modifiedAt":"2025-10-09T20:15:48.347824+00:00"}
+info: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Authorization succeeded for user 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 33333333-3333-3333-3333-333333333333.SIfh4XilcwPXw8GiRP+lYyk36urOxZ5hytkRan2kais=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 33333333-3333-3333-3333-333333333333, sig: SIfh4XilcwPXw8GiRP+lYyk36urOxZ5hytkRan2kais=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: SIfh4XilcwPXw8GiRP+lYyk36urOxZ5hytkRan2kais=, Received: SIfh4XilcwPXw8GiRP+lYyk36urOxZ5hytkRan2kais=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 33333333-3333-3333-3333-333333333333
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=, Received: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+Found 10 career paths
+Found 5 skill categories
+Found 51 positions
+Found 10 projects
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=, Received: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=, Received: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=, Received: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=, Received: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=, Received: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=, Received: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=, Received: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=, Received: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=, Received: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=, Received: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=, Received: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=, Received: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=, Received: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=, Received: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=, Received: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=, Received: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+DatabaseCleanupFixture: Constructor called
+DatabaseCleanupFixture: POSTGRES_HOST=localhost
+DatabaseCleanupFixture: POSTGRES_PORT=5433
+DatabaseCleanupFixture: POSTGRES_DB=cpr_test
+DatabaseCleanupFixture: InitializeAsync starting
+DatabaseCleanupFixture: Global setup already completed (skipping)
+DatabaseCleanupFixture: Built connection string: Host=localhost;Port=5433;Database=cpr_test;Username=postgres;Password=postgres
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=, Received: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=, Received: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 33333333-3333-3333-3333-333333333333.SIfh4XilcwPXw8GiRP+lYyk36urOxZ5hytkRan2kais=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 33333333-3333-3333-3333-333333333333, sig: SIfh4XilcwPXw8GiRP+lYyk36urOxZ5hytkRan2kais=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: SIfh4XilcwPXw8GiRP+lYyk36urOxZ5hytkRan2kais=, Received: SIfh4XilcwPXw8GiRP+lYyk36urOxZ5hytkRan2kais=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 33333333-3333-3333-3333-333333333333
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 00000000-0000-0000-0000-000000000123.G2IUh/Q6QzY3BR4U2lBIICrk1qRffj+b82OobiEJtRQ=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 00000000-0000-0000-0000-000000000123, sig: G2IUh/Q6QzY3BR4U2lBIICrk1qRffj+b82OobiEJtRQ=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: G2IUh/Q6QzY3BR4U2lBIICrk1qRffj+b82OobiEJtRQ=, Received: G2IUh/Q6QzY3BR4U2lBIICrk1qRffj+b82OobiEJtRQ=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 00000000-0000-0000-0000-000000000123
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: invalid-token
+  Passed CPR.IntegrationTests.GoalsControllerTaskNegativeTests.PatchTask_WithoutAuth_ReturnsUnauthorized [4 ms]
+  Passed CPR.IntegrationTests.MeControllerTests.UpdateSkill_WithValidData_ReturnsOk [460 ms]
+  Passed CPR.IntegrationTests.GoalsControllerTaskPatchTests.PatchTask_CanUpdateFields_AndToggleCompletion [463 ms]
+  Passed CPR.IntegrationTests.GoalsControllerTaskNegativeTests.PatchTask_NonExistentTask_ReturnsNotFound [21 ms]
+  Passed CPR.IntegrationTests.MeControllerTests.UpdateSkill_WithInvalidLevelId_ReturnsBadRequest [31 ms]
+  Passed CPR.IntegrationTests.SeedVerificationTests.SeedRows_Exist_InDatabase [139 ms]
+  Passed CPR.IntegrationTests.MeControllerTests.CreateSkill_DuplicateAssessment_ReturnsConflict [36 ms]
+  Passed CPR.IntegrationTests.MeControllerTests.UpdateSkill_WithInvalidSkillId_ReturnsBadRequest [13 ms]
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[7]
+      Stub was not authenticated. Failure message: Invalid token format
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[12]
+      AuthenticationScheme: Stub was challenged.
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 33333333-3333-3333-3333-333333333333.SIfh4XilcwPXw8GiRP+lYyk36urOxZ5hytkRan2kais=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 33333333-3333-3333-3333-333333333333, sig: SIfh4XilcwPXw8GiRP+lYyk36urOxZ5hytkRan2kais=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: SIfh4XilcwPXw8GiRP+lYyk36urOxZ5hytkRan2kais=, Received: SIfh4XilcwPXw8GiRP+lYyk36urOxZ5hytkRan2kais=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 33333333-3333-3333-3333-333333333333
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 33333333-3333-3333-3333-333333333333.SIfh4XilcwPXw8GiRP+lYyk36urOxZ5hytkRan2kais=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 33333333-3333-3333-3333-333333333333, sig: SIfh4XilcwPXw8GiRP+lYyk36urOxZ5hytkRan2kais=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: SIfh4XilcwPXw8GiRP+lYyk36urOxZ5hytkRan2kais=, Received: SIfh4XilcwPXw8GiRP+lYyk36urOxZ5hytkRan2kais=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 33333333-3333-3333-3333-333333333333
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=, Received: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 00000000-0000-0000-0000-000000000123.G2IUh/Q6QzY3BR4U2lBIICrk1qRffj+b82OobiEJtRQ=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 00000000-0000-0000-0000-000000000123, sig: G2IUh/Q6QzY3BR4U2lBIICrk1qRffj+b82OobiEJtRQ=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: G2IUh/Q6QzY3BR4U2lBIICrk1qRffj+b82OobiEJtRQ=, Received: G2IUh/Q6QzY3BR4U2lBIICrk1qRffj+b82OobiEJtRQ=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 00000000-0000-0000-0000-000000000123
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: c6874b28-e2fa-4835-8e8f-159bd5067091.WrybXa4N+al3H/70IXKHEqIMmZVnUoqzoasBe4RXJmY=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: c6874b28-e2fa-4835-8e8f-159bd5067091, sig: WrybXa4N+al3H/70IXKHEqIMmZVnUoqzoasBe4RXJmY=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: WrybXa4N+al3H/70IXKHEqIMmZVnUoqzoasBe4RXJmY=, Received: WrybXa4N+al3H/70IXKHEqIMmZVnUoqzoasBe4RXJmY=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: c6874b28-e2fa-4835-8e8f-159bd5067091
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 44444444-4444-4444-4444-444444444444.o8Gh1M8MMj2QRqZaObHuVkrb8kcRB1ndr1fnE6hE3Xw=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 44444444-4444-4444-4444-444444444444, sig: o8Gh1M8MMj2QRqZaObHuVkrb8kcRB1ndr1fnE6hE3Xw=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: o8Gh1M8MMj2QRqZaObHuVkrb8kcRB1ndr1fnE6hE3Xw=, Received: o8Gh1M8MMj2QRqZaObHuVkrb8kcRB1ndr1fnE6hE3Xw=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 44444444-4444-4444-4444-444444444444
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=, Received: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=, Received: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 00000000-0000-0000-0000-000000000123.G2IUh/Q6QzY3BR4U2lBIICrk1qRffj+b82OobiEJtRQ=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 00000000-0000-0000-0000-000000000123, sig: G2IUh/Q6QzY3BR4U2lBIICrk1qRffj+b82OobiEJtRQ=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: G2IUh/Q6QzY3BR4U2lBIICrk1qRffj+b82OobiEJtRQ=, Received: G2IUh/Q6QzY3BR4U2lBIICrk1qRffj+b82OobiEJtRQ=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 00000000-0000-0000-0000-000000000123
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 33333333-3333-3333-3333-333333333333.SIfh4XilcwPXw8GiRP+lYyk36urOxZ5hytkRan2kais=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 33333333-3333-3333-3333-333333333333, sig: SIfh4XilcwPXw8GiRP+lYyk36urOxZ5hytkRan2kais=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: SIfh4XilcwPXw8GiRP+lYyk36urOxZ5hytkRan2kais=, Received: SIfh4XilcwPXw8GiRP+lYyk36urOxZ5hytkRan2kais=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 33333333-3333-3333-3333-333333333333
+Found 0 skills:
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 00000000-0000-0000-0000-000000000123.G2IUh/Q6QzY3BR4U2lBIICrk1qRffj+b82OobiEJtRQ=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 00000000-0000-0000-0000-000000000123, sig: G2IUh/Q6QzY3BR4U2lBIICrk1qRffj+b82OobiEJtRQ=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: G2IUh/Q6QzY3BR4U2lBIICrk1qRffj+b82OobiEJtRQ=, Received: G2IUh/Q6QzY3BR4U2lBIICrk1qRffj+b82OobiEJtRQ=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 00000000-0000-0000-0000-000000000123
+  Passed CPR.IntegrationTests.MeControllerTests.GetSkills_WithInvalidToken_ReturnsUnauthorized [3 ms]
+  Passed CPR.IntegrationTests.MeControllerTests.CreateSkill_WithInvalidSkillId_ReturnsBadRequest [4 ms]
+  Passed CPR.IntegrationTests.FeedbackControllerTests.SubmitFeedback_WithMaliciousContent_ReturnsBadRequest [102 ms]
+  Passed CPR.IntegrationTests.TaxonomyIntegrationTests.GetCareer_ReturnsSeededPaths [39 ms]
+  Passed CPR.IntegrationTests.TaxonomyIntegrationTests.GetPositions_ReturnsPositions_WithExpectations [13 ms]
+  Passed CPR.IntegrationTests.MeControllerTests.CreateSkill_WithValidData_ReturnsCreated [19 ms]
+  Passed CPR.IntegrationTests.MeControllerTests.GetSkills_WithValidToken_ReturnsUserSkills [6 ms]
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 00000000-0000-0000-0000-000000000123.G2IUh/Q6QzY3BR4U2lBIICrk1qRffj+b82OobiEJtRQ=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 00000000-0000-0000-0000-000000000123, sig: G2IUh/Q6QzY3BR4U2lBIICrk1qRffj+b82OobiEJtRQ=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: G2IUh/Q6QzY3BR4U2lBIICrk1qRffj+b82OobiEJtRQ=, Received: G2IUh/Q6QzY3BR4U2lBIICrk1qRffj+b82OobiEJtRQ=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 00000000-0000-0000-0000-000000000123
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 00000000-0000-0000-0000-000000000123.G2IUh/Q6QzY3BR4U2lBIICrk1qRffj+b82OobiEJtRQ=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 00000000-0000-0000-0000-000000000123, sig: G2IUh/Q6QzY3BR4U2lBIICrk1qRffj+b82OobiEJtRQ=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: G2IUh/Q6QzY3BR4U2lBIICrk1qRffj+b82OobiEJtRQ=, Received: G2IUh/Q6QzY3BR4U2lBIICrk1qRffj+b82OobiEJtRQ=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 00000000-0000-0000-0000-000000000123
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: c6874b28-e2fa-4835-8e8f-159bd5067091.WrybXa4N+al3H/70IXKHEqIMmZVnUoqzoasBe4RXJmY=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: c6874b28-e2fa-4835-8e8f-159bd5067091, sig: WrybXa4N+al3H/70IXKHEqIMmZVnUoqzoasBe4RXJmY=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: WrybXa4N+al3H/70IXKHEqIMmZVnUoqzoasBe4RXJmY=, Received: WrybXa4N+al3H/70IXKHEqIMmZVnUoqzoasBe4RXJmY=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: c6874b28-e2fa-4835-8e8f-159bd5067091
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=, Received: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=, Received: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: c6874b28-e2fa-4835-8e8f-159bd5067091.WrybXa4N+al3H/70IXKHEqIMmZVnUoqzoasBe4RXJmY=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: c6874b28-e2fa-4835-8e8f-159bd5067091, sig: WrybXa4N+al3H/70IXKHEqIMmZVnUoqzoasBe4RXJmY=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: WrybXa4N+al3H/70IXKHEqIMmZVnUoqzoasBe4RXJmY=, Received: WrybXa4N+al3H/70IXKHEqIMmZVnUoqzoasBe4RXJmY=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: c6874b28-e2fa-4835-8e8f-159bd5067091
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=, Received: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=, Received: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 00000000-0000-0000-0000-000000000123.G2IUh/Q6QzY3BR4U2lBIICrk1qRffj+b82OobiEJtRQ=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 00000000-0000-0000-0000-000000000123, sig: G2IUh/Q6QzY3BR4U2lBIICrk1qRffj+b82OobiEJtRQ=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: G2IUh/Q6QzY3BR4U2lBIICrk1qRffj+b82OobiEJtRQ=, Received: G2IUh/Q6QzY3BR4U2lBIICrk1qRffj+b82OobiEJtRQ=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 00000000-0000-0000-0000-000000000123
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=, Received: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 00000000-0000-0000-0000-000000000123.G2IUh/Q6QzY3BR4U2lBIICrk1qRffj+b82OobiEJtRQ=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 00000000-0000-0000-0000-000000000123, sig: G2IUh/Q6QzY3BR4U2lBIICrk1qRffj+b82OobiEJtRQ=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: G2IUh/Q6QzY3BR4U2lBIICrk1qRffj+b82OobiEJtRQ=, Received: G2IUh/Q6QzY3BR4U2lBIICrk1qRffj+b82OobiEJtRQ=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 00000000-0000-0000-0000-000000000123
+  Passed CPR.IntegrationTests.MeControllerTests.GetMe_WithValidToken_ReturnsOk [5 ms]
+  Passed CPR.IntegrationTests.TaxonomyIntegrationTests.GetSkills_ReturnsFilteredSkills_WhenPositionIdProvided [17 ms]
+  Passed CPR.IntegrationTests.TaxonomyIntegrationTests.GetSkillLevels_ReturnsFilteredSkillLevels_WhenSkillIdProvided [31 ms]
+  Passed CPR.IntegrationTests.FeedbackControllerTests.CreateFeedbackRequest_WithValidData_ReturnsCreated [69 ms]
+  Passed CPR.IntegrationTests.FeedbackControllerTests.SubmitFeedback_WithInvalidRating_ReturnsBadRequest [15 ms]
+  Passed CPR.IntegrationTests.TaxonomyIntegrationTests.GetCareerTracks_ReturnsTracks_WhenCareerPathProvided [29 ms]
+  Passed CPR.IntegrationTests.TaxonomyIntegrationTests.GetSkills_ReturnsAllSkills_WhenNoPositionIdProvided [5 ms]
+  Passed CPR.IntegrationTests.FeedbackControllerTests.SubmitFeedback_WithNonExistentEmployee_ReturnsBadRequest [18 ms]
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[12]
+      AuthenticationScheme: Stub was challenged.
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[12]
+      AuthenticationScheme: Stub was challenged.
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[12]
+      AuthenticationScheme: Stub was challenged.
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: c6874b28-e2fa-4835-8e8f-159bd5067091.WrybXa4N+al3H/70IXKHEqIMmZVnUoqzoasBe4RXJmY=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: c6874b28-e2fa-4835-8e8f-159bd5067091, sig: WrybXa4N+al3H/70IXKHEqIMmZVnUoqzoasBe4RXJmY=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: WrybXa4N+al3H/70IXKHEqIMmZVnUoqzoasBe4RXJmY=, Received: WrybXa4N+al3H/70IXKHEqIMmZVnUoqzoasBe4RXJmY=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: c6874b28-e2fa-4835-8e8f-159bd5067091
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=, Received: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=, Received: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: c6874b28-e2fa-4835-8e8f-159bd5067091.WrybXa4N+al3H/70IXKHEqIMmZVnUoqzoasBe4RXJmY=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: c6874b28-e2fa-4835-8e8f-159bd5067091, sig: WrybXa4N+al3H/70IXKHEqIMmZVnUoqzoasBe4RXJmY=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: WrybXa4N+al3H/70IXKHEqIMmZVnUoqzoasBe4RXJmY=, Received: WrybXa4N+al3H/70IXKHEqIMmZVnUoqzoasBe4RXJmY=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: c6874b28-e2fa-4835-8e8f-159bd5067091
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=, Received: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=, Received: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+Feedback submission failed, but continuing with retrieval test
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=, Received: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: c6874b28-e2fa-4835-8e8f-159bd5067091.WrybXa4N+al3H/70IXKHEqIMmZVnUoqzoasBe4RXJmY=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: c6874b28-e2fa-4835-8e8f-159bd5067091, sig: WrybXa4N+al3H/70IXKHEqIMmZVnUoqzoasBe4RXJmY=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: WrybXa4N+al3H/70IXKHEqIMmZVnUoqzoasBe4RXJmY=, Received: WrybXa4N+al3H/70IXKHEqIMmZVnUoqzoasBe4RXJmY=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: c6874b28-e2fa-4835-8e8f-159bd5067091
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=, Received: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=, Received: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+DatabaseCleanupFixture: Constructor called
+DatabaseCleanupFixture: POSTGRES_HOST=localhost
+DatabaseCleanupFixture: POSTGRES_PORT=5433
+DatabaseCleanupFixture: POSTGRES_DB=cpr_test
+DatabaseCleanupFixture: InitializeAsync starting
+DatabaseCleanupFixture: Global setup already completed (skipping)
+DatabaseCleanupFixture: Built connection string: Host=localhost;Port=5433;Database=cpr_test;Username=postgres;Password=postgres
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=, Received: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Checking role authorization for user 679add6e-6c29-4e00-b6a5-b69c8e0f3445 requiring roles: Solution Owner
+info: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Authorization succeeded for user 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: e9741b9b-3c66-4462-af46-297810b29403.xIkib349eSVmZsNHjK8yItTSB0OqgTSkpibjkxYUCUw=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: e9741b9b-3c66-4462-af46-297810b29403, sig: xIkib349eSVmZsNHjK8yItTSB0OqgTSkpibjkxYUCUw=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: xIkib349eSVmZsNHjK8yItTSB0OqgTSkpibjkxYUCUw=, Received: xIkib349eSVmZsNHjK8yItTSB0OqgTSkpibjkxYUCUw=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: e9741b9b-3c66-4462-af46-297810b29403
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=, Received: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Checking role authorization for user 679add6e-6c29-4e00-b6a5-b69c8e0f3445 requiring roles: Solution Owner
+info: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Authorization succeeded for user 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=, Received: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Checking role authorization for user 679add6e-6c29-4e00-b6a5-b69c8e0f3445 requiring roles: Solution Owner
+info: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Authorization succeeded for user 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+warn: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Authorization failed: User ID claim not found or invalid
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[12]
+      AuthenticationScheme: Stub was challenged.
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[12]
+      AuthenticationScheme: Stub was challenged.
+  Passed CPR.IntegrationTests.TaxonomyIntegrationTests.GetSkillLevels_ReturnsAllSkillLevels_WhenNoSkillIdProvided [7 ms]
+  Passed CPR.IntegrationTests.FeedbackControllerTests.FeedbackEndpoints_WithoutAuth_ReturnsUnauthorized [2 ms]
+  Passed CPR.IntegrationTests.FeedbackControllerTests.SubmitFeedback_WithContentTooShort_ReturnsBadRequest [6 ms]
+  Passed CPR.IntegrationTests.FeedbackControllerTests.GetMyFeedback_WithValidToken_ReturnsFeedback [63 ms]
+  Passed CPR.IntegrationTests.FeedbackControllerTests.SubmitFeedback_WithSelfFeedback_ReturnsBadRequest [9 ms]
+  Passed CPR.IntegrationTests.ProjectsControllerIntegrationTests.GetProjectRoles_AsEmployee_ReturnsOk [87 ms]
+  Passed CPR.IntegrationTests.ProjectsControllerIntegrationTests.RemoveEmployee_NonExistentTeamMember_ReturnsNotFound [45 ms]
+  Passed CPR.IntegrationTests.ProjectsControllerIntegrationTests.DeleteProject_WithoutAuth_ReturnsUnauthorized [2 ms]
+  Passed CPR.IntegrationTests.ProjectsControllerIntegrationTests.GetProjectRoles_WithoutAuth_ReturnsUnauthorized [1 ms]
+warn: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Authorization failed: User ID claim not found or invalid
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[12]
+      AuthenticationScheme: Stub was challenged.
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=, Received: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Checking role authorization for user 679add6e-6c29-4e00-b6a5-b69c8e0f3445 requiring roles: Solution Owner
+info: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Authorization succeeded for user 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: e9741b9b-3c66-4462-af46-297810b29403.xIkib349eSVmZsNHjK8yItTSB0OqgTSkpibjkxYUCUw=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: e9741b9b-3c66-4462-af46-297810b29403, sig: xIkib349eSVmZsNHjK8yItTSB0OqgTSkpibjkxYUCUw=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: xIkib349eSVmZsNHjK8yItTSB0OqgTSkpibjkxYUCUw=, Received: xIkib349eSVmZsNHjK8yItTSB0OqgTSkpibjkxYUCUw=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: e9741b9b-3c66-4462-af46-297810b29403
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=, Received: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=, Received: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Checking role authorization for user 679add6e-6c29-4e00-b6a5-b69c8e0f3445 requiring roles: Solution Owner
+info: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Authorization succeeded for user 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=, Received: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Checking role authorization for user 679add6e-6c29-4e00-b6a5-b69c8e0f3445 requiring roles: Solution Owner
+info: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Authorization succeeded for user 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=, Received: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Checking role authorization for user 679add6e-6c29-4e00-b6a5-b69c8e0f3445 requiring roles: Solution Owner
+info: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Authorization succeeded for user 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=, Received: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Checking role authorization for user 679add6e-6c29-4e00-b6a5-b69c8e0f3445 requiring roles: Solution Owner
+info: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Authorization succeeded for user 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=, Received: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Checking role authorization for user 679add6e-6c29-4e00-b6a5-b69c8e0f3445 requiring roles: Solution Owner
+info: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Authorization succeeded for user 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: e9741b9b-3c66-4462-af46-297810b29403.xIkib349eSVmZsNHjK8yItTSB0OqgTSkpibjkxYUCUw=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: e9741b9b-3c66-4462-af46-297810b29403, sig: xIkib349eSVmZsNHjK8yItTSB0OqgTSkpibjkxYUCUw=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: xIkib349eSVmZsNHjK8yItTSB0OqgTSkpibjkxYUCUw=, Received: xIkib349eSVmZsNHjK8yItTSB0OqgTSkpibjkxYUCUw=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: e9741b9b-3c66-4462-af46-297810b29403
+info: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Checking role authorization for user e9741b9b-3c66-4462-af46-297810b29403 requiring roles: Solution Owner
+warn: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Authorization failed for user e9741b9b-3c66-4462-af46-297810b29403: Required roles not found. User roles: Employee
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[13]
+      AuthenticationScheme: Stub was forbidden.
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=, Received: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Checking role authorization for user 679add6e-6c29-4e00-b6a5-b69c8e0f3445 requiring roles: Solution Owner
+info: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Authorization succeeded for user 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=, Received: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Checking role authorization for user 679add6e-6c29-4e00-b6a5-b69c8e0f3445 requiring roles: Solution Owner
+info: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Authorization succeeded for user 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=, Received: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Checking role authorization for user 679add6e-6c29-4e00-b6a5-b69c8e0f3445 requiring roles: Solution Owner
+info: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Authorization succeeded for user 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=, Received: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Checking role authorization for user 679add6e-6c29-4e00-b6a5-b69c8e0f3445 requiring roles: Solution Owner
+info: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Authorization succeeded for user 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=, Received: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Checking role authorization for user 679add6e-6c29-4e00-b6a5-b69c8e0f3445 requiring roles: Solution Owner
+info: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Authorization succeeded for user 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+warn: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Authorization failed: User ID claim not found or invalid
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[12]
+      AuthenticationScheme: Stub was challenged.
+  Passed CPR.IntegrationTests.ProjectsControllerIntegrationTests.UpdateProject_WithoutAuth_ReturnsUnauthorized [2 ms]
+  Passed CPR.IntegrationTests.ProjectsControllerIntegrationTests.GetProjectTeam_AsEmployee_ReturnsOk [31 ms]
+  Passed CPR.IntegrationTests.ProjectsControllerIntegrationTests.GetProjectById_NonExistent_ReturnsNotFound [10 ms]
+  Passed CPR.IntegrationTests.ProjectsControllerIntegrationTests.CreateProjectRole_AsSolutionOwner_ReturnsCreated [43 ms]
+  Passed CPR.IntegrationTests.ProjectsControllerIntegrationTests.UpdateProject_PartialUpdate_OnlyUpdatesProvidedFields [26 ms]
+  Passed CPR.IntegrationTests.ProjectsControllerIntegrationTests.AssignEmployee_AsEmployee_ReturnsForbidden [22 ms]
+  Passed CPR.IntegrationTests.ProjectsControllerIntegrationTests.UpdateProjectRole_AsSolutionOwner_ReturnsOk [49 ms]
+  Passed CPR.IntegrationTests.ProjectsControllerIntegrationTests.UpdateProject_AsSolutionOwner_ReturnsOk [19 ms]
+  Passed CPR.IntegrationTests.ProjectsControllerIntegrationTests.DeleteProjectRole_WithoutAuth_ReturnsUnauthorized [1 ms]
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=, Received: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Checking role authorization for user 679add6e-6c29-4e00-b6a5-b69c8e0f3445 requiring roles: Solution Owner
+info: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Authorization succeeded for user 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: e9741b9b-3c66-4462-af46-297810b29403.xIkib349eSVmZsNHjK8yItTSB0OqgTSkpibjkxYUCUw=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: e9741b9b-3c66-4462-af46-297810b29403, sig: xIkib349eSVmZsNHjK8yItTSB0OqgTSkpibjkxYUCUw=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: xIkib349eSVmZsNHjK8yItTSB0OqgTSkpibjkxYUCUw=, Received: xIkib349eSVmZsNHjK8yItTSB0OqgTSkpibjkxYUCUw=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: e9741b9b-3c66-4462-af46-297810b29403
+info: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Checking role authorization for user e9741b9b-3c66-4462-af46-297810b29403 requiring roles: Solution Owner
+warn: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Authorization failed for user e9741b9b-3c66-4462-af46-297810b29403: Required roles not found. User roles: Employee
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[13]
+      AuthenticationScheme: Stub was forbidden.
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=, Received: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Checking role authorization for user 679add6e-6c29-4e00-b6a5-b69c8e0f3445 requiring roles: Solution Owner
+info: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Authorization succeeded for user 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=, Received: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Checking role authorization for user 679add6e-6c29-4e00-b6a5-b69c8e0f3445 requiring roles: Solution Owner
+info: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Authorization succeeded for user 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=, Received: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Checking role authorization for user 679add6e-6c29-4e00-b6a5-b69c8e0f3445 requiring roles: Solution Owner
+info: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Authorization succeeded for user 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+warn: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Authorization failed: User ID claim not found or invalid
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[12]
+      AuthenticationScheme: Stub was challenged.
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=, Received: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Checking role authorization for user 679add6e-6c29-4e00-b6a5-b69c8e0f3445 requiring roles: Solution Owner
+info: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Authorization succeeded for user 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=, Received: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=, Received: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Checking role authorization for user 679add6e-6c29-4e00-b6a5-b69c8e0f3445 requiring roles: Solution Owner
+info: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Authorization succeeded for user 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: e9741b9b-3c66-4462-af46-297810b29403.xIkib349eSVmZsNHjK8yItTSB0OqgTSkpibjkxYUCUw=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: e9741b9b-3c66-4462-af46-297810b29403, sig: xIkib349eSVmZsNHjK8yItTSB0OqgTSkpibjkxYUCUw=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: xIkib349eSVmZsNHjK8yItTSB0OqgTSkpibjkxYUCUw=, Received: xIkib349eSVmZsNHjK8yItTSB0OqgTSkpibjkxYUCUw=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: e9741b9b-3c66-4462-af46-297810b29403
+info: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Checking role authorization for user e9741b9b-3c66-4462-af46-297810b29403 requiring roles: Solution Owner
+warn: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Authorization failed for user e9741b9b-3c66-4462-af46-297810b29403: Required roles not found. User roles: Employee
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[13]
+      AuthenticationScheme: Stub was forbidden.
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=, Received: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Checking role authorization for user 679add6e-6c29-4e00-b6a5-b69c8e0f3445 requiring roles: Solution Owner
+info: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Authorization succeeded for user 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: e9741b9b-3c66-4462-af46-297810b29403.xIkib349eSVmZsNHjK8yItTSB0OqgTSkpibjkxYUCUw=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: e9741b9b-3c66-4462-af46-297810b29403, sig: xIkib349eSVmZsNHjK8yItTSB0OqgTSkpibjkxYUCUw=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: xIkib349eSVmZsNHjK8yItTSB0OqgTSkpibjkxYUCUw=, Received: xIkib349eSVmZsNHjK8yItTSB0OqgTSkpibjkxYUCUw=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: e9741b9b-3c66-4462-af46-297810b29403
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=, Received: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Checking role authorization for user 679add6e-6c29-4e00-b6a5-b69c8e0f3445 requiring roles: Solution Owner
+info: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Authorization succeeded for user 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+  Passed CPR.IntegrationTests.ProjectsControllerIntegrationTests.CreateProjectRole_AsEmployee_ReturnsForbidden [17 ms]
+  Passed CPR.IntegrationTests.ProjectsControllerIntegrationTests.DeleteProjectRole_NonExistentRole_ReturnsNotFound [19 ms]
+  Passed CPR.IntegrationTests.ProjectsControllerIntegrationTests.CreateProject_WithEmptyTitle_ReturnsBadRequest [6 ms]
+  Passed CPR.IntegrationTests.ProjectsControllerIntegrationTests.CreateProjectRole_WithoutAuth_ReturnsUnauthorized [1 ms]
+  Passed CPR.IntegrationTests.ProjectsControllerIntegrationTests.RemoveEmployee_NonExistentProject_ReturnsNotFound [7 ms]
+  Passed CPR.IntegrationTests.ProjectsControllerIntegrationTests.GetProjectTeam_NonExistentProject_ReturnsNotFound [7 ms]
+  Passed CPR.IntegrationTests.ProjectsControllerIntegrationTests.RemoveEmployee_AsEmployee_ReturnsForbidden [15 ms]
+  Passed CPR.IntegrationTests.ProjectsControllerIntegrationTests.GetProjectById_AsEmployee_ReturnsOk [14 ms]
+  Passed CPR.IntegrationTests.ProjectsControllerIntegrationTests.UpdateProject_NonExistent_ReturnsNotFound [8 ms]
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=, Received: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Checking role authorization for user 679add6e-6c29-4e00-b6a5-b69c8e0f3445 requiring roles: Solution Owner
+info: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Authorization succeeded for user 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: e9741b9b-3c66-4462-af46-297810b29403.xIkib349eSVmZsNHjK8yItTSB0OqgTSkpibjkxYUCUw=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: e9741b9b-3c66-4462-af46-297810b29403, sig: xIkib349eSVmZsNHjK8yItTSB0OqgTSkpibjkxYUCUw=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: xIkib349eSVmZsNHjK8yItTSB0OqgTSkpibjkxYUCUw=, Received: xIkib349eSVmZsNHjK8yItTSB0OqgTSkpibjkxYUCUw=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: e9741b9b-3c66-4462-af46-297810b29403
+info: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Checking role authorization for user e9741b9b-3c66-4462-af46-297810b29403 requiring roles: Solution Owner
+warn: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Authorization failed for user e9741b9b-3c66-4462-af46-297810b29403: Required roles not found. User roles: Employee
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[13]
+      AuthenticationScheme: Stub was forbidden.
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=, Received: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Checking role authorization for user 679add6e-6c29-4e00-b6a5-b69c8e0f3445 requiring roles: Solution Owner
+info: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Authorization succeeded for user 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=, Received: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Checking role authorization for user 679add6e-6c29-4e00-b6a5-b69c8e0f3445 requiring roles: Solution Owner
+info: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Authorization succeeded for user 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: e9741b9b-3c66-4462-af46-297810b29403.xIkib349eSVmZsNHjK8yItTSB0OqgTSkpibjkxYUCUw=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: e9741b9b-3c66-4462-af46-297810b29403, sig: xIkib349eSVmZsNHjK8yItTSB0OqgTSkpibjkxYUCUw=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: xIkib349eSVmZsNHjK8yItTSB0OqgTSkpibjkxYUCUw=, Received: xIkib349eSVmZsNHjK8yItTSB0OqgTSkpibjkxYUCUw=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: e9741b9b-3c66-4462-af46-297810b29403
+info: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Checking role authorization for user e9741b9b-3c66-4462-af46-297810b29403 requiring roles: Solution Owner
+warn: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Authorization failed for user e9741b9b-3c66-4462-af46-297810b29403: Required roles not found. User roles: Employee
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[13]
+      AuthenticationScheme: Stub was forbidden.
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=, Received: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Checking role authorization for user 679add6e-6c29-4e00-b6a5-b69c8e0f3445 requiring roles: Solution Owner
+info: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Authorization succeeded for user 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=, Received: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Checking role authorization for user 679add6e-6c29-4e00-b6a5-b69c8e0f3445 requiring roles: Solution Owner
+info: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Authorization succeeded for user 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: e9741b9b-3c66-4462-af46-297810b29403.xIkib349eSVmZsNHjK8yItTSB0OqgTSkpibjkxYUCUw=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: e9741b9b-3c66-4462-af46-297810b29403, sig: xIkib349eSVmZsNHjK8yItTSB0OqgTSkpibjkxYUCUw=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: xIkib349eSVmZsNHjK8yItTSB0OqgTSkpibjkxYUCUw=, Received: xIkib349eSVmZsNHjK8yItTSB0OqgTSkpibjkxYUCUw=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: e9741b9b-3c66-4462-af46-297810b29403
+info: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Checking role authorization for user e9741b9b-3c66-4462-af46-297810b29403 requiring roles: Solution Owner
+warn: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Authorization failed for user e9741b9b-3c66-4462-af46-297810b29403: Required roles not found. User roles: Employee
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[13]
+      AuthenticationScheme: Stub was forbidden.
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=, Received: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Checking role authorization for user 679add6e-6c29-4e00-b6a5-b69c8e0f3445 requiring roles: Solution Owner
+info: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Authorization succeeded for user 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=, Received: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Checking role authorization for user 679add6e-6c29-4e00-b6a5-b69c8e0f3445 requiring roles: Solution Owner
+info: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Authorization succeeded for user 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=, Received: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Checking role authorization for user 679add6e-6c29-4e00-b6a5-b69c8e0f3445 requiring roles: Solution Owner
+info: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Authorization succeeded for user 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=, Received: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Checking role authorization for user 679add6e-6c29-4e00-b6a5-b69c8e0f3445 requiring roles: Solution Owner
+info: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Authorization succeeded for user 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=, Received: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[12]
+      AuthenticationScheme: Stub was challenged.
+warn: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Authorization failed: User ID claim not found or invalid
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[12]
+      AuthenticationScheme: Stub was challenged.
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: e9741b9b-3c66-4462-af46-297810b29403.xIkib349eSVmZsNHjK8yItTSB0OqgTSkpibjkxYUCUw=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: e9741b9b-3c66-4462-af46-297810b29403, sig: xIkib349eSVmZsNHjK8yItTSB0OqgTSkpibjkxYUCUw=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: xIkib349eSVmZsNHjK8yItTSB0OqgTSkpibjkxYUCUw=, Received: xIkib349eSVmZsNHjK8yItTSB0OqgTSkpibjkxYUCUw=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: e9741b9b-3c66-4462-af46-297810b29403
+  Passed CPR.IntegrationTests.ProjectsControllerIntegrationTests.UpdateProject_AsEmployee_ReturnsForbidden [16 ms]
+  Passed CPR.IntegrationTests.ProjectsControllerIntegrationTests.DeleteProjectRole_AsEmployee_ReturnsForbidden [22 ms]
+  Passed CPR.IntegrationTests.ProjectsControllerIntegrationTests.UpdateProjectRole_AsEmployee_ReturnsForbidden [24 ms]
+  Passed CPR.IntegrationTests.ProjectsControllerIntegrationTests.AssignEmployee_NonExistentProject_ReturnsNotFound [31 ms]
+  Passed CPR.IntegrationTests.ProjectsControllerIntegrationTests.DeleteProjectRole_AsSolutionOwner_ReturnsNoContent [25 ms]
+  Passed CPR.IntegrationTests.ProjectsControllerIntegrationTests.GetProjectRoles_NonExistentProject_ReturnsNotFound [6 ms]
+  Passed CPR.IntegrationTests.ProjectsControllerIntegrationTests.GetAllProjects_WithoutAuth_ReturnsUnauthorized [1 ms]
+  Passed CPR.IntegrationTests.ProjectsControllerIntegrationTests.UpdateProjectRole_WithoutAuth_ReturnsUnauthorized [1 ms]
+  Passed CPR.IntegrationTests.ProjectsControllerIntegrationTests.GetAllProjects_AsEmployee_ReturnsOk [14 ms]
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=, Received: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Checking role authorization for user 679add6e-6c29-4e00-b6a5-b69c8e0f3445 requiring roles: Solution Owner
+info: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Authorization succeeded for user 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=, Received: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Checking role authorization for user 679add6e-6c29-4e00-b6a5-b69c8e0f3445 requiring roles: Solution Owner
+info: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Authorization succeeded for user 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=, Received: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=, Received: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Checking role authorization for user 679add6e-6c29-4e00-b6a5-b69c8e0f3445 requiring roles: Solution Owner
+info: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Authorization succeeded for user 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=, Received: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Checking role authorization for user 679add6e-6c29-4e00-b6a5-b69c8e0f3445 requiring roles: Solution Owner
+info: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Authorization succeeded for user 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: e9741b9b-3c66-4462-af46-297810b29403.xIkib349eSVmZsNHjK8yItTSB0OqgTSkpibjkxYUCUw=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: e9741b9b-3c66-4462-af46-297810b29403, sig: xIkib349eSVmZsNHjK8yItTSB0OqgTSkpibjkxYUCUw=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: xIkib349eSVmZsNHjK8yItTSB0OqgTSkpibjkxYUCUw=, Received: xIkib349eSVmZsNHjK8yItTSB0OqgTSkpibjkxYUCUw=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: e9741b9b-3c66-4462-af46-297810b29403
+info: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Checking role authorization for user e9741b9b-3c66-4462-af46-297810b29403 requiring roles: Solution Owner
+warn: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Authorization failed for user e9741b9b-3c66-4462-af46-297810b29403: Required roles not found. User roles: Employee
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[13]
+      AuthenticationScheme: Stub was forbidden.
+warn: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Authorization failed: User ID claim not found or invalid
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[12]
+      AuthenticationScheme: Stub was challenged.
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: e9741b9b-3c66-4462-af46-297810b29403.xIkib349eSVmZsNHjK8yItTSB0OqgTSkpibjkxYUCUw=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: e9741b9b-3c66-4462-af46-297810b29403, sig: xIkib349eSVmZsNHjK8yItTSB0OqgTSkpibjkxYUCUw=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: xIkib349eSVmZsNHjK8yItTSB0OqgTSkpibjkxYUCUw=, Received: xIkib349eSVmZsNHjK8yItTSB0OqgTSkpibjkxYUCUw=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: e9741b9b-3c66-4462-af46-297810b29403
+info: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Checking role authorization for user e9741b9b-3c66-4462-af46-297810b29403 requiring roles: Solution Owner
+warn: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Authorization failed for user e9741b9b-3c66-4462-af46-297810b29403: Required roles not found. User roles: Employee
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[13]
+      AuthenticationScheme: Stub was forbidden.
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=, Received: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+warn: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Authorization failed: User ID claim not found or invalid
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[12]
+      AuthenticationScheme: Stub was challenged.
+warn: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Authorization failed: User ID claim not found or invalid
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[12]
+      AuthenticationScheme: Stub was challenged.
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=, Received: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Checking role authorization for user 679add6e-6c29-4e00-b6a5-b69c8e0f3445 requiring roles: Solution Owner
+info: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Authorization succeeded for user 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+  Passed CPR.IntegrationTests.ProjectsControllerIntegrationTests.DeleteProject_AsSolutionOwner_ReturnsNoContent [24 ms]
+  Passed CPR.IntegrationTests.ProjectsControllerIntegrationTests.DeleteProject_NonExistent_ReturnsNotFound [7 ms]
+  Passed CPR.IntegrationTests.ProjectsControllerIntegrationTests.DeleteProject_AsEmployee_ReturnsForbidden [13 ms]
+  Passed CPR.IntegrationTests.ProjectsControllerIntegrationTests.CreateProject_WithoutAuth_ReturnsUnauthorized [1 ms]
+  Passed CPR.IntegrationTests.ProjectsControllerIntegrationTests.CreateProject_AsEmployee_ReturnsForbidden [6 ms]
+  Passed CPR.IntegrationTests.ProjectsControllerIntegrationTests.GetAllProjects_WithAuth_ReturnsOk [6 ms]
+  Passed CPR.IntegrationTests.ProjectsControllerIntegrationTests.AssignEmployee_WithoutAuth_ReturnsUnauthorized [1 ms]
+  Passed CPR.IntegrationTests.ProjectsControllerIntegrationTests.RemoveEmployee_WithoutAuth_ReturnsUnauthorized [1 ms]
+  Passed CPR.IntegrationTests.ProjectsControllerIntegrationTests.CreateProject_AsSolutionOwner_ReturnsCreated [8 ms]
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=, Received: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Checking role authorization for user 679add6e-6c29-4e00-b6a5-b69c8e0f3445 requiring roles: Solution Owner
+info: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Authorization succeeded for user 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[12]
+      AuthenticationScheme: Stub was challenged.
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=, Received: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Checking role authorization for user 679add6e-6c29-4e00-b6a5-b69c8e0f3445 requiring roles: Solution Owner
+info: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Authorization succeeded for user 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=, Received: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Checking role authorization for user 679add6e-6c29-4e00-b6a5-b69c8e0f3445 requiring roles: Solution Owner
+info: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Authorization succeeded for user 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=, Received: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Checking role authorization for user 679add6e-6c29-4e00-b6a5-b69c8e0f3445 requiring roles: Solution Owner
+info: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Authorization succeeded for user 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[12]
+      AuthenticationScheme: Stub was challenged.
+DatabaseCleanupFixture: Constructor called
+DatabaseCleanupFixture: POSTGRES_HOST=localhost
+DatabaseCleanupFixture: POSTGRES_PORT=5433
+DatabaseCleanupFixture: POSTGRES_DB=cpr_test
+DatabaseCleanupFixture: InitializeAsync starting
+DatabaseCleanupFixture: Global setup already completed (skipping)
+DatabaseCleanupFixture: Built connection string: Host=localhost;Port=5433;Database=cpr_test;Username=postgres;Password=postgres
+warn: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Authorization failed: User ID claim not found or invalid
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[12]
+      AuthenticationScheme: Stub was challenged.
+warn: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Authorization failed: User ID claim not found or invalid
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[12]
+      AuthenticationScheme: Stub was challenged.
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa.E54m/0rZ/xKGb8DqmOYokC/xiERusbsBmeUtcZzo3v4=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa, sig: E54m/0rZ/xKGb8DqmOYokC/xiERusbsBmeUtcZzo3v4=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: E54m/0rZ/xKGb8DqmOYokC/xiERusbsBmeUtcZzo3v4=, Received: E54m/0rZ/xKGb8DqmOYokC/xiERusbsBmeUtcZzo3v4=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa
+info: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Checking role authorization for user aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa requiring roles: People Manager, Solution Owner, Director, Administrator
+info: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Authorization succeeded for user aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa
+  Passed CPR.IntegrationTests.ProjectsControllerIntegrationTests.CreateProject_WithNullTitle_ReturnsBadRequest [5 ms]
+  Passed CPR.IntegrationTests.ProjectsControllerIntegrationTests.GetProjectTeam_WithoutAuth_ReturnsUnauthorized [1 ms]
+  Passed CPR.IntegrationTests.ProjectsControllerIntegrationTests.UpdateProjectRole_NonExistentRole_ReturnsNotFound [14 ms]
+  Passed CPR.IntegrationTests.ProjectsControllerIntegrationTests.CreateProjectRole_NonExistentProject_ReturnsNotFound [7 ms]
+  Passed CPR.IntegrationTests.ProjectsControllerIntegrationTests.GetProjectById_WithoutAuth_ReturnsUnauthorized [1 ms]
+  Passed CPR.IntegrationTests.TeamControllerIntegrationTests.DebugDatabaseState [53 ms]
+  Passed CPR.IntegrationTests.TeamControllerIntegrationTests.GetTeamGoals_WithoutAuth_ReturnsUnauthorized [18 ms]
+  Passed CPR.IntegrationTests.TeamControllerIntegrationTests.GetTeamMembers_WithoutAuth_ReturnsUnauthorized [2 ms]
+  Passed CPR.IntegrationTests.TeamControllerIntegrationTests.GetTeamMemberProfile_WithAuth_ReturnsOk [123 ms]
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa.E54m/0rZ/xKGb8DqmOYokC/xiERusbsBmeUtcZzo3v4=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa, sig: E54m/0rZ/xKGb8DqmOYokC/xiERusbsBmeUtcZzo3v4=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: E54m/0rZ/xKGb8DqmOYokC/xiERusbsBmeUtcZzo3v4=, Received: E54m/0rZ/xKGb8DqmOYokC/xiERusbsBmeUtcZzo3v4=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa
+info: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Checking role authorization for user aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa requiring roles: People Manager, Solution Owner, Director, Administrator
+info: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Authorization succeeded for user aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa.E54m/0rZ/xKGb8DqmOYokC/xiERusbsBmeUtcZzo3v4=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa, sig: E54m/0rZ/xKGb8DqmOYokC/xiERusbsBmeUtcZzo3v4=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: E54m/0rZ/xKGb8DqmOYokC/xiERusbsBmeUtcZzo3v4=, Received: E54m/0rZ/xKGb8DqmOYokC/xiERusbsBmeUtcZzo3v4=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa
+info: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Checking role authorization for user aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa requiring roles: People Manager, Solution Owner, Director, Administrator
+info: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Authorization succeeded for user aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa
+warn: CPR.Api.Auth.RoleAuthorizationHandler[0]
+      Authorization failed: User ID claim not found or invalid
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[12]
+      AuthenticationScheme: Stub was challenged.
+DatabaseCleanupFixture: Constructor called
+DatabaseCleanupFixture: POSTGRES_HOST=localhost
+DatabaseCleanupFixture: POSTGRES_PORT=5433
+DatabaseCleanupFixture: POSTGRES_DB=cpr_test
+DatabaseCleanupFixture: InitializeAsync starting
+DatabaseCleanupFixture: Global setup already completed (skipping)
+DatabaseCleanupFixture: Built connection string: Host=localhost;Port=5433;Database=cpr_test;Username=postgres;Password=postgres
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Received token: 679add6e-6c29-4e00-b6a5-b69c8e0f3445.eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Parsed userId: 679add6e-6c29-4e00-b6a5-b69c8e0f3445, sig: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Using signing key: test-key
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Expected signature: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=, Received: eybee7OfNhm6RpX4X94PPexK9IUfxZ1xihSzmw6EWas=
+info: CPR.Api.Auth.JwtStubAuthenticationHandler[0]
+      JWT Stub Handler: Authentication successful for user: 679add6e-6c29-4e00-b6a5-b69c8e0f3445
+[xUnit.net 00:00:04.49]   Finished:    CPR.IntegrationTests
+  Passed CPR.IntegrationTests.TeamControllerIntegrationTests.GetTeamMemberProfile_NonExistentMember_ReturnsNotFound [12 ms]
+  Passed CPR.IntegrationTests.TeamControllerIntegrationTests.GetTeamGoals_WithAuth_ReturnsOk [28 ms]
+  Passed CPR.IntegrationTests.TeamControllerIntegrationTests.GetTeamMemberProfile_WithoutAuth_ReturnsUnauthorized [1 ms]
+  Passed CPR.IntegrationTests.TokenGeneratorSmokeTests.TokenGenerator_E2E_ReturnsUserProfile [33 ms]
+
+Test Run Successful.
+Total tests: 100
+     Passed: 100
+ Total time: 4.9176 Seconds
+
+Workload updates are available. Run `dotnet workload list` for more information.
+All requested tests completed.

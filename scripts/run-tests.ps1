@@ -10,9 +10,9 @@ param(
 if (-not $DatabaseName) { $DatabaseName = 'cpr_test' }
 
 $DOTNET_FRAMEWORK = 'net9.0'
-$UNIT_PROJ = '.\tests\CPR.UnitTests\CPR.UnitTests.csproj'
-$CONTRACT_PROJ = '.\tests\CPR.ContractTests\CPR.ContractTests.csproj'
-$INTEGRATION_PROJ = '.\tests\CPR.IntegrationTests\CPR.IntegrationTests.csproj'
+$UNIT_PROJ = '..\tests\CPR.UnitTests\CPR.UnitTests.csproj'
+$CONTRACT_PROJ = '..\tests\CPR.ContractTests\CPR.ContractTests.csproj'
+$INTEGRATION_PROJ = '..\tests\CPR.IntegrationTests\CPR.IntegrationTests.csproj'
 
 function Run-Unit {
     Write-Host '==> Running unit tests'

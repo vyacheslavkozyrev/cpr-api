@@ -19,7 +19,6 @@ A comprehensive API for managing career progression, performance reviews, skills
 
 ### Database
 - **PostgreSQL 16** - Primary database
-- **pgAdmin 4** - Database management tool (included in Docker)
 
 ### Testing
 - **xUnit** - Testing framework
@@ -27,7 +26,7 @@ A comprehensive API for managing career progression, performance reviews, skills
 - **WebApplicationFactory** - Test host for API testing
 
 ### Infrastructure
-- **Docker & Docker Compose** - Containerization for PostgreSQL and pgAdmin
+- **Docker & Docker Compose** - Containerization for PostgreSQL
 - **HMAC Authentication** - Development stub for user authentication
 
 ## Project Structure
@@ -56,7 +55,6 @@ CPR/
 │   ├── CPR.IntegrationTests/ # Integration tests (API + DB)
 │   └── CPR.ContractTests/   # API contract tests
 ├── scripts/
-│   ├── run-api.cmd          # Run API (no auth)
 │   ├── run-api-as-employee.cmd  # Run API as Eve Adams (employee)
 │   ├── run-api-as-manager.cmd   # Run API as Henry Wilson (manager)
 │   ├── run-api-as-solution-owner.cmd  # Run API as John Doe (solution owner)
@@ -64,8 +62,7 @@ CPR/
 │   ├── run-tests.cmd        # Run all tests
 │   └── run-docker-dev.cmd   # Start Docker containers
 ├── docker/
-│   ├── docker-compose.dev.yml   # Dev environment (port 5432)
-│   └── docker-compose.test.yml  # Test environment (port 5433)
+│   └── docker-compose.yml   # Both dev (5432) and test (5433) databases
 ├── documents/               # Documentation
 │   ├── conventions.md       # Coding conventions
 │   ├── endpoints.md         # API endpoint documentation
@@ -96,34 +93,25 @@ JWT_SIGNING_KEY=local-test-key
 
 ### 1. Start Docker Containers
 
-**For Development:**
+**Start both Dev and Test databases:**
 ```powershell
 cd scripts
 .\run-docker-dev.cmd
 ```
 Or manually:
 ```powershell
-docker-compose -f docker/docker-compose.dev.yml up -d
+docker-compose -f docker/docker-compose.yml up -d
 ```
 
-This starts:
-- PostgreSQL on `localhost:5432` (dev) and `localhost:5433` (test)
-- pgAdmin on `http://localhost:5050` (admin@admin.com / admin)
+This starts both PostgreSQL containers:
+- **Dev Database**: `localhost:5432` (uses `.env.dev` → database `cpr_dev`)
+- **Test Database**: `localhost:5433` (uses `.env.test` → database `cpr_test`)
 
-**For Testing Only:**
-```powershell
-docker-compose -f docker/docker-compose.test.yml up -d
-```
+Both containers run simultaneously from a single Docker Compose file.
 
 ### 2. Run the API
 
-**Option A: Run without authentication (public endpoints only)**
-```powershell
-cd scripts
-.\run-api.cmd
-```
-
-**Option B: Run as Employee (Eve Adams)**
+**Option A: Run as Employee (Eve Adams)**
 ```powershell
 cd scripts
 .\run-api-as-employee.cmd
@@ -132,7 +120,7 @@ cd scripts
 - User ID: `c7746e91-a5e8-4f8b-9f22-f48374ffa2a4`
 - Token automatically copied to clipboard
 
-**Option C: Run as Manager (Henry Wilson)**
+**Option B: Run as Manager (Henry Wilson)**
 ```powershell
 cd scripts
 .\run-api-as-manager.cmd
@@ -141,7 +129,7 @@ cd scripts
 - User ID: `977f4f1f-b3ce-4244-98fc-2c0d0248de88`
 - Token automatically copied to clipboard
 
-**Option D: Run as Solution Owner (John Doe)**
+**Option C: Run as Solution Owner (John Doe)**
 ```powershell
 cd scripts
 .\run-api-as-solution-owner.cmd
@@ -151,7 +139,7 @@ cd scripts
 - Token automatically copied to clipboard
 - **Note**: Ensure john.doe has Solution Owner role assigned in database
 
-**Option E: Manual run**
+**Option D: Manual run**
 ```powershell
 dotnet run --project src\CPR.Api --urls "http://localhost:5000"
 ```
@@ -192,10 +180,10 @@ dotnet test tests\CPR.ContractTests\CPR.ContractTests.csproj
 ```
 
 **Test Summary:**
-- **Unit Tests**: 22 tests - Business logic validation (ProjectService)
-- **Integration Tests**: 52 tests - Full API + Database scenarios (ProjectsController)
+- **Unit Tests**: 84 tests - Business logic validation, services, repositories, and utilities
+- **Integration Tests**: 100 tests - Full API + Database scenarios covering all endpoints
 - **Contract Tests**: 16 tests - API contract validation & Swagger schema (11 Projects + 5 existing)
-- **Total**: 90 tests - All passing ✅
+- **Total**: 200 tests - All passing ✅
 
 All tests run from empty databases and handle their own setup/cleanup automatically.
 
@@ -239,15 +227,6 @@ The database is automatically seeded with test users:
 | Henry Wilson | Contributor (Support Dir) | `977f4f1f-b3ce-4244-98fc-2c0d0248de88` | `...00a` |
 
 ## Database Management
-
-### Access pgAdmin
-1. Open `http://localhost:5050`
-2. Login: `admin@admin.com` / `admin`
-3. Add server:
-   - Host: `postgres` (Docker network) or `localhost` (from host)
-   - Port: `5432` (dev) or `5433` (test)
-   - Username: `postgres`
-   - Password: `postgres`
 
 ### Run Migrations Manually
 ```powershell
@@ -306,8 +285,8 @@ docker logs cpr-postgres-dev -f
 ### API fails to start: "relation does not exist"
 **Solution:** Drop and recreate the database:
 ```powershell
-# In pgAdmin or psql
-DROP DATABASE IF EXISTS cpr_dev;
+# Using psql
+psql -h localhost -p 5432 -U postgres -c "DROP DATABASE IF EXISTS cpr_dev;"
 # Then restart the API - it will recreate and seed automatically
 ```
 
@@ -489,8 +468,8 @@ Windows (PowerShell):
 # run all tests (unit, contract, integration)
 .\scripts\run-tests.cmd
 
-# start API and generate a token (copied to clipboard)
-.\scripts\run-api.cmd
+# start API as employee (token copied to clipboard)
+.\scripts\run-api-as-employee.cmd
 ```
 
 Unix / CI (bash):
