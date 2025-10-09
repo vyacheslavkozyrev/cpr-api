@@ -1095,9 +1095,9 @@ namespace CPR.Infrastructure.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("modified_by");
 
-                    b.Property<Guid?>("PositionId")
+                    b.Property<Guid>("ProjectId")
                         .HasColumnType("uuid")
-                        .HasColumnName("position_id");
+                        .HasColumnName("project_id");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -1105,6 +1105,9 @@ namespace CPR.Infrastructure.Migrations
                         .HasColumnName("title");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ProjectId")
+                        .HasDatabaseName("IX_project_roles_project_id");
 
                     b.ToTable("project_roles", (string)null);
 
@@ -1115,7 +1118,7 @@ namespace CPR.Infrastructure.Migrations
                             CreatedAt = new DateTimeOffset(new DateTime(2025, 9, 5, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             CreatedBy = new Guid("11111111-1111-1111-1111-111111111111"),
                             IsDeleted = false,
-                            PositionId = new Guid("cccccccc-cccc-cccc-cccc-cccccccc0001"),
+                            ProjectId = new Guid("77777777-7777-7777-7777-777777777701"),
                             Title = "Tech Lead"
                         });
                 });
@@ -1161,15 +1164,17 @@ namespace CPR.Infrastructure.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("modified_by");
 
-                    b.Property<Guid>("ProjectId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("project_id");
-
                     b.Property<Guid>("ProjectRoleId")
                         .HasColumnType("uuid")
                         .HasColumnName("project_role_id");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("EmployeeId")
+                        .HasDatabaseName("IX_project_teams_employee_id");
+
+                    b.HasIndex("ProjectRoleId")
+                        .HasDatabaseName("IX_project_teams_project_role_id");
 
                     b.ToTable("project_teams", (string)null);
                 });

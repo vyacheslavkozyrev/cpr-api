@@ -10,7 +10,5 @@ namespace CPR.Application.Contracts
 
         [StringLength(2000)]
         public string? Description { get; set; }
-
-        public Guid? PositionId { get; set; }
     }
 }

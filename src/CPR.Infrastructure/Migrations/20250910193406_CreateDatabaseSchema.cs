@@ -408,69 +408,7 @@ namespace CPR.Infrastructure.Migrations
                 columns: new[] { "position_id", "skill_id" },
                 unique: true);
 
-            migrationBuilder.CreateTable(
-                name: "project_roles",
-                columns: table => new
-                {
-                    id = table.Column<Guid>(type: "uuid", nullable: false),
-                    title = table.Column<string>(type: "text", nullable: false),
-                    description = table.Column<string>(type: "text", nullable: true),
-                    position_id = table.Column<Guid>(type: "uuid", nullable: true),
-                    created_by = table.Column<Guid>(type: "uuid", nullable: true),
-                    created_at = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "now()"),
-                    modified_by = table.Column<Guid>(type: "uuid", nullable: true),
-                    modified_at = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
-                    is_deleted = table.Column<bool>(type: "boolean", nullable: false),
-                    deleted_by = table.Column<Guid>(type: "uuid", nullable: true),
-                    deleted_at = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_project_roles", x => x.id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "project_teams",
-                columns: table => new
-                {
-                    id = table.Column<Guid>(type: "uuid", nullable: false),
-                    project_id = table.Column<Guid>(type: "uuid", nullable: false),
-                    project_role_id = table.Column<Guid>(type: "uuid", nullable: false),
-                    employee_id = table.Column<Guid>(type: "uuid", nullable: false),
-                    created_by = table.Column<Guid>(type: "uuid", nullable: true),
-                    created_at = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "now()"),
-                    modified_by = table.Column<Guid>(type: "uuid", nullable: true),
-                    modified_at = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
-                    is_deleted = table.Column<bool>(type: "boolean", nullable: false),
-                    deleted_by = table.Column<Guid>(type: "uuid", nullable: true),
-                    deleted_at = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_project_teams", x => x.id);
-                });
-            // Indexes and unique constraints for project_teams
-            migrationBuilder.CreateIndex(
-                name: "IX_project_teams_project_id",
-                table: "project_teams",
-                column: "project_id");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_project_teams_project_role_id",
-                table: "project_teams",
-                column: "project_role_id");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_project_teams_employee_id",
-                table: "project_teams",
-                column: "employee_id");
-
-            migrationBuilder.CreateIndex(
-                name: "UX_project_teams_project_role_employee",
-                table: "project_teams",
-                columns: new[] { "project_id", "project_role_id", "employee_id" },
-                unique: true);
-
+            // Create projects table first (before project_roles)
             migrationBuilder.CreateTable(
                 name: "projects",
                 columns: table => new
@@ -493,7 +431,8 @@ namespace CPR.Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_projects", x => x.id);
                 });
-            // Indexes and unique constraints for projects
+
+            // Indexes for projects
             migrationBuilder.CreateIndex(
                 name: "IX_projects_owner_id",
                 table: "projects",
@@ -508,6 +447,88 @@ namespace CPR.Infrastructure.Migrations
                 name: "UX_projects_code",
                 table: "projects",
                 column: "code",
+                unique: true);
+
+            migrationBuilder.CreateTable(
+                name: "project_roles",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
+                    project_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    title = table.Column<string>(type: "text", nullable: false),
+                    description = table.Column<string>(type: "text", nullable: true),
+                    created_by = table.Column<Guid>(type: "uuid", nullable: true),
+                    created_at = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "now()"),
+                    modified_by = table.Column<Guid>(type: "uuid", nullable: true),
+                    modified_at = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
+                    is_deleted = table.Column<bool>(type: "boolean", nullable: false),
+                    deleted_by = table.Column<Guid>(type: "uuid", nullable: true),
+                    deleted_at = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_project_roles", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_project_roles_projects_project_id",
+                        column: x => x.project_id,
+                        principalTable: "projects",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "project_teams",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
+                    project_role_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    employee_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    created_by = table.Column<Guid>(type: "uuid", nullable: true),
+                    created_at = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "now()"),
+                    modified_by = table.Column<Guid>(type: "uuid", nullable: true),
+                    modified_at = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
+                    is_deleted = table.Column<bool>(type: "boolean", nullable: false),
+                    deleted_by = table.Column<Guid>(type: "uuid", nullable: true),
+                    deleted_at = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_project_teams", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_project_teams_project_roles_project_role_id",
+                        column: x => x.project_role_id,
+                        principalTable: "project_roles",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_project_teams_employees_employee_id",
+                        column: x => x.employee_id,
+                        principalTable: "employees",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+            // Indexes and unique constraints for project_teams
+            migrationBuilder.CreateIndex(
+                name: "IX_project_teams_project_role_id",
+                table: "project_teams",
+                column: "project_role_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_project_teams_employee_id",
+                table: "project_teams",
+                column: "employee_id");
+
+            // Index for project_roles.project_id
+            migrationBuilder.CreateIndex(
+                name: "IX_project_roles_project_id",
+                table: "project_roles",
+                column: "project_id");
+
+            // Unique constraint: one employee per project role
+            migrationBuilder.CreateIndex(
+                name: "UX_project_teams_project_role_employee",
+                table: "project_teams",
+                columns: new[] { "project_role_id", "employee_id" },
                 unique: true);
 
             migrationBuilder.CreateTable(

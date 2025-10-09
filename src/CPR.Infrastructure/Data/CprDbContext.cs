@@ -313,8 +313,8 @@ namespace CPR.Infrastructure.Data
                 b.ToTable("project_roles");
                 b.HasKey(r => r.Id);
                 b.Property(r => r.Id).HasColumnName("id");
+                b.Property(r => r.ProjectId).HasColumnName("project_id").IsRequired();
                 b.Property(r => r.Title).HasColumnName("title").IsRequired();
-                b.Property(r => r.PositionId).HasColumnName("position_id");
                 b.Property(r => r.Description).HasColumnName("description");
                 b.Property(r => r.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("CURRENT_TIMESTAMP");
                 b.Property(r => r.CreatedBy).HasColumnName("created_by");
@@ -431,7 +431,6 @@ namespace CPR.Infrastructure.Data
                 b.ToTable("project_teams");
                 b.HasKey(pt => pt.Id);
                 b.Property(pt => pt.Id).HasColumnName("id");
-                b.Property(pt => pt.ProjectId).HasColumnName("project_id").IsRequired();
                 b.Property(pt => pt.ProjectRoleId).HasColumnName("project_role_id").IsRequired();
                 b.Property(pt => pt.EmployeeId).HasColumnName("employee_id").IsRequired();
                 b.Property(pt => pt.CreatedBy).HasColumnName("created_by");

@@ -2618,10 +2618,73 @@ namespace CPR.Infrastructure.Services
             {
                 new Project
                 {
-                    Id = Guid.NewGuid(),
+                    Id = new Guid("77777777-7777-7777-7777-777777777701"),
                     Code = "PRJ-001",
                     Title = "Career Progression System",
-                    Description = "Development of the career progression and review system"
+                    Description = "Development of the career progression and review system for employee growth"
+                },
+                new Project
+                {
+                    Id = new Guid("77777777-7777-7777-7777-777777777702"),
+                    Code = "PRJ-002",
+                    Title = "Customer Portal Redesign",
+                    Description = "Modernization of the customer-facing portal with improved UX"
+                },
+                new Project
+                {
+                    Id = new Guid("77777777-7777-7777-7777-777777777703"),
+                    Code = "PRJ-003",
+                    Title = "Mobile App Development",
+                    Description = "Native mobile applications for iOS and Android platforms"
+                },
+                new Project
+                {
+                    Id = new Guid("77777777-7777-7777-7777-777777777704"),
+                    Code = "PRJ-004",
+                    Title = "Data Analytics Platform",
+                    Description = "Enterprise data warehouse and analytics infrastructure"
+                },
+                new Project
+                {
+                    Id = new Guid("77777777-7777-7777-7777-777777777705"),
+                    Code = "PRJ-005",
+                    Title = "Cloud Migration Initiative",
+                    Description = "Migration of legacy systems to cloud infrastructure"
+                },
+                new Project
+                {
+                    Id = new Guid("77777777-7777-7777-7777-777777777706"),
+                    Code = "PRJ-006",
+                    Title = "API Gateway Implementation",
+                    Description = "Centralized API management and security platform"
+                },
+                new Project
+                {
+                    Id = new Guid("77777777-7777-7777-7777-777777777707"),
+                    Code = "PRJ-007",
+                    Title = "E-Commerce Platform",
+                    Description = "Full-featured online shopping and payment processing system"
+                },
+                new Project
+                {
+                    Id = new Guid("77777777-7777-7777-7777-777777777708"),
+                    Code = "PRJ-008",
+                    Title = "DevOps Automation",
+                    Description = "CI/CD pipeline automation and infrastructure as code"
+                },
+                new Project
+                {
+                    Id = new Guid("77777777-7777-7777-7777-777777777709"),
+                    Code = "PRJ-009",
+                    Title = "Security Compliance Framework",
+                    Description = "Enterprise security and compliance monitoring system"
+                },
+                new Project
+                {
+                    Id = new Guid("77777777-7777-7777-7777-777777777710"),
+                    Code = "PRJ-010",
+                    Title = "AI/ML Research Platform",
+                    Description = "Machine learning experimentation and model deployment platform"
                 }
             };
 
@@ -2734,82 +2797,60 @@ namespace CPR.Infrastructure.Services
                 _logger.LogInformation("Seeding project roles...");
             }
 
-            // Get some positions to link project roles to
-            var seniorEngineerPosition = await _context.Positions
-                .FirstOrDefaultAsync(p => p.Title.Contains("Senior Mobile Engineer"));
-            var techLeadPosition = await _context.Positions
-                .FirstOrDefaultAsync(p => p.Title.Contains("Staff Frontend Engineer"));
+            // Create project roles for all 10 projects
+            var projectRoles = new List<ProjectRole>();
 
-            var projectRoles = new[]
+            // Define project IDs
+            var projectIds = new[]
             {
-                new ProjectRole
-                {
-                    Id = new Guid("ddd11111-1111-1111-1111-111111111111"),
-                    Title = "Tech Lead",
-                    Description = "Technical leadership and architecture decisions for the project",
-                    PositionId = techLeadPosition?.Id
-                },
-                new ProjectRole
-                {
-                    Id = new Guid("ddd22222-2222-2222-2222-222222222222"),
-                    Title = "Product Manager",
-                    Description = "Product vision, roadmap, and stakeholder management"
-                },
-                new ProjectRole
-                {
-                    Id = new Guid("ddd33333-3333-3333-3333-333333333333"),
-                    Title = "Software Engineer",
-                    Description = "Software development and implementation",
-                    PositionId = seniorEngineerPosition?.Id
-                },
-                new ProjectRole
-                {
-                    Id = new Guid("ddd44444-4444-4444-4444-444444444444"),
-                    Title = "QA Engineer",
-                    Description = "Quality assurance, testing, and validation"
-                },
-                new ProjectRole
-                {
-                    Id = new Guid("ddd55555-5555-5555-5555-555555555555"),
-                    Title = "UX Designer",
-                    Description = "User experience design and research"
-                },
-                new ProjectRole
-                {
-                    Id = new Guid("ddd66666-6666-6666-6666-666666666666"),
-                    Title = "DevOps Engineer",
-                    Description = "Infrastructure, deployment, and operations"
-                },
-                new ProjectRole
-                {
-                    Id = new Guid("ddd77777-7777-7777-7777-777777777777"),
-                    Title = "Data Analyst",
-                    Description = "Data analysis, reporting, and insights"
-                },
-                new ProjectRole
-                {
-                    Id = new Guid("ddd88888-8888-8888-8888-888888888888"),
-                    Title = "Business Analyst",
-                    Description = "Requirements gathering and business process analysis"
-                },
-                new ProjectRole
-                {
-                    Id = new Guid("ddd99999-9999-9999-9999-999999999999"),
-                    Title = "Scrum Master",
-                    Description = "Agile process facilitation and team coordination"
-                },
-                new ProjectRole
-                {
-                    Id = new Guid("dddaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"),
-                    Title = "Security Engineer",
-                    Description = "Security assessment, implementation, and compliance"
-                }
+                new Guid("77777777-7777-7777-7777-777777777701"),
+                new Guid("77777777-7777-7777-7777-777777777702"),
+                new Guid("77777777-7777-7777-7777-777777777703"),
+                new Guid("77777777-7777-7777-7777-777777777704"),
+                new Guid("77777777-7777-7777-7777-777777777705"),
+                new Guid("77777777-7777-7777-7777-777777777706"),
+                new Guid("77777777-7777-7777-7777-777777777707"),
+                new Guid("77777777-7777-7777-7777-777777777708"),
+                new Guid("77777777-7777-7777-7777-777777777709"),
+                new Guid("77777777-7777-7777-7777-777777777710")
             };
+
+            // Common role templates
+            var roleTemplates = new[]
+            {
+                ("Tech Lead", "Technical leadership and architecture decisions"),
+                ("Product Manager", "Product vision, roadmap, and stakeholder management"),
+                ("Software Engineer", "Software development and implementation"),
+                ("QA Engineer", "Quality assurance, testing, and validation"),
+                ("UX Designer", "User experience design and research"),
+                ("DevOps Engineer", "Infrastructure, deployment, and operations"),
+                ("Data Analyst", "Data analysis, reporting, and insights"),
+                ("Business Analyst", "Requirements gathering and business process analysis"),
+                ("Scrum Master", "Agile process facilitation and team coordination"),
+                ("Security Engineer", "Security assessment, implementation, and compliance")
+            };
+
+            // Create 10 roles for each project (100 total)
+            int counter = 1;
+            foreach (var projectId in projectIds)
+            {
+                foreach (var (title, description) in roleTemplates)
+                {
+                    projectRoles.Add(new ProjectRole
+                    {
+                        Id = Guid.NewGuid(),
+                        ProjectId = projectId,
+                        Title = title,
+                        Description = description
+                    });
+                    counter++;
+                }
+            }
 
             await _context.ProjectRoles.AddRangeAsync(projectRoles);
             await _context.SaveChangesAsync();
 
-            _logger.LogInformation("Seeded {Count} project roles.", projectRoles.Length);
+            _logger.LogInformation("Seeded {Count} project roles.", projectRoles.Count);
         }
 
         private async Task SeedPositionToSkillsAsync(bool forceSeed = false)

@@ -3761,9 +3761,9 @@ namespace CPR.Infrastructure.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("modified_by");
 
-                    b.Property<Guid?>("PositionId")
+                    b.Property<Guid>("ProjectId")
                         .HasColumnType("uuid")
-                        .HasColumnName("position_id");
+                        .HasColumnName("project_id");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -3771,6 +3771,9 @@ namespace CPR.Infrastructure.Migrations
                         .HasColumnName("title");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ProjectId")
+                        .HasDatabaseName("IX_project_roles_project_id");
 
                     b.ToTable("project_roles", (string)null);
                 });
@@ -3816,15 +3819,17 @@ namespace CPR.Infrastructure.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("modified_by");
 
-                    b.Property<Guid>("ProjectId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("project_id");
-
                     b.Property<Guid>("ProjectRoleId")
                         .HasColumnType("uuid")
                         .HasColumnName("project_role_id");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("EmployeeId")
+                        .HasDatabaseName("IX_project_teams_employee_id");
+
+                    b.HasIndex("ProjectRoleId")
+                        .HasDatabaseName("IX_project_teams_project_role_id");
 
                     b.ToTable("project_teams", (string)null);
                 });

@@ -74,14 +74,7 @@ namespace CPR.Infrastructure.Repositories
 
         public IQueryable<ProjectRole> QueryRolesByProjectId(Guid projectId, bool includeDeleted = false)
         {
-            // ProjectRoles are linked to Projects through ProjectTeam
-            // Get distinct role IDs used in this project
-            var roleIdsInProject = _db.ProjectTeams
-                .Where(pt => pt.ProjectId == projectId && !pt.IsDeleted)
-                .Select(pt => pt.ProjectRoleId)
-                .Distinct();
-
-            var query = _db.ProjectRoles.Where(pr => roleIdsInProject.Contains(pr.Id));
+            var query = _db.ProjectRoles.Where(pr => pr.ProjectId == projectId);
 
             if (!includeDeleted)
             {
@@ -124,7 +117,13 @@ namespace CPR.Infrastructure.Repositories
 
         public IQueryable<ProjectTeam> QueryTeamByProjectId(Guid projectId, bool includeDeleted = false)
         {
-            var query = _db.ProjectTeams.Where(pt => pt.ProjectId == projectId);
+            // ProjectTeam is linked to Project through ProjectRole
+            // Get role IDs for this project first
+            var roleIdsInProject = _db.ProjectRoles
+                .Where(pr => pr.ProjectId == projectId && !pr.IsDeleted)
+                .Select(pr => pr.Id);
+
+            var query = _db.ProjectTeams.Where(pt => roleIdsInProject.Contains(pt.ProjectRoleId));
 
             if (!includeDeleted)
             {

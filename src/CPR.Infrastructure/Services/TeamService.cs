@@ -256,18 +256,27 @@ namespace CPR.Infrastructure.Services
         /// </summary>
         private async Task<TeamMemberProjectDto[]> GetEmployeeProjectsAsync(Guid employeeId)
         {
+            // Join ProjectTeam -> ProjectRole -> Project to get complete information
             var projectTeams = await _repo.GetProjectTeamsForEmployee(employeeId)
-                .ToListAsync();
+                .Join(_db.ProjectRoles,
+                    pt => pt.ProjectRoleId,
+                    pr => pr.Id,
+                    (pt, pr) => new { ProjectTeam = pt, ProjectRole = pr })
+                .Join(_db.Projects,
+                    x => x.ProjectRole.ProjectId,
+                    p => p.Id,
+                    (x, p) => new TeamMemberProjectDto
+                    {
+                        ProjectId = p.Id,
+                        ProjectTitle = p.Title,
+                        ProjectRoleId = x.ProjectRole.Id,
+                        ProjectRoleTitle = x.ProjectRole.Title,
+                        ProjectRoleDescription = x.ProjectRole.Description,
+                        JoinedAt = x.ProjectTeam.CreatedAt
+                    })
+                .ToArrayAsync();
 
-            return projectTeams.Select(pt => new TeamMemberProjectDto
-            {
-                ProjectId = pt.ProjectId,
-                ProjectTitle = "Project", // Simplified - would need to join with Project table
-                ProjectRoleId = pt.ProjectRoleId,
-                ProjectRoleTitle = "Role", // Simplified - would need to join with ProjectRole table
-                ProjectRoleDescription = null, // Simplified - would need to join with ProjectRole table
-                JoinedAt = pt.CreatedAt
-            }).ToArray();
+            return projectTeams;
         }
     }
 }
