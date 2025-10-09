@@ -217,14 +217,17 @@ Set-Clipboard $token
 
 ### Pre-seeded Users
 
-The database is automatically seeded with test users:
+The database is automatically seeded with 55 test users. Key users for testing:
 
-| Name | Role | User ID | Employee ID |
-|------|------|---------|-------------|
-| Ryan King | Administrator | `5950a2be-bdfb-4dcb-9913-1e3e0e022a5c` | `...001` |
-| Sarah Johnson | Contributor | `f4c8e7a2-1b3d-4e6f-9a2c-8d7e6f5a4b3c` | `...002` |
-| Eve Adams | Contributor (Security Dir) | `c7746e91-a5e8-4f8b-9f22-f48374ffa2a4` | `...007` |
-| Henry Wilson | Contributor (Support Dir) | `977f4f1f-b3ce-4244-98fc-2c0d0248de88` | `...00a` |
+| Name | Username | Roles | User ID |
+|------|----------|-------|---------|
+| John Doe | john.doe | Administrator, Employee | `679add6e-6c29-4e00-b6a5-b69c8e0f3445` |
+| Henry Wilson | henry.wilson | People Manager | `977f4f1f-b3ce-4244-98fc-2c0d0248de88` |
+| Eve Adams | eve.adams | Employee | `c7746e91-a5e8-4f8b-9f22-f48374ffa2a4` |
+| Alice Wilson | alice.wilson | Employee | `e9741b9b-3c66-4462-af46-297810b29403` |
+| Ryan King | ryan.king | Employee | `5950a2be-bdfb-4dcb-9913-1e3e0e022a5c` |
+
+**Note**: All users have the Employee role by default. John Doe additionally has Administrator role, and Henry Wilson has People Manager role (with 3 direct reports).
 
 ## Database Management
 
@@ -249,8 +252,8 @@ dotnet ef database update --project src\CPR.Infrastructure --startup-project src
 
 Or using Docker:
 ```powershell
-docker-compose -f docker/docker-compose.dev.yml down -v
-docker-compose -f docker/docker-compose.dev.yml up -d
+docker-compose -f docker/docker-compose.yml down -v
+docker-compose -f docker/docker-compose.yml up -d
 ```
 
 ## Common Tasks
@@ -274,10 +277,13 @@ dotnet watch --project src\CPR.Api
 ### View Logs
 ```powershell
 # Docker logs
-docker-compose -f docker/docker-compose.dev.yml logs -f
+docker-compose -f docker/docker-compose.yml logs -f
 
-# Specific container
-docker logs cpr-postgres-dev -f
+# Specific container (dev database)
+docker logs cpr_postgres_dev -f
+
+# Test database
+docker logs cpr_postgres_test -f
 ```
 
 ## Troubleshooting
@@ -293,9 +299,9 @@ psql -h localhost -p 5432 -U postgres -c "DROP DATABASE IF EXISTS cpr_dev;"
 ### Tests fail after running ContractTests
 **Solution:** Tests are now isolated - IntegrationTests automatically recreate their database. If issues persist:
 ```powershell
-# Recreate test database
-docker-compose -f docker/docker-compose.test.yml down -v
-docker-compose -f docker/docker-compose.test.yml up -d
+# Recreate both databases
+docker-compose -f docker/docker-compose.yml down -v
+docker-compose -f docker/docker-compose.yml up -d
 ```
 
 ### Port already in use
@@ -305,7 +311,7 @@ docker-compose -f docker/docker-compose.test.yml up -d
 netstat -ano | findstr :5432
 
 # Stop Docker containers
-docker-compose -f docker/docker-compose.dev.yml down
+docker-compose -f docker/docker-compose.yml down
 ```
 
 ### Migration conflicts
@@ -335,19 +341,15 @@ Invoke-RestMethod -Uri http://localhost:5000/me -Headers @{ Authorization = "Bea
 
 ## Running integration tests locally with Postgres
 
-A minimal test Postgres instance is provided in `docker-compose.test.yml`.
+Both dev and test PostgreSQL instances are provided in `docker/docker-compose.yml`.
 
-Start the database:
-
-```powershell
-docker-compose -f docker-compose.test.yml up -d
-```
-
-Set the `DATABASE_URL` environment variable for the test run (PowerShell):
+Start the databases:
 
 ```powershell
-$env:DATABASE_URL = "Host=localhost;Port=5432;Database=cpr_test;Username=postgres;Password=postgres"
+docker-compose -f docker/docker-compose.yml up -d
 ```
+
+The test database runs on port 5433 and is automatically used by integration tests via `.env.test` configuration.
 
 Run the integration tests:
 
@@ -355,10 +357,10 @@ Run the integration tests:
 dotnet test tests/CPR.IntegrationTests/CPR.IntegrationTests.csproj
 ```
 
-When finished, bring down the test database:
+When finished, bring down the databases:
 
 ```powershell
-docker-compose -f docker-compose.test.yml down
+docker-compose -f docker/docker-compose.yml down
 ```
 OpenAPI & client generation
 ---------------------------
