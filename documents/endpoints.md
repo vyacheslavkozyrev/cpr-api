@@ -66,6 +66,23 @@ All endpoints require appropriate roles. Authorization is enforced through:
 - `GET /skills` - Public
 - `GET /skill_levels` - Public
 
+#### **Project Management Endpoints**
+**Read Operations** (Any authenticated user):
+- `GET /api/projects` - Any authenticated user
+- `GET /api/projects/{id}` - Any authenticated user
+- `GET /api/projects/{id}/roles` - Any authenticated user
+- `GET /api/projects/{id}/team` - Any authenticated user
+
+**Write Operations** (Project Owner role required):
+- `POST /api/projects` - Project Owner only
+- `PUT /api/projects/{id}` - Project Owner only
+- `DELETE /api/projects/{id}` - Project Owner only
+- `POST /api/projects/{id}/roles` - Project Owner only
+- `PUT /api/projects/{id}/roles/{roleId}` - Project Owner only
+- `DELETE /api/projects/{id}/roles/{roleId}` - Project Owner only
+- `POST /api/projects/{id}/team` - Project Owner only
+- `DELETE /api/projects/{id}/team/{teamMemberId}` - Project Owner only
+
 ### **Authorization Implementation Notes**
 - Users can have multiple roles (many-to-many relationship)
 - Higher-level roles inherit permissions from lower-level roles
@@ -573,6 +590,248 @@ Approvals & Reviews
 
 Feedback moderation
 - GET /team/feedback — feedback for team (visibility rules apply)
+
+---
+
+## Project Management (Project Owner Role)
+
+### Overview
+Project management endpoints allow Project Owners to create and manage projects, define project-specific roles, and assign employees to projects. All authenticated users can view project information, but only users with the Project Owner role can create, update, or delete projects and their related resources.
+
+### Role Requirements
+- **Read Operations**: Any authenticated user can view projects, roles, and team members
+- **Write Operations**: Only users with the **Project Owner** role can create, update, or delete projects, roles, and team assignments
+
+### Projects
+
+#### GET /api/projects
+- **Purpose**: Get all projects
+- **Authentication**: Required (JWT Bearer token)
+- **Authorization**: Any authenticated user
+- **Response 200** (JSON):
+  ```json
+  [
+    {
+      "id": "GUID - Project identifier",
+      "code": "string - Project code (e.g., PRJ-001)",
+      "title": "string - Project title",
+      "description": "string - Project description (optional)",
+      "ownerId": "GUID - Project owner employee ID (optional)",
+      "sponsorId": "GUID - Project sponsor employee ID (optional)",
+      "createdAt": "DateTime - Creation timestamp",
+      "modifiedAt": "DateTime - Last modification timestamp (optional)"
+    }
+  ]
+  ```
+- **Error Responses**:
+  - `401 Unauthorized`: Authentication required
+
+#### GET /api/projects/{id}
+- **Purpose**: Get a specific project by ID
+- **Authentication**: Required (JWT Bearer token)
+- **Authorization**: Any authenticated user
+- **Response 200** (JSON):
+  ```json
+  {
+    "id": "GUID - Project identifier",
+    "code": "string - Project code",
+    "title": "string - Project title",
+    "description": "string - Project description (optional)",
+    "ownerId": "GUID - Project owner employee ID (optional)",
+    "sponsorId": "GUID - Project sponsor employee ID (optional)",
+    "createdAt": "DateTime - Creation timestamp",
+    "modifiedAt": "DateTime - Last modification timestamp (optional)"
+  }
+  ```
+- **Error Responses**:
+  - `401 Unauthorized`: Authentication required
+  - `404 Not Found`: Project not found
+
+#### POST /api/projects
+- **Purpose**: Create a new project
+- **Authentication**: Required (JWT Bearer token)
+- **Authorization**: Project Owner role required
+- **Request Body** (JSON):
+  ```json
+  {
+    "code": "string - Project code (required, max 50 characters)",
+    "title": "string - Project title (required, max 250 characters)",
+    "description": "string - Project description (optional, max 2000 characters)",
+    "ownerId": "GUID - Project owner employee ID (optional)",
+    "sponsorId": "GUID - Project sponsor employee ID (optional)"
+  }
+  ```
+- **Response 201** (JSON): Returns created project (same structure as GET)
+- **Error Responses**:
+  - `400 Bad Request`: Validation errors
+  - `401 Unauthorized`: Authentication required
+  - `403 Forbidden`: Project Owner role required
+
+#### PUT /api/projects/{id}
+- **Purpose**: Update an existing project
+- **Authentication**: Required (JWT Bearer token)
+- **Authorization**: Project Owner role required
+- **Request Body** (JSON):
+  ```json
+  {
+    "code": "string - Project code (optional, max 50 characters)",
+    "title": "string - Project title (optional, max 250 characters)",
+    "description": "string - Project description (optional, max 2000 characters)",
+    "ownerId": "GUID - Project owner employee ID (optional)",
+    "sponsorId": "GUID - Project sponsor employee ID (optional)"
+  }
+  ```
+- **Response 200** (JSON): Returns updated project
+- **Error Responses**:
+  - `400 Bad Request`: Validation errors
+  - `401 Unauthorized`: Authentication required
+  - `403 Forbidden`: Project Owner role required
+  - `404 Not Found`: Project not found
+
+#### DELETE /api/projects/{id}
+- **Purpose**: Delete a project (soft delete)
+- **Authentication**: Required (JWT Bearer token)
+- **Authorization**: Project Owner role required
+- **Response 204**: No content (successful deletion)
+- **Error Responses**:
+  - `401 Unauthorized`: Authentication required
+  - `403 Forbidden`: Project Owner role required
+  - `404 Not Found`: Project not found
+
+### Project Roles
+
+#### GET /api/projects/{id}/roles
+- **Purpose**: Get all roles for a specific project
+- **Authentication**: Required (JWT Bearer token)
+- **Authorization**: Any authenticated user
+- **Response 200** (JSON):
+  ```json
+  [
+    {
+      "id": "GUID - Role identifier",
+      "projectId": "GUID - Project identifier",
+      "title": "string - Role title",
+      "description": "string - Role description (optional)",
+      "createdAt": "DateTime - Creation timestamp",
+      "modifiedAt": "DateTime - Last modification timestamp (optional)"
+    }
+  ]
+  ```
+- **Error Responses**:
+  - `401 Unauthorized`: Authentication required
+  - `404 Not Found`: Project not found
+
+#### POST /api/projects/{id}/roles
+- **Purpose**: Create a new role for a project
+- **Authentication**: Required (JWT Bearer token)
+- **Authorization**: Project Owner role required
+- **Request Body** (JSON):
+  ```json
+  {
+    "title": "string - Role title (required, max 250 characters)",
+    "description": "string - Role description (optional, max 2000 characters)"
+  }
+  ```
+- **Response 201** (JSON): Returns created role
+- **Error Responses**:
+  - `400 Bad Request`: Validation errors
+  - `401 Unauthorized`: Authentication required
+  - `403 Forbidden`: Project Owner role required
+  - `404 Not Found`: Project not found
+
+#### PUT /api/projects/{id}/roles/{roleId}
+- **Purpose**: Update an existing project role
+- **Authentication**: Required (JWT Bearer token)
+- **Authorization**: Project Owner role required
+- **Request Body** (JSON):
+  ```json
+  {
+    "title": "string - Role title (optional, max 250 characters)",
+    "description": "string - Role description (optional, max 2000 characters)"
+  }
+  ```
+- **Response 200** (JSON): Returns updated role
+- **Error Responses**:
+  - `400 Bad Request`: Validation errors
+  - `401 Unauthorized`: Authentication required
+  - `403 Forbidden`: Project Owner role required
+  - `404 Not Found`: Project or role not found
+
+#### DELETE /api/projects/{id}/roles/{roleId}
+- **Purpose**: Delete a project role (soft delete)
+- **Authentication**: Required (JWT Bearer token)
+- **Authorization**: Project Owner role required
+- **Response 204**: No content (successful deletion)
+- **Error Responses**:
+  - `401 Unauthorized`: Authentication required
+  - `403 Forbidden`: Project Owner role required
+  - `404 Not Found`: Project or role not found
+
+### Project Team
+
+#### GET /api/projects/{id}/team
+- **Purpose**: Get all team members for a specific project
+- **Authentication**: Required (JWT Bearer token)
+- **Authorization**: Any authenticated user
+- **Response 200** (JSON):
+  ```json
+  [
+    {
+      "id": "GUID - Team member assignment identifier",
+      "projectRoleId": "GUID - Project role identifier",
+      "employeeId": "GUID - Employee identifier",
+      "createdAt": "DateTime - Assignment timestamp",
+      "modifiedAt": "DateTime - Last modification timestamp (optional)"
+    }
+  ]
+  ```
+- **Error Responses**:
+  - `401 Unauthorized`: Authentication required
+  - `404 Not Found`: Project not found
+
+#### POST /api/projects/{id}/team
+- **Purpose**: Assign an employee to a project role
+- **Authentication**: Required (JWT Bearer token)
+- **Authorization**: Project Owner role required
+- **Request Body** (JSON):
+  ```json
+  {
+    "projectRoleId": "GUID - Project role identifier (required)",
+    "employeeId": "GUID - Employee identifier (required)"
+  }
+  ```
+- **Response 201** (JSON): Returns created team assignment
+- **Error Responses**:
+  - `400 Bad Request`: Validation errors
+  - `401 Unauthorized`: Authentication required
+  - `403 Forbidden`: Project Owner role required
+  - `404 Not Found`: Project, role, or employee not found
+
+#### DELETE /api/projects/{id}/team/{teamMemberId}
+- **Purpose**: Remove an employee from a project (soft delete)
+- **Authentication**: Required (JWT Bearer token)
+- **Authorization**: Project Owner role required
+- **Response 204**: No content (successful removal)
+- **Error Responses**:
+  - `401 Unauthorized`: Authentication required
+  - `403 Forbidden`: Project Owner role required
+  - `404 Not Found`: Project or team member not found
+
+### Project Management Authorization Notes
+- **Project Owner** role is required for all create, update, and delete operations
+- All authenticated users can view projects, roles, and team members (read operations)
+- Role assignments are managed through the `user_to_role` table in the database
+- Users without the Project Owner role receive `403 Forbidden` responses for write operations
+- All deletions are soft deletes (sets `is_deleted = true` without removing from database)
+- Project roles are project-specific and independent from organization positions
+- Employees can be assigned to multiple project roles across different projects
+
+### Database Schema Notes
+- **projects** table: Stores project information with code, title, description, owner, and sponsor
+- **project_roles** table: Stores project-specific roles with project_id FK (not position_id)
+- **project_teams** table: Junction table linking employees to project roles (project_role_id + employee_id)
+- Relationship: Project → ProjectRole → ProjectTeam → Employee
+- Projects are seeded with 10 sample projects and 100 project roles (10 roles per project)
 
 ---
 

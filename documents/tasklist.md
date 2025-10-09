@@ -2,8 +2,8 @@
 
 Progress (update after each iteration)
 - Iteration: 14
-- Status: In Progress - Phase 1 Complete
-- Notes: Iteration 14 Project Management (Project Owner Role) — Phase 1 (DTOs) completed. Created 8 DTOs (ProjectDto, CreateProjectDto, UpdateProjectDto, ProjectRoleDto, CreateProjectRoleDto, UpdateProjectRoleDto, ProjectTeamDto, CreateProjectTeamDto) with proper validation. Renamed ProjectRoleDto in TeamDtos.cs to TeamMemberProjectDto to avoid naming conflict. Updated TeamService.cs accordingly. All tests passing (Unit: 62, Integration: 55, Contract: 5). Ready for Phase 2 (Repositories).
+- Status: **In Progress** - Phases 1-6 Complete, Testing Pending
+- Notes: Iteration 14 Project Management (Project Owner Role) — Core implementation complete (2025-10-08). Successfully implemented project management system with major database schema refactoring. Created 8 DTOs with validation, refactored project_roles and project_teams schema (ProjectRole now has project_id instead of position_id, ProjectTeam no longer has project_id), implemented IProjectService with 11 methods, created ProjectsController with 11 RESTful endpoints (read operations open to all authenticated users, write operations require Project Owner role), enhanced seed data with 10 diverse projects and 100 project roles. All existing tests still passing (Unit: 62, Integration: 55, Contract: 5). Database successfully recreated with new schema. **Next**: Create integration tests for new project management endpoints.
 
 Database Enhancement (2025-09-18): Successfully implemented comprehensive seed data system with:
 - Created SeedData.cs with hierarchical data generation methods
@@ -210,31 +210,94 @@ Iterations
 
 - [ ] Iteration 14 — Project Management (Project Owner Role)
   - Goal: Implement project management APIs for Project Owner role to manage projects, project roles, and employee assignments.
+  - Status: **In Progress** - Core implementation complete, integration tests pending (2025-10-08)
   - Scope:
     - **Project Owner APIs (Project Owner role required)**:
-      - POST /api/projects — Create a new project
-      - PUT /api/projects/{id} — Edit project details
-      - POST /api/projects/{id}/roles — Create/define a project role
-      - PUT /api/projects/{id}/roles/{roleId} — Edit project role
-      - POST /api/projects/{id}/team — Assign employee to project with role
-      - DELETE /api/projects/{id}/team/{teamId} — Remove employee from project
-    - **Public/Shared APIs (All roles)**:
-      - GET /api/projects — List all projects (filtered by permissions)
-      - GET /api/projects/{id} — Get project details with roles and team members
+      - POST /api/projects — Create a new project ✅
+      - PUT /api/projects/{id} — Edit project details ✅
+      - DELETE /api/projects/{id} — Delete project (soft delete) ✅
+      - POST /api/projects/{id}/roles — Create/define a project role ✅
+      - PUT /api/projects/{id}/roles/{roleId} — Edit project role ✅
+      - DELETE /api/projects/{id}/roles/{roleId} — Delete project role (soft delete) ✅
+      - POST /api/projects/{id}/team — Assign employee to project with role ✅
+      - DELETE /api/projects/{id}/team/{teamMemberId} — Remove employee from project ✅
+    - **Public/Shared APIs (All authenticated users)**:
+      - GET /api/projects — List all projects ✅
+      - GET /api/projects/{id} — Get project details ✅
+      - GET /api/projects/{id}/roles — Get project roles ✅
+      - GET /api/projects/{id}/team — Get project team members ✅
   - Implementation:
-    - DTOs: ProjectDto, CreateProjectDto, UpdateProjectDto, ProjectRoleDto, CreateProjectRoleDto, UpdateProjectRoleDto, ProjectTeamDto, CreateProjectTeamDto
-    - Controller: ProjectsController with appropriate endpoints
-    - Service: IProjectService and ProjectService with business logic
-    - Repository: IProjectRepository and ProjectRepository for data access
-    - Authorization: RequireRole("Project Owner") for write operations
+    - **Phase 1: DTOs** ✅
+      - Created 8 DTOs: ProjectDto, CreateProjectDto, UpdateProjectDto, ProjectRoleDto, CreateProjectRoleDto, UpdateProjectRoleDto, ProjectTeamDto, CreateProjectTeamDto
+      - Added comprehensive validation attributes (Required, MaxLength, etc.)
+      - Renamed ProjectRoleDto in TeamDtos.cs to TeamMemberProjectDto to avoid naming conflicts
+    - **Phase 2: Database Schema Refactoring** ✅
+      - **Major Schema Change**: Refactored project_roles and project_teams tables
+      - Changed project_roles.position_id → project_id (required FK to projects)
+      - Removed project_teams.project_id (now gets project through ProjectRole)
+      - Fixed table creation ordering: projects → project_roles → project_teams
+      - Fixed unique constraint: project_teams now uses (project_role_id, employee_id)
+      - Updated CreateDatabaseSchema migration, Designer, and ModelSnapshot
+      - Updated domain entities: ProjectRole.cs and ProjectTeam.cs
+      - Updated all DTOs to reflect new schema
+      - Updated CprDbContext configuration
+    - **Phase 3: Seed Data** ✅
+      - Enhanced DatabaseSeeder to create **10 diverse projects** (PRJ-001 through PRJ-010)
+      - Created **100 project roles** (10 roles per project)
+      - Role templates: Tech Lead, Product Manager, Software Engineer, QA Engineer, UX Designer, DevOps Engineer, Data Analyst, Business Analyst, Scrum Master, Security Engineer
+      - Projects: Career Progression System, Customer Portal Redesign, Mobile App Development, Data Analytics Platform, Cloud Migration Initiative, API Gateway Implementation, E-Commerce Platform, DevOps Automation, Security Compliance Framework, AI/ML Research Platform
+    - **Phase 4: Repository** ✅
+      - Created IProjectRepository interface with 15 methods for CRUD operations
+      - Implemented ProjectRepository with proper EF Core queries
+      - Updated ProjectRepository queries for new schema relationships
+      - Updated TeamService.GetEmployeeProjectsAsync() with proper joins
+      - Registered IProjectRepository → ProjectRepository in DI container
+    - **Phase 5: Services** ✅
+      - Created IProjectService interface with 11 business methods
+      - Implemented ProjectService with full CRUD logic for projects, roles, and team
+      - Added validation (project exists, role belongs to project, etc.)
+      - Implemented soft delete pattern (IsDeleted, DeletedBy, DeletedAt)
+      - Added partial update support (only modifies provided fields)
+      - Entity-to-DTO mapping helpers
+      - Registered IProjectService → ProjectService in DI container
+    - **Phase 6: Controllers** ✅
+      - Created ProjectsController with 11 RESTful endpoints
+      - Authorization: Read operations open to all authenticated users, write operations require "Project Owner" role
+      - Proper HTTP status codes (200 OK, 201 Created, 204 No Content, 400 Bad Request, 401 Unauthorized, 403 Forbidden, 404 Not Found)
+      - User context handling with IUserService.GetCurrentUserProfileAsync()
+      - Error handling with try-catch for InvalidOperationException
+      - XML documentation comments for Swagger generation
+      - ProducesResponseType attributes for all endpoints
+    - **Phase 7: Database Recreation** ✅
+      - Dropped and recreated cpr_dev and cpr_test databases
+      - Applied updated migrations successfully
+      - Verified 10 projects and 100 project roles seeded correctly
+      - Database running with new schema
+  - Test Results:
+    - **Existing Unit Tests**: 62/62 passing ✅ (no regressions)
+    - **Existing Integration Tests**: 55/55 passing ✅ (no regressions)
+    - **Existing Contract Tests**: 5/5 passing ✅ (no regressions)
+    - **New Project Management Tests**: ⏳ Pending
   - Acceptance Criteria:
-    - Project Owner can create/edit projects
-    - Project Owner can define project-specific roles
-    - Project Owner can assign/remove employees to projects with roles
-    - All roles can view projects list and details
-    - Integration tests cover all CRUD operations and authorization
-    - Unit tests for business logic and validation
-    - Swagger documentation includes all endpoints with examples
+    - ✅ Project Owner can create/edit/delete projects (implemented)
+    - ✅ Project Owner can define project-specific roles (implemented)
+    - ✅ Project Owner can assign/remove employees to projects with roles (implemented)
+    - ✅ All authenticated users can view projects list and details (implemented)
+    - ✅ Proper authorization with RequireRole("Project Owner") for write operations (implemented)
+    - ✅ All existing tests pass with new schema (verified)
+    - ✅ Database schema properly refactored and seeded (verified)
+    - ⏳ **Integration tests for new endpoints** (pending - Phase 8)
+    - ⏳ Unit tests for ProjectService business logic (pending - Phase 8)
+    - ⏳ Contract tests for new API endpoints (pending - Phase 8)
+    - ⏳ Swagger documentation with examples (pending - Phase 8)
+  - Notes:
+    - Major database schema refactoring completed successfully
+    - ProjectRole now correctly references projects (not positions)
+    - ProjectTeam simplified (removed redundant project_id)
+    - Rich seed data with 10 diverse projects and 100 roles
+    - Clean separation: read operations public, write operations require Project Owner role
+    - Build successful with no errors or warnings
+    - Ready for integration testing and documentation phase
 
 - [ ] Iteration 15 — Positions & position->skill mapping (admin)
   - Scope: CRUD /positions, POST /position_to_skill
