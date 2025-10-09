@@ -307,9 +307,232 @@ Iterations
     - Solution Owner role assignment handled dynamically in tests (not seeded by default)
     - All 90 new tests pass reliably when run individually or together
 
-- [ ] Iteration 15 — Positions & position->skill mapping (admin)
-  - Scope: CRUD /positions, POST /position_to_skill
-  - Acceptance: Admin CRUD tests and mapping persisted.
+- [ ] Iteration 15 — Taxonomy Management (Administrator CUD Operations)
+  - Goal: Implement Create, Update, and Delete operations for taxonomy entities (career paths, career tracks, positions, skill categories, skills, skill levels) restricted to Administrator role only.
+  - Status: **Planned**
+  - Scope:
+    - **Career Path Management (Administrator role required)**:
+      - POST /api/career — Create a new career path
+      - PUT /api/career/{id} — Update existing career path
+      - DELETE /api/career/{id} — Delete career path (soft delete)
+    - **Career Track Management (Administrator role required)**:
+      - POST /api/career_track — Create a new career track (requires careerPathId)
+      - PUT /api/career_track/{id} — Update existing career track (can change careerPathId)
+      - DELETE /api/career_track/{id} — Delete career track (soft delete)
+    - **Position Management (Administrator role required)**:
+      - POST /api/positions — Create a new position (requires careerTrackId)
+      - PUT /api/positions/{id} — Update existing position (can change careerTrackId)
+      - DELETE /api/positions/{id} — Delete position (soft delete)
+    - **Skill Category Management (Administrator role required)**:
+      - POST /api/skill_categories — Create a new skill category
+      - PUT /api/skill_categories/{id} — Update existing skill category
+      - DELETE /api/skill_categories/{id} — Delete skill category (soft delete)
+    - **Skill Management (Administrator role required)**:
+      - POST /api/skills — Create a new skill (requires skillCategoryId)
+      - PUT /api/skills/{id} — Update existing skill (can change skillCategoryId)
+      - DELETE /api/skills/{id} — Delete skill (soft delete)
+    - **Skill Level Management (Administrator role required)**:
+      - POST /api/skill_levels — Create a new skill level (requires skillId)
+      - PUT /api/skill_levels/{id} — Update existing skill level (can change skillId)
+      - DELETE /api/skill_levels/{id} — Delete skill level (soft delete)
+    - **Position-to-Skill Mapping (Administrator role required)**:
+      - POST /api/positions/{id}/skills — Map skill to position with required skill level (requires skillId and skillLevelId)
+      - DELETE /api/positions/{id}/skills/{skillId} — Remove skill mapping from position
+  - Implementation Plan:
+    - **Phase 1: DTOs** (Create DTOs for write operations - read DTOs already exist)
+      - **Location**: CPR.Application/Contracts/TaxonomyDtos.cs
+      - **Existing Read DTOs** (already implemented, will reuse for responses):
+        - ✅ CareerPathDto: Id, Title, Description
+        - ✅ CareerTrackDto: Id, Title, Description, CareerPathId
+        - ✅ PositionDto: Id, Title, Description, Expectations, CareerTrackId
+        - ✅ SkillDto: Id, Title, Description, CategoryId (note: property name is CategoryId, not SkillCategoryId)
+        - ✅ SkillLevelDto: Id, Title, Description, SkillId, Value (note: property name is Value, not Level)
+        - ❌ SkillCategoryDto: Need to create for skill categories read operations
+      - **New Create DTOs** (to be added):
+        - CreateCareerPathDto: Title (required, 1-250 chars), Description (optional, max 2000 chars)
+        - CreateCareerTrackDto: Title (required), Description (optional), CareerPathId (required, Guid)
+        - CreatePositionDto: Title (required), Description (optional), Expectations (optional), CareerTrackId (required, Guid)
+        - CreateSkillCategoryDto: Title (required, 1-250 chars), Description (optional, max 2000 chars)
+        - CreateSkillDto: Title (required), Description (optional), CategoryId (required, Guid) // Note: use CategoryId to match existing SkillDto
+        - CreateSkillLevelDto: Title (required), Description (optional), Value (required, 1-5), SkillId (required, Guid) // Note: use Value to match existing SkillLevelDto
+        - CreatePositionSkillMappingDto: SkillId (required, Guid), SkillLevelId (required, Guid)
+      - **New Update DTOs** (to be added):
+        - UpdateCareerPathDto: Title (optional), Description (optional)
+        - UpdateCareerTrackDto: Title (optional), Description (optional), CareerPathId (optional)
+        - UpdatePositionDto: Title (optional), Description (optional), Expectations (optional), CareerTrackId (optional)
+        - UpdateSkillCategoryDto: Title (optional), Description (optional)
+        - UpdateSkillDto: Title (optional), Description (optional), CategoryId (optional)
+        - UpdateSkillLevelDto: Title (optional), Description (optional), Value (optional, 1-5), SkillId (optional)
+      - **New Response DTO**:
+        - SkillCategoryDto: Id, Title, Description (for read operations)
+        - PositionSkillMappingDto: Id, PositionId, SkillId, SkillLevelId, SkillTitle, SkillLevelTitle, CreatedAt
+      - **Validation Attributes**: [Required], [MaxLength(250)], [Range(1,5)], etc.
+      - **Important**: Match property names with existing DTOs (CategoryId not SkillCategoryId, Value not Level)
+    
+    - **Phase 2: Service Layer** (Extend IClassificationService and ClassificationService)
+      - **Location**: CPR.Application/Services/IClassificationService.cs and CPR.Infrastructure/Services/ClassificationService.cs
+      - **Career Path Methods**:
+        - Task<CareerPathDto> CreateCareerPathAsync(CreateCareerPathDto dto, Guid currentUserId)
+        - Task<CareerPathDto> UpdateCareerPathAsync(Guid id, UpdateCareerPathDto dto, Guid currentUserId)
+        - Task DeleteCareerPathAsync(Guid id, Guid currentUserId) // Soft delete with referential integrity check
+      - **Career Track Methods**:
+        - Task<CareerTrackDto> CreateCareerTrackAsync(CreateCareerTrackDto dto, Guid currentUserId)
+        - Task<CareerTrackDto> UpdateCareerTrackAsync(Guid id, UpdateCareerTrackDto dto, Guid currentUserId)
+        - Task DeleteCareerTrackAsync(Guid id, Guid currentUserId) // Check for dependent positions
+      - **Position Methods**:
+        - Task<PositionDto> CreatePositionAsync(CreatePositionDto dto, Guid currentUserId)
+        - Task<PositionDto> UpdatePositionAsync(Guid id, UpdatePositionDto dto, Guid currentUserId)
+        - Task DeletePositionAsync(Guid id, Guid currentUserId) // Check for employee assignments and skill mappings
+      - **Skill Category Methods**:
+        - Task<SkillCategoryDto> CreateSkillCategoryAsync(CreateSkillCategoryDto dto, Guid currentUserId)
+        - Task<SkillCategoryDto> UpdateSkillCategoryAsync(Guid id, UpdateSkillCategoryDto dto, Guid currentUserId)
+        - Task DeleteSkillCategoryAsync(Guid id, Guid currentUserId) // Check for dependent skills
+      - **Skill Methods**:
+        - Task<SkillDto> CreateSkillAsync(CreateSkillDto dto, Guid currentUserId)
+        - Task<SkillDto> UpdateSkillAsync(Guid id, UpdateSkillDto dto, Guid currentUserId)
+        - Task DeleteSkillAsync(Guid id, Guid currentUserId) // Check for skill levels, position mappings, employee assessments
+      - **Skill Level Methods**:
+        - Task<SkillLevelDto> CreateSkillLevelAsync(CreateSkillLevelDto dto, Guid currentUserId)
+        - Task<SkillLevelDto> UpdateSkillLevelAsync(Guid id, UpdateSkillLevelDto dto, Guid currentUserId)
+        - Task DeleteSkillLevelAsync(Guid id, Guid currentUserId) // Check for position mappings and employee assessments
+      - **Position-Skill Mapping Methods**:
+        - Task<PositionSkillMappingDto> AddSkillToPositionAsync(Guid positionId, CreatePositionSkillMappingDto dto, Guid currentUserId)
+        - Task RemoveSkillFromPositionAsync(Guid positionId, Guid skillId, Guid currentUserId)
+        - Task<IEnumerable<PositionSkillMappingDto>> GetPositionSkillMappingsAsync(Guid positionId) // Helper for validation
+      - **Validation Logic** (throw InvalidOperationException with clear messages):
+        - Entity existence checks (404 Not Found scenarios)
+        - Foreign key validation (parent entities must exist)
+        - Duplicate title checks within same parent context
+        - Referential integrity before deletion (check for dependent entities)
+        - Skill level belongs to skill validation (for position mappings)
+        - Level range validation (1-5 for skill levels)
+      - **Soft Delete Implementation**:
+        - Set IsDeleted = true, DeletedBy = currentUserId, DeletedAt = DateTimeOffset.UtcNow
+        - Filter deleted entities in all read queries (Where(!IsDeleted))
+      - **Partial Update Support**:
+        - Only update fields that are not null in UpdateDto
+        - Always update ModifiedBy and ModifiedAt
+      - **Repository Usage**: Use existing repositories (CareerPathRepository, SkillRepository, etc.) via DbContext
+    
+    - **Phase 3: Controller Updates** (Extend TaxonomyController with write operations)
+      - **Location**: CPR.Api/Controllers/TaxonomyController.cs
+      - **Existing READ Endpoints** (keep unchanged, public, no authentication):
+        - ✅ [HttpGet("career")] → GetCareer (returns List<CareerPathDto>)
+        - ✅ [HttpGet("career_track")] → GetCareerTracks (query: career_path_id)
+        - ✅ [HttpGet("positions")] → GetPositions (query: career_track_id)
+        - ✅ [HttpGet("skills")] → GetSkills (query: position_id)
+        - ✅ [HttpGet("skill_levels")] → GetSkillLevels (query: skill_id)
+        - ❌ [HttpGet("skill_categories")] → GetSkillCategories (NEW - needs to be added)
+      - **Career Path Endpoints** (NEW - Administrator only):
+        - [HttpPost("career")] [RequireRole("Administrator")] → CreateCareerPath
+        - [HttpPut("career/{id}")] [RequireRole("Administrator")] → UpdateCareerPath
+        - [HttpDelete("career/{id}")] [RequireRole("Administrator")] → DeleteCareerPath
+      - **Career Track Endpoints** (NEW - Administrator only):
+        - [HttpPost("career_track")] [RequireRole("Administrator")] → CreateCareerTrack
+        - [HttpPut("career_track/{id}")] [RequireRole("Administrator")] → UpdateCareerTrack
+        - [HttpDelete("career_track/{id}")] [RequireRole("Administrator")] → DeleteCareerTrack
+      - **Position Endpoints** (NEW - Administrator only):
+        - [HttpPost("positions")] [RequireRole("Administrator")] → CreatePosition
+        - [HttpPut("positions/{id}")] [RequireRole("Administrator")] → UpdatePosition
+        - [HttpDelete("positions/{id}")] [RequireRole("Administrator")] → DeletePosition
+      - **Skill Category Endpoints** (NEW - Administrator only):
+        - [HttpGet("skill_categories")] (public) → GetSkillCategories
+        - [HttpPost("skill_categories")] [RequireRole("Administrator")] → CreateSkillCategory
+        - [HttpPut("skill_categories/{id}")] [RequireRole("Administrator")] → UpdateSkillCategory
+        - [HttpDelete("skill_categories/{id}")] [RequireRole("Administrator")] → DeleteSkillCategory
+      - **Skill Endpoints** (NEW - Administrator only):
+        - [HttpPost("skills")] [RequireRole("Administrator")] → CreateSkill
+        - [HttpPut("skills/{id}")] [RequireRole("Administrator")] → UpdateSkill
+        - [HttpDelete("skills/{id}")] [RequireRole("Administrator")] → DeleteSkill
+      - **Skill Level Endpoints** (NEW - Administrator only):
+        - [HttpPost("skill_levels")] [RequireRole("Administrator")] → CreateSkillLevel
+        - [HttpPut("skill_levels/{id}")] [RequireRole("Administrator")] → UpdateSkillLevel
+        - [HttpDelete("skill_levels/{id}")] [RequireRole("Administrator")] → DeleteSkillLevel
+      - **Position-Skill Mapping Endpoints** (NEW - Administrator only):
+        - [HttpPost("positions/{id}/skills")] [RequireRole("Administrator")] → AddSkillToPosition
+        - [HttpDelete("positions/{id}/skills/{skillId}")] [RequireRole("Administrator")] → RemoveSkillFromPosition
+      - **Implementation Details**:
+        - User context: Get current user ID from IUserService.GetCurrentUserProfileAsync()
+        - Error handling: try-catch InvalidOperationException → 400 BadRequest with error message
+        - HTTP status codes: 201 Created (POST), 200 OK (PUT), 204 No Content (DELETE), 400 Bad Request, 403 Forbidden, 404 Not Found
+        - Return created/updated entity DTO on POST/PUT
+        - XML documentation comments for Swagger generation
+        - [ProducesResponseType] attributes for all status codes
+        - Property naming: Use CategoryId (not SkillCategoryId), Value (not Level) to match existing DTOs
+    
+    - **Phase 4: Testing** (Comprehensive test coverage for all new functionality)
+      - **Unit Tests** (CPR.UnitTests/ClassificationServiceTests.cs or create new TaxonomyServiceTests.cs):
+        - **Career Path Tests** (9 tests): Create, Update, Delete, Duplicate title validation, Referential integrity (has tracks), Partial update, Soft delete verification
+        - **Career Track Tests** (10 tests): Create with valid careerPathId, Invalid careerPathId validation, Update, Delete, Referential integrity (has positions), Parent relationship change
+        - **Position Tests** (12 tests): Create with valid careerTrackId, Invalid careerTrackId validation, Update, Delete, Referential integrity (has employees/skill mappings), Parent relationship change
+        - **Skill Category Tests** (9 tests): Create, Update, Delete, Duplicate title validation, Referential integrity (has skills), Partial update
+        - **Skill Tests** (12 tests): Create with valid skillCategoryId, Invalid skillCategoryId validation, Update, Delete, Referential integrity (has levels/mappings/assessments), Parent relationship change
+        - **Skill Level Tests** (12 tests): Create with valid skillId, Invalid skillId validation, Level range validation (1-5), Update, Delete, Referential integrity (has mappings), Duplicate level per skill
+        - **Position-Skill Mapping Tests** (10 tests): Add mapping with valid IDs, Invalid positionId/skillId/skillLevelId, SkillLevelId belongs to skillId validation, Remove mapping, Duplicate mapping prevention
+        - **Total**: ~74 unit tests
+      - **Integration Tests** (CPR.IntegrationTests/TaxonomyControllerTests.cs):
+        - **Authorization Tests** (6 tests): Administrator can create/update/delete, Non-Administrator gets 403 Forbidden, Public can still read
+        - **Career Path Integration Tests** (8 tests): Create success, Update success, Delete success, Validation errors (400), Not found (404), Referential integrity error
+        - **Career Track Integration Tests** (9 tests): Create with parent, Update parent reference, Delete with positions check, Invalid parent validation
+        - **Position Integration Tests** (10 tests): Create with parent, Update parent reference, Delete with dependencies check, Skill mapping workflow
+        - **Skill Category Integration Tests** (8 tests): Full CRUD workflow, Referential integrity scenarios
+        - **Skill Integration Tests** (10 tests): Create with category, Update category reference, Delete with dependencies, Cascade scenarios
+        - **Skill Level Integration Tests** (10 tests): Create with skill, Level validation, Update, Delete with dependencies
+        - **Position-Skill Mapping Integration Tests** (12 tests): Add mapping workflow, Remove mapping, Validation errors, List mappings per position
+        - **Total**: ~73 integration tests
+      - **Contract Tests** (CPR.ContractTests/TaxonomyContractTests.cs):
+        - Validate JSON schemas for all 20 new POST/PUT endpoints
+        - Verify response structure matches DTOs
+        - Test with Administrator role client
+        - **Total**: ~20 contract tests
+      - **Regression Testing**:
+        - Ensure all existing tests pass (84 unit, 100 integration, 16 contract)
+        - Verify read operations still work without authentication
+        - Verify other controllers not affected
+      - **Test Utilities**:
+        - Create helper method for Administrator client (similar to Solution Owner pattern)
+        - Database cleanup between tests
+        - Seed minimal test data for parent entities
+  - Acceptance Criteria:
+    - [ ] Administrator can create/update/delete career paths
+    - [ ] Administrator can create/update/delete career tracks (with careerPathId relationship)
+    - [ ] Administrator can create/update/delete positions (with careerTrackId relationship)
+    - [ ] Administrator can create/update/delete skill categories
+    - [ ] Administrator can create/update/delete skills (with skillCategoryId relationship)
+    - [ ] Administrator can create/update/delete skill levels (with skillId relationship)
+    - [ ] Administrator can map/unmap skills to positions (with required skillLevelId)
+    - [ ] All write operations require Administrator role (403 Forbidden for non-administrators)
+    - [ ] All read operations remain public (no authentication required)
+    - [ ] Proper validation:
+      - Required fields validation (title, descriptions where applicable)
+      - Length limits (MaxLength attributes)
+      - Foreign key validation (careerPathId, careerTrackId, skillCategoryId, skillId, skillLevelId exist)
+      - Position-skill mapping validation (skillLevelId belongs to specified skillId)
+      - Duplicate prevention (same title within same parent context)
+    - [ ] Soft delete pattern implemented (IsDeleted, DeletedBy, DeletedAt)
+    - [ ] Partial updates supported (only modify provided fields)
+    - [ ] Referential integrity checks (prevent deletion if dependent entities exist)
+    - [ ] Unit tests for service layer logic (validation, relationships, soft delete)
+    - [ ] Integration tests for all new endpoints (authorization, validation, CRUD operations)
+    - [ ] Contract tests for JSON schemas
+    - [ ] All existing tests pass (no regressions)
+    - [ ] Swagger documentation with examples
+  - Notes:
+    - Build on existing TaxonomyController and ClassificationService
+    - Maintain consistency with Project Management implementation (Iteration 14)
+    - Use same patterns: soft delete, partial updates, RequireRole authorization
+    - Keep read operations public, restrict write operations to Administrator only
+    - **Entity Relationships (Critical)**:
+      - CareerTrack → CareerPath (careerPathId required)
+      - Position → CareerTrack (careerTrackId required)
+      - Skill → SkillCategory (skillCategoryId required)
+      - SkillLevel → Skill (skillId required)
+      - PositionToSkill → Position + Skill + SkillLevel (positionId, skillId, skillLevelId all required)
+    - **Validation Hierarchy**: When creating/updating, validate parent entities exist
+    - **Position-to-Skill Mapping Enhancement**: Now includes required skill level (skillLevelId) to define proficiency expectations per position
+    - **Referential Integrity**: Check for dependent entities before soft deletion (e.g., cannot delete career path if it has career tracks)
+    - **Skill Categories**: Added missing CUD operations for skill_categories entity
+    - Consider cascade behavior: deleting career path should check for dependent tracks/positions and either prevent deletion or cascade soft delete
 
 - [ ] Iteration 16 — Reporting & analytics (basic)
   - Scope: GET /reports/feedback-summary, GET /analytics/skills-gap
