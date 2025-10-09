@@ -221,13 +221,13 @@ The database is automatically seeded with 55 test users. Key users for testing:
 
 | Name | Username | Roles | User ID |
 |------|----------|-------|---------|
-| John Doe | john.doe | Administrator, Employee | `679add6e-6c29-4e00-b6a5-b69c8e0f3445` |
+| John Doe | john.doe | Administrator, Solution Owner, Employee | `679add6e-6c29-4e00-b6a5-b69c8e0f3445` |
 | Henry Wilson | henry.wilson | People Manager | `977f4f1f-b3ce-4244-98fc-2c0d0248de88` |
 | Eve Adams | eve.adams | Employee | `c7746e91-a5e8-4f8b-9f22-f48374ffa2a4` |
 | Alice Wilson | alice.wilson | Employee | `e9741b9b-3c66-4462-af46-297810b29403` |
 | Ryan King | ryan.king | Employee | `5950a2be-bdfb-4dcb-9913-1e3e0e022a5c` |
 
-**Note**: All users have the Employee role by default. John Doe additionally has Administrator role, and Henry Wilson has People Manager role (with 3 direct reports).
+**Note**: All 55 users have the Employee role by default. John Doe additionally has Administrator and Solution Owner roles, and Henry Wilson has People Manager role (with 3 direct reports).
 
 ## Database Management
 

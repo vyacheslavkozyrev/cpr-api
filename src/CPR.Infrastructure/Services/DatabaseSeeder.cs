@@ -1340,6 +1340,7 @@ namespace CPR.Infrastructure.Services
             var employeeRole = await _context.Roles.FirstAsync(r => r.Title == "Employee");
             var peopleManagerRole = await _context.Roles.FirstAsync(r => r.Title == "People Manager");
             var administratorRole = await _context.Roles.FirstAsync(r => r.Title == "Administrator");
+            var solutionOwnerRole = await _context.Roles.FirstAsync(r => r.Title == "Solution Owner");
 
             // Get user IDs - all users from the seed data
             var userIds = new[]
@@ -1400,7 +1401,7 @@ namespace CPR.Infrastructure.Services
                 };
             }
 
-            // John Doe - Administrator (for testing purposes)
+            // John Doe - Administrator and Solution Owner (for testing purposes)
             var johnDoeIndex = userRoles.FindIndex(ur => ur.UserId == new Guid("679add6e-6c29-4e00-b6a5-b69c8e0f3445"));
             if (johnDoeIndex >= 0)
             {
@@ -1410,6 +1411,16 @@ namespace CPR.Infrastructure.Services
                     Id = Guid.NewGuid(),
                     UserId = new Guid("679add6e-6c29-4e00-b6a5-b69c8e0f3445"),
                     RoleId = administratorRole.Id,
+                    CreatedBy = systemUserId,
+                    CreatedAt = DateTimeOffset.UtcNow
+                });
+
+                // Add Solution Owner role in addition to Employee role
+                userRoles.Add(new UserToRole
+                {
+                    Id = Guid.NewGuid(),
+                    UserId = new Guid("679add6e-6c29-4e00-b6a5-b69c8e0f3445"),
+                    RoleId = solutionOwnerRole.Id,
                     CreatedBy = systemUserId,
                     CreatedAt = DateTimeOffset.UtcNow
                 });
