@@ -73,15 +73,15 @@ All endpoints require appropriate roles. Authorization is enforced through:
 - `GET /api/projects/{id}/roles` - Any authenticated user
 - `GET /api/projects/{id}/team` - Any authenticated user
 
-**Write Operations** (Project Owner role required):
-- `POST /api/projects` - Project Owner only
-- `PUT /api/projects/{id}` - Project Owner only
-- `DELETE /api/projects/{id}` - Project Owner only
-- `POST /api/projects/{id}/roles` - Project Owner only
-- `PUT /api/projects/{id}/roles/{roleId}` - Project Owner only
-- `DELETE /api/projects/{id}/roles/{roleId}` - Project Owner only
-- `POST /api/projects/{id}/team` - Project Owner only
-- `DELETE /api/projects/{id}/team/{teamMemberId}` - Project Owner only
+**Write Operations** (Solution Owner role required):
+- `POST /api/projects` - Solution Owner only
+- `PUT /api/projects/{id}` - Solution Owner only
+- `DELETE /api/projects/{id}` - Solution Owner only
+- `POST /api/projects/{id}/roles` - Solution Owner only
+- `PUT /api/projects/{id}/roles/{roleId}` - Solution Owner only
+- `DELETE /api/projects/{id}/roles/{roleId}` - Solution Owner only
+- `POST /api/projects/{id}/team` - Solution Owner only
+- `DELETE /api/projects/{id}/team/{teamMemberId}` - Solution Owner only
 
 ### **Authorization Implementation Notes**
 - Users can have multiple roles (many-to-many relationship)

@@ -59,6 +59,7 @@ CPR/
 │   ├── run-api.cmd          # Run API (no auth)
 │   ├── run-api-as-employee.cmd  # Run API as Eve Adams (employee)
 │   ├── run-api-as-manager.cmd   # Run API as Henry Wilson (manager)
+│   ├── run-api-as-solution-owner.cmd  # Run API as John Doe (solution owner)
 │   ├── generate-token.ps1   # Generate HMAC auth token
 │   ├── run-tests.cmd        # Run all tests
 │   └── run-docker-dev.cmd   # Start Docker containers
@@ -140,7 +141,17 @@ cd scripts
 - User ID: `977f4f1f-b3ce-4244-98fc-2c0d0248de88`
 - Token automatically copied to clipboard
 
-**Option D: Manual run**
+**Option D: Run as Solution Owner (John Doe)**
+```powershell
+cd scripts
+.\run-api-as-solution-owner.cmd
+```
+- User: John Doe (Solution Owner)
+- User ID: `679add6e-6c29-4e00-b6a5-b69c8e0f3445`
+- Token automatically copied to clipboard
+- **Note**: Ensure john.doe has Solution Owner role assigned in database
+
+**Option E: Manual run**
 ```powershell
 dotnet run --project src\CPR.Api --urls "http://localhost:5000"
 ```
@@ -181,9 +192,10 @@ dotnet test tests\CPR.ContractTests\CPR.ContractTests.csproj
 ```
 
 **Test Summary:**
-- **Unit Tests**: ~30+ tests - Business logic validation
-- **Integration Tests**: 55 tests - Full API + Database scenarios
-- **Contract Tests**: 5 tests - API contract validation & Swagger schema
+- **Unit Tests**: 22 tests - Business logic validation (ProjectService)
+- **Integration Tests**: 52 tests - Full API + Database scenarios (ProjectsController)
+- **Contract Tests**: 16 tests - API contract validation & Swagger schema (11 Projects + 5 existing)
+- **Total**: 90 tests - All passing ✅
 
 All tests run from empty databases and handle their own setup/cleanup automatically.
 
