@@ -22,11 +22,13 @@ namespace CPR.Api
             services.AddScoped<CPR.Application.Repositories.ITeamRepository, CPR.Infrastructure.Repositories.TeamRepository>();
             services.AddScoped<CPR.Application.Repositories.IRoleRepository, CPR.Infrastructure.Repositories.RoleRepository>();
             services.AddScoped<CPR.Application.Repositories.IUserRoleRepository, CPR.Infrastructure.Repositories.UserRoleRepository>();
+            services.AddScoped<CPR.Application.Repositories.IProjectRepository, CPR.Infrastructure.Repositories.ProjectRepository>();
             services.AddScoped<CPR.Application.Services.IGoalService, CPR.Infrastructure.Services.GoalService>();
             services.AddScoped<CPR.Application.Services.IClassificationService, CPR.Infrastructure.Services.ClassificationService>();
             services.AddScoped<CPR.Application.Services.IFeedbackService, CPR.Infrastructure.Services.FeedbackService>();
             services.AddScoped<CPR.Application.Services.ITeamService, CPR.Infrastructure.Services.TeamService>();
             services.AddScoped<CPR.Application.Services.IRoleService, CPR.Infrastructure.Services.RoleService>();
+            services.AddScoped<CPR.Application.Services.IProjectService, CPR.Infrastructure.Services.ProjectService>();
 
             // Register database seeder
             services.AddScoped<CPR.Infrastructure.Services.DatabaseSeeder>();
