@@ -1,9 +1,9 @@
 # Tasklist — CPR
 
 Progress (update after each iteration)
-- Iteration: 13
-- Status: Phase 5 Complete
-- Notes: Iteration 13 RBAC Phase 5 completed — All controllers now have proper role-based authorization with RequireRoleAttribute applied. GoalsController, TeamController updated with specific role requirements. MeController, FeedbackController, TaxonomyController verified. Documentation updated. All tests pass. RBAC system fully implemented!
+- Iteration: 14
+- Status: In Progress
+- Notes: Iteration 14 Project Management (Project Owner Role) started — Scope defined with 8 project management API endpoints. Database entities (Project, ProjectRole, ProjectAssignment) already exist in Domain layer. RBAC system from Iteration 13 ready for Project Owner role authorization. Implementation plan to be discussed before coding begins.
 
 Database Enhancement (2025-09-18): Successfully implemented comprehensive seed data system with:
 - Created SeedData.cs with hierarchical data generation methods
@@ -208,9 +208,33 @@ Iterations
   - Roles: Employee, People Manager, Solution Owner, Director, Administrator
   - Acceptance: All endpoints properly secured with role-based access control; integration tests for role authorization.
 
-- [ ] Iteration 14 — Promotions (director)
-  - Scope: GET /promotions, GET /promotions/{id}, POST /promotions/{id}/approve|decline
-  - Acceptance: Director flows test (read request -> approve/decline transitions).
+- [ ] Iteration 14 — Project Management (Project Owner Role)
+  - Goal: Implement project management APIs for Project Owner role to manage projects, project roles, and employee assignments.
+  - Scope:
+    - **Project Owner APIs (Project Owner role required)**:
+      - POST /api/projects — Create a new project
+      - PUT /api/projects/{id} — Edit project details
+      - POST /api/projects/{id}/roles — Create/define a project role
+      - PUT /api/projects/{id}/roles/{roleId} — Edit project role
+      - POST /api/projects/{id}/team — Assign employee to project with role
+      - DELETE /api/projects/{id}/team/{teamId} — Remove employee from project
+    - **Public/Shared APIs (All roles)**:
+      - GET /api/projects — List all projects (filtered by permissions)
+      - GET /api/projects/{id} — Get project details with roles and team members
+  - Implementation:
+    - DTOs: ProjectDto, CreateProjectDto, UpdateProjectDto, ProjectRoleDto, CreateProjectRoleDto, UpdateProjectRoleDto, ProjectTeamDto, CreateProjectTeamDto
+    - Controller: ProjectsController with appropriate endpoints
+    - Service: IProjectService and ProjectService with business logic
+    - Repository: IProjectRepository and ProjectRepository for data access
+    - Authorization: RequireRole("Project Owner") for write operations
+  - Acceptance Criteria:
+    - Project Owner can create/edit projects
+    - Project Owner can define project-specific roles
+    - Project Owner can assign/remove employees to projects with roles
+    - All roles can view projects list and details
+    - Integration tests cover all CRUD operations and authorization
+    - Unit tests for business logic and validation
+    - Swagger documentation includes all endpoints with examples
 
 - [ ] Iteration 15 — Positions & position->skill mapping (admin)
   - Scope: CRUD /positions, POST /position_to_skill
