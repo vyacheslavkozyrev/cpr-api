@@ -1,4 +1,6 @@
+#nullable enable
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Linq;
@@ -544,7 +546,9 @@ namespace CPR.IntegrationTests
             // Verify data was saved
             var savedManager = await db.Employees.FirstOrDefaultAsync(e => e.UserId == Guid.Parse("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"));
             var savedEmployee = await db.Employees.FirstOrDefaultAsync(e => e.UserId == Guid.Parse("cccccccc-cccc-cccc-cccc-cccccccccccc"));
-            var directReports = await db.Employees.Where(e => e.ManagerId == savedManager.Id && !e.IsDeleted).ToListAsync();
+            var directReports = savedManager != null
+                ? await db.Employees.Where(e => e.ManagerId == savedManager.Id && !e.IsDeleted).ToListAsync()
+                : new List<CPR.Domain.Entities.Employee>();
 
             System.Diagnostics.Debug.WriteLine($"DatabaseCleanupFixture: Manager saved: {savedManager != null}, Employee saved: {savedEmployee != null}, Direct reports count: {directReports.Count}");
             if (savedManager != null) System.Diagnostics.Debug.WriteLine($"DatabaseCleanupFixture: Manager ID: {savedManager.Id}, IsDeleted: {savedManager.IsDeleted}");
@@ -555,8 +559,8 @@ namespace CPR.IntegrationTests
             var employeeRoles = await db.UserRoles.Where(ur => ur.UserId == Guid.Parse("cccccccc-cccc-cccc-cccc-cccccccccccc") && !ur.IsDeleted).Include(ur => ur.Role).ToListAsync();
 
             System.Diagnostics.Debug.WriteLine($"DatabaseCleanupFixture: Manager roles count: {managerRoles.Count}, Employee roles count: {employeeRoles.Count}");
-            foreach (var ur in managerRoles) System.Diagnostics.Debug.WriteLine($"DatabaseCleanupFixture: Manager role: {ur.Role.Title}");
-            foreach (var ur in employeeRoles) System.Diagnostics.Debug.WriteLine($"DatabaseCleanupFixture: Employee role: {ur.Role.Title}");
+            foreach (var ur in managerRoles) System.Diagnostics.Debug.WriteLine($"DatabaseCleanupFixture: Manager role: {ur.Role?.Title ?? "Unknown"}");
+            foreach (var ur in employeeRoles) System.Diagnostics.Debug.WriteLine($"DatabaseCleanupFixture: Employee role: {ur.Role?.Title ?? "Unknown"}");
         }
     }
 }
