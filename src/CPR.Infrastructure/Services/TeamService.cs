@@ -254,12 +254,12 @@ namespace CPR.Infrastructure.Services
         /// <summary>
         /// Get projects for an employee
         /// </summary>
-        private async Task<ProjectRoleDto[]> GetEmployeeProjectsAsync(Guid employeeId)
+        private async Task<TeamMemberProjectDto[]> GetEmployeeProjectsAsync(Guid employeeId)
         {
             var projectTeams = await _repo.GetProjectTeamsForEmployee(employeeId)
                 .ToListAsync();
 
-            return projectTeams.Select(pt => new ProjectRoleDto
+            return projectTeams.Select(pt => new TeamMemberProjectDto
             {
                 ProjectId = pt.ProjectId,
                 ProjectTitle = "Project", // Simplified - would need to join with Project table

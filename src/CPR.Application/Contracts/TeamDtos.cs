@@ -51,7 +51,7 @@ namespace CPR.Application.Contracts
         public List<TeamFeedbackSummaryDto> RecentFeedback { get; set; } = new();
 
         /// <summary>Projects the employee is involved in</summary>
-        public List<ProjectRoleDto> Projects { get; set; } = new();
+        public List<TeamMemberProjectDto> Projects { get; set; } = new();
     }
 
     /// <summary>
@@ -133,9 +133,9 @@ namespace CPR.Application.Contracts
     }
 
     /// <summary>
-    /// Project role information for team member profile
+    /// Project assignment information for team member profile
     /// </summary>
-    public class ProjectRoleDto
+    public class TeamMemberProjectDto
     {
         /// <summary>Project identifier</summary>
         public Guid ProjectId { get; set; }
