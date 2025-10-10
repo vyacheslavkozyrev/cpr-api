@@ -1,0 +1,43 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://example.com/schemas/position_skill.schema.json",
+    "type": "object",
+    "required": [
+        "id",
+        "positionId",
+        "skillId",
+        "skillTitle",
+        "skillLevelId",
+        "skillLevelTitle",
+        "createdAt"
+    ],
+    "properties": {
+        "id": {
+            "type": "string",
+            "format": "uuid"
+        },
+        "positionId": {
+            "type": "string",
+            "format": "uuid"
+        },
+        "skillId": {
+            "type": "string",
+            "format": "uuid"
+        },
+        "skillTitle": {
+            "type": "string"
+        },
+        "skillLevelId": {
+            "type": "string",
+            "format": "uuid"
+        },
+        "skillLevelTitle": {
+            "type": "string"
+        },
+        "createdAt": {
+            "type": "string",
+            "format": "date-time"
+        }
+    },
+    "additionalProperties": false
+}

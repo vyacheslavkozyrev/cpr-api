@@ -1,0 +1,30 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://example.com/schemas/skill.schema.json",
+    "type": "object",
+    "required": [
+        "id",
+        "title",
+        "categoryId"
+    ],
+    "properties": {
+        "id": {
+            "type": "string",
+            "format": "uuid"
+        },
+        "title": {
+            "type": "string"
+        },
+        "description": {
+            "type": [
+                "string",
+                "null"
+            ]
+        },
+        "categoryId": {
+            "type": "string",
+            "format": "uuid"
+        }
+    },
+    "additionalProperties": false
+}

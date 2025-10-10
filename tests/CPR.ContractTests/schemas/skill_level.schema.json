@@ -1,0 +1,36 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://example.com/schemas/skill_level.schema.json",
+    "type": "object",
+    "required": [
+        "id",
+        "skillId",
+        "value",
+        "title"
+    ],
+    "properties": {
+        "id": {
+            "type": "string",
+            "format": "uuid"
+        },
+        "skillId": {
+            "type": "string",
+            "format": "uuid"
+        },
+        "value": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 5
+        },
+        "title": {
+            "type": "string"
+        },
+        "description": {
+            "type": [
+                "string",
+                "null"
+            ]
+        }
+    },
+    "additionalProperties": false
+}
