@@ -57,6 +57,7 @@ CPR/
 ├── scripts/
 │   ├── run-api-as-employee.cmd  # Run API as Eve Adams (employee)
 │   ├── run-api-as-manager.cmd   # Run API as Henry Wilson (manager)
+│   ├── run-api-as-administrator.cmd  # Run API as Administrator
 │   ├── run-api-as-solution-owner.cmd  # Run API as John Doe (solution owner)
 │   ├── generate-token.ps1   # Generate HMAC auth token
 │   ├── run-tests.cmd        # Run all tests
@@ -129,7 +130,17 @@ cd scripts
 - User ID: `977f4f1f-b3ce-4244-98fc-2c0d0248de88`
 - Token automatically copied to clipboard
 
-**Option C: Run as Solution Owner (John Doe)**
+**Option C: Run as Administrator**
+```powershell
+cd scripts
+.\run-api-as-administrator.cmd
+```
+- User: Administrator
+- User ID: `679add6e-6c29-4e00-b6a5-b69c8e0f3445`
+- Token automatically copied to clipboard
+- **Note**: Required for taxonomy management write operations (POST/PUT/DELETE)
+
+**Option D: Run as Solution Owner (John Doe)**
 ```powershell
 cd scripts
 .\run-api-as-solution-owner.cmd
@@ -139,7 +150,7 @@ cd scripts
 - Token automatically copied to clipboard
 - **Note**: Ensure john.doe has Solution Owner role assigned in database
 
-**Option D: Manual run**
+**Option E: Manual run**
 ```powershell
 dotnet run --project src\CPR.Api --urls "http://localhost:5000"
 ```
@@ -472,6 +483,12 @@ Windows (PowerShell):
 
 # start API as employee (token copied to clipboard)
 .\scripts\run-api-as-employee.cmd
+
+# start API as manager (token copied to clipboard)
+.\scripts\run-api-as-manager.cmd
+
+# start API as administrator (token copied to clipboard)
+.\scripts\run-api-as-administrator.cmd
 ```
 
 Unix / CI (bash):

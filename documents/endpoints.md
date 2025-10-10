@@ -59,12 +59,49 @@ All endpoints require appropriate roles. Authorization is enforced through:
 - `GET /me/feedback/request` - Any authenticated user
 - `GET /me/feedback/request/todo` - Any authenticated user
 
-#### **Taxonomy Endpoints** (Public - no authentication required)
+#### **Taxonomy Endpoints (Read)** (Public - no authentication required)
 - `GET /career` - Public
 - `GET /career_track` - Public
 - `GET /positions` - Public
 - `GET /skills` - Public
 - `GET /skill_levels` - Public
+- `GET /skill_categories` - Public
+- `GET /positions/{id}/skills` - Public
+
+#### **Taxonomy Management Endpoints (Write)** (Administrator role required)
+**Career Path Management**:
+- `POST /api/career` - Administrator only
+- `PUT /api/career/{id}` - Administrator only
+- `DELETE /api/career/{id}` - Administrator only (soft delete)
+
+**Career Track Management**:
+- `POST /api/career_track` - Administrator only
+- `PUT /api/career_track/{id}` - Administrator only
+- `DELETE /api/career_track/{id}` - Administrator only (soft delete)
+
+**Position Management**:
+- `POST /api/positions` - Administrator only
+- `PUT /api/positions/{id}` - Administrator only
+- `DELETE /api/positions/{id}` - Administrator only (soft delete)
+
+**Skill Category Management**:
+- `POST /api/skill_categories` - Administrator only
+- `PUT /api/skill_categories/{id}` - Administrator only
+- `DELETE /api/skill_categories/{id}` - Administrator only (soft delete)
+
+**Skill Management**:
+- `POST /api/skills` - Administrator only
+- `PUT /api/skills/{id}` - Administrator only
+- `DELETE /api/skills/{id}` - Administrator only (soft delete)
+
+**Skill Level Management**:
+- `POST /api/skill_levels` - Administrator only
+- `PUT /api/skill_levels/{id}` - Administrator only
+- `DELETE /api/skill_levels/{id}` - Administrator only (soft delete)
+
+**Position-to-Skill Mapping**:
+- `POST /api/positions/{id}/skills` - Administrator only
+- `DELETE /api/positions/{id}/skills/{skillId}` - Administrator only
 
 #### **Project Management Endpoints**
 **Read Operations** (Any authenticated user):
@@ -840,13 +877,31 @@ Users & Employees
 - GET /users; POST /users; PATCH /users/{id}; DELETE /users/{id}
 - GET /employees; POST /employees; PATCH /employees/{id}; DELETE /employees/{id}
 
-Positions & Career
-- CRUD /positions, /career_tracks, /career_paths
-- GET /positions/{id}/skills
+Career Paths & Career Tracks
+- POST /api/career — Create career path
+- PUT /api/career/{id} — Update career path
+- DELETE /api/career/{id} — Soft delete career path
+- POST /api/career_track — Create career track
+- PUT /api/career_track/{id} — Update career track
+- DELETE /api/career_track/{id} — Soft delete career track
 
-Skills taxonomy
-- CRUD /skills, /skill_levels, /skill_categories
-- POST /position_to_skill — map position → skill
+Positions
+- POST /api/positions — Create position
+- PUT /api/positions/{id} — Update position
+- DELETE /api/positions/{id} — Soft delete position
+- POST /api/positions/{id}/skills — Map skill to position
+- DELETE /api/positions/{id}/skills/{skillId} — Remove skill from position
+
+Skills Taxonomy
+- POST /api/skill_categories — Create skill category
+- PUT /api/skill_categories/{id} — Update skill category
+- DELETE /api/skill_categories/{id} — Soft delete skill category
+- POST /api/skills — Create skill
+- PUT /api/skills/{id} — Update skill
+- DELETE /api/skills/{id} — Soft delete skill
+- POST /api/skill_levels — Create skill level
+- PUT /api/skill_levels/{id} — Update skill level
+- DELETE /api/skill_levels/{id} — Soft delete skill level
 
 Audit & housekeeping
 - GET /audit_logs?entity_type=&entity_id=&from=&to=
@@ -876,4 +931,424 @@ Audit & housekeeping
 - Pagination and filter conventions: page, per_page, sort, q
 - Soft-delete: default filter is_deleted=false (use include_deleted=true to override)
 - Auth: role claims (admin|manager|director) + resource-owner checks
+
+---
+
+## Iteration 15 — Taxonomy Management (Administrator CUD Operations)
+
+### Overview
+Iteration 15 extends the read-only taxonomy endpoints (career paths, career tracks, positions, skill categories, skills, skill levels) with full Create, Update, and Delete operations. All write operations require the **Administrator** role.
+
+### Endpoints Summary
+
+#### Career Path Management (Administrator role required)
+- **POST /api/career** — Create a new career path
+- **PUT /api/career/{id}** — Update an existing career path
+- **DELETE /api/career/{id}** — Soft delete a career path
+
+#### Career Track Management (Administrator role required)
+- **POST /api/career_track** — Create a new career track
+- **PUT /api/career_track/{id}** — Update an existing career track
+- **DELETE /api/career_track/{id}** — Soft delete a career track
+
+#### Position Management (Administrator role required)
+- **POST /api/positions** — Create a new position
+- **PUT /api/positions/{id}** — Update an existing position
+- **DELETE /api/positions/{id}** — Soft delete a position
+
+#### Skill Category Management (Administrator role required)
+- **POST /api/skill_categories** — Create a new skill category
+- **PUT /api/skill_categories/{id}** — Update an existing skill category
+- **DELETE /api/skill_categories/{id}** — Soft delete a skill category
+
+#### Skill Management (Administrator role required)
+- **POST /api/skills** — Create a new skill
+- **PUT /api/skills/{id}** — Update an existing skill
+- **DELETE /api/skills/{id}** — Soft delete a skill
+
+#### Skill Level Management (Administrator role required)
+- **POST /api/skill_levels** — Create a new skill level
+- **PUT /api/skill_levels/{id}** — Update an existing skill level
+- **DELETE /api/skill_levels/{id}** — Soft delete a skill level
+
+#### Position-to-Skill Mapping (Administrator role required)
+- **POST /api/positions/{id}/skills** — Map a skill to a position with required skill level
+- **DELETE /api/positions/{id}/skills/{skillId}** — Remove skill mapping from a position
+
+### Endpoint Details
+
+#### Career Path Management
+
+##### POST /api/career
+- **Purpose**: Create a new career path
+- **Authentication**: Required (JWT Bearer token)
+- **Authorization**: Administrator role required
+- **Request Body** (JSON):
+  ```json
+  {
+    "title": "string - Career path title (required, 1-250 characters)",
+    "description": "string - Career path description (optional, max 2000 characters)"
+  }
+  ```
+- **Response 201** (JSON):
+  ```json
+  {
+    "id": "GUID - Career path identifier",
+    "title": "string - Career path title",
+    "description": "string - Career path description (optional)"
+  }
+  ```
+- **Error Responses**:
+  - `400 Bad Request`: Validation errors (title required, duplicate title, length constraints)
+  - `401 Unauthorized`: Authentication required
+  - `403 Forbidden`: Administrator role required
+
+##### PUT /api/career/{id}
+- **Purpose**: Update an existing career path
+- **Authentication**: Required (JWT Bearer token)
+- **Authorization**: Administrator role required
+- **Request Body** (JSON):
+  ```json
+  {
+    "title": "string - Career path title (optional, 1-250 characters)",
+    "description": "string - Career path description (optional, max 2000 characters)"
+  }
+  ```
+- **Response 200** (JSON): Returns updated career path
+- **Error Responses**:
+  - `400 Bad Request`: Validation errors (duplicate title, length constraints)
+  - `401 Unauthorized`: Authentication required
+  - `403 Forbidden`: Administrator role required
+  - `404 Not Found`: Career path not found
+
+##### DELETE /api/career/{id}
+- **Purpose**: Soft delete a career path (checks for dependent career tracks)
+- **Authentication**: Required (JWT Bearer token)
+- **Authorization**: Administrator role required
+- **Response 204**: No content (successful deletion)
+- **Error Responses**:
+  - `400 Bad Request`: Cannot delete - has dependent career tracks
+  - `401 Unauthorized`: Authentication required
+  - `403 Forbidden`: Administrator role required
+  - `404 Not Found`: Career path not found
+
+#### Career Track Management
+
+##### POST /api/career_track
+- **Purpose**: Create a new career track
+- **Authentication**: Required (JWT Bearer token)
+- **Authorization**: Administrator role required
+- **Request Body** (JSON):
+  ```json
+  {
+    "title": "string - Career track title (required, 1-250 characters)",
+    "description": "string - Career track description (optional, max 2000 characters)",
+    "careerPathId": "GUID - Parent career path identifier (required)"
+  }
+  ```
+- **Response 201** (JSON): Returns created career track with `id`, `title`, `description`, `careerPathId`
+- **Error Responses**:
+  - `400 Bad Request`: Validation errors (title required, duplicate title within career path, invalid careerPathId)
+  - `401 Unauthorized`: Authentication required
+  - `403 Forbidden`: Administrator role required
+
+##### PUT /api/career_track/{id}
+- **Purpose**: Update an existing career track
+- **Authentication**: Required (JWT Bearer token)
+- **Authorization**: Administrator role required
+- **Request Body** (JSON):
+  ```json
+  {
+    "title": "string - Career track title (optional, 1-250 characters)",
+    "description": "string - Career track description (optional, max 2000 characters)",
+    "careerPathId": "GUID - Parent career path identifier (optional)"
+  }
+  ```
+- **Response 200** (JSON): Returns updated career track
+- **Error Responses**:
+  - `400 Bad Request`: Validation errors
+  - `401 Unauthorized`: Authentication required
+  - `403 Forbidden`: Administrator role required
+  - `404 Not Found`: Career track not found
+
+##### DELETE /api/career_track/{id}
+- **Purpose**: Soft delete a career track (checks for dependent positions)
+- **Authentication**: Required (JWT Bearer token)
+- **Authorization**: Administrator role required
+- **Response 204**: No content (successful deletion)
+- **Error Responses**:
+  - `400 Bad Request`: Cannot delete - has dependent positions
+  - `401 Unauthorized`: Authentication required
+  - `403 Forbidden`: Administrator role required
+  - `404 Not Found`: Career track not found
+
+#### Position Management
+
+##### POST /api/positions
+- **Purpose**: Create a new position
+- **Authentication**: Required (JWT Bearer token)
+- **Authorization**: Administrator role required
+- **Request Body** (JSON):
+  ```json
+  {
+    "title": "string - Position title (required, 1-250 characters)",
+    "description": "string - Position description (optional, max 2000 characters)",
+    "expectations": "string - Position expectations (optional, max 2000 characters)",
+    "careerTrackId": "GUID - Parent career track identifier (required)"
+  }
+  ```
+- **Response 201** (JSON): Returns created position with `id`, `title`, `description`, `expectations`, `careerTrackId`
+- **Error Responses**:
+  - `400 Bad Request`: Validation errors (title required, duplicate title within career track, invalid careerTrackId)
+  - `401 Unauthorized`: Authentication required
+  - `403 Forbidden`: Administrator role required
+
+##### PUT /api/positions/{id}
+- **Purpose**: Update an existing position
+- **Authentication**: Required (JWT Bearer token)
+- **Authorization**: Administrator role required
+- **Request Body** (JSON):
+  ```json
+  {
+    "title": "string - Position title (optional, 1-250 characters)",
+    "description": "string - Position description (optional, max 2000 characters)",
+    "expectations": "string - Position expectations (optional, max 2000 characters)",
+    "careerTrackId": "GUID - Parent career track identifier (optional)"
+  }
+  ```
+- **Response 200** (JSON): Returns updated position
+- **Error Responses**:
+  - `400 Bad Request`: Validation errors
+  - `401 Unauthorized`: Authentication required
+  - `403 Forbidden`: Administrator role required
+  - `404 Not Found`: Position not found
+
+##### DELETE /api/positions/{id}
+- **Purpose**: Soft delete a position (checks for employee assignments and skill mappings)
+- **Authentication**: Required (JWT Bearer token)
+- **Authorization**: Administrator role required
+- **Response 204**: No content (successful deletion)
+- **Error Responses**:
+  - `400 Bad Request`: Cannot delete - has employee assignments or skill mappings
+  - `401 Unauthorized`: Authentication required
+  - `403 Forbidden`: Administrator role required
+  - `404 Not Found`: Position not found
+
+#### Skill Category Management
+
+##### POST /api/skill_categories
+- **Purpose**: Create a new skill category
+- **Authentication**: Required (JWT Bearer token)
+- **Authorization**: Administrator role required
+- **Request Body** (JSON):
+  ```json
+  {
+    "title": "string - Category title (required, 1-250 characters)",
+    "description": "string - Category description (optional, max 2000 characters)"
+  }
+  ```
+- **Response 201** (JSON): Returns created skill category with `id`, `title`, `description`
+- **Error Responses**:
+  - `400 Bad Request`: Validation errors (title required, duplicate title)
+  - `401 Unauthorized`: Authentication required
+  - `403 Forbidden`: Administrator role required
+
+##### PUT /api/skill_categories/{id}
+- **Purpose**: Update an existing skill category
+- **Authentication**: Required (JWT Bearer token)
+- **Authorization**: Administrator role required
+- **Request Body** (JSON):
+  ```json
+  {
+    "title": "string - Category title (optional, 1-250 characters)",
+    "description": "string - Category description (optional, max 2000 characters)"
+  }
+  ```
+- **Response 200** (JSON): Returns updated skill category
+- **Error Responses**:
+  - `400 Bad Request`: Validation errors
+  - `401 Unauthorized`: Authentication required
+  - `403 Forbidden`: Administrator role required
+  - `404 Not Found`: Skill category not found
+
+##### DELETE /api/skill_categories/{id}
+- **Purpose**: Soft delete a skill category (checks for dependent skills)
+- **Authentication**: Required (JWT Bearer token)
+- **Authorization**: Administrator role required
+- **Response 204**: No content (successful deletion)
+- **Error Responses**:
+  - `400 Bad Request`: Cannot delete - has dependent skills
+  - `401 Unauthorized`: Authentication required
+  - `403 Forbidden`: Administrator role required
+  - `404 Not Found`: Skill category not found
+
+#### Skill Management
+
+##### POST /api/skills
+- **Purpose**: Create a new skill
+- **Authentication**: Required (JWT Bearer token)
+- **Authorization**: Administrator role required
+- **Request Body** (JSON):
+  ```json
+  {
+    "title": "string - Skill title (required, 1-250 characters)",
+    "description": "string - Skill description (optional, max 2000 characters)",
+    "categoryId": "GUID - Parent skill category identifier (required)"
+  }
+  ```
+- **Response 201** (JSON): Returns created skill with `id`, `title`, `description`, `categoryId`
+- **Error Responses**:
+  - `400 Bad Request`: Validation errors (title required, duplicate title within category, invalid categoryId)
+  - `401 Unauthorized`: Authentication required
+  - `403 Forbidden`: Administrator role required
+
+##### PUT /api/skills/{id}
+- **Purpose**: Update an existing skill
+- **Authentication**: Required (JWT Bearer token)
+- **Authorization**: Administrator role required
+- **Request Body** (JSON):
+  ```json
+  {
+    "title": "string - Skill title (optional, 1-250 characters)",
+    "description": "string - Skill description (optional, max 2000 characters)",
+    "categoryId": "GUID - Parent skill category identifier (optional)"
+  }
+  ```
+- **Response 200** (JSON): Returns updated skill
+- **Error Responses**:
+  - `400 Bad Request`: Validation errors
+  - `401 Unauthorized`: Authentication required
+  - `403 Forbidden`: Administrator role required
+  - `404 Not Found`: Skill not found
+
+##### DELETE /api/skills/{id}
+- **Purpose**: Soft delete a skill (checks for skill levels, position mappings, employee assessments)
+- **Authentication**: Required (JWT Bearer token)
+- **Authorization**: Administrator role required
+- **Response 204**: No content (successful deletion)
+- **Error Responses**:
+  - `400 Bad Request`: Cannot delete - has skill levels, position mappings, or employee assessments
+  - `401 Unauthorized`: Authentication required
+  - `403 Forbidden`: Administrator role required
+  - `404 Not Found`: Skill not found
+
+#### Skill Level Management
+
+##### POST /api/skill_levels
+- **Purpose**: Create a new skill level
+- **Authentication**: Required (JWT Bearer token)
+- **Authorization**: Administrator role required
+- **Request Body** (JSON):
+  ```json
+  {
+    "skillId": "GUID - Parent skill identifier (required)",
+    "value": "integer - Level value 1-5 (required)",
+    "title": "string - Level title (required, 1-250 characters)",
+    "description": "string - Level description (optional, max 2000 characters)"
+  }
+  ```
+- **Response 201** (JSON): Returns created skill level with `id`, `skillId`, `value`, `title`, `description`
+- **Error Responses**:
+  - `400 Bad Request`: Validation errors (value must be 1-5, duplicate value for skill, invalid skillId)
+  - `401 Unauthorized`: Authentication required
+  - `403 Forbidden`: Administrator role required
+
+##### PUT /api/skill_levels/{id}
+- **Purpose**: Update an existing skill level
+- **Authentication**: Required (JWT Bearer token)
+- **Authorization**: Administrator role required
+- **Request Body** (JSON):
+  ```json
+  {
+    "skillId": "GUID - Parent skill identifier (optional)",
+    "value": "integer - Level value 1-5 (optional)",
+    "title": "string - Level title (optional, 1-250 characters)",
+    "description": "string - Level description (optional, max 2000 characters)"
+  }
+  ```
+- **Response 200** (JSON): Returns updated skill level
+- **Error Responses**:
+  - `400 Bad Request`: Validation errors
+  - `401 Unauthorized`: Authentication required
+  - `403 Forbidden`: Administrator role required
+  - `404 Not Found`: Skill level not found
+
+##### DELETE /api/skill_levels/{id}
+- **Purpose**: Soft delete a skill level (checks for position mappings and employee assessments)
+- **Authentication**: Required (JWT Bearer token)
+- **Authorization**: Administrator role required
+- **Response 204**: No content (successful deletion)
+- **Error Responses**:
+  - `400 Bad Request`: Cannot delete - has position mappings or employee assessments
+  - `401 Unauthorized`: Authentication required
+  - `403 Forbidden`: Administrator role required
+  - `404 Not Found`: Skill level not found
+
+#### Position-to-Skill Mapping
+
+##### POST /api/positions/{id}/skills
+- **Purpose**: Map a skill to a position with required skill level
+- **Authentication**: Required (JWT Bearer token)
+- **Authorization**: Administrator role required
+- **Request Body** (JSON):
+  ```json
+  {
+    "skillId": "GUID - Skill identifier (required)",
+    "skillLevelId": "GUID - Required skill level identifier (required)"
+  }
+  ```
+- **Response 201** (JSON):
+  ```json
+  {
+    "id": "GUID - Mapping identifier",
+    "positionId": "GUID - Position identifier",
+    "skillId": "GUID - Skill identifier",
+    "skillTitle": "string - Skill title",
+    "skillLevelId": "GUID - Skill level identifier",
+    "skillLevelTitle": "string - Skill level title",
+    "createdAt": "DateTime - Creation timestamp"
+  }
+  ```
+- **Error Responses**:
+  - `400 Bad Request`: Validation errors (skill level doesn't belong to skill, duplicate mapping, invalid skillId or skillLevelId)
+  - `401 Unauthorized`: Authentication required
+  - `403 Forbidden`: Administrator role required
+  - `404 Not Found`: Position not found
+
+##### DELETE /api/positions/{id}/skills/{skillId}
+- **Purpose**: Remove skill mapping from a position
+- **Authentication**: Required (JWT Bearer token)
+- **Authorization**: Administrator role required
+- **Response 204**: No content (successful removal)
+- **Error Responses**:
+  - `401 Unauthorized`: Authentication required
+  - `403 Forbidden`: Administrator role required
+  - `404 Not Found`: Position or skill mapping not found
+
+### Authorization Notes
+- All write operations require the **Administrator** role
+- Read operations (`GET /career`, `GET /skill_categories`, etc.) remain public and require no authentication
+- Users without the Administrator role receive `403 Forbidden` for all write operations
+- Role assignments are managed through the `user_to_role` table
+
+### Validation & Business Rules
+- **Duplicate Detection**: Titles must be unique within their parent context (e.g., career track titles unique within career path)
+- **Referential Integrity**: Parent entities must exist before creating child entities
+- **Soft Delete Protection**: Cannot delete entities with dependent children (e.g., career path with career tracks)
+- **Skill Level Values**: Must be integers 1-5 (Beginner to Expert)
+- **Skill Level Validation**: When mapping skills to positions, the skill level must belong to the specified skill
+- **Length Constraints**: Titles max 250 characters, descriptions max 2000 characters
+- **Partial Updates**: PUT endpoints support partial updates (only provided fields are modified)
+
+### Database Implementation
+- All deletions are **soft deletes** (sets `is_deleted = true`, `deleted_at = timestamp`, `deleted_by = user_id`)
+- Soft-deleted entities are automatically filtered from read queries
+- `modified_by` and `modified_at` fields are updated on every modification
+- All timestamps use `DateTimeOffset` for timezone support
+
+### Test Coverage
+- **Unit Tests**: 64 new tests in `TaxonomyControllerTests.cs` (148 total unit tests)
+- **Integration Tests**: 85 new tests in `TaxonomyControllerIntegrationTests.cs` (~285 total integration tests)
+- **Contract Tests**: 13 new tests in `TaxonomyContractTests.cs` with 8 JSON schema files (28 total contract tests)
+- All tests validate authorization, validation, soft delete behavior, and referential integrity
 
