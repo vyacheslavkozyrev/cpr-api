@@ -47,7 +47,7 @@ namespace CPR.Infrastructure.Data
                 b.HasKey(u => u.Id);
                 b.Property(u => u.Id).HasColumnName("id");
                 b.Property(u => u.UserName).HasColumnName("user_name").IsRequired();
-                b.Property(u => u.PasswordHash).HasColumnName("password_hash").IsRequired();
+                b.Property(u => u.EntraExternalId).HasColumnName("entra_external_id");
                 b.Property(u => u.DisplayName).HasColumnName("display_name");
 
                 b.Property(u => u.CreatedBy).HasColumnName("created_by");
@@ -57,6 +57,10 @@ namespace CPR.Infrastructure.Data
                 b.Property(u => u.IsDeleted).HasColumnName("is_deleted");
                 b.Property(u => u.DeletedBy).HasColumnName("deleted_by");
                 b.Property(u => u.DeletedAt).HasColumnName("deleted_at");
+
+                // Indexes
+                b.HasIndex(u => u.UserName).IsUnique().HasDatabaseName("UX_users_user_name");
+                b.HasIndex(u => u.EntraExternalId).IsUnique().HasDatabaseName("IX_users_entra_external_id");
             });
 
             modelBuilder.Entity<Employee>(b =>

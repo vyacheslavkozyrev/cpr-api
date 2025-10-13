@@ -279,385 +279,330 @@ namespace CPR.Infrastructure.Services
                 {
                     Id = new Guid("679add6e-6c29-4e00-b6a5-b69c8e0f3445"),
                     UserName = "john.doe",
-                    PasswordHash = "hashed_password_placeholder",
                     DisplayName = "John Doe"
                 },
                 new User
                 {
                     Id = new Guid("c6874b28-e2fa-4835-8e8f-159bd5067091"),
                     UserName = "jane.smith",
-                    PasswordHash = "hashed_password_placeholder",
                     DisplayName = "Jane Smith"
                 },
                 new User
                 {
                     Id = new Guid("45f0eaae-b3eb-4261-a430-4d9e94ec8e0d"),
                     UserName = "bob.johnson",
-                    PasswordHash = "hashed_password_placeholder",
                     DisplayName = "Bob Johnson"
                 },
                 new User
                 {
                     Id = new Guid("e9741b9b-3c66-4462-af46-297810b29403"),
                     UserName = "alice.wilson",
-                    PasswordHash = "hashed_password_placeholder",
                     DisplayName = "Alice Wilson"
                 },
                 new User
                 {
                     Id = new Guid("d670f2cf-66a6-4cb6-947f-062c7b089c8d"),
                     UserName = "charlie.brown",
-                    PasswordHash = "hashed_password_placeholder",
                     DisplayName = "Charlie Brown"
                 },
                 new User
                 {
                     Id = new Guid("bf428236-361c-4ade-995d-21a62feec86f"),
                     UserName = "diana.prince",
-                    PasswordHash = "hashed_password_placeholder",
                     DisplayName = "Diana Prince"
                 },
                 new User
                 {
                     Id = new Guid("c7746e91-a5e8-4f8b-9f22-f48374ffa2a4"),
                     UserName = "eve.adams",
-                    PasswordHash = "hashed_password_placeholder",
                     DisplayName = "Eve Adams"
                 },
                 new User
                 {
                     Id = new Guid("7567ad7a-174e-461c-bd88-e7489db10317"),
                     UserName = "frank.miller",
-                    PasswordHash = "hashed_password_placeholder",
                     DisplayName = "Frank Miller"
                 },
                 new User
                 {
                     Id = new Guid("5d70d7d5-570e-46fe-91ce-2d6081b365aa"),
                     UserName = "grace.lee",
-                    PasswordHash = "hashed_password_placeholder",
                     DisplayName = "Grace Lee"
                 },
                 new User
                 {
                     Id = new Guid("977f4f1f-b3ce-4244-98fc-2c0d0248de88"),
                     UserName = "henry.wilson",
-                    PasswordHash = "hashed_password_placeholder",
                     DisplayName = "Henry Wilson"
                 },
                 new User
                 {
                     Id = new Guid("20c78aa6-077a-4d3b-a7c5-84d561ec3975"),
                     UserName = "iris.davis",
-                    PasswordHash = "hashed_password_placeholder",
                     DisplayName = "Iris Davis"
                 },
                 new User
                 {
                     Id = new Guid("87896109-9ac7-444c-aa79-dfe1dc908a5d"),
                     UserName = "jack.thompson",
-                    PasswordHash = "hashed_password_placeholder",
                     DisplayName = "Jack Thompson"
                 },
                 new User
                 {
                     Id = new Guid("81694c14-a96a-4625-b5e5-a9fd034021af"),
                     UserName = "kate.garcia",
-                    PasswordHash = "hashed_password_placeholder",
                     DisplayName = "Kate Garcia"
                 },
                 new User
                 {
                     Id = new Guid("7522f469-e697-4e02-bb2f-f7f055c9aacb"),
                     UserName = "liam.anderson",
-                    PasswordHash = "hashed_password_placeholder",
                     DisplayName = "Liam Anderson"
                 },
                 new User
                 {
                     Id = new Guid("bf694c99-cfa6-4fba-be98-efba28bb4f31"),
                     UserName = "mia.rodriguez",
-                    PasswordHash = "hashed_password_placeholder",
                     DisplayName = "Mia Rodriguez"
                 },
                 new User
                 {
                     Id = new Guid("879c8ae6-c1c0-4d16-85fb-5dfe698fd108"),
                     UserName = "noah.martinez",
-                    PasswordHash = "hashed_password_placeholder",
                     DisplayName = "Noah Martinez"
                 },
                 new User
                 {
                     Id = new Guid("88b6f0d3-298e-4083-84cf-fa7893a0c846"),
                     UserName = "olivia.lopez",
-                    PasswordHash = "hashed_password_placeholder",
                     DisplayName = "Olivia Lopez"
                 },
                 new User
                 {
                     Id = new Guid("ad92cd5e-5599-4f3c-b2e1-39a49dd6b5bc"),
                     UserName = "peter.gonzalez",
-                    PasswordHash = "hashed_password_placeholder",
                     DisplayName = "Peter Gonzalez"
                 },
                 new User
                 {
                     Id = new Guid("cc230776-dc23-4996-9383-15fee9688215"),
                     UserName = "quinn.hernandez",
-                    PasswordHash = "hashed_password_placeholder",
                     DisplayName = "Quinn Hernandez"
                 },
                 new User
                 {
                     Id = new Guid("5950a2be-bdfb-4dcb-9913-1e3e0e022a5c"),
                     UserName = "ryan.king",
-                    PasswordHash = "hashed_password_placeholder",
                     DisplayName = "Ryan King"
                 },
                 new User
                 {
                     Id = new Guid("a22e8c3a-4ae0-4b59-b766-89a226fa82f0"),
                     UserName = "sara.wright",
-                    PasswordHash = "hashed_password_placeholder",
                     DisplayName = "Sara Wright"
                 },
                 new User
                 {
                     Id = new Guid("b1111111-1111-4111-1111-111111111111"),
                     UserName = "tom.richards",
-                    PasswordHash = "hashed_password_placeholder",
                     DisplayName = "Tom Richards"
                 },
                 new User
                 {
                     Id = new Guid("b2222222-2222-4222-2222-222222222222"),
                     UserName = "uma.patel",
-                    PasswordHash = "hashed_password_placeholder",
                     DisplayName = "Uma Patel"
                 },
                 new User
                 {
                     Id = new Guid("b3333333-3333-4333-3333-333333333333"),
                     UserName = "victor.chen",
-                    PasswordHash = "hashed_password_placeholder",
                     DisplayName = "Victor Chen"
                 },
                 new User
                 {
                     Id = new Guid("b4444444-4444-4444-4444-444444444444"),
                     UserName = "wendy.clark",
-                    PasswordHash = "hashed_password_placeholder",
                     DisplayName = "Wendy Clark"
                 },
                 new User
                 {
                     Id = new Guid("b5555555-5555-4555-5555-555555555555"),
                     UserName = "xavier.ross",
-                    PasswordHash = "hashed_password_placeholder",
                     DisplayName = "Xavier Ross"
                 },
                 new User
                 {
                     Id = new Guid("b6666666-6666-4666-6666-666666666666"),
                     UserName = "yara.hassan",
-                    PasswordHash = "hashed_password_placeholder",
                     DisplayName = "Yara Hassan"
                 },
                 new User
                 {
                     Id = new Guid("b7777777-7777-4777-7777-777777777777"),
                     UserName = "zack.powell",
-                    PasswordHash = "hashed_password_placeholder",
                     DisplayName = "Zack Powell"
                 },
                 new User
                 {
                     Id = new Guid("b8888888-8888-4888-8888-888888888888"),
                     UserName = "amy.foster",
-                    PasswordHash = "hashed_password_placeholder",
                     DisplayName = "Amy Foster"
                 },
                 new User
                 {
                     Id = new Guid("b9999999-9999-4999-9999-999999999999"),
                     UserName = "ben.cooper",
-                    PasswordHash = "hashed_password_placeholder",
                     DisplayName = "Ben Cooper"
                 },
                 new User
                 {
                     Id = new Guid("c1111111-1111-4111-1111-111111111111"),
                     UserName = "clara.morgan",
-                    PasswordHash = "hashed_password_placeholder",
                     DisplayName = "Clara Morgan"
                 },
                 new User
                 {
                     Id = new Guid("c2222222-2222-4222-2222-222222222222"),
                     UserName = "david.bell",
-                    PasswordHash = "hashed_password_placeholder",
                     DisplayName = "David Bell"
                 },
                 new User
                 {
                     Id = new Guid("c3333333-3333-4333-3333-333333333333"),
                     UserName = "emma.murphy",
-                    PasswordHash = "hashed_password_placeholder",
                     DisplayName = "Emma Murphy"
                 },
                 new User
                 {
                     Id = new Guid("c4444444-4444-4444-4444-444444444444"),
                     UserName = "felix.rivera",
-                    PasswordHash = "hashed_password_placeholder",
                     DisplayName = "Felix Rivera"
                 },
                 new User
                 {
                     Id = new Guid("c5555555-5555-4555-5555-555555555555"),
                     UserName = "gina.coleman",
-                    PasswordHash = "hashed_password_placeholder",
                     DisplayName = "Gina Coleman"
                 },
                 new User
                 {
                     Id = new Guid("c6666666-6666-4666-6666-666666666666"),
                     UserName = "hugo.sanders",
-                    PasswordHash = "hashed_password_placeholder",
                     DisplayName = "Hugo Sanders"
                 },
                 new User
                 {
                     Id = new Guid("c7777777-7777-4777-7777-777777777777"),
                     UserName = "isla.perry",
-                    PasswordHash = "hashed_password_placeholder",
                     DisplayName = "Isla Perry"
                 },
                 new User
                 {
                     Id = new Guid("c8888888-8888-4888-8888-888888888888"),
                     UserName = "jason.butler",
-                    PasswordHash = "hashed_password_placeholder",
                     DisplayName = "Jason Butler"
                 },
                 new User
                 {
                     Id = new Guid("c9999999-9999-4999-9999-999999999999"),
                     UserName = "kara.simmons",
-                    PasswordHash = "hashed_password_placeholder",
                     DisplayName = "Kara Simmons"
                 },
                 new User
                 {
                     Id = new Guid("d1111111-1111-4111-1111-111111111111"),
                     UserName = "leo.barnes",
-                    PasswordHash = "hashed_password_placeholder",
                     DisplayName = "Leo Barnes"
                 },
                 new User
                 {
                     Id = new Guid("d2222222-2222-4222-2222-222222222222"),
                     UserName = "maya.ross",
-                    PasswordHash = "hashed_password_placeholder",
                     DisplayName = "Maya Ross"
                 },
                 new User
                 {
                     Id = new Guid("d3333333-3333-4333-3333-333333333333"),
                     UserName = "nathan.jenkins",
-                    PasswordHash = "hashed_password_placeholder",
                     DisplayName = "Nathan Jenkins"
                 },
                 new User
                 {
                     Id = new Guid("d4444444-4444-4444-4444-444444444444"),
                     UserName = "olivia.ward",
-                    PasswordHash = "hashed_password_placeholder",
                     DisplayName = "Olivia Ward"
                 },
                 new User
                 {
                     Id = new Guid("d5555555-5555-4555-5555-555555555555"),
                     UserName = "paul.hayes",
-                    PasswordHash = "hashed_password_placeholder",
                     DisplayName = "Paul Hayes"
                 },
                 new User
                 {
                     Id = new Guid("d6666666-6666-4666-6666-666666666666"),
                     UserName = "rachel.myers",
-                    PasswordHash = "hashed_password_placeholder",
                     DisplayName = "Rachel Myers"
                 },
                 new User
                 {
                     Id = new Guid("d7777777-7777-4777-7777-777777777777"),
                     UserName = "samuel.long",
-                    PasswordHash = "hashed_password_placeholder",
                     DisplayName = "Samuel Long"
                 },
                 new User
                 {
                     Id = new Guid("d8888888-8888-4888-8888-888888888888"),
                     UserName = "tina.watson",
-                    PasswordHash = "hashed_password_placeholder",
                     DisplayName = "Tina Watson"
                 },
                 new User
                 {
                     Id = new Guid("d9999999-9999-4999-9999-999999999999"),
                     UserName = "ulysses.brooks",
-                    PasswordHash = "hashed_password_placeholder",
                     DisplayName = "Ulysses Brooks"
                 },
                 new User
                 {
                     Id = new Guid("e1111111-1111-4111-1111-111111111111"),
                     UserName = "veronica.kelly",
-                    PasswordHash = "hashed_password_placeholder",
                     DisplayName = "Veronica Kelly"
                 },
                 new User
                 {
                     Id = new Guid("e2222222-2222-4222-2222-222222222222"),
                     UserName = "william.sanders",
-                    PasswordHash = "hashed_password_placeholder",
                     DisplayName = "William Sanders"
                 },
                 new User
                 {
                     Id = new Guid("e3333333-3333-4333-3333-333333333333"),
                     UserName = "xena.price",
-                    PasswordHash = "hashed_password_placeholder",
                     DisplayName = "Xena Price"
                 },
                 new User
                 {
                     Id = new Guid("e4444444-4444-4444-4444-444444444444"),
                     UserName = "yale.bennett",
-                    PasswordHash = "hashed_password_placeholder",
                     DisplayName = "Yale Bennett"
                 },
                 new User
                 {
                     Id = new Guid("e5555555-5555-4555-5555-555555555555"),
                     UserName = "zoe.wood",
-                    PasswordHash = "hashed_password_placeholder",
                     DisplayName = "Zoe Wood"
                 },
                 new User
                 {
                     Id = new Guid("e6666666-6666-4666-6666-666666666666"),
                     UserName = "aaron.gray",
-                    PasswordHash = "hashed_password_placeholder",
                     DisplayName = "Aaron Gray"
                 },
                 new User
                 {
                     Id = new Guid("e7777777-7777-4777-7777-777777777777"),
                     UserName = "bella.james",
-                    PasswordHash = "hashed_password_placeholder",
                     DisplayName = "Bella James"
                 }
             };

@@ -423,7 +423,6 @@ namespace CPR.IntegrationTests
                 Id = Guid.Parse("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"),
                 UserName = "test_manager",
                 DisplayName = "Test Manager User",
-                PasswordHash = "hashedpassword",
                 IsDeleted = false
             };
 
@@ -450,7 +449,6 @@ namespace CPR.IntegrationTests
                 Id = Guid.Parse("cccccccc-cccc-cccc-cccc-cccccccccccc"),
                 UserName = "test_employee",
                 DisplayName = "Test Employee User",
-                PasswordHash = "hashedpassword",
                 IsDeleted = false
             };
 

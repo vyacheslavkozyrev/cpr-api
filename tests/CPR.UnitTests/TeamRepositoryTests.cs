@@ -32,9 +32,9 @@ namespace CPR.UnitTests.Repositories
         private void SeedTestData()
         {
             // Create users
-            var managerUser = new User { Id = Guid.NewGuid(), UserName = "manager", DisplayName = "Manager User", PasswordHash = "hashedpassword" };
-            var employee1User = new User { Id = Guid.NewGuid(), UserName = "employee1", DisplayName = "Employee 1", PasswordHash = "hashedpassword" };
-            var employee2User = new User { Id = Guid.NewGuid(), UserName = "employee2", DisplayName = "Employee 2", PasswordHash = "hashedpassword" };
+            var managerUser = new User { Id = Guid.NewGuid(), UserName = "manager", DisplayName = "Manager User" };
+            var employee1User = new User { Id = Guid.NewGuid(), UserName = "employee1", DisplayName = "Employee 1" };
+            var employee2User = new User { Id = Guid.NewGuid(), UserName = "employee2", DisplayName = "Employee 2" };
 
             // Create positions
             var managerPosition = new Position { Id = Guid.NewGuid(), Title = "Manager", CareerTrackId = Guid.NewGuid() };

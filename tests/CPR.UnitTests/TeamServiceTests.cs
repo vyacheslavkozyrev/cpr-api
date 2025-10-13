@@ -48,9 +48,9 @@ namespace CPR.UnitTests.Services
             var employee2Id = Guid.NewGuid();
 
             // Create test data in the in-memory database
-            var managerUser = new User { Id = Guid.NewGuid(), UserName = "manager", DisplayName = "Manager User", PasswordHash = "hashedpassword", IsDeleted = false };
-            var employee1User = new User { Id = Guid.NewGuid(), UserName = "employee1", DisplayName = "Employee 1", PasswordHash = "hashedpassword", IsDeleted = false };
-            var employee2User = new User { Id = Guid.NewGuid(), UserName = "employee2", DisplayName = "Employee 2", PasswordHash = "hashedpassword", IsDeleted = false };
+            var managerUser = new User { Id = Guid.NewGuid(), UserName = "manager", DisplayName = "Manager User", IsDeleted = false };
+            var employee1User = new User { Id = Guid.NewGuid(), UserName = "employee1", DisplayName = "Employee 1", IsDeleted = false };
+            var employee2User = new User { Id = Guid.NewGuid(), UserName = "employee2", DisplayName = "Employee 2", IsDeleted = false };
 
             // Create positions
             var managerPosition = new Position { Id = Guid.NewGuid(), Title = "Manager", CareerTrackId = Guid.NewGuid() };
@@ -88,7 +88,7 @@ namespace CPR.UnitTests.Services
             var managerId = Guid.NewGuid();
 
             // Create test data - manager with no direct reports
-            var managerUser = new User { Id = Guid.NewGuid(), UserName = "manager", DisplayName = "Manager User", PasswordHash = "hashedpassword", IsDeleted = false };
+            var managerUser = new User { Id = Guid.NewGuid(), UserName = "manager", DisplayName = "Manager User", IsDeleted = false };
             var managerPosition = new Position { Id = Guid.NewGuid(), Title = "Manager", CareerTrackId = new Guid("22e5ed0b-43c4-4ce6-829d-3943e4b7bdd1"), IsDeleted = false };
             var manager = new Employee { Id = managerId, UserId = managerUser.Id, PositionId = managerPosition.Id, IsDeleted = false };
 
@@ -112,8 +112,8 @@ namespace CPR.UnitTests.Services
             var memberId = Guid.NewGuid();
 
             // Create test data in the in-memory database
-            var managerUser = new User { Id = Guid.NewGuid(), UserName = "manager", DisplayName = "Manager User", PasswordHash = "hashedpassword", IsDeleted = false };
-            var memberUser = new User { Id = Guid.NewGuid(), UserName = "member", DisplayName = "Member User", PasswordHash = "hashedpassword", IsDeleted = false };
+            var managerUser = new User { Id = Guid.NewGuid(), UserName = "manager", DisplayName = "Manager User", IsDeleted = false };
+            var memberUser = new User { Id = Guid.NewGuid(), UserName = "member", DisplayName = "Member User", IsDeleted = false };
 
             var engineeringDept = new Department { Id = new Guid("fff11111-1111-1111-1111-111111111111"), Name = "Engineering", Code = "ENG", IsDeleted = false };
 
@@ -150,8 +150,8 @@ namespace CPR.UnitTests.Services
             var memberId = Guid.NewGuid();
 
             // Create test data - manager and member not related
-            var managerUser = new User { Id = Guid.NewGuid(), UserName = "manager", DisplayName = "Manager User", PasswordHash = "hashedpassword", IsDeleted = false };
-            var memberUser = new User { Id = Guid.NewGuid(), UserName = "member", DisplayName = "Member User", PasswordHash = "hashedpassword", IsDeleted = false };
+            var managerUser = new User { Id = Guid.NewGuid(), UserName = "manager", DisplayName = "Manager User", IsDeleted = false };
+            var memberUser = new User { Id = Guid.NewGuid(), UserName = "member", DisplayName = "Member User", IsDeleted = false };
 
             var managerPosition = new Position { Id = Guid.NewGuid(), Title = "Manager", CareerTrackId = new Guid("22e5ed0b-43c4-4ce6-829d-3943e4b7bdd1"), IsDeleted = false };
             var memberPosition = new Position { Id = Guid.NewGuid(), Title = "Developer", CareerTrackId = new Guid("22e5ed0b-43c4-4ce6-829d-3943e4b7bdd1"), IsDeleted = false };
@@ -183,9 +183,9 @@ namespace CPR.UnitTests.Services
             var employee2Id = Guid.NewGuid();
 
             // Create test data in the in-memory database
-            var managerUser = new User { Id = Guid.NewGuid(), UserName = "manager", DisplayName = "Manager User", PasswordHash = "hashedpassword", IsDeleted = false };
-            var employee1User = new User { Id = Guid.NewGuid(), UserName = "employee1", DisplayName = "Employee 1", PasswordHash = "hashedpassword", IsDeleted = false };
-            var employee2User = new User { Id = Guid.NewGuid(), UserName = "employee2", DisplayName = "Employee 2", PasswordHash = "hashedpassword", IsDeleted = false };
+            var managerUser = new User { Id = Guid.NewGuid(), UserName = "manager", DisplayName = "Manager User", IsDeleted = false };
+            var employee1User = new User { Id = Guid.NewGuid(), UserName = "employee1", DisplayName = "Employee 1", IsDeleted = false };
+            var employee2User = new User { Id = Guid.NewGuid(), UserName = "employee2", DisplayName = "Employee 2", IsDeleted = false };
 
             var managerPosition = new Position { Id = Guid.NewGuid(), Title = "Manager", CareerTrackId = new Guid("22e5ed0b-43c4-4ce6-829d-3943e4b7bdd1"), IsDeleted = false };
             var employee1Position = new Position { Id = Guid.NewGuid(), Title = "Developer", CareerTrackId = new Guid("22e5ed0b-43c4-4ce6-829d-3943e4b7bdd1"), IsDeleted = false };
@@ -230,8 +230,8 @@ namespace CPR.UnitTests.Services
             var employeeId = Guid.NewGuid();
 
             // Create test data in the in-memory database
-            var managerUser = new User { Id = Guid.NewGuid(), UserName = "manager", DisplayName = "Manager User", PasswordHash = "hashedpassword", IsDeleted = false };
-            var employeeUser = new User { Id = Guid.NewGuid(), UserName = "employee", DisplayName = "Employee User", PasswordHash = "hashedpassword", IsDeleted = false };
+            var managerUser = new User { Id = Guid.NewGuid(), UserName = "manager", DisplayName = "Manager User", IsDeleted = false };
+            var employeeUser = new User { Id = Guid.NewGuid(), UserName = "employee", DisplayName = "Employee User", IsDeleted = false };
 
             var managerPosition = new Position { Id = Guid.NewGuid(), Title = "Manager", CareerTrackId = new Guid("22e5ed0b-43c4-4ce6-829d-3943e4b7bdd1"), IsDeleted = false };
             var employeePosition = new Position { Id = Guid.NewGuid(), Title = "Developer", CareerTrackId = new Guid("22e5ed0b-43c4-4ce6-829d-3943e4b7bdd1"), IsDeleted = false };
@@ -261,7 +261,7 @@ namespace CPR.UnitTests.Services
             var employeeId = Guid.NewGuid();
 
             // Create test data in the in-memory database
-            var employeeUser = new User { Id = Guid.NewGuid(), UserName = "employee", DisplayName = "Employee User", PasswordHash = "hashedpassword", IsDeleted = false };
+            var employeeUser = new User { Id = Guid.NewGuid(), UserName = "employee", DisplayName = "Employee User", IsDeleted = false };
             var employeePosition = new Position { Id = Guid.NewGuid(), Title = "Developer", CareerTrackId = new Guid("22e5ed0b-43c4-4ce6-829d-3943e4b7bdd1"), IsDeleted = false };
             var employee = new Employee { Id = employeeId, UserId = employeeUser.Id, PositionId = employeePosition.Id, IsDeleted = false };
 
@@ -285,8 +285,8 @@ namespace CPR.UnitTests.Services
             var memberId = Guid.NewGuid();
 
             // Create test data - manager and direct report
-            var managerUser = new User { Id = Guid.NewGuid(), UserName = "manager", DisplayName = "Manager User", PasswordHash = "hashedpassword", IsDeleted = false };
-            var memberUser = new User { Id = Guid.NewGuid(), UserName = "member", DisplayName = "Member User", PasswordHash = "hashedpassword", IsDeleted = false };
+            var managerUser = new User { Id = Guid.NewGuid(), UserName = "manager", DisplayName = "Manager User", IsDeleted = false };
+            var memberUser = new User { Id = Guid.NewGuid(), UserName = "member", DisplayName = "Member User", IsDeleted = false };
 
             var managerPosition = new Position { Id = Guid.NewGuid(), Title = "Manager", CareerTrackId = new Guid("22e5ed0b-43c4-4ce6-829d-3943e4b7bdd1"), IsDeleted = false };
             var memberPosition = new Position { Id = Guid.NewGuid(), Title = "Developer", CareerTrackId = new Guid("22e5ed0b-43c4-4ce6-829d-3943e4b7bdd1"), IsDeleted = false };
@@ -317,8 +317,8 @@ namespace CPR.UnitTests.Services
             var memberId = Guid.NewGuid();
 
             // Create test data - manager and member not related
-            var managerUser = new User { Id = Guid.NewGuid(), UserName = "manager", DisplayName = "Manager User", PasswordHash = "hashedpassword", IsDeleted = false };
-            var memberUser = new User { Id = Guid.NewGuid(), UserName = "member", DisplayName = "Member User", PasswordHash = "hashedpassword", IsDeleted = false };
+            var managerUser = new User { Id = Guid.NewGuid(), UserName = "manager", DisplayName = "Manager User", IsDeleted = false };
+            var memberUser = new User { Id = Guid.NewGuid(), UserName = "member", DisplayName = "Member User", IsDeleted = false };
 
             var managerPosition = new Position { Id = Guid.NewGuid(), Title = "Manager", CareerTrackId = new Guid("22e5ed0b-43c4-4ce6-829d-3943e4b7bdd1"), IsDeleted = false };
             var memberPosition = new Position { Id = Guid.NewGuid(), Title = "Developer", CareerTrackId = new Guid("22e5ed0b-43c4-4ce6-829d-3943e4b7bdd1"), IsDeleted = false };

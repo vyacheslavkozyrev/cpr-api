@@ -33,7 +33,6 @@ namespace CPR.IntegrationTests
             {
                 Id = Guid.NewGuid(),
                 UserName = "integration.user." + Guid.NewGuid().ToString("N"),
-                PasswordHash = "x",
                 DisplayName = "Integration User",
                 CreatedAt = DateTimeOffset.UtcNow
             };

@@ -7,7 +7,7 @@ namespace CPR.Domain.Entities
     {
         public Guid Id { get; set; }
         public string UserName { get; set; } = null!;
-        public string PasswordHash { get; set; } = null!;
+        public string? EntraExternalId { get; set; }
         public string? DisplayName { get; set; }
 
         // Navigation properties

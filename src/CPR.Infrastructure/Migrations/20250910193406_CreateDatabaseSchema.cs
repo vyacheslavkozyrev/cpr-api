@@ -610,7 +610,7 @@ namespace CPR.Infrastructure.Migrations
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
                     user_name = table.Column<string>(type: "text", nullable: false),
-                    password_hash = table.Column<string>(type: "text", nullable: false),
+                    entra_external_id = table.Column<string>(type: "text", nullable: true),
                     display_name = table.Column<string>(type: "text", nullable: true),
                     created_by = table.Column<Guid>(type: "uuid", nullable: true),
                     created_at = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "now()"),
@@ -629,6 +629,12 @@ namespace CPR.Infrastructure.Migrations
                 name: "UX_users_user_name",
                 table: "users",
                 column: "user_name",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_users_entra_external_id",
+                table: "users",
+                column: "entra_external_id",
                 unique: true);
 
             migrationBuilder.CreateTable(

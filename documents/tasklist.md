@@ -1,9 +1,9 @@
 # Tasklist — CPR
 
 Progress (update after each iteration)
-- Iteration: 15
-- Status: **Complete** ✅
-- Notes: Iteration 15 Taxonomy Management (Administrator CUD Operations) — All phases complete ✅. Phase 1: Created 17 new DTOs (1 read, 6 create, 6 update, 2 mapping, 2 position-skill) with validation. Phase 2: Extended IClassificationService with 24 methods implementing validation, soft delete, partial updates, referential integrity. Phase 3: Added 21 endpoints to TaxonomyController (1 GET /skill_categories + 20 Administrator CUD operations). Phase 4: Testing complete with 162 new tests (64 unit + 85 integration + 13 contract), all passing. Total test counts: Unit: 148, Integration: ~285, Contract: 28. **Previous Iteration**: Iteration 14 Project Management (Solution Owner Role) — Complete ✅ (2025-10-09).
+- Iteration: 16
+- Status: **In Progress** ⏳
+- Notes: Iteration 16 Azure AD B2C Authentication — Planning complete ✅ (2025-10-13). Comprehensive 7-phase implementation plan created covering: Azure AD B2C tenant setup, database schema migration (add AzureAdB2CObjectId, remove PasswordHash), authentication infrastructure (Microsoft.Identity.Web integration), authentication endpoints (signup/signin/signout/reset-password), comprehensive testing (30+ unit, 15+ integration, 5+ contract tests), user migration & deployment, documentation & training. Estimated timeline: 8-10 working days. See `iteration-16-azure-ad-b2c-auth-plan.md` for full details. **Previous Iteration**: Iteration 15 Taxonomy Management (Administrator CUD Operations) — Complete ✅ (2025-10-09). Phase 1: Created 17 new DTOs with validation. Phase 2: Extended IClassificationService with 24 methods. Phase 3: Added 21 endpoints to TaxonomyController. Phase 4: 162 new tests (64 unit + 85 integration + 13 contract). Total test counts: Unit: 148, Integration: ~285, Contract: 28.
 
 Database Enhancement (2025-09-18): Successfully implemented comprehensive seed data system with:
 - Created SeedData.cs with hierarchical data generation methods
@@ -534,11 +534,157 @@ Iterations
     - **Skill Categories**: Added missing CUD operations for skill_categories entity
     - Consider cascade behavior: deleting career path should check for dependent tracks/positions and either prevent deletion or cascade soft delete
 
-- [ ] Iteration 16 — Reporting & analytics (basic)
+- [ ] Iteration 16 — Microsoft Entra External ID Authentication (Real Authentication System)
+  - Status: In Progress ⏳ — Planning complete, updated to Microsoft Entra External ID (2025-10-13)
+  - Goal: Replace mock HMAC token authentication with Microsoft Entra External ID for production-grade authentication
+  - Scope: Real user authentication with Microsoft Entra External ID (formerly Azure AD B2C) identity service
+  - Documentation: See `iteration-16-azure-ad-b2c-auth-plan.md` and `phase-1-entra-external-id-setup-guide.md` for comprehensive implementation plan
+  - Migration Notes: Updated from Azure AD B2C to Microsoft Entra External ID (Microsoft's rebranded CIAM solution). See `entra-external-id-migration-summary.md` for details.
+  - Estimated Timeline: 8-10 working days
+  
+  - [ ] Phase 1: Microsoft Entra External ID Setup & Configuration (1 day)
+    - Create Microsoft Entra External ID tenant for each environment (dev, staging, prod)
+    - Register CPR API application in Microsoft Entra External ID
+    - Configure authentication experience with self-service sign-up and password reset
+    - Configure API permissions and expose API scope (api://cpr-api/API.Access)
+    - Record configuration values (tenant ID, client ID, domain, authority URL)
+    - Documentation: See `phase-1-entra-external-id-setup-guide.md` for detailed steps
+    - Acceptance: Microsoft Entra External ID tenant configured, sign-up/sign-in tested manually
+  
+  - [ ] Phase 2: Database Schema Migration (0.5 days)
+    - Create migration: AddEntraExternalId
+    - Add `entra_external_id` column to users table (string, max 100 chars, nullable, unique index)
+    - Update User entity with EntraExternalId property (stores Microsoft Entra object ID from 'oid' claim)
+    - Update CprDbContext configuration with column mapping and unique index
+    - Create migration: RemovePasswordHash (apply in Phase 6 after migration)
+    - Acceptance: Migrations created and tested (up/down), User entity updated
+  
+  - [ ] Phase 3: Authentication Infrastructure (2 days)
+    - Install NuGet packages: Microsoft.Identity.Web v2.15.0+, Microsoft.Identity.Web.MicrosoftGraph
+    - Update appsettings.json with EntraExternalID configuration section
+    - Update environment variables (.env.dev, .env.test, .env.staging, .env.prod) with Entra External ID settings
+    - Create EntraExternalIdAuthenticationHandler for JWT token validation (validates tokens from *.ciamlogin.com)
+    - Create IUserSyncService and UserSyncService for user sync from Microsoft Entra External ID to local database
+    - Update Program.cs: Replace JwtStubAuthenticationHandler with Microsoft.Identity.Web JWT validation
+    - Update RoleAuthorizationHandler to work with Microsoft Entra claims (oid claim for user identification)
+    - Implement feature flag for authentication mode (AUTHENTICATION_MODE=EntraExternalID or Stub)
+    - Acceptance: JWT tokens from Microsoft Entra External ID validated correctly, user sync working
+  
+  - [ ] Phase 4: Authentication Endpoints (2 days)
+    - Create AuthController with authentication endpoints
+    - POST /api/auth/signup - Redirect to Microsoft Entra External ID sign-up flow
+    - POST /api/auth/signin - Redirect to Microsoft Entra External ID sign-in flow
+    - GET /api/auth/signin-oidc - Callback endpoint (handled by Microsoft.Identity.Web)
+    - POST /api/auth/signout - Sign out user and redirect to Microsoft Entra sign-out
+    - POST /api/auth/reset-password - Redirect to Microsoft Entra password reset flow
+    - Create AuthDtos: SignInRequestDto, SignInResponseDto, SignOutRequestDto, ResetPasswordRequestDto, AuthenticatedUserDto
+    - Update GET /api/me endpoint to include Microsoft Entra fields (entraExternalId, email)
+    - Update Swagger documentation with new auth endpoints
+    - Acceptance: All auth endpoints implemented and documented
+  
+  - [ ] Phase 5: Testing (2 days)
+    - Unit Tests (CPR.UnitTests/AuthControllerTests.cs, CPR.UnitTests/UserSyncServiceTests.cs)
+      - Test redirect URL generation for sign-in, sign-up, password reset
+      - Test user sync service (create new user, update existing user)
+      - Test claim extraction from JWT tokens
+      - Mock Azure AD B2C responses
+      - Target: 30+ new unit tests
+    - Integration Tests (CPR.IntegrationTests/AuthIntegrationTests.cs)
+      - Test sign-in flow with mock Microsoft Entra External ID tokens
+      - Test user creation/sync after successful authentication
+      - Test role assignment after user sync
+      - Test protected endpoints with Microsoft Entra External ID tokens
+      - Target: 15+ new integration tests
+    - Contract Tests (CPR.ContractTests/AuthContractTests.cs)
+      - Validate auth endpoint request/response schemas
+      - Validate JWT token structure
+      - Validate error responses (401, 403)
+      - Target: 5+ new contract tests
+    - Manual Testing Checklist
+      - Sign up with new user in Microsoft Entra External ID
+      - Sign in with existing user
+      - Password reset flow
+      - Sign out and confirm session cleared
+      - Access protected endpoint with valid token
+      - Access protected endpoint with expired token (401)
+      - Access protected endpoint with invalid token (401)
+      - Verify user synced to local database with correct EntraExternalId
+      - Verify roles assigned correctly after sync
+    - Acceptance: All tests passing (30+ unit, 15+ integration, 5+ contract), manual testing checklist complete
+  
+  - [ ] Phase 6: Migration & Deployment (1 day)
+    - Migrate existing users to Microsoft Entra External ID (manual or bulk import)
+    - Update seed data scripts (DatabaseSeeder.cs) to work without PasswordHash
+    - Apply RemovePasswordHash migration after all users have EntraExternalId
+    - Update documentation: README.md, endpoints.md, conventions.md
+    - Update/deprecate scripts: run-api-as-employee.cmd, run-api-as-manager.cmd, run-api-as-administrator.cmd
+    - Create run-api-with-entra-external-id.cmd script
+    - Deploy to dev environment and verify
+    - Deploy to staging environment and verify
+    - Acceptance: Microsoft Entra External ID authentication working in dev/staging, all users migrated, PasswordHash removed
+  
+  - [ ] Phase 7: Documentation & Training (1 day)
+    - Update technical documentation with architecture diagram showing Microsoft Entra External ID integration
+    - Create sequence diagrams for sign-in, sign-up, password reset flows
+    - Document token validation process and user sync service
+    - Update API documentation (Swagger/OpenAPI specs for auth endpoints)
+    - Create user guides: "How to Sign Up", "How to Sign In", "How to Reset Password"
+    - Create developer guides: "Setting up Microsoft Entra External ID for Local Development", "Testing with Entra External ID"
+    - Update README.md with Microsoft Entra External ID setup instructions and Quick Start section
+    - Acceptance: All documentation complete and reviewed
+  
+  - Acceptance Criteria:
+    - ✅ Users can sign up for new accounts via Azure AD B2C
+    - ✅ Users can sign in with email and password
+    - ✅ Users can reset forgotten passwords
+    - ✅ Users can sign out and session is cleared
+    - ✅ All protected endpoints validate Azure AD B2C JWT tokens correctly
+    - ✅ User records synced to local database with AzureAdB2CObjectId
+    - ✅ Roles assigned correctly after user sync
+    - ✅ PasswordHash column removed from database
+    - ✅ All tests passing: 30+ unit, 15+ integration, 5+ contract tests
+    - ✅ No regression in existing functionality
+    - ✅ API response time < 200ms (95th percentile)
+    - ✅ Token validation time < 50ms (95th percentile)
+    - ✅ Zero critical security vulnerabilities
+    - ✅ Documentation complete (technical docs, user guides, developer guides, README)
+  
+  - Security Considerations:
+    - JWT token validation with Azure AD B2C public keys (issuer, audience, expiration, signature)
+    - Token expiration enforcement (default 1 hour)
+    - Audit logging for all authentication events
+    - PII stored in Azure AD B2C (email, display name), application data remains in PostgreSQL
+    - HTTPS enforcement for all auth endpoints in production
+    - Password policy in Azure AD B2C: min 8 chars, complexity requirements, lockout after 5 failed attempts
+  
+  - Database Changes:
+    - ADD: users.azure_ad_b2c_object_id (varchar(100), nullable, unique index)
+    - REMOVE: users.password_hash (in Phase 6, after migration)
+  
+  - Key Components:
+    - AzureAdB2CAuthenticationHandler: Validates JWT tokens from Azure AD B2C
+    - UserSyncService: Syncs users from Azure AD B2C to local database
+    - AuthController: Manages authentication flows (signup, signin, signout, password reset)
+    - Feature flag: AUTHENTICATION_MODE (AzureAdB2C or Stub for backward compatibility)
+  
+  - Out of Scope (Deferred):
+    - Token refresh flow → Iteration 17
+    - Multi-Factor Authentication (MFA) → Iteration 18
+    - Social identity providers (Google, Facebook) → Iteration 19
+    - Profile editing endpoint → Iteration 17
+    - Account deletion with webhook → Iteration 18
+  
+  - Dependencies:
+    - Azure subscription with permissions to create Azure AD B2C tenant
+    - Microsoft.Identity.Web NuGet package v2.15.0+
+    - User entity supports AzureAdB2CObjectId field
+    - Database supports unique index on AzureAdB2CObjectId
+
+- [ ] Iteration 17 — Reporting & analytics (basic)
   - Scope: GET /reports/feedback-summary, GET /analytics/skills-gap
   - Acceptance: Aggregation job or query and sample integration tests.
 
-- [ ] Iteration 17 — System / integrations
+- [ ] Iteration 18 — System / integrations
   - Scope: POST /internal/import/users, POST /webhook/feedback
   - Acceptance: Import endpoints accept payload and create records; integration tests.
 
