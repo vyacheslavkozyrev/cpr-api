@@ -15,6 +15,7 @@ using System;
 using System.IO;
 using System.Reflection;
 using Swashbuckle.AspNetCore.Filters;
+using Microsoft.Identity.Web;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -35,12 +36,30 @@ builder.Logging.AddFilter("Npgsql", LogLevel.Warning);
 // Add minimal services
 builder.Services.AddControllers().AddNewtonsoftJson();
 
-// Register stub authentication scheme (reads signing key from env var JWT_SIGNING_KEY)
-builder.Services.AddAuthentication(options =>
+// Configure authentication based on AUTHENTICATION_MODE environment variable
+var authenticationMode = builder.Configuration["Authentication:Mode"] ?? Environment.GetEnvironmentVariable("AUTHENTICATION_MODE") ?? "Stub";
+
+if (authenticationMode.Equals("EntraExternalId", StringComparison.OrdinalIgnoreCase))
 {
-    options.DefaultAuthenticateScheme = "Stub";
-    options.DefaultChallengeScheme = "Stub";
-}).AddScheme<Microsoft.AspNetCore.Authentication.AuthenticationSchemeOptions, CPR.Api.Auth.JwtStubAuthenticationHandler>("Stub", options => { });
+    // Use Microsoft Entra External ID authentication with JWT Bearer validation
+    Console.WriteLine($"[CPR] Authentication mode: Microsoft Entra External ID");
+    
+    builder.Services.AddAuthentication(Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerDefaults.AuthenticationScheme)
+        .AddMicrosoftIdentityWebApi(builder.Configuration.GetSection("AzureAd"))
+        .EnableTokenAcquisitionToCallDownstreamApi()
+        .AddInMemoryTokenCaches();
+}
+else
+{
+    // Use stub authentication (default) - reads signing key from JWT_SIGNING_KEY env var
+    Console.WriteLine($"[CPR] Authentication mode: Stub (JWT_SIGNING_KEY)");
+    
+    builder.Services.AddAuthentication(options =>
+    {
+        options.DefaultAuthenticateScheme = "Stub";
+        options.DefaultChallengeScheme = "Stub";
+    }).AddScheme<Microsoft.AspNetCore.Authentication.AuthenticationSchemeOptions, CPR.Api.Auth.JwtStubAuthenticationHandler>("Stub", options => { });
+}
 
 builder.Services.AddAuthorization();
 
@@ -166,6 +185,10 @@ if (app.Environment.IsDevelopment() || app.Environment.IsEnvironment("Test"))
 
 // Use the ProblemDetails middleware so exceptions are mapped to RFC7807 responses
 app.UseProblemDetails();
+
+// Add authentication and authorization middleware
+app.UseAuthentication();
+app.UseAuthorization();
 
 // Test-only endpoints for integration tests that intentionally throw so ProblemDetails
 // middleware can be validated. Using MapGet ensures the TestHost routing matches

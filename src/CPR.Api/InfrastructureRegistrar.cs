@@ -29,6 +29,7 @@ namespace CPR.Api
             services.AddScoped<CPR.Application.Services.ITeamService, CPR.Infrastructure.Services.TeamService>();
             services.AddScoped<CPR.Application.Services.IRoleService, CPR.Infrastructure.Services.RoleService>();
             services.AddScoped<CPR.Application.Services.IProjectService, CPR.Infrastructure.Services.ProjectService>();
+            services.AddScoped<CPR.Application.Services.IUserSyncService, CPR.Infrastructure.Services.UserSyncService>();
 
             // Register database seeder
             services.AddScoped<CPR.Infrastructure.Services.DatabaseSeeder>();
