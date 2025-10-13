@@ -24,7 +24,7 @@ namespace CPR.Api.Auth
         /// <param name="logger">The logger for authorization events.</param>
         /// <param name="httpContextAccessor">The HTTP context accessor for storing user context.</param>
         public RoleAuthorizationHandler(
-            IRoleService roleService, 
+            IRoleService roleService,
             IUserSyncService userSyncService,
             ILogger<RoleAuthorizationHandler> logger,
             IHttpContextAccessor httpContextAccessor)
@@ -51,7 +51,7 @@ namespace CPR.Api.Auth
 
             // Determine authentication scheme and extract user ID accordingly
             var authenticationType = context.User.Identity?.AuthenticationType;
-            
+
             if (authenticationType == "Stub")
             {
                 // Stub authentication: Use 'sub' claim (ClaimTypes.NameIdentifier)
@@ -62,14 +62,14 @@ namespace CPR.Api.Auth
                     context.Fail();
                     return;
                 }
-                
+
                 _logger.LogDebug("Using Stub authentication for user {UserId}", userId);
             }
             else
             {
                 // Microsoft Entra External ID: Use 'oid' claim (object identifier)
                 var entraExternalId = _userSyncService.ExtractEntraExternalId(context.User);
-                
+
                 if (string.IsNullOrEmpty(entraExternalId))
                 {
                     _logger.LogWarning("Authorization failed: Entra External ID ('oid') claim not found");

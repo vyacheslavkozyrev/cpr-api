@@ -43,7 +43,7 @@ if (authenticationMode.Equals("EntraExternalId", StringComparison.OrdinalIgnoreC
 {
     // Use Microsoft Entra External ID authentication with JWT Bearer validation
     Console.WriteLine($"[CPR] Authentication mode: Microsoft Entra External ID");
-    
+
     builder.Services.AddAuthentication(Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerDefaults.AuthenticationScheme)
         .AddMicrosoftIdentityWebApi(builder.Configuration.GetSection("AzureAd"))
         .EnableTokenAcquisitionToCallDownstreamApi()
@@ -53,7 +53,7 @@ else
 {
     // Use stub authentication (default) - reads signing key from JWT_SIGNING_KEY env var
     Console.WriteLine($"[CPR] Authentication mode: Stub (JWT_SIGNING_KEY)");
-    
+
     builder.Services.AddAuthentication(options =>
     {
         options.DefaultAuthenticateScheme = "Stub";
