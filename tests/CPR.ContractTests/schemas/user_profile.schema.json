@@ -1,0 +1,59 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "object",
+    "required": [
+        "user_id",
+        "employee_id",
+        "user_name",
+        "display_name",
+        "position"
+    ],
+    "properties": {
+        "user_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "User identifier (GUID)"
+        },
+        "employee_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Employee identifier (GUID)"
+        },
+        "user_name": {
+            "type": "string",
+            "description": "Username/login"
+        },
+        "display_name": {
+            "type": "string",
+            "description": "Display name for the user"
+        },
+        "email": {
+            "type": [
+                "string",
+                "null"
+            ],
+            "format": "email",
+            "description": "Email address (null for Stub auth, populated for Entra auth)"
+        },
+        "position": {
+            "type": "object",
+            "required": [
+                "id",
+                "title"
+            ],
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "format": "uuid",
+                    "description": "Position identifier"
+                },
+                "title": {
+                    "type": "string",
+                    "description": "Position title"
+                }
+            },
+            "additionalProperties": false
+        }
+    },
+    "additionalProperties": false
+}
