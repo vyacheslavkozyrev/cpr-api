@@ -23,8 +23,9 @@ Write-Host "Token (truncated): $($token.Substring(0,[Math]::Min(60,$token.Length
 # Export required env vars for the API process
 $env:JWT_SIGNING_KEY = $SigningKey
 $env:ASPNETCORE_URLS = $Url
+$env:AUTHENTICATION_MODE = "Stub"  # Force Stub mode for token-based scripts
 
-Write-Host "Starting CPR API at $Url (JWT signing key set)."
+Write-Host "Starting CPR API at $Url (JWT signing key set, Stub authentication mode)."
 
 # Run API project (this process will run in the current shell)
 # Using --project to point at the web project
