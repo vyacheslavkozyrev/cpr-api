@@ -30,6 +30,16 @@ public class UserService(CprDbContext db) : IUserService
 
         var username = user.Identity?.Name ?? "unknown";
 
+        // Extract email from JWT claims (ClaimTypes.Email or "email")
+        var email = user.FindFirst(ClaimTypes.Email)?.Value
+                    ?? user.FindFirst("email")?.Value;
+
+        // Extract display name from JWT claims with fallback to preferred_username
+        var displayNameFromToken = user.FindFirst(ClaimTypes.Name)?.Value
+                                   ?? user.FindFirst("name")?.Value
+                                   ?? user.FindFirst("preferred_username")?.Value
+                                   ?? username;
+
         // Look up the employee record for this user
         var employee = await _db.Employees
             .Include(e => e.User)
@@ -43,8 +53,9 @@ public class UserService(CprDbContext db) : IUserService
             {
                 UserId = userId.ToString(),
                 EmployeeId = userId.ToString(),
-                UserName = username, // JWT name claim as fallback
-                DisplayName = username
+                UserName = username,
+                DisplayName = displayNameFromToken,
+                Email = email
             };
         }
 
@@ -53,7 +64,8 @@ public class UserService(CprDbContext db) : IUserService
             UserId = employee.UserId.ToString(),
             EmployeeId = employee.Id.ToString(),
             UserName = employee.User?.UserName ?? username,
-            DisplayName = employee.User?.DisplayName ?? employee.User?.UserName ?? username,
+            DisplayName = employee.User?.DisplayName ?? employee.User?.UserName ?? displayNameFromToken,
+            Email = email,
             Position = new Position { Id = "00000000-0000-0000-0000-000000000001", Title = "Developer" }
         };
     }

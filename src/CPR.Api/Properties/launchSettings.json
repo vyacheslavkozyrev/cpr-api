@@ -11,9 +11,7 @@
                 "AzureAd__TenantId": "c77e5d0f-a26e-42e1-be72-fa5a9efd180c",
                 "AzureAd__ClientId": "4d440622-bc73-44b7-a13c-9160a21d87f2",
                 "AzureAd__Audience": "api://cpr-api-dev",
-                "AzureAd__CallbackPath": "https://localhost:3000/",
-                "AzureAd__SignedOutCallbackPath": "https://localhost:3000/signout",
-                "Authentication__Mode": "Stub"
+                "Authentication__Mode": "EntraExternalId"
             }
         }
     }

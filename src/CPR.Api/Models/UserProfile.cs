@@ -50,6 +50,12 @@ public class UserProfile
     public string DisplayName { get; set; } = string.Empty;
 
     /// <summary>
+    /// Email address for the user (extracted from JWT claims).
+    /// </summary>
+    [JsonPropertyName("email")]
+    public string? Email { get; set; }
+
+    /// <summary>
     /// Current position information.
     /// </summary>
     [JsonPropertyName("position")]
