@@ -24,9 +24,15 @@ Write-Host "Token (truncated): $($token.Substring(0,[Math]::Min(60,$token.Length
 $env:JWT_SIGNING_KEY = $SigningKey
 $env:ASPNETCORE_URLS = $Url
 $env:AUTHENTICATION_MODE = "Stub"  # Force Stub mode for token-based scripts
+$env:Authentication__Mode = "Stub"  # Override launchSettings.json configuration
+$env:ASPNETCORE_ENVIRONMENT = "Development"  # Ensure development environment
 
 Write-Host "Starting CPR API at $Url (JWT signing key set, Stub authentication mode)."
+Write-Host "Environment variables set:"
+Write-Host "  JWT_SIGNING_KEY: $SigningKey"
+Write-Host "  AUTHENTICATION_MODE: Stub"
+Write-Host "  Authentication__Mode: Stub"
 
 # Run API project (this process will run in the current shell)
-# Using --project to point at the web project
-dotnet run --project "$PSScriptRoot\..\src\CPR.Api\CPR.Api.csproj" --configuration Debug
+# Using --project to point at the web project and explicitly disable launch profile
+dotnet run --project "$PSScriptRoot\..\src\CPR.Api\CPR.Api.csproj" --configuration Debug --no-launch-profile

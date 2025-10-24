@@ -36,8 +36,27 @@ builder.Logging.AddFilter("Npgsql", LogLevel.Warning);
 // Add minimal services
 builder.Services.AddControllers().AddNewtonsoftJson();
 
+// CORS: allow only port 3000 for UI development
+var localAllowedOrigins = new[] {
+    "http://localhost:3000",  // React dev port
+    "https://localhost:3000"  // React dev port (HTTPS)
+};
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("LocalDevCors", policy =>
+        policy.WithOrigins(localAllowedOrigins)
+              .AllowAnyHeader()
+              .AllowAnyMethod()
+              .AllowCredentials());
+});
+
 // Configure authentication based on AUTHENTICATION_MODE environment variable
-var authenticationMode = builder.Configuration["Authentication:Mode"] ?? Environment.GetEnvironmentVariable("AUTHENTICATION_MODE") ?? "Stub";
+var configValue = builder.Configuration["Authentication:Mode"];
+var envValue = Environment.GetEnvironmentVariable("AUTHENTICATION_MODE");
+Console.WriteLine($"[CPR DEBUG] Configuration['Authentication:Mode']: '{configValue}'");
+Console.WriteLine($"[CPR DEBUG] Environment.GetEnvironmentVariable('AUTHENTICATION_MODE'): '{envValue}'");
+var authenticationMode = configValue ?? envValue ?? "Stub";
+Console.WriteLine($"[CPR DEBUG] Final authenticationMode: '{authenticationMode}'");
 
 if (authenticationMode.Equals("EntraExternalId", StringComparison.OrdinalIgnoreCase))
 {
@@ -185,6 +204,9 @@ if (app.Environment.IsDevelopment() || app.Environment.IsEnvironment("Test"))
 
 // Use the ProblemDetails middleware so exceptions are mapped to RFC7807 responses
 app.UseProblemDetails();
+
+// Apply CORS policy for local development before authentication
+app.UseCors("LocalDevCors");
 
 // Add authentication and authorization middleware
 app.UseAuthentication();
