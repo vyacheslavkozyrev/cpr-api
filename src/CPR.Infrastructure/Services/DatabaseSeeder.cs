@@ -315,7 +315,8 @@ namespace CPR.Infrastructure.Services
                 {
                     Id = new Guid("c7746e91-a5e8-4f8b-9f22-f48374ffa2a4"),
                     UserName = "eve.adams",
-                    DisplayName = "Eve Adams"
+                    DisplayName = "Eve Adams",
+                    EntraExternalId = "74f8fba3-4c7f-449d-9ab9-07d60ed15b62" // Microsoft Entra External ID OID
                 },
                 new User
                 {

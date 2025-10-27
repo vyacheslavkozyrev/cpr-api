@@ -6,12 +6,7 @@
             "launchBrowser": true,
             "applicationUrl": "http://localhost:5000;https://localhost:5001",
             "environmentVariables": {
-                "ASPNETCORE_ENVIRONMENT": "Development",
-                "AzureAd__Instance": "https://login.microsoftonline.com/",
-                "AzureAd__TenantId": "c77e5d0f-a26e-42e1-be72-fa5a9efd180c",
-                "AzureAd__ClientId": "4d440622-bc73-44b7-a13c-9160a21d87f2",
-                "AzureAd__Audience": "api://cpr-api-dev",
-                "Authentication__Mode": "EntraExternalId"
+                "ASPNETCORE_ENVIRONMENT": "Development"
             }
         }
     }

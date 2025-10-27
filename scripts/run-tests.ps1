@@ -25,8 +25,8 @@ function Run-Contract {
 }
 
 function Run-Integration {
-    Write-Host "==> Running integration tests (DATABASE_NAME=$DatabaseName)"
-    $env:DATABASE_NAME = $DatabaseName
+    Write-Host "==> Running integration tests using Test environment configuration"
+    $env:ASPNETCORE_ENVIRONMENT = "Test"
     dotnet test $INTEGRATION_PROJ -f $DOTNET_FRAMEWORK --logger "console;verbosity=normal"
 }
 

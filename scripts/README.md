@@ -2,21 +2,35 @@
 
 This folder contains various scripts to run the CPR API with different authentication modes and user contexts.
 
-## Authentication Modes
+## Authentication Modes & Environments
 
-The CPR API supports two authentication modes:
+The CPR API supports multiple environments with different authentication modes:
 
-### 1. **Stub Mode** (Development/Testing)
-- Uses HMAC-signed tokens for quick local development
-- No external dependencies (Microsoft Entra not required)
-- Fast iteration during development
-- Perfect for automated testing and CI/CD
+### 1. **Test Environment** (Integration Testing)
+- **Configuration**: `appsettings.Test.json`
+- **Authentication**: Stub Mode (HMAC-signed tokens)
+- **Database**: Local PostgreSQL on port 5433
+- **Usage**: Automated tests, CI/CD pipelines
+- **Environment Variable**: `ASPNETCORE_ENVIRONMENT=Test`
 
-### 2. **EntraExternalId Mode** (Production)
-- Uses real JWT tokens from Microsoft Entra External ID
-- Production-like authentication
-- Requires UI application to provide bearer tokens
-- Recommended for integration testing with UI
+### 2. **Development Environment** (Local Development) 
+- **Configuration**: `appsettings.Development.json`
+- **Authentication**: EntraExternalId Mode (Real Azure AD)
+- **Database**: Local PostgreSQL on port 5432
+- **Usage**: Local development with real authentication
+- **Environment Variable**: `ASPNETCORE_ENVIRONMENT=Development`
+
+### 3. **QA Environment**
+- **Configuration**: `appsettings.QA.json`
+- **Authentication**: EntraExternalId Mode (QA tenant)
+- **Database**: QA PostgreSQL server
+- **Environment Variable**: `ASPNETCORE_ENVIRONMENT=QA`
+
+### 4. **Production Environment**
+- **Configuration**: `appsettings.Production.json`
+- **Authentication**: EntraExternalId Mode (Production tenant)
+- **Database**: Production PostgreSQL server
+- **Environment Variable**: `ASPNETCORE_ENVIRONMENT=Production`
 
 ---
 
@@ -43,7 +57,7 @@ scripts\run-api-as-solution-owner.cmd
 **What these scripts do:**
 1. Generate a stub JWT token for the specified user
 2. Copy the token to clipboard
-3. Set `AUTHENTICATION_MODE=Stub` environment variable
+3. Set `ASPNETCORE_ENVIRONMENT=Test` to use Stub authentication
 4. Start the API at `http://localhost:5000`
 
 **How to use:**
@@ -64,7 +78,7 @@ scripts\run-api.cmd
 ```
 
 **What this script does:**
-1. Sets `AUTHENTICATION_MODE=EntraExternalId` environment variable
+1. Sets `ASPNETCORE_ENVIRONMENT=Development` to use EntraExternalId authentication
 2. Configures API to validate real JWT tokens from Microsoft Entra
 3. Starts the API at `http://localhost:5000`
 

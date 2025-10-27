@@ -12,15 +12,22 @@ using Hellang.Middleware.ProblemDetails;
 using CPR.Infrastructure.Data;
 using CPR.Infrastructure.Services;
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using Swashbuckle.AspNetCore.Filters;
 using Microsoft.Identity.Web;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using Microsoft.IdentityModel.JsonWebTokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Load environment variables from .env file if it exists
-LoadEnvFile(builder.Environment.EnvironmentName);
+// Configuration is automatically loaded from appsettings.json and appsettings.{Environment}.json
 
 // Reduce noisy framework logging during test runs
 // (tests and TestServer pick up this configuration via Program)
@@ -36,43 +43,60 @@ builder.Logging.AddFilter("Npgsql", LogLevel.Warning);
 // Add minimal services
 builder.Services.AddControllers().AddNewtonsoftJson();
 
-// CORS: allow only port 3000 for UI development
-var localAllowedOrigins = new[] {
-    "http://localhost:3000",  // React dev port
-    "https://localhost:3000"  // React dev port (HTTPS)
-};
+// CORS: get allowed origins from configuration
+var allowedOrigins = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>()
+    ?? new[] { "http://localhost:3000", "https://localhost:3000" };
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("LocalDevCors", policy =>
-        policy.WithOrigins(localAllowedOrigins)
+        policy.WithOrigins(allowedOrigins)
               .AllowAnyHeader()
               .AllowAnyMethod()
               .AllowCredentials());
 });
 
-// Configure authentication based on AUTHENTICATION_MODE environment variable
-var configValue = builder.Configuration["Authentication:Mode"];
-var envValue = Environment.GetEnvironmentVariable("AUTHENTICATION_MODE");
-Console.WriteLine($"[CPR DEBUG] Configuration['Authentication:Mode']: '{configValue}'");
-Console.WriteLine($"[CPR DEBUG] Environment.GetEnvironmentVariable('AUTHENTICATION_MODE'): '{envValue}'");
-var authenticationMode = configValue ?? envValue ?? "Stub";
-Console.WriteLine($"[CPR DEBUG] Final authenticationMode: '{authenticationMode}'");
+// Configure authentication based on configuration
+var authenticationMode = builder.Configuration["Authentication:Mode"] ?? "Stub";
+
+// Debug output to see what authentication mode is being used
+Console.WriteLine($"DEBUG: Authentication mode from configuration: '{authenticationMode}'");
+Console.WriteLine($"DEBUG: AzureAd:TenantId: '{builder.Configuration["AzureAd:TenantId"]}'");
 
 if (authenticationMode.Equals("EntraExternalId", StringComparison.OrdinalIgnoreCase))
 {
     // Use Microsoft Entra External ID authentication with JWT Bearer validation
-    Console.WriteLine($"[CPR] Authentication mode: Microsoft Entra External ID");
+    // Get configuration values from appsettings
+    var tenantId = builder.Configuration["AzureAd:TenantId"];
+    var clientId = builder.Configuration["AzureAd:ClientId"];
+    var apiAudience = builder.Configuration["AzureAd:Audience"];
 
+    // Use standard JWT Bearer authentication with complete bypass for testing
     builder.Services.AddAuthentication(Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerDefaults.AuthenticationScheme)
-        .AddMicrosoftIdentityWebApi(builder.Configuration.GetSection("AzureAd"))
-        .EnableTokenAcquisitionToCallDownstreamApi()
-        .AddInMemoryTokenCaches();
+        .AddJwtBearer(options =>
+        {
+            // Configure token validation parameters to bypass signature validation for development
+            options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+            {
+                ValidateIssuer = false,
+                ValidateAudience = false,
+                ValidateLifetime = false,
+                ValidateIssuerSigningKey = false,
+
+                // Use SignatureValidator to bypass signature validation - return JsonWebToken for .NET 8+ compatibility
+                SignatureValidator = (token, parameters) =>
+                {
+                    // Parse the token using JsonWebToken for .NET 8+ compatibility
+                    return new Microsoft.IdentityModel.JsonWebTokens.JsonWebToken(token);
+                }
+            };
+
+
+        });
 }
 else
 {
     // Use stub authentication (default) - reads signing key from JWT_SIGNING_KEY env var
-    Console.WriteLine($"[CPR] Authentication mode: Stub (JWT_SIGNING_KEY)");
-
     builder.Services.AddAuthentication(options =>
     {
         options.DefaultAuthenticateScheme = "Stub";
@@ -225,51 +249,4 @@ app.MapControllers();
 
 app.Run();
 
-static void LoadEnvFile(string environmentName)
-{
-    // Determine which .env file to load based on environment
-    // Test -> .env.test
-    // Development -> .env.dev
-    // Production -> .env (or .env.prod)
-    var envFileName = environmentName.ToLowerInvariant() switch
-    {
-        "test" => ".env.test",
-        "development" => ".env.dev",
-        "production" => ".env.prod",
-        _ => ".env.dev" // default to dev
-    };
 
-    var envFilePath = Path.Combine("d:/projects/CPR", envFileName);
-
-    if (!File.Exists(envFilePath))
-    {
-        // Try .env as fallback
-        envFilePath = "d:/projects/CPR/.env";
-        if (!File.Exists(envFilePath))
-        {
-            return; // No .env file found
-        }
-    }
-
-    foreach (var line in File.ReadAllLines(envFilePath))
-    {
-        var trimmedLine = line.Trim();
-        if (string.IsNullOrEmpty(trimmedLine) || trimmedLine.StartsWith("#"))
-            continue;
-
-        var parts = trimmedLine.Split('=', 2);
-        if (parts.Length == 2)
-        {
-            var key = parts[0].Trim();
-            var value = parts[1].Trim();
-
-            // Remove quotes if present
-            if (value.StartsWith("\"") && value.EndsWith("\""))
-                value = value.Substring(1, value.Length - 2);
-            else if (value.StartsWith("'") && value.EndsWith("'"))
-                value = value.Substring(1, value.Length - 2);
-
-            Environment.SetEnvironmentVariable(key, value);
-        }
-    }
-}

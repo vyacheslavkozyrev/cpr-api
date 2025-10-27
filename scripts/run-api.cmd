@@ -19,11 +19,11 @@ echo.
 echo Starting API...
 echo.
 
-REM Set environment variables for Entra External ID mode
-set AUTHENTICATION_MODE=EntraExternalId
+REM Set environment for Production-like configuration (uses appsettings.Development.json by default)
+set ASPNETCORE_ENVIRONMENT=Development
 set ASPNETCORE_URLS=http://localhost:5000
 
-REM Run API project
+REM Run API project (will use EntraExternalId mode from appsettings.Development.json)
 cd /d "%~dp0..\src\CPR.Api"
 dotnet run --configuration Debug
 

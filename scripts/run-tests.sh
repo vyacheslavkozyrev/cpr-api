@@ -29,9 +29,9 @@ run_contract() {
 }
 
 run_integration() {
-  echo "==> Running integration tests (DATABASE_NAME=$DB_NAME)"
-  # Export DATABASE_NAME for the integration test run so code picks it up
-  DATABASE_NAME="$DB_NAME" dotnet test "$INTEGRATION_PROJ" -f "$DOTNET_FRAMEWORK" --logger "console;verbosity=normal"
+  echo "==> Running integration tests using Test environment configuration"
+  # Use Test environment which includes correct database configuration
+  ASPNETCORE_ENVIRONMENT="Test" dotnet test "$INTEGRATION_PROJ" -f "$DOTNET_FRAMEWORK" --logger "console;verbosity=normal"
 }
 
 # parse arg
