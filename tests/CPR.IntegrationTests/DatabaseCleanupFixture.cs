@@ -31,7 +31,7 @@ namespace CPR.IntegrationTests
             {
                 if (_connString == null)
                 {
-                    _connString = CPR.Infrastructure.Data.DatabaseConnection.BuildConnectionString();
+                    _connString = CPR.Infrastructure.Data.DatabaseConnection.BuildConnectionString(defaultDatabase: "cpr_test");
                     Console.WriteLine($"DatabaseCleanupFixture: Built connection string: {_connString}");
                 }
                 return _connString;
