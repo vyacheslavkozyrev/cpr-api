@@ -295,10 +295,14 @@ namespace CPR.Infrastructure.Services
                 .AverageAsync(f => (double?)f.Rating) ?? 0;
 
             // Rating distribution
-            var ratingDistribution = await feedbackQuery
+            var ratingsData = await feedbackQuery
                 .Where(f => f.Rating.HasValue)
-                .GroupBy(f => f.Rating!.Value)
-                .ToDictionaryAsync(g => g.Key, g => g.Count());
+                .Select(f => f.Rating!.Value)
+                .ToListAsync();
+
+            var ratingDistribution = ratingsData
+                .GroupBy(r => r)
+                .ToDictionary(g => g.Key, g => g.Count());
 
             // Ensure all ratings 1-5 are represented
             for (int i = 1; i <= 5; i++)

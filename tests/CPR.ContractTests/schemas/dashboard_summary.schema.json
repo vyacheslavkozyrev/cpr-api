@@ -1,0 +1,123 @@
+{
+    "$id": "https://example.com/schemas/dashboard_summary.schema.json",
+    "type": "object",
+    "required": [
+        "goals",
+        "feedback",
+        "skills",
+        "activity"
+    ],
+    "properties": {
+        "goals": {
+            "type": "object",
+            "required": [
+                "total",
+                "active",
+                "completed",
+                "overdue",
+                "completionRate"
+            ],
+            "properties": {
+                "total": {
+                    "type": "integer",
+                    "minimum": 0
+                },
+                "active": {
+                    "type": "integer",
+                    "minimum": 0
+                },
+                "completed": {
+                    "type": "integer",
+                    "minimum": 0
+                },
+                "overdue": {
+                    "type": "integer",
+                    "minimum": 0
+                },
+                "completionRate": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 100
+                }
+            },
+            "additionalProperties": false
+        },
+        "feedback": {
+            "type": "object",
+            "required": [
+                "totalReceived",
+                "pendingRequests",
+                "averageRating",
+                "recentCount"
+            ],
+            "properties": {
+                "totalReceived": {
+                    "type": "integer",
+                    "minimum": 0
+                },
+                "pendingRequests": {
+                    "type": "integer",
+                    "minimum": 0
+                },
+                "averageRating": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 5
+                },
+                "recentCount": {
+                    "type": "integer",
+                    "minimum": 0
+                }
+            },
+            "additionalProperties": false
+        },
+        "skills": {
+            "type": "object",
+            "required": [
+                "totalSkills",
+                "assessedSkills",
+                "assessmentProgress",
+                "averageLevel"
+            ],
+            "properties": {
+                "totalSkills": {
+                    "type": "integer",
+                    "minimum": 0
+                },
+                "assessedSkills": {
+                    "type": "integer",
+                    "minimum": 0
+                },
+                "assessmentProgress": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 100
+                },
+                "averageLevel": {
+                    "type": "number",
+                    "minimum": 0
+                }
+            },
+            "additionalProperties": false
+        },
+        "activity": {
+            "type": "object",
+            "required": [
+                "totalActivities",
+                "recentActivities"
+            ],
+            "properties": {
+                "totalActivities": {
+                    "type": "integer",
+                    "minimum": 0
+                },
+                "recentActivities": {
+                    "type": "integer",
+                    "minimum": 0
+                }
+            },
+            "additionalProperties": false
+        }
+    },
+    "additionalProperties": false
+}

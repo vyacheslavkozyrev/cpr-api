@@ -1,0 +1,118 @@
+{
+    "$id": "https://example.com/schemas/goals_summary.schema.json",
+    "type": "object",
+    "required": [
+        "statistics",
+        "recentGoals",
+        "progressTrend"
+    ],
+    "properties": {
+        "statistics": {
+            "type": "object",
+            "required": [
+                "total",
+                "active",
+                "completed",
+                "overdue",
+                "completionRate",
+                "averageProgress"
+            ],
+            "properties": {
+                "total": {
+                    "type": "integer",
+                    "minimum": 0
+                },
+                "active": {
+                    "type": "integer",
+                    "minimum": 0
+                },
+                "completed": {
+                    "type": "integer",
+                    "minimum": 0
+                },
+                "overdue": {
+                    "type": "integer",
+                    "minimum": 0
+                },
+                "completionRate": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 100
+                },
+                "averageProgress": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 100
+                }
+            },
+            "additionalProperties": false
+        },
+        "recentGoals": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "required": [
+                    "id",
+                    "title",
+                    "status",
+                    "progress",
+                    "isOverdue"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "format": "uuid"
+                    },
+                    "title": {
+                        "type": "string"
+                    },
+                    "status": {
+                        "type": "string"
+                    },
+                    "progress": {
+                        "type": "number",
+                        "minimum": 0,
+                        "maximum": 100
+                    },
+                    "deadline": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "format": "date-time"
+                    },
+                    "isOverdue": {
+                        "type": "boolean"
+                    }
+                },
+                "additionalProperties": false
+            }
+        },
+        "progressTrend": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "required": [
+                    "period",
+                    "completed",
+                    "created"
+                ],
+                "properties": {
+                    "period": {
+                        "type": "string"
+                    },
+                    "completed": {
+                        "type": "integer",
+                        "minimum": 0
+                    },
+                    "created": {
+                        "type": "integer",
+                        "minimum": 0
+                    }
+                },
+                "additionalProperties": false
+            }
+        }
+    },
+    "additionalProperties": false
+}

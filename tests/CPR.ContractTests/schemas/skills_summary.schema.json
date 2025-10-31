@@ -1,0 +1,112 @@
+{
+    "$id": "https://example.com/schemas/skills_summary.schema.json",
+    "type": "object",
+    "required": [
+        "statistics",
+        "skillCategories",
+        "recentAssessments"
+    ],
+    "properties": {
+        "statistics": {
+            "type": "object",
+            "required": [
+                "totalSkills",
+                "assessedSkills",
+                "assessmentProgress",
+                "averageLevel",
+                "skillGaps"
+            ],
+            "properties": {
+                "totalSkills": {
+                    "type": "integer",
+                    "minimum": 0
+                },
+                "assessedSkills": {
+                    "type": "integer",
+                    "minimum": 0
+                },
+                "assessmentProgress": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 100
+                },
+                "averageLevel": {
+                    "type": "number",
+                    "minimum": 0
+                },
+                "skillGaps": {
+                    "type": "integer",
+                    "minimum": 0
+                }
+            },
+            "additionalProperties": false
+        },
+        "skillCategories": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "required": [
+                    "categoryId",
+                    "categoryName",
+                    "totalSkills",
+                    "assessedSkills",
+                    "averageLevel"
+                ],
+                "properties": {
+                    "categoryId": {
+                        "type": "string",
+                        "format": "uuid"
+                    },
+                    "categoryName": {
+                        "type": "string"
+                    },
+                    "totalSkills": {
+                        "type": "integer",
+                        "minimum": 0
+                    },
+                    "assessedSkills": {
+                        "type": "integer",
+                        "minimum": 0
+                    },
+                    "averageLevel": {
+                        "type": "number",
+                        "minimum": 0
+                    }
+                },
+                "additionalProperties": false
+            }
+        },
+        "recentAssessments": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "required": [
+                    "skillId",
+                    "skillName",
+                    "level",
+                    "assessedAt"
+                ],
+                "properties": {
+                    "skillId": {
+                        "type": "string",
+                        "format": "uuid"
+                    },
+                    "skillName": {
+                        "type": "string"
+                    },
+                    "level": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 5
+                    },
+                    "assessedAt": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                },
+                "additionalProperties": false
+            }
+        }
+    },
+    "additionalProperties": false
+}

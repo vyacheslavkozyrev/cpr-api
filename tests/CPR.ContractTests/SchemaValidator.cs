@@ -14,6 +14,22 @@ namespace CPR.ContractTests
             var doc = JsonDocument.Parse(json);
             if (doc.RootElement.ValueKind != JsonValueKind.Array) throw new Xunit.Sdk.XunitException("Expected JSON array");
 
+            ValidateJsonInternal(schemaRelativePath, json, true);
+        }
+
+        // lightweight validation for JSON objects
+        public static void ValidateJsonObject(string schemaRelativePath, string json)
+        {
+            var doc = JsonDocument.Parse(json);
+            if (doc.RootElement.ValueKind != JsonValueKind.Object) throw new Xunit.Sdk.XunitException("Expected JSON object");
+
+            ValidateJsonInternal(schemaRelativePath, json, false);
+        }
+
+        private static void ValidateJsonInternal(string schemaRelativePath, string json, bool isArray)
+        {
+            var doc = JsonDocument.Parse(json);
+            
             // locate the schemas directory by walking up from the test assembly directory
             var dir = AppContext.BaseDirectory;
             string? schemasDir = null;
@@ -40,21 +56,43 @@ namespace CPR.ContractTests
             // parse minimal required fields from schema ("required": [...])
             using var st = JsonDocument.Parse(schemaText);
             var required = new System.Collections.Generic.List<string>();
-            if (st.RootElement.TryGetProperty("items", out var items) && items.ValueKind == JsonValueKind.Object && items.TryGetProperty("required", out var req))
-            {
-                foreach (var it in req.EnumerateArray()) required.Add(it.GetString()!);
-            }
 
-            foreach (var item in doc.RootElement.EnumerateArray())
+            if (isArray)
             {
-                foreach (var r in required)
+                // For arrays, get required fields from items.required
+                if (st.RootElement.TryGetProperty("items", out var items) && items.ValueKind == JsonValueKind.Object && items.TryGetProperty("required", out var req))
                 {
-                    if (!item.TryGetProperty(r, out var p)) throw new Xunit.Sdk.XunitException($"Missing required property '{r}' in item");
-                    if (r.Equals("id", StringComparison.OrdinalIgnoreCase) || r.EndsWith("Id", StringComparison.OrdinalIgnoreCase))
-                    {
-                        if (p.ValueKind != JsonValueKind.String || string.IsNullOrWhiteSpace(p.GetString()) || !Guid.TryParse(p.GetString(), out _))
-                            throw new Xunit.Sdk.XunitException($"Property '{r}' is not a GUID string: {p}");
-                    }
+                    foreach (var it in req.EnumerateArray()) required.Add(it.GetString()!);
+                }
+
+                foreach (var item in doc.RootElement.EnumerateArray())
+                {
+                    ValidateRequiredProperties(item, required);
+                }
+            }
+            else
+            {
+                // For objects, get required fields from root.required
+                if (st.RootElement.TryGetProperty("required", out var req))
+                {
+                    foreach (var it in req.EnumerateArray()) required.Add(it.GetString()!);
+                }
+
+                ValidateRequiredProperties(doc.RootElement, required);
+            }
+        }
+
+        private static void ValidateRequiredProperties(JsonElement element, System.Collections.Generic.List<string> required)
+        {
+            foreach (var r in required)
+            {
+                if (!element.TryGetProperty(r, out var p)) throw new Xunit.Sdk.XunitException($"Missing required property '{r}'");
+                if (r.Equals("id", StringComparison.OrdinalIgnoreCase) || r.EndsWith("Id", StringComparison.OrdinalIgnoreCase))
+                {
+                    // Handle nullable GUID fields
+                    if (p.ValueKind == JsonValueKind.Null) continue; // Nullable GUID is OK
+                    if (p.ValueKind != JsonValueKind.String || string.IsNullOrWhiteSpace(p.GetString()) || !Guid.TryParse(p.GetString(), out _))
+                        throw new Xunit.Sdk.XunitException($"Property '{r}' is not a valid GUID string: {p}");
                 }
             }
         }

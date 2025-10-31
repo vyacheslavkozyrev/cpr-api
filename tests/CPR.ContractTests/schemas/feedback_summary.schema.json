@@ -1,0 +1,112 @@
+{
+    "$id": "https://example.com/schemas/feedback_summary.schema.json",
+    "type": "object",
+    "required": [
+        "statistics",
+        "recentFeedback",
+        "ratingTrend"
+    ],
+    "properties": {
+        "statistics": {
+            "type": "object",
+            "required": [
+                "totalReceived",
+                "pendingRequests",
+                "averageRating",
+                "ratingDistribution"
+            ],
+            "properties": {
+                "totalReceived": {
+                    "type": "integer",
+                    "minimum": 0
+                },
+                "pendingRequests": {
+                    "type": "integer",
+                    "minimum": 0
+                },
+                "averageRating": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 5
+                },
+                "ratingDistribution": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "integer",
+                        "minimum": 0
+                    }
+                }
+            },
+            "additionalProperties": false
+        },
+        "recentFeedback": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "required": [
+                    "id",
+                    "fromEmployeeId",
+                    "fromEmployeeName",
+                    "goalTitle",
+                    "createdAt"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "format": "uuid"
+                    },
+                    "fromEmployeeId": {
+                        "type": "string",
+                        "format": "uuid"
+                    },
+                    "fromEmployeeName": {
+                        "type": "string"
+                    },
+                    "goalTitle": {
+                        "type": "string"
+                    },
+                    "rating": {
+                        "type": [
+                            "integer",
+                            "null"
+                        ],
+                        "minimum": 1,
+                        "maximum": 5
+                    },
+                    "createdAt": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                },
+                "additionalProperties": false
+            }
+        },
+        "ratingTrend": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "required": [
+                    "period",
+                    "averageRating",
+                    "count"
+                ],
+                "properties": {
+                    "period": {
+                        "type": "string"
+                    },
+                    "averageRating": {
+                        "type": "number",
+                        "minimum": 0,
+                        "maximum": 5
+                    },
+                    "count": {
+                        "type": "integer",
+                        "minimum": 0
+                    }
+                },
+                "additionalProperties": false
+            }
+        }
+    },
+    "additionalProperties": false
+}
