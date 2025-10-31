@@ -29,7 +29,7 @@ namespace CPR.ContractTests
         private static void ValidateJsonInternal(string schemaRelativePath, string json, bool isArray)
         {
             var doc = JsonDocument.Parse(json);
-            
+
             // locate the schemas directory by walking up from the test assembly directory
             var dir = AppContext.BaseDirectory;
             string? schemasDir = null;

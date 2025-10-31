@@ -18,7 +18,7 @@ public class DashboardContractTests : IClassFixture<CustomWebApplicationFactory>
 {
     private readonly CustomWebApplicationFactory _factory;
     private readonly string _jwtKey;
-    
+
     // Test user IDs - using same as integration tests for consistency
     private const string TestUserId = "22222222-2222-2222-2222-222222222222";
     private const string TestEmployeeId = "11111111-1111-1111-1111-111111111111";
@@ -493,7 +493,7 @@ public class DashboardContractTests : IClassFixture<CustomWebApplicationFactory>
         var endpoints = new[]
         {
             "/api/dashboard/summary",
-            "/api/dashboard/activity", 
+            "/api/dashboard/activity",
             "/api/dashboard/goals-summary",
             "/api/dashboard/feedback-summary",
             "/api/dashboard/skills-summary"
@@ -507,7 +507,7 @@ public class DashboardContractTests : IClassFixture<CustomWebApplicationFactory>
             // Assert
             response.EnsureSuccessStatusCode();
             var json = await response.Content.ReadAsStringAsync();
-            
+
             // Validate it's parseable JSON
             var exception = Record.Exception(() => JsonDocument.Parse(json));
             Assert.Null(exception);
