@@ -131,6 +131,36 @@ namespace CPR.Infrastructure.Services
             };
         }
 
+        public async Task<bool> DeleteTaskAsync(Guid goalId, Guid taskId, Guid requestingUserId)
+        {
+            // Verify the goal exists and user has access
+            var goal = await _repo.GetByIdAsync(goalId);
+            if (goal == null || goal.IsDeleted) return false;
+
+            // Find the task and verify it belongs to the goal
+            var task = await _db.GoalTasks
+                .FirstOrDefaultAsync(t => t.Id == taskId && t.GoalId == goalId && !t.IsDeleted);
+
+            if (task == null) return false;
+
+            // Soft delete the task
+            task.IsDeleted = true;
+            task.DeletedAt = DateTimeOffset.UtcNow;
+            task.DeletedBy = requestingUserId;
+            task.ModifiedAt = DateTimeOffset.UtcNow;
+            task.ModifiedBy = requestingUserId;
+
+            // Update the parent goal's timestamp
+            goal.ModifiedAt = DateTimeOffset.UtcNow;
+            goal.ModifiedBy = requestingUserId;
+
+            _db.GoalTasks.Update(task);
+            await _repo.UpdateAsync(goal);
+            await _db.SaveChangesAsync();
+
+            return true;
+        }
+
         public async Task DeleteGoalAsync(Guid id, Guid requestingUserId)
         {
             var goal = await _repo.GetByIdAsync(id);

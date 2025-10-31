@@ -5,6 +5,7 @@ using CPR.Application.Services;
 using CPR.Application.Contracts;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
 using CPR.Api.Auth;
 
 namespace CPR.Api.Controllers
@@ -158,6 +159,51 @@ namespace CPR.Api.Controllers
             var updated = await _goalService.UpdateTaskAsync(id, taskId, ownerId, dto);
             if (updated == null) return NotFound();
             return Ok(updated);
+        }
+
+        /// <summary>
+        /// Delete a task from a goal (soft delete).
+        /// </summary>
+        /// <param name="id">Goal identifier.</param>
+        /// <param name="taskId">Task identifier.</param>
+        /// <returns>No content on successful deletion</returns>
+        /// <response code="204">Task successfully deleted</response>
+        /// <response code="400">Invalid request parameters</response>
+        /// <response code="401">Authentication required</response>
+        /// <response code="403">Insufficient permissions</response>
+        /// <response code="404">Goal or task not found</response>
+        [HttpDelete("{id}/tasks/{taskId}")]
+        [Authorize]
+        [RequireRole("Employee", "People Manager", "Solution Owner", "Director", "Administrator")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> DeleteTask(Guid id, Guid taskId)
+        {
+            // Validate parameters
+            if (id == Guid.Empty || taskId == Guid.Empty)
+            {
+                return BadRequest("Invalid goal ID or task ID");
+            }
+
+            var profile = await _userService.GetCurrentUserProfileAsync(User);
+            if (profile == null) return Unauthorized();
+            if (!Guid.TryParse(profile.EmployeeId, out var ownerId)) return Unauthorized();
+
+            // Verify goal exists and get goal details for authorization
+            var goal = await _goalService.GetGoalByIdAsync(id, ownerId);
+            if (goal == null) return NotFound($"Goal with ID {id} not found");
+
+            // Authorization: Only goal owner can delete tasks (following same pattern as PatchTask)
+            if (goal.EmployeeId != ownerId) return Forbid();
+
+            // Attempt to delete the task
+            var deleted = await _goalService.DeleteTaskAsync(id, taskId, ownerId);
+            if (!deleted) return NotFound($"Task with ID {taskId} not found in goal {id}");
+
+            return NoContent();
         }
     }
 }

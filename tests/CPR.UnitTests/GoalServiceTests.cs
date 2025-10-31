@@ -287,6 +287,170 @@ namespace CPR.UnitTests
             Assert.Equal("original", updated.Title);
         }
 
+        [Fact]
+        public async Task DeleteTaskAsync_ValidRequest_ReturnsTrueAndSoftDeletesTask()
+        {
+            // Arrange
+            var repo = new GoalsRepository(_db);
+            var svc = new GoalService(_db, repo);
+            var ownerId = Guid.NewGuid();
+
+            // Create a goal
+            var createGoalDto = new CreateGoalDto
+            {
+                Title = "Test Goal for Task Deletion",
+                Description = "Goal description"
+            };
+            var goal = await svc.CreateGoalAsync(ownerId, createGoalDto);
+
+            // Add a task to the goal
+            var createTaskDto = new CreateGoalTaskDto
+            {
+                Title = "Task to Delete",
+                Description = "Task description"
+            };
+            var task = await svc.AddTaskAsync(goal.Id, ownerId, createTaskDto);
+
+            // Act
+            var result = await svc.DeleteTaskAsync(goal.Id, task.Id, ownerId);
+
+            // Assert
+            Assert.True(result);
+
+            // Verify task is soft deleted in database
+            var deletedTask = await _db.GoalTasks.FindAsync(task.Id);
+            Assert.NotNull(deletedTask);
+            Assert.True(deletedTask.IsDeleted);
+            Assert.NotNull(deletedTask.DeletedAt);
+            Assert.Equal(ownerId, deletedTask.DeletedBy);
+            Assert.NotNull(deletedTask.ModifiedAt);
+            Assert.Equal(ownerId, deletedTask.ModifiedBy);
+
+            // Verify goal's ModifiedAt timestamp was updated
+            var updatedGoal = await _db.Goals.FindAsync(goal.Id);
+            Assert.NotNull(updatedGoal.ModifiedAt);
+            Assert.Equal(ownerId, updatedGoal.ModifiedBy);
+        }
+
+        [Fact]
+        public async Task DeleteTaskAsync_GoalNotFound_ReturnsFalse()
+        {
+            // Arrange
+            var repo = new GoalsRepository(_db);
+            var svc = new GoalService(_db, repo);
+            var ownerId = Guid.NewGuid();
+            var nonExistentGoalId = Guid.NewGuid();
+            var taskId = Guid.NewGuid();
+
+            // Act
+            var result = await svc.DeleteTaskAsync(nonExistentGoalId, taskId, ownerId);
+
+            // Assert
+            Assert.False(result);
+        }
+
+        [Fact]
+        public async Task DeleteTaskAsync_TaskNotFound_ReturnsFalse()
+        {
+            // Arrange
+            var repo = new GoalsRepository(_db);
+            var svc = new GoalService(_db, repo);
+            var ownerId = Guid.NewGuid();
+
+            // Create a goal
+            var createGoalDto = new CreateGoalDto
+            {
+                Title = "Test Goal",
+                Description = "Goal description"
+            };
+            var goal = await svc.CreateGoalAsync(ownerId, createGoalDto);
+            var nonExistentTaskId = Guid.NewGuid();
+
+            // Act
+            var result = await svc.DeleteTaskAsync(goal.Id, nonExistentTaskId, ownerId);
+
+            // Assert
+            Assert.False(result);
+        }
+
+        [Fact]
+        public async Task DeleteTaskAsync_TaskBelongsToDifferentGoal_ReturnsFalse()
+        {
+            // Arrange
+            var repo = new GoalsRepository(_db);
+            var svc = new GoalService(_db, repo);
+            var ownerId = Guid.NewGuid();
+
+            // Create two goals
+            var createGoalDto1 = new CreateGoalDto { Title = "Goal 1", Description = "Description 1" };
+            var createGoalDto2 = new CreateGoalDto { Title = "Goal 2", Description = "Description 2" };
+            var goal1 = await svc.CreateGoalAsync(ownerId, createGoalDto1);
+            var goal2 = await svc.CreateGoalAsync(ownerId, createGoalDto2);
+
+            // Add task to goal2
+            var createTaskDto = new CreateGoalTaskDto { Title = "Task in Goal 2" };
+            var task = await svc.AddTaskAsync(goal2.Id, ownerId, createTaskDto);
+
+            // Act - try to delete task from goal1 (wrong goal)
+            var result = await svc.DeleteTaskAsync(goal1.Id, task.Id, ownerId);
+
+            // Assert
+            Assert.False(result);
+
+            // Verify task is not deleted
+            var unchangedTask = await _db.GoalTasks.FindAsync(task.Id);
+            Assert.False(unchangedTask.IsDeleted);
+        }
+
+        [Fact]
+        public async Task DeleteTaskAsync_TaskAlreadyDeleted_ReturnsFalse()
+        {
+            // Arrange
+            var repo = new GoalsRepository(_db);
+            var svc = new GoalService(_db, repo);
+            var ownerId = Guid.NewGuid();
+
+            // Create goal and task
+            var createGoalDto = new CreateGoalDto { Title = "Test Goal", Description = "Description" };
+            var goal = await svc.CreateGoalAsync(ownerId, createGoalDto);
+            var createTaskDto = new CreateGoalTaskDto { Title = "Task to Delete Twice" };
+            var task = await svc.AddTaskAsync(goal.Id, ownerId, createTaskDto);
+
+            // Delete task first time
+            var firstResult = await svc.DeleteTaskAsync(goal.Id, task.Id, ownerId);
+            Assert.True(firstResult);
+
+            // Act - try to delete already deleted task
+            var secondResult = await svc.DeleteTaskAsync(goal.Id, task.Id, ownerId);
+
+            // Assert
+            Assert.False(secondResult);
+        }
+
+        [Fact]
+        public async Task DeleteTaskAsync_GoalIsDeleted_ReturnsFalse()
+        {
+            // Arrange
+            var repo = new GoalsRepository(_db);
+            var svc = new GoalService(_db, repo);
+            var ownerId = Guid.NewGuid();
+
+            // Create goal and task
+            var createGoalDto = new CreateGoalDto { Title = "Goal to Delete", Description = "Description" };
+            var goal = await svc.CreateGoalAsync(ownerId, createGoalDto);
+            var createTaskDto = new CreateGoalTaskDto { Title = "Task in Deleted Goal" };
+            var task = await svc.AddTaskAsync(goal.Id, ownerId, createTaskDto);
+
+            // Delete the goal first
+            await svc.DeleteGoalAsync(goal.Id, ownerId);
+
+            // Act - try to delete task from deleted goal
+            var result = await svc.DeleteTaskAsync(goal.Id, task.Id, ownerId);
+
+            // Assert
+            Assert.False(result);
+        }
+
         public void Dispose()
         {
             _db?.Dispose();

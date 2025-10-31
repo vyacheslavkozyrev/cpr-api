@@ -13,5 +13,6 @@ namespace CPR.Application.Services
         Task DeleteGoalAsync(Guid id, Guid requestingUserId);
         Task<TaskDto> AddTaskAsync(Guid goalId, Guid requestingUserId, CreateGoalTaskDto dto);
         Task<TaskDto?> UpdateTaskAsync(Guid goalId, Guid taskId, Guid requestingUserId, UpdateGoalTaskDto dto);
+        Task<bool> DeleteTaskAsync(Guid goalId, Guid taskId, Guid requestingUserId);
     }
 }
