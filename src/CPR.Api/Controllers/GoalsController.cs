@@ -106,7 +106,6 @@ namespace CPR.Api.Controllers
         /// <param name="id">Goal identifier.</param>
         [HttpDelete("{id}")]
         [Authorize]
-        [RequireRole("Administrator")]
         public async Task<IActionResult> Delete(Guid id)
         {
             var profile = await _userService.GetCurrentUserProfileAsync(User);

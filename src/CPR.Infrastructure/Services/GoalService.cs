@@ -78,6 +78,21 @@ namespace CPR.Infrastructure.Services
                 CreatedBy = requestingUserId
             };
             await _db.GoalTasks.AddAsync(task);
+
+            // Recalculate goal progress after adding new task
+            var allTasks = await _db.GoalTasks
+                .Where(t => t.GoalId == goalId && !t.IsDeleted)
+                .ToListAsync();
+            
+            // Include the new task in the count (it's not yet saved but will be)
+            var totalTasks = allTasks.Count + 1;
+            var completedCount = allTasks.Count(t => t.IsCompleted);
+            goal.ProgressPercent = Math.Round((decimal)completedCount / totalTasks * 100, 2);
+
+            goal.ModifiedAt = DateTimeOffset.UtcNow;
+            goal.ModifiedBy = requestingUserId;
+            await _repo.UpdateAsync(goal);
+
             await _db.SaveChangesAsync();
 
             return new TaskDto
@@ -88,7 +103,8 @@ namespace CPR.Infrastructure.Services
                 Description = task.Description,
                 Deadline = task.Deadline,
                 IsCompleted = task.IsCompleted,
-                CreatedAt = task.CreatedAt
+                CreatedAt = task.CreatedAt,
+                ModifiedAt = task.ModifiedAt
             };
         }
 
@@ -116,6 +132,26 @@ namespace CPR.Infrastructure.Services
             task.ModifiedAt = DateTimeOffset.UtcNow;
             task.ModifiedBy = requestingUserId;
             _db.GoalTasks.Update(task);
+
+            // Recalculate goal progress based on task completion
+            var allTasks = await _db.GoalTasks
+                .Where(t => t.GoalId == goalId && !t.IsDeleted)
+                .ToListAsync();
+            
+            if (allTasks.Count > 0)
+            {
+                var completedCount = allTasks.Count(t => t.IsCompleted);
+                goal.ProgressPercent = Math.Round((decimal)completedCount / allTasks.Count * 100, 2);
+            }
+            else
+            {
+                goal.ProgressPercent = 0;
+            }
+
+            goal.ModifiedAt = DateTimeOffset.UtcNow;
+            goal.ModifiedBy = requestingUserId;
+            await _repo.UpdateAsync(goal);
+
             await _db.SaveChangesAsync();
 
             return new TaskDto
@@ -127,7 +163,8 @@ namespace CPR.Infrastructure.Services
                 Deadline = task.Deadline,
                 IsCompleted = task.IsCompleted,
                 CompletedAt = task.CompletedAt,
-                CreatedAt = task.CreatedAt
+                CreatedAt = task.CreatedAt,
+                ModifiedAt = task.ModifiedAt
             };
         }
 
@@ -150,11 +187,27 @@ namespace CPR.Infrastructure.Services
             task.ModifiedAt = DateTimeOffset.UtcNow;
             task.ModifiedBy = requestingUserId;
 
+            _db.GoalTasks.Update(task);
+
+            // Recalculate goal progress after task deletion
+            var remainingTasks = await _db.GoalTasks
+                .Where(t => t.GoalId == goalId && !t.IsDeleted)
+                .ToListAsync();
+            
+            if (remainingTasks.Count > 0)
+            {
+                var completedCount = remainingTasks.Count(t => t.IsCompleted);
+                goal.ProgressPercent = Math.Round((decimal)completedCount / remainingTasks.Count * 100, 2);
+            }
+            else
+            {
+                goal.ProgressPercent = 0;
+            }
+
             // Update the parent goal's timestamp
             goal.ModifiedAt = DateTimeOffset.UtcNow;
             goal.ModifiedBy = requestingUserId;
 
-            _db.GoalTasks.Update(task);
             await _repo.UpdateAsync(goal);
             await _db.SaveChangesAsync();
 
@@ -165,6 +218,13 @@ namespace CPR.Infrastructure.Services
         {
             var goal = await _repo.GetByIdAsync(id);
             if (goal == null) return;
+
+            // Only the goal owner can delete their own goals
+            if (goal.EmployeeId != requestingUserId)
+            {
+                throw new UnauthorizedAccessException("You can only delete your own goals.");
+            }
+
             await _repo.DeleteAsync(goal);
         }
 
@@ -206,7 +266,8 @@ namespace CPR.Infrastructure.Services
                     Deadline = t.Deadline,
                     IsCompleted = t.IsCompleted,
                     CompletedAt = t.CompletedAt,
-                    CreatedAt = t.CreatedAt
+                    CreatedAt = t.CreatedAt,
+                    ModifiedAt = t.ModifiedAt
                 }).ToList()
             }).ToArray();
         }
@@ -225,7 +286,7 @@ namespace CPR.Infrastructure.Services
                 Description = g.Description,
                 Status = g.Status,
                 CreatedAt = g.CreatedAt,
-                UpdatedAt = g.ModifiedAt,
+                ModifiedAt = g.ModifiedAt,
                 RelatedSkillId = g.RelatedSkillId,
                 RelatedSkillLevelId = g.RelatedSkillLevelId,
                 Deadline = g.Deadline,
@@ -242,7 +303,8 @@ namespace CPR.Infrastructure.Services
                     Deadline = t.Deadline,
                     IsCompleted = t.IsCompleted,
                     CompletedAt = t.CompletedAt,
-                    CreatedAt = t.CreatedAt
+                    CreatedAt = t.CreatedAt,
+                    ModifiedAt = t.ModifiedAt
                 }).ToList()
             };
         }
@@ -271,7 +333,7 @@ namespace CPR.Infrastructure.Services
                 Description = g.Description,
                 Status = g.Status,
                 CreatedAt = g.CreatedAt,
-                UpdatedAt = g.ModifiedAt,
+                ModifiedAt = g.ModifiedAt,
                 RelatedSkillId = g.RelatedSkillId,
                 RelatedSkillLevelId = g.RelatedSkillLevelId,
                 Deadline = g.Deadline,

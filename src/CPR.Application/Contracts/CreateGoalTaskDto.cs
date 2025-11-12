@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace CPR.Application.Contracts
 {
@@ -7,11 +8,14 @@ namespace CPR.Application.Contracts
     {
         [Required]
         [StringLength(250, MinimumLength = 1)]
+        [JsonPropertyName("title")]
         public string Title { get; set; } = null!;
 
         [StringLength(2000)]
+        [JsonPropertyName("description")]
         public string? Description { get; set; }
 
+        [JsonPropertyName("deadline")]
         public DateTimeOffset? Deadline { get; set; }
     }
 }
