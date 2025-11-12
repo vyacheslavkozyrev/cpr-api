@@ -83,7 +83,7 @@ namespace CPR.Infrastructure.Services
             var allTasks = await _db.GoalTasks
                 .Where(t => t.GoalId == goalId && !t.IsDeleted)
                 .ToListAsync();
-            
+
             // Include the new task in the count (it's not yet saved but will be)
             var totalTasks = allTasks.Count + 1;
             var completedCount = allTasks.Count(t => t.IsCompleted);
@@ -137,7 +137,7 @@ namespace CPR.Infrastructure.Services
             var allTasks = await _db.GoalTasks
                 .Where(t => t.GoalId == goalId && !t.IsDeleted)
                 .ToListAsync();
-            
+
             if (allTasks.Count > 0)
             {
                 var completedCount = allTasks.Count(t => t.IsCompleted);
@@ -193,7 +193,7 @@ namespace CPR.Infrastructure.Services
             var remainingTasks = await _db.GoalTasks
                 .Where(t => t.GoalId == goalId && !t.IsDeleted)
                 .ToListAsync();
-            
+
             if (remainingTasks.Count > 0)
             {
                 var completedCount = remainingTasks.Count(t => t.IsCompleted);
