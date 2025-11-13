@@ -123,8 +123,8 @@ namespace CPR.UnitTests
             Assert.Equal("orig", updated.Title);
             Assert.Equal("origdesc", updated.Description);
             // ModifiedAt is set by the service even if no fields changed
-            Assert.NotNull(updated.UpdatedAt);
-            Assert.True(updated.UpdatedAt >= before.CreatedAt);
+            Assert.NotNull(updated.ModifiedAt);
+            Assert.True(updated.ModifiedAt >= before.CreatedAt);
         }
 
         [Fact]
