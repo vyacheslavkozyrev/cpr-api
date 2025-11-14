@@ -141,7 +141,7 @@ namespace CPR.Infrastructure.Services
 
             // Save to database
             var createdRequest = await _repository.CreateAsync(feedbackRequest);
-            
+
             // Map to DTO
             return MapToDto(createdRequest);
         }
@@ -150,7 +150,7 @@ namespace CPR.Infrastructure.Services
         public async Task<FeedbackRequestDto?> GetByIdAsync(Guid id, Guid requestorId)
         {
             var request = await _repository.GetByIdAsync(id, includeDeleted: false);
-            
+
             // Verify ownership
             if (request == null || request.RequestorId != requestorId)
             {

@@ -27,7 +27,7 @@ namespace CPR.Infrastructure.Repositories
         {
             await _db.FeedbackRequests.AddAsync(feedbackRequest);
             await _db.SaveChangesAsync();
-            
+
             // Reload with related data
             return (await GetByIdAsync(feedbackRequest.Id))!;
         }
@@ -115,13 +115,13 @@ namespace CPR.Infrastructure.Repositories
                 switch (query.Status.ToLower())
                 {
                     case "overdue":
-                        recipientQuery = recipientQuery.Where(r => 
-                            r.FeedbackRequest.DueDate.HasValue && 
+                        recipientQuery = recipientQuery.Where(r =>
+                            r.FeedbackRequest.DueDate.HasValue &&
                             r.FeedbackRequest.DueDate.Value < DateTime.UtcNow);
                         break;
                     case "pending":
-                        recipientQuery = recipientQuery.Where(r => 
-                            !r.FeedbackRequest.DueDate.HasValue || 
+                        recipientQuery = recipientQuery.Where(r =>
+                            !r.FeedbackRequest.DueDate.HasValue ||
                             r.FeedbackRequest.DueDate.Value >= DateTime.UtcNow);
                         break;
                 }
@@ -130,8 +130,8 @@ namespace CPR.Infrastructure.Repositories
             // Apply search
             if (!string.IsNullOrEmpty(query.Search))
             {
-                recipientQuery = recipientQuery.Where(r => 
-                    r.FeedbackRequest.Message != null && 
+                recipientQuery = recipientQuery.Where(r =>
+                    r.FeedbackRequest.Message != null &&
                     r.FeedbackRequest.Message.Contains(query.Search));
             }
 
@@ -232,8 +232,8 @@ namespace CPR.Infrastructure.Repositories
             // Apply search
             if (!string.IsNullOrEmpty(query.Search))
             {
-                recipientQuery = recipientQuery.Where(r => 
-                    r.FeedbackRequest.Message != null && 
+                recipientQuery = recipientQuery.Where(r =>
+                    r.FeedbackRequest.Message != null &&
                     r.FeedbackRequest.Message.Contains(query.Search));
             }
 
@@ -288,7 +288,7 @@ namespace CPR.Infrastructure.Repositories
             feedbackRequest.DeletedBy = deletedBy;
             feedbackRequest.ModifiedAt = DateTimeOffset.UtcNow;
             feedbackRequest.ModifiedBy = deletedBy;
-            
+
             await UpdateAsync(feedbackRequest);
         }
 
@@ -324,7 +324,7 @@ namespace CPR.Infrastructure.Repositories
             // Find active requests with matching criteria
             var existingRequests = await _db.FeedbackRequests
                 .Include(fr => fr.Recipients)
-                .Where(fr => fr.RequestorId == requestorId && 
+                .Where(fr => fr.RequestorId == requestorId &&
                              !fr.IsDeleted &&
                              fr.ProjectId == projectId &&
                              fr.GoalId == goalId)
@@ -332,12 +332,12 @@ namespace CPR.Infrastructure.Repositories
 
             // Find which recipients already have active requests
             var duplicateRecipients = new List<Guid>();
-            
+
             foreach (var employeeId in recipientIds)
             {
-                var hasDuplicate = existingRequests.Any(fr => 
+                var hasDuplicate = existingRequests.Any(fr =>
                     fr.Recipients.Any(r => r.EmployeeId == employeeId && !r.IsCompleted));
-                
+
                 if (hasDuplicate)
                 {
                     duplicateRecipients.Add(employeeId);
@@ -354,8 +354,8 @@ namespace CPR.Infrastructure.Repositories
             var tomorrow = today.AddDays(1);
 
             return await _db.FeedbackRequests
-                .Where(fr => fr.RequestorId == requestorId && 
-                             fr.CreatedAt >= today && 
+                .Where(fr => fr.RequestorId == requestorId &&
+                             fr.CreatedAt >= today &&
                              fr.CreatedAt < tomorrow &&
                              !fr.IsDeleted)
                 .CountAsync();
@@ -366,7 +366,7 @@ namespace CPR.Infrastructure.Repositories
         // ====================================
 
         private async Task<PaginatedFeedbackRequestsDto> BuildPaginatedResponse(
-            IQueryable<FeedbackRequest> baseQuery, 
+            IQueryable<FeedbackRequest> baseQuery,
             FeedbackRequestListQuery query)
         {
             // Apply status filter
@@ -428,8 +428,8 @@ namespace CPR.Infrastructure.Repositories
                 case "complete":
                     return query.Where(fr => fr.Recipients.All(r => r.IsCompleted));
                 case "overdue":
-                    return query.Where(fr => fr.DueDate.HasValue && 
-                                            fr.DueDate.Value < DateTime.UtcNow && 
+                    return query.Where(fr => fr.DueDate.HasValue &&
+                                            fr.DueDate.Value < DateTime.UtcNow &&
                                             fr.Recipients.Any(r => !r.IsCompleted));
                 default:
                     return query;
@@ -443,8 +443,8 @@ namespace CPR.Infrastructure.Repositories
                 case "pending":
                     return query.Where(r => !r.IsCompleted);
                 case "overdue":
-                    return query.Where(r => !r.IsCompleted && 
-                                           r.FeedbackRequest.DueDate.HasValue && 
+                    return query.Where(r => !r.IsCompleted &&
+                                           r.FeedbackRequest.DueDate.HasValue &&
                                            r.FeedbackRequest.DueDate.Value < DateTime.UtcNow);
                 case "responded":
                     return query.Where(r => r.IsCompleted && r.RespondedAt.HasValue);
@@ -459,36 +459,36 @@ namespace CPR.Infrastructure.Repositories
 
             return sortBy?.ToLower() switch
             {
-                "due_date" => isDescending 
-                    ? query.OrderByDescending(fr => fr.DueDate) 
+                "due_date" => isDescending
+                    ? query.OrderByDescending(fr => fr.DueDate)
                     : query.OrderBy(fr => fr.DueDate),
-                "updated_at" => isDescending 
-                    ? query.OrderByDescending(fr => fr.ModifiedAt ?? fr.CreatedAt) 
+                "updated_at" => isDescending
+                    ? query.OrderByDescending(fr => fr.ModifiedAt ?? fr.CreatedAt)
                     : query.OrderBy(fr => fr.ModifiedAt ?? fr.CreatedAt),
-                "created_at" => isDescending 
-                    ? query.OrderByDescending(fr => fr.CreatedAt) 
+                "created_at" => isDescending
+                    ? query.OrderByDescending(fr => fr.CreatedAt)
                     : query.OrderBy(fr => fr.CreatedAt),
                 _ => query.OrderByDescending(fr => fr.CreatedAt)
             };
         }
 
         private IQueryable<FeedbackRequestRecipient> ApplySortingToRecipients(
-            IQueryable<FeedbackRequestRecipient> query, 
-            string sortBy, 
+            IQueryable<FeedbackRequestRecipient> query,
+            string sortBy,
             string sortOrder)
         {
             var isDescending = sortOrder?.ToLower() == "desc";
 
             return sortBy?.ToLower() switch
             {
-                "due_date" => isDescending 
-                    ? query.OrderByDescending(r => r.FeedbackRequest.DueDate) 
+                "due_date" => isDescending
+                    ? query.OrderByDescending(r => r.FeedbackRequest.DueDate)
                     : query.OrderBy(r => r.FeedbackRequest.DueDate),
-                "updated_at" => isDescending 
-                    ? query.OrderByDescending(r => r.UpdatedAt) 
+                "updated_at" => isDescending
+                    ? query.OrderByDescending(r => r.UpdatedAt)
                     : query.OrderBy(r => r.UpdatedAt),
-                "created_at" => isDescending 
-                    ? query.OrderByDescending(r => r.FeedbackRequest.CreatedAt) 
+                "created_at" => isDescending
+                    ? query.OrderByDescending(r => r.FeedbackRequest.CreatedAt)
                     : query.OrderBy(r => r.FeedbackRequest.CreatedAt),
                 _ => query.OrderByDescending(r => r.FeedbackRequest.CreatedAt)
             };
@@ -498,8 +498,8 @@ namespace CPR.Infrastructure.Repositories
         {
             var totalRecipients = recipients.Count;
             var respondedCount = recipients.Count(r => r.IsCompleted && r.RespondedAt.HasValue);
-            var hasOverdue = request.DueDate.HasValue && 
-                            request.DueDate.Value < DateTime.UtcNow && 
+            var hasOverdue = request.DueDate.HasValue &&
+                            request.DueDate.Value < DateTime.UtcNow &&
                             recipients.Any(r => !r.IsCompleted);
 
             var status = CalculateStatus(totalRecipients, respondedCount, recipients.Any(r => !r.IsCompleted));
@@ -592,8 +592,8 @@ namespace CPR.Infrastructure.Repositories
             var pendingCount = requests.Count(fr => fr.Recipients.All(r => !r.IsCompleted));
             var partialCount = requests.Count(fr => fr.Recipients.Any(r => r.IsCompleted) && fr.Recipients.Any(r => !r.IsCompleted));
             var completeCount = requests.Count(fr => fr.Recipients.All(r => r.IsCompleted));
-            var overdueCount = requests.Count(fr => fr.DueDate.HasValue && 
-                                                    fr.DueDate.Value < DateTime.UtcNow && 
+            var overdueCount = requests.Count(fr => fr.DueDate.HasValue &&
+                                                    fr.DueDate.Value < DateTime.UtcNow &&
                                                     fr.Recipients.Any(r => !r.IsCompleted));
 
             return new FeedbackRequestSummaryDto
@@ -614,11 +614,11 @@ namespace CPR.Infrastructure.Repositories
                 .ToListAsync();
 
             var totalActive = recipients.Count(r => !r.IsCompleted);
-            var pendingCount = recipients.Count(r => !r.IsCompleted && 
-                                                     (!r.FeedbackRequest.DueDate.HasValue || 
+            var pendingCount = recipients.Count(r => !r.IsCompleted &&
+                                                     (!r.FeedbackRequest.DueDate.HasValue ||
                                                       r.FeedbackRequest.DueDate.Value >= DateTime.UtcNow));
-            var overdueCount = recipients.Count(r => !r.IsCompleted && 
-                                                     r.FeedbackRequest.DueDate.HasValue && 
+            var overdueCount = recipients.Count(r => !r.IsCompleted &&
+                                                     r.FeedbackRequest.DueDate.HasValue &&
                                                      r.FeedbackRequest.DueDate.Value < DateTime.UtcNow);
 
             return new FeedbackRequestSummaryDto

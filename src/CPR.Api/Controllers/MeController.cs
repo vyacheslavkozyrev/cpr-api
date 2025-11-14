@@ -17,16 +17,19 @@ public class MeController : ControllerBase
 {
     private readonly IUserService _userService;
     private readonly IClassificationService _classificationService;
+    private readonly IFeedbackRequestService _feedbackRequestService;
 
     /// <summary>
     /// Creates a new instance of <see cref="MeController"/>.
     /// </summary>
     /// <param name="userService">Service to read the current user's profile.</param>
     /// <param name="classificationService">Service to manage skill assessments.</param>
-    public MeController(IUserService userService, IClassificationService classificationService)
+    /// <param name="feedbackRequestService">Service to manage feedback requests.</param>
+    public MeController(IUserService userService, IClassificationService classificationService, IFeedbackRequestService feedbackRequestService)
     {
         _userService = userService;
         _classificationService = classificationService;
+        _feedbackRequestService = feedbackRequestService;
     }
 
     /// <summary>
@@ -128,5 +131,105 @@ public class MeController : ControllerBase
         {
             return BadRequest(ex.Message);
         }
+    }
+
+    /// <summary>
+    /// Get paginated list of feedback requests sent by the current user
+    /// </summary>
+    /// <param name="page">Page number (default: 1)</param>
+    /// <param name="pageSize">Page size (default: 20, max: 100)</param>
+    /// <param name="sortBy">Sort field (created_at, due_date, updated_at)</param>
+    /// <param name="sortOrder">Sort order (asc, desc)</param>
+    /// <param name="status">Filter by status (pending, partial, complete, overdue)</param>
+    /// <param name="search">Search in message content</param>
+    /// <returns>Paginated list of sent feedback requests</returns>
+    [Authorize]
+    [HttpGet("feedback/request")]
+    [ProducesResponseType(typeof(PaginatedFeedbackRequestsDto), 200)]
+    [ProducesResponseType(401)]
+    public async Task<IActionResult> GetSentFeedbackRequests(
+        [FromQuery] int page = 1,
+        [FromQuery] int pageSize = 20,
+        [FromQuery] string sortBy = "created_at",
+        [FromQuery] string sortOrder = "desc",
+        [FromQuery] string? status = null,
+        [FromQuery] string? search = null)
+    {
+        var profile = await _userService.GetCurrentUserProfileAsync(User);
+        if (profile == null)
+        {
+            return Unauthorized();
+        }
+
+        if (!Guid.TryParse(profile.EmployeeId, out var requestorId))
+        {
+            return Problem(
+                title: "Invalid employee ID",
+                detail: "The employee ID in the user profile is not valid",
+                statusCode: StatusCodes.Status400BadRequest);
+        }
+
+        var query = new FeedbackRequestListQuery
+        {
+            Page = page,
+            PageSize = pageSize,
+            SortBy = sortBy,
+            SortOrder = sortOrder,
+            Status = status,
+            Search = search
+        };
+
+        var result = await _feedbackRequestService.GetSentRequestsAsync(requestorId, query);
+        return Ok(result);
+    }
+
+    /// <summary>
+    /// Get paginated list of feedback requests addressed to the current user (todo list)
+    /// </summary>
+    /// <param name="page">Page number (default: 1)</param>
+    /// <param name="pageSize">Page size (default: 20, max: 100)</param>
+    /// <param name="sortBy">Sort field (created_at, due_date, updated_at)</param>
+    /// <param name="sortOrder">Sort order (asc, desc)</param>
+    /// <param name="status">Filter by status (pending, overdue, responded)</param>
+    /// <param name="search">Search in message content</param>
+    /// <returns>Paginated list of feedback requests to respond to</returns>
+    [Authorize]
+    [HttpGet("feedback/request/todo")]
+    [ProducesResponseType(typeof(PaginatedFeedbackRequestsDto), 200)]
+    [ProducesResponseType(401)]
+    public async Task<IActionResult> GetTodoFeedbackRequests(
+        [FromQuery] int page = 1,
+        [FromQuery] int pageSize = 20,
+        [FromQuery] string sortBy = "created_at",
+        [FromQuery] string sortOrder = "desc",
+        [FromQuery] string? status = null,
+        [FromQuery] string? search = null)
+    {
+        var profile = await _userService.GetCurrentUserProfileAsync(User);
+        if (profile == null)
+        {
+            return Unauthorized();
+        }
+
+        if (!Guid.TryParse(profile.EmployeeId, out var employeeId))
+        {
+            return Problem(
+                title: "Invalid employee ID",
+                detail: "The employee ID in the user profile is not valid",
+                statusCode: StatusCodes.Status400BadRequest);
+        }
+
+        var query = new FeedbackRequestListQuery
+        {
+            Page = page,
+            PageSize = pageSize,
+            SortBy = sortBy,
+            SortOrder = sortOrder,
+            Status = status,
+            Search = search
+        };
+
+        var result = await _feedbackRequestService.GetTodoRequestsAsync(employeeId, query);
+        return Ok(result);
     }
 }
