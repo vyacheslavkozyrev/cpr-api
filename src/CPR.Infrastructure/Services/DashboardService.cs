@@ -46,8 +46,10 @@ namespace CPR.Infrastructure.Services
                 .Where(f => f.ToEmployeeId == employeeId && !f.IsDeleted && f.CreatedAt >= periodStart)
                 .CountAsync();
 
-            var pendingRequests = await _context.FeedbackRequests
-                .Where(fr => fr.EmployeeId == employeeId && !fr.IsDeleted)
+            // Count pending feedback requests through Recipients collection (multi-recipient architecture)
+            var pendingRequests = await _context.FeedbackRequestRecipients
+                .Where(r => r.EmployeeId == employeeId && !r.IsCompleted)
+                .Where(r => !r.FeedbackRequest.IsDeleted)
                 .CountAsync();
 
             var averageRating = await _context.Feedback
@@ -286,8 +288,10 @@ namespace CPR.Infrastructure.Services
                 .Where(f => f.CreatedAt >= periodStart)
                 .CountAsync();
 
-            var pendingRequests = await _context.FeedbackRequests
-                .Where(fr => fr.EmployeeId == employeeId && !fr.IsDeleted)
+            // Count pending feedback requests through Recipients collection (multi-recipient architecture)
+            var pendingRequests = await _context.FeedbackRequestRecipients
+                .Where(r => r.EmployeeId == employeeId && !r.IsCompleted)
+                .Where(r => !r.FeedbackRequest.IsDeleted)
                 .CountAsync();
 
             var averageRating = await feedbackQuery

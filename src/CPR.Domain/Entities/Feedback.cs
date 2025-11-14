@@ -11,5 +11,13 @@ namespace CPR.Domain.Entities
         public Guid ToEmployeeId { get; set; }
         public string Content { get; set; } = null!;
         public int? Rating { get; set; }
+
+        /// <summary>
+        /// Optional link to feedback request that prompted this feedback
+        /// </summary>
+        public Guid? FeedbackRequestId { get; set; }
+
+        // Navigation property
+        public virtual FeedbackRequest? FeedbackRequest { get; set; }
     }
 }

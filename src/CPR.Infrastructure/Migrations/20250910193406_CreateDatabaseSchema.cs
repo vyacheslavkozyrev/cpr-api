@@ -232,6 +232,7 @@ namespace CPR.Infrastructure.Migrations
                     to_employee_id = table.Column<Guid>(type: "uuid", nullable: false),
                     content = table.Column<string>(type: "text", nullable: false),
                     rating = table.Column<int>(type: "integer", nullable: true),
+                    feedback_request_id = table.Column<Guid>(type: "uuid", nullable: true),
                     created_by = table.Column<Guid>(type: "uuid", nullable: true),
                     created_at = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "now()"),
                     modified_by = table.Column<Guid>(type: "uuid", nullable: true),
@@ -251,11 +252,10 @@ namespace CPR.Infrastructure.Migrations
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
                     requestor_id = table.Column<Guid>(type: "uuid", nullable: false),
-                    employee_id = table.Column<Guid>(type: "uuid", nullable: false),
                     project_id = table.Column<Guid>(type: "uuid", nullable: true),
                     goal_id = table.Column<Guid>(type: "uuid", nullable: true),
-                    message = table.Column<string>(type: "text", nullable: true),
-                    due_date = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
+                    message = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: true),
+                    due_date = table.Column<DateTime>(type: "date", nullable: true),
                     created_by = table.Column<Guid>(type: "uuid", nullable: true),
                     created_at = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "now()"),
                     modified_by = table.Column<Guid>(type: "uuid", nullable: true),
@@ -267,7 +267,122 @@ namespace CPR.Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_feedback_requests", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_feedback_requests_employees_requestor_id",
+                        column: x => x.requestor_id,
+                        principalTable: "employees",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_feedback_requests_projects_project_id",
+                        column: x => x.project_id,
+                        principalTable: "projects",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.SetNull);
+                    table.ForeignKey(
+                        name: "FK_feedback_requests_goals_goal_id",
+                        column: x => x.goal_id,
+                        principalTable: "goals",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.SetNull);
                 });
+
+            // Indexes for feedback_requests
+            migrationBuilder.CreateIndex(
+                name: "IX_feedback_requests_requestor_id",
+                table: "feedback_requests",
+                column: "requestor_id",
+                filter: "is_deleted = false");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_feedback_requests_due_date",
+                table: "feedback_requests",
+                column: "due_date",
+                filter: "is_deleted = false");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_feedback_requests_project_id",
+                table: "feedback_requests",
+                column: "project_id",
+                filter: "is_deleted = false AND project_id IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_feedback_requests_goal_id",
+                table: "feedback_requests",
+                column: "goal_id",
+                filter: "is_deleted = false AND goal_id IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_feedback_requests_created_at",
+                table: "feedback_requests",
+                column: "created_at",
+                descending: new[] { true },
+                filter: "is_deleted = false");
+
+            migrationBuilder.CreateTable(
+                name: "feedback_request_recipients",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
+                    feedback_request_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    employee_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    is_completed = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
+                    responded_at = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
+                    last_reminder_at = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
+                    created_at = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "now()"),
+                    updated_at = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "now()")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_feedback_request_recipients", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_feedback_request_recipients_feedback_requests_feedback_request_id",
+                        column: x => x.feedback_request_id,
+                        principalTable: "feedback_requests",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_feedback_request_recipients_employees_employee_id",
+                        column: x => x.employee_id,
+                        principalTable: "employees",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            // Unique constraint for feedback_request_recipients
+            migrationBuilder.CreateIndex(
+                name: "UX_feedback_request_recipients_request_employee",
+                table: "feedback_request_recipients",
+                columns: new[] { "feedback_request_id", "employee_id" },
+                unique: true);
+
+            // Indexes for feedback_request_recipients
+            migrationBuilder.CreateIndex(
+                name: "IX_feedback_request_recipients_feedback_request_id",
+                table: "feedback_request_recipients",
+                column: "feedback_request_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_feedback_request_recipients_employee_id",
+                table: "feedback_request_recipients",
+                column: "employee_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_feedback_request_recipients_is_completed",
+                table: "feedback_request_recipients",
+                column: "is_completed");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_feedback_request_recipients_pending",
+                table: "feedback_request_recipients",
+                columns: new[] { "employee_id", "is_completed" },
+                filter: "is_completed = false");
+
+            // Index for feedback.feedback_request_id
+            migrationBuilder.CreateIndex(
+                name: "IX_feedback_feedback_request_id",
+                table: "feedback",
+                column: "feedback_request_id");
 
             migrationBuilder.CreateTable(
                 name: "goal_tasks",
@@ -777,11 +892,61 @@ namespace CPR.Infrastructure.Migrations
             migrationBuilder.DropTable(
                 name: "positions");
 
+            // Drop indexes for feedback_request_recipients
+            migrationBuilder.DropIndex(
+                name: "IX_feedback_request_recipients_pending",
+                table: "feedback_request_recipients");
+
+            migrationBuilder.DropIndex(
+                name: "IX_feedback_request_recipients_is_completed",
+                table: "feedback_request_recipients");
+
+            migrationBuilder.DropIndex(
+                name: "IX_feedback_request_recipients_employee_id",
+                table: "feedback_request_recipients");
+
+            migrationBuilder.DropIndex(
+                name: "IX_feedback_request_recipients_feedback_request_id",
+                table: "feedback_request_recipients");
+
+            migrationBuilder.DropIndex(
+                name: "UX_feedback_request_recipients_request_employee",
+                table: "feedback_request_recipients");
+
             migrationBuilder.DropTable(
-                name: "feedback");
+                name: "feedback_request_recipients");
+
+            // Drop indexes for feedback_requests
+            migrationBuilder.DropIndex(
+                name: "IX_feedback_requests_created_at",
+                table: "feedback_requests");
+
+            migrationBuilder.DropIndex(
+                name: "IX_feedback_requests_goal_id",
+                table: "feedback_requests");
+
+            migrationBuilder.DropIndex(
+                name: "IX_feedback_requests_project_id",
+                table: "feedback_requests");
+
+            migrationBuilder.DropIndex(
+                name: "IX_feedback_requests_due_date",
+                table: "feedback_requests");
+
+            migrationBuilder.DropIndex(
+                name: "IX_feedback_requests_requestor_id",
+                table: "feedback_requests");
 
             migrationBuilder.DropTable(
                 name: "feedback_requests");
+
+            // Drop index for feedback.feedback_request_id
+            migrationBuilder.DropIndex(
+                name: "IX_feedback_feedback_request_id",
+                table: "feedback");
+
+            migrationBuilder.DropTable(
+                name: "feedback");
 
             migrationBuilder.DropTable(
                 name: "goal_tasks");
