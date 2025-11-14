@@ -530,4 +530,34 @@ namespace CPR.Application.Contracts
         /// <summary>Name of the employee receiving feedback</summary>
         public string ToEmployeeName { get; set; } = null!;
     }
+
+    /// <summary>
+    /// Query parameters for listing feedback requests
+    /// </summary>
+    public class FeedbackRequestListQuery
+    {
+        /// <summary>Current page number (1-based)</summary>
+        [JsonPropertyName("page")]
+        public int Page { get; set; } = 1;
+
+        /// <summary>Number of items per page (max: 100)</summary>
+        [JsonPropertyName("page_size")]
+        public int PageSize { get; set; } = 20;
+
+        /// <summary>Sort field</summary>
+        [JsonPropertyName("sort_by")]
+        public string SortBy { get; set; } = "created_at";
+
+        /// <summary>Sort order (asc or desc)</summary>
+        [JsonPropertyName("sort_order")]
+        public string SortOrder { get; set; } = "desc";
+
+        /// <summary>Filter by status (pending, partial, complete, cancelled, overdue)</summary>
+        [JsonPropertyName("status")]
+        public string? Status { get; set; }
+
+        /// <summary>Search in message content</summary>
+        [JsonPropertyName("search")]
+        public string? Search { get; set; }
+    }
 }
