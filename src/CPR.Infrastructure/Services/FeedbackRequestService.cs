@@ -18,14 +18,22 @@ namespace CPR.Infrastructure.Services
     {
         private readonly IFeedbackRequestRepository _repository;
         private readonly CprDbContext _db;
+        private readonly IEmailService _emailService;
+        private readonly ICalendarService _calendarService;
         private const int MaxRequestsPerDay = 50;
         private const int MaxRecipientsPerRequest = 20;
         private static readonly TimeSpan ReminderCooldown = TimeSpan.FromHours(48);
 
-        public FeedbackRequestService(IFeedbackRequestRepository repository, CprDbContext db)
+        public FeedbackRequestService(
+            IFeedbackRequestRepository repository,
+            CprDbContext db,
+            IEmailService emailService,
+            ICalendarService calendarService)
         {
             _repository = repository;
             _db = db;
+            _emailService = emailService;
+            _calendarService = calendarService;
         }
 
         /// <inheritdoc />
@@ -141,6 +149,9 @@ namespace CPR.Infrastructure.Services
 
             // Save to database
             var createdRequest = await _repository.CreateAsync(feedbackRequest);
+
+            // Send email notifications to recipients (Feature US-004, T031)
+            await SendNotificationEmailsAsync(createdRequest);
 
             // Map to DTO
             return MapToDto(createdRequest);
@@ -330,6 +341,9 @@ namespace CPR.Infrastructure.Services
 
             // Update last reminder timestamp
             await _repository.UpdateLastReminderAsync(recipientId, DateTimeOffset.UtcNow);
+
+            // Send reminder email (Feature US-004, T031)
+            await SendReminderEmailAsync(existingRequest, recipient, isOverdue: false);
         }
 
         /// <inheritdoc />
@@ -365,6 +379,10 @@ namespace CPR.Infrastructure.Services
             foreach (var recipient in eligibleRecipients)
             {
                 await _repository.UpdateLastReminderAsync(recipient.Id, now);
+
+                // Send reminder email (Feature US-004, T031)
+                await SendReminderEmailAsync(existingRequest, recipient, isOverdue: false);
+
                 count++;
             }
 
@@ -503,6 +521,148 @@ namespace CPR.Infrastructure.Services
             }
 
             return "pending";
+        }
+
+        // ====================================
+        // EMAIL NOTIFICATION HELPERS (T031/T088)
+        // ====================================
+
+        /// <summary>
+        /// Send notification emails to all recipients when a feedback request is created
+        /// Feature US-004, T031: Email notifications with T088: Calendar attachments
+        /// </summary>
+        private async Task SendNotificationEmailsAsync(FeedbackRequest request)
+        {
+            if (request.Recipients == null || !request.Recipients.Any())
+            {
+                return;
+            }
+
+            // Load related entities for email content
+            var requestWithDetails = await _db.FeedbackRequests
+                .Include(r => r.Requestor)
+                    .ThenInclude(e => e.User)
+                .Include(r => r.Project)
+                .Include(r => r.Goal)
+                .Include(r => r.Recipients)
+                    .ThenInclude(rec => rec.Employee)
+                        .ThenInclude(e => e.User)
+                .FirstOrDefaultAsync(r => r.Id == request.Id);
+
+            if (requestWithDetails == null)
+            {
+                return;
+            }
+
+            var requestorName = requestWithDetails.Requestor?.User?.DisplayName ?? "Unknown";
+
+            foreach (var recipient in requestWithDetails.Recipients)
+            {
+                var recipientEmail = recipient.Employee?.User?.UserName;
+                if (string.IsNullOrEmpty(recipientEmail))
+                {
+                    continue;
+                }
+
+                try
+                {
+                    // Generate calendar file
+                    var calendarContent = await _calendarService.GenerateFeedbackRequestCalendarAsync(
+                        requestWithDetails.Id,
+                        recipient.EmployeeId,
+                        requestorName,
+                        recipient.Employee?.User?.DisplayName ?? "Unknown",
+                        requestWithDetails.Message,
+                        requestWithDetails.DueDate ?? DateTimeOffset.UtcNow.AddDays(7),
+                        requestWithDetails.Project?.Title,
+                        requestWithDetails.Goal?.Title
+                    );
+
+                    // Send notification email with calendar attachment
+                    await _emailService.SendFeedbackRequestNotificationAsync(
+                        requestWithDetails,
+                        recipient,
+                        requestorName,
+                        recipientEmail,
+                        calendarContent
+                    );
+                }
+                catch (Exception ex)
+                {
+                    // Log but don't fail the entire operation if one email fails
+                    // TODO: Add proper logging
+                    Console.WriteLine($"Failed to send notification email to {recipientEmail}: {ex.Message}");
+                }
+            }
+        }
+
+        /// <summary>
+        /// Send reminder email to a specific recipient
+        /// Feature US-004, T031: Email notifications with T088: Calendar attachments
+        /// </summary>
+        private async Task SendReminderEmailAsync(FeedbackRequest request, FeedbackRequestRecipient recipient, bool isOverdue)
+        {
+            var recipientEmail = recipient.Employee?.User?.UserName;
+            if (string.IsNullOrEmpty(recipientEmail))
+            {
+                return;
+            }
+
+            try
+            {
+                // Load related entities if not already loaded
+                if (request.Requestor == null || request.Project == null || request.Goal == null)
+                {
+                    request = await _db.FeedbackRequests
+                        .Include(r => r.Requestor)
+                            .ThenInclude(e => e.User)
+                        .Include(r => r.Project)
+                        .Include(r => r.Goal)
+                        .FirstOrDefaultAsync(r => r.Id == request.Id) ?? request;
+                }
+
+                if (recipient.Employee == null || recipient.Employee.User == null)
+                {
+                    var recipientWithEmployee = await _db.FeedbackRequestRecipients
+                        .Include(r => r.Employee)
+                            .ThenInclude(e => e.User)
+                        .FirstOrDefaultAsync(r => r.Id == recipient.Id);
+                    if (recipientWithEmployee != null)
+                    {
+                        recipient = recipientWithEmployee;
+                    }
+                }
+
+                var requestorName = request.Requestor?.User?.DisplayName ?? "Unknown";
+
+                // Generate calendar file
+                var calendarContent = await _calendarService.GenerateFeedbackRequestCalendarAsync(
+                    request.Id,
+                    recipient.EmployeeId,
+                    requestorName,
+                    recipient.Employee?.User?.DisplayName ?? "Unknown",
+                    request.Message,
+                    request.DueDate ?? DateTimeOffset.UtcNow.AddDays(7),
+                    request.Project?.Title,
+                    request.Goal?.Title
+                );
+
+                // Send reminder email with calendar attachment
+                await _emailService.SendFeedbackRequestReminderAsync(
+                    request,
+                    recipient,
+                    requestorName,
+                    recipientEmail,
+                    calendarContent,
+                    isOverdue
+                );
+            }
+            catch (Exception ex)
+            {
+                // Log but don't fail the operation if email fails
+                // TODO: Add proper logging
+                Console.WriteLine($"Failed to send reminder email to {recipientEmail}: {ex.Message}");
+            }
         }
     }
 }

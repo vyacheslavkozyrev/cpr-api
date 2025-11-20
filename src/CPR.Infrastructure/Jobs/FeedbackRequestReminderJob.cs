@@ -13,14 +13,20 @@ namespace CPR.Infrastructure.Jobs
     public class FeedbackRequestReminderJob
     {
         private readonly IFeedbackRequestRepository _repository;
+        private readonly CPR.Application.Services.IEmailService _emailService;
+        private readonly CPR.Application.Services.ICalendarService _calendarService;
         private readonly ILogger<FeedbackRequestReminderJob> _logger;
         private static readonly TimeSpan ReminderCooldown = TimeSpan.FromHours(48);
 
         public FeedbackRequestReminderJob(
             IFeedbackRequestRepository repository,
+            CPR.Application.Services.IEmailService emailService,
+            CPR.Application.Services.ICalendarService calendarService,
             ILogger<FeedbackRequestReminderJob> logger)
         {
             _repository = repository;
+            _emailService = emailService;
+            _calendarService = calendarService;
             _logger = logger;
         }
 
@@ -59,18 +65,51 @@ namespace CPR.Infrastructure.Jobs
 
                     foreach (var recipient in eligibleRecipients)
                     {
-                        // Update last reminder timestamp
-                        await _repository.UpdateLastReminderAsync(recipient.Id, now);
+                        try
+                        {
+                            // Update last reminder timestamp
+                            await _repository.UpdateLastReminderAsync(recipient.Id, now);
 
-                        // TODO: Queue email notification job here (T031/T088)
-                        // await _emailService.SendReminderEmailAsync(request, recipient);
+                            // Send reminder email with calendar attachment (T031/T088)
+                            var recipientEmail = recipient.Employee?.User?.UserName;
+                            if (!string.IsNullOrEmpty(recipientEmail))
+                            {
+                                var requestorName = request.Requestor?.User?.DisplayName ?? "Unknown";
+                                var calendarContent = await _calendarService.GenerateFeedbackRequestCalendarAsync(
+                                    request.Id,
+                                    recipient.EmployeeId,
+                                    requestorName,
+                                    recipient.Employee?.User?.DisplayName ?? "Unknown",
+                                    request.Message,
+                                    request.DueDate ?? DateTimeOffset.UtcNow.AddDays(7),
+                                    request.Project?.Title,
+                                    request.Goal?.Title
+                                );
 
-                        remindersSent++;
+                                await _emailService.SendFeedbackRequestReminderAsync(
+                                    request,
+                                    recipient,
+                                    requestorName,
+                                    recipientEmail,
+                                    calendarContent,
+                                    isOverdue: false
+                                );
+                            }
 
-                        _logger.LogInformation(
-                            "Sent upcoming due date reminder for request {RequestId} to recipient {RecipientId}",
-                            request.Id,
-                            recipient.Id);
+                            remindersSent++;
+
+                            _logger.LogInformation(
+                                "Sent upcoming due date reminder for request {RequestId} to recipient {RecipientId}",
+                                request.Id,
+                                recipient.Id);
+                        }
+                        catch (Exception ex)
+                        {
+                            _logger.LogError(ex,
+                                "Failed to send reminder for request {RequestId} to recipient {RecipientId}",
+                                request.Id,
+                                recipient.Id);
+                        }
                     }
                 }
 
@@ -118,18 +157,51 @@ namespace CPR.Infrastructure.Jobs
 
                     foreach (var recipient in eligibleRecipients)
                     {
-                        // Update last reminder timestamp
-                        await _repository.UpdateLastReminderAsync(recipient.Id, now);
+                        try
+                        {
+                            // Update last reminder timestamp
+                            await _repository.UpdateLastReminderAsync(recipient.Id, now);
 
-                        // TODO: Queue email notification job here (T031/T088)
-                        // await _emailService.SendOverdueReminderEmailAsync(request, recipient);
+                            // Send overdue reminder email with calendar attachment (T031/T088)
+                            var recipientEmail = recipient.Employee?.User?.UserName;
+                            if (!string.IsNullOrEmpty(recipientEmail))
+                            {
+                                var requestorName = request.Requestor?.User?.DisplayName ?? "Unknown";
+                                var calendarContent = await _calendarService.GenerateFeedbackRequestCalendarAsync(
+                                    request.Id,
+                                    recipient.EmployeeId,
+                                    requestorName,
+                                    recipient.Employee?.User?.DisplayName ?? "Unknown",
+                                    request.Message,
+                                    request.DueDate ?? DateTimeOffset.UtcNow.AddDays(7),
+                                    request.Project?.Title,
+                                    request.Goal?.Title
+                                );
 
-                        remindersSent++;
+                                await _emailService.SendFeedbackRequestReminderAsync(
+                                    request,
+                                    recipient,
+                                    requestorName,
+                                    recipientEmail,
+                                    calendarContent,
+                                    isOverdue: true
+                                );
+                            }
 
-                        _logger.LogInformation(
-                            "Sent overdue reminder for request {RequestId} to recipient {RecipientId}",
-                            request.Id,
-                            recipient.Id);
+                            remindersSent++;
+
+                            _logger.LogInformation(
+                                "Sent overdue reminder for request {RequestId} to recipient {RecipientId}",
+                                request.Id,
+                                recipient.Id);
+                        }
+                        catch (Exception ex)
+                        {
+                            _logger.LogError(ex,
+                                "Failed to send overdue reminder for request {RequestId} to recipient {RecipientId}",
+                                request.Id,
+                                recipient.Id);
+                        }
                     }
                 }
 
