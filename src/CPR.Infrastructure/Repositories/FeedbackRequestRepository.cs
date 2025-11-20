@@ -361,6 +361,52 @@ namespace CPR.Infrastructure.Repositories
                 .CountAsync();
         }
 
+        /// <inheritdoc/>
+        public async Task<List<FeedbackRequest>> GetRequestsDueWithinAsync(
+            DateTimeOffset startDate,
+            DateTimeOffset endDate,
+            bool includeDeleted = false)
+        {
+            var query = _db.FeedbackRequests
+                .Include(fr => fr.Recipients)
+                    .ThenInclude(r => r.Employee)
+                .Include(fr => fr.Requestor)
+                .Include(fr => fr.Project)
+                .Include(fr => fr.Goal)
+                .Where(fr => fr.DueDate.HasValue &&
+                             fr.DueDate.Value >= startDate &&
+                             fr.DueDate.Value <= endDate);
+
+            if (!includeDeleted)
+            {
+                query = query.Where(fr => !fr.IsDeleted);
+            }
+
+            return await query.ToListAsync();
+        }
+
+        /// <inheritdoc/>
+        public async Task<List<FeedbackRequest>> GetOverdueRequestsAsync(
+            DateTimeOffset currentDate,
+            bool includeDeleted = false)
+        {
+            var query = _db.FeedbackRequests
+                .Include(fr => fr.Recipients)
+                    .ThenInclude(r => r.Employee)
+                .Include(fr => fr.Requestor)
+                .Include(fr => fr.Project)
+                .Include(fr => fr.Goal)
+                .Where(fr => fr.DueDate.HasValue &&
+                             fr.DueDate.Value < currentDate);
+
+            if (!includeDeleted)
+            {
+                query = query.Where(fr => !fr.IsDeleted);
+            }
+
+            return await query.ToListAsync();
+        }
+
         // ====================================
         // PRIVATE HELPER METHODS
         // ====================================

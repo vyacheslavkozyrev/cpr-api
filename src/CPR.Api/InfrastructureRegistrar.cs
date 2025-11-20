@@ -34,6 +34,7 @@ namespace CPR.Api
             services.AddScoped<CPR.Application.Services.IClassificationService, CPR.Infrastructure.Services.ClassificationService>();
             services.AddScoped<CPR.Application.Services.IFeedbackService, CPR.Infrastructure.Services.FeedbackService>();
             services.AddScoped<CPR.Application.Services.IFeedbackRequestService, CPR.Infrastructure.Services.FeedbackRequestService>();
+            services.AddScoped<CPR.Application.Services.ICalendarService, CPR.Infrastructure.Services.CalendarService>();
             services.AddScoped<CPR.Application.Services.ITeamService, CPR.Infrastructure.Services.TeamService>();
             services.AddScoped<CPR.Application.Services.IRoleService, CPR.Infrastructure.Services.RoleService>();
             services.AddScoped<CPR.Application.Services.IProjectService, CPR.Infrastructure.Services.ProjectService>();

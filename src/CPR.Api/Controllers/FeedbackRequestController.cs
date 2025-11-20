@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using CPR.Api.Services;
 using CPR.Application.Services;
 using CPR.Application.Contracts;
+using System.Text;
 
 namespace CPR.Api.Controllers;
 
@@ -15,16 +16,22 @@ public class FeedbackRequestController : ControllerBase
 {
     private readonly IUserService _userService;
     private readonly IFeedbackRequestService _feedbackRequestService;
+    private readonly ICalendarService _calendarService;
 
     /// <summary>
     /// Creates a new instance of <see cref="FeedbackRequestController"/>
     /// </summary>
     /// <param name="userService">Service to read the current user's profile</param>
     /// <param name="feedbackRequestService">Service to manage feedback requests</param>
-    public FeedbackRequestController(IUserService userService, IFeedbackRequestService feedbackRequestService)
+    /// <param name="calendarService">Service to generate calendar files</param>
+    public FeedbackRequestController(
+        IUserService userService,
+        IFeedbackRequestService feedbackRequestService,
+        ICalendarService calendarService)
     {
         _userService = userService;
         _feedbackRequestService = feedbackRequestService;
+        _calendarService = calendarService;
     }
 
     /// <summary>
@@ -324,6 +331,109 @@ public class FeedbackRequestController : ControllerBase
         {
             var count = await _feedbackRequestService.SendRemindersToAllAsync(id, requestorId);
             return Ok(new { reminders_sent = count });
+        }
+        catch (ArgumentException ex)
+        {
+            return Problem(
+                title: "Invalid request",
+                detail: ex.Message,
+                statusCode: StatusCodes.Status400BadRequest);
+        }
+    }
+
+    /// <summary>
+    /// Download calendar file (.ics) for a feedback request
+    /// </summary>
+    /// <param name="id">Feedback request ID</param>
+    /// <param name="recipientId">Recipient ID to generate calendar for</param>
+    /// <returns>iCalendar (.ics) file for download</returns>
+    [Authorize]
+    [HttpGet("{id}/recipient/{recipientId}/calendar")]
+    [ProducesResponseType(typeof(FileContentResult), 200)]
+    [ProducesResponseType(400)]
+    [ProducesResponseType(401)]
+    [ProducesResponseType(404)]
+    public async Task<IActionResult> GetCalendarFile(Guid id, Guid recipientId)
+    {
+        var profile = await _userService.GetCurrentUserProfileAsync(User);
+        if (profile == null)
+        {
+            return Unauthorized();
+        }
+
+        if (!Guid.TryParse(profile.EmployeeId, out var currentEmployeeId))
+        {
+            return Problem(
+                title: "Invalid employee ID",
+                detail: "The employee ID in the user profile is not valid",
+                statusCode: StatusCodes.Status400BadRequest);
+        }
+
+        try
+        {
+            // Get the full feedback request details
+            var request = await _feedbackRequestService.GetByIdAsync(id, currentEmployeeId);
+
+            // If not found as requestor, the recipient might be trying to access it
+            // In that case, we need to verify they are actually a recipient
+            if (request == null)
+            {
+                // Check if current user is a recipient by querying their todo list
+                var todoRequests = await _feedbackRequestService.GetTodoRequestsAsync(
+                    currentEmployeeId,
+                    new FeedbackRequestListQuery { Page = 1, PageSize = 100 });
+
+                var todoRequest = todoRequests.Data?.Find(r => r.Id == id);
+                if (todoRequest == null)
+                {
+                    return NotFound();
+                }
+
+                // Recipient found in todo list, now get full details
+                // Since we're a recipient, use recipientId (recipient trying to get their own calendar)
+                request = await _feedbackRequestService.GetByIdAsync(id, todoRequest.RequestorId);
+                if (request == null)
+                {
+                    return NotFound();
+                }
+            }
+
+            // Verify the recipient exists in this request
+            var recipient = request.Recipients?.Find(r => r.Id == recipientId);
+            if (recipient == null)
+            {
+                return Problem(
+                    title: "Recipient not found",
+                    detail: "The specified recipient does not exist in this feedback request",
+                    statusCode: StatusCodes.Status404NotFound);
+            }
+
+            // Verify due date exists
+            if (!request.DueDate.HasValue)
+            {
+                return Problem(
+                    title: "No due date",
+                    detail: "This feedback request does not have a due date set",
+                    statusCode: StatusCodes.Status400BadRequest);
+            }
+
+            // Generate calendar file
+            var icsContent = await _calendarService.GenerateFeedbackRequestCalendarAsync(
+                id,
+                recipient.EmployeeId,
+                request.Requestor?.DisplayName ?? "Unknown",
+                recipient.Employee?.DisplayName ?? "Unknown",
+                request.Message,
+                request.DueDate.Value,
+                request.Project?.Name,
+                request.Goal?.Title
+            );
+
+            // Return as downloadable file
+            var fileName = $"feedback-request-{id}.ics";
+            var contentBytes = Encoding.UTF8.GetBytes(icsContent);
+
+            return File(contentBytes, "text/calendar", fileName);
         }
         catch (ArgumentException ex)
         {

@@ -104,5 +104,22 @@ namespace CPR.Application.Repositories
         /// <param name="requestorId">The employee ID</param>
         /// <returns>Count of requests created today</returns>
         Task<int> GetTodayRequestCountAsync(Guid requestorId);
+
+        /// <summary>
+        /// Get feedback requests with due dates within a specified time range (for automatic reminders)
+        /// </summary>
+        /// <param name="startDate">Start of the date range</param>
+        /// <param name="endDate">End of the date range</param>
+        /// <param name="includeDeleted">Whether to include soft-deleted requests</param>
+        /// <returns>List of feedback requests with due dates in the range</returns>
+        Task<List<FeedbackRequest>> GetRequestsDueWithinAsync(DateTimeOffset startDate, DateTimeOffset endDate, bool includeDeleted = false);
+
+        /// <summary>
+        /// Get feedback requests that are past their due date (for overdue reminders)
+        /// </summary>
+        /// <param name="currentDate">Current date to compare against</param>
+        /// <param name="includeDeleted">Whether to include soft-deleted requests</param>
+        /// <returns>List of overdue feedback requests</returns>
+        Task<List<FeedbackRequest>> GetOverdueRequestsAsync(DateTimeOffset currentDate, bool includeDeleted = false);
     }
 }

@@ -11,6 +11,8 @@ using Microsoft.Extensions.Hosting;
 using Hellang.Middleware.ProblemDetails;
 using CPR.Infrastructure.Data;
 using CPR.Infrastructure.Services;
+using Hangfire;
+using Hangfire.PostgreSql;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -191,6 +193,19 @@ builder.Services.AddDbContext<CprDbContext>(options =>
         .ConfigureWarnings(warnings => warnings.Ignore(RelationalEventId.PendingModelChangesWarning))
 );
 
+// Configure Hangfire for background jobs
+builder.Services.AddHangfire(config => config
+    .SetDataCompatibilityLevel(Hangfire.CompatibilityLevel.Version_180)
+    .UseSimpleAssemblyNameTypeSerializer()
+    .UseRecommendedSerializerSettings()
+    .UsePostgreSqlStorage(options =>
+        options.UseNpgsqlConnection(connectionString)));
+
+builder.Services.AddHangfireServer();
+
+// Register background job classes
+builder.Services.AddScoped<CPR.Infrastructure.Jobs.FeedbackRequestReminderJob>();
+
 // Configure ProblemDetails (Hellang middleware) - register before building the app
 builder.Services.AddProblemDetails(options =>
 {
@@ -246,6 +261,26 @@ app.UseCors("LocalDevCors");
 // Add authentication and authorization middleware
 app.UseAuthentication();
 app.UseAuthorization();
+
+// Enable Hangfire Dashboard (only in development for security)
+if (app.Environment.IsDevelopment())
+{
+    app.UseHangfireDashboard("/hangfire", new DashboardOptions
+    {
+        Authorization = new[] { new HangfireAuthorizationFilter() }
+    });
+}
+
+// Schedule recurring jobs
+RecurringJob.AddOrUpdate<CPR.Infrastructure.Jobs.FeedbackRequestReminderJob>(
+    "send-upcoming-due-date-reminders",
+    job => job.SendUpcomingDueDateRemindersAsync(),
+    "0 9 * * *"); // Daily at 9:00 AM UTC
+
+RecurringJob.AddOrUpdate<CPR.Infrastructure.Jobs.FeedbackRequestReminderJob>(
+    "send-overdue-reminders",
+    job => job.SendOverdueRemindersAsync(),
+    "0 10 * * *"); // Daily at 10:00 AM UTC
 
 // Test-only endpoints for integration tests that intentionally throw so ProblemDetails
 // middleware can be validated. Using MapGet ensures the TestHost routing matches
