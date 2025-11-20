@@ -1,6 +1,69 @@
 # CPR API Scripts
 
-This folder contains various scripts to run the CPR API with different authentication modes and user contexts.
+This folder contains various scripts to run the CPR API with different authentication modes and user contexts, as well as database management utilities.
+
+## Database Management Scripts
+
+### Regenerate Migrations (RECOMMENDED)
+
+When entities change or migrations get out of sync:
+
+```powershell
+.\scripts\regenerate-migrations.ps1
+```
+
+**What it does:**
+- Removes all existing migrations
+- Generates fresh migration from current entity model
+- Drops and recreates database
+- Applies new migration
+- ⚠️ **All data will be lost!**
+
+**Use when:**
+- Entity definitions have changed
+- Model snapshot is out of sync
+- Setting up clean development environment
+- Migrations are corrupted
+
+### Reset Database
+
+Reset database without regenerating migrations:
+
+```powershell
+.\scripts\reset-database.ps1
+```
+
+**What it does:**
+- Drops existing database
+- Creates new database
+- Applies existing migrations
+- ⚠️ **All data will be lost!**
+
+**Use when:**
+- Database schema is corrupted
+- Need clean slate with existing migrations
+- Testing migration scripts
+
+### Verify Database Schema
+
+Check if database matches EF Core model:
+
+```powershell
+.\scripts\verify-database-schema.ps1
+```
+
+**What it does:**
+- Lists columns in feedback_requests table
+- Lists columns in feedback_request_recipients table
+- Checks for incorrect columns (e.g., employee_id in feedback_requests)
+- Shows applied migrations
+
+**Use when:**
+- Debugging schema mismatches
+- After manual database changes
+- Before regenerating migrations
+
+---
 
 ## Authentication Modes & Environments
 

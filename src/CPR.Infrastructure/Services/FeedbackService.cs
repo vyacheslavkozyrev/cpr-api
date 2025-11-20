@@ -313,6 +313,25 @@ namespace CPR.Infrastructure.Services
 
             await _feedbackRepo.AddAsync(feedback);
 
+            // If this feedback is in response to a feedback request, mark the recipient as completed
+            if (dto.FeedbackRequestId.HasValue)
+            {
+                var recipient = await _db.FeedbackRequestRecipients
+                    .FirstOrDefaultAsync(r =>
+                        r.FeedbackRequestId == dto.FeedbackRequestId.Value &&
+                        r.EmployeeId == fromEmployeeId &&
+                        !r.IsCompleted);
+
+                if (recipient != null)
+                {
+                    recipient.IsCompleted = true;
+                    recipient.RespondedAt = DateTimeOffset.UtcNow;
+                    recipient.UpdatedAt = DateTimeOffset.UtcNow;
+                    _db.FeedbackRequestRecipients.Update(recipient);
+                    await _db.SaveChangesAsync();
+                }
+            }
+
             // Return the created feedback with related data
             return await GetFeedbackDtoAsync(feedback.Id);
         }

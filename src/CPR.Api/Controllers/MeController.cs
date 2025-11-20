@@ -18,6 +18,7 @@ public class MeController : ControllerBase
     private readonly IUserService _userService;
     private readonly IClassificationService _classificationService;
     private readonly IFeedbackRequestService _feedbackRequestService;
+    private readonly IProjectService _projectService;
 
     /// <summary>
     /// Creates a new instance of <see cref="MeController"/>.
@@ -25,11 +26,13 @@ public class MeController : ControllerBase
     /// <param name="userService">Service to read the current user's profile.</param>
     /// <param name="classificationService">Service to manage skill assessments.</param>
     /// <param name="feedbackRequestService">Service to manage feedback requests.</param>
-    public MeController(IUserService userService, IClassificationService classificationService, IFeedbackRequestService feedbackRequestService)
+    /// <param name="projectService">Service to manage projects.</param>
+    public MeController(IUserService userService, IClassificationService classificationService, IFeedbackRequestService feedbackRequestService, IProjectService projectService)
     {
         _userService = userService;
         _classificationService = classificationService;
         _feedbackRequestService = feedbackRequestService;
+        _projectService = projectService;
     }
 
     /// <summary>
@@ -98,6 +101,26 @@ public class MeController : ControllerBase
         {
             return Conflict(ex.Message);
         }
+    }
+
+    /// <summary>
+    /// Get the current user's projects (projects they are assigned to as team members).
+    /// </summary>
+    /// <returns>List of projects where the current user is a team member.</returns>
+    [Authorize]
+    [HttpGet("projects")]
+    [ProducesResponseType(typeof(ProjectDto[]), 200)]
+    [ProducesResponseType(401)]
+    public async Task<IActionResult> GetMyProjects()
+    {
+        var profile = await _userService.GetCurrentUserProfileAsync(User);
+        if (profile == null) return Unauthorized();
+
+        if (!Guid.TryParse(profile.EmployeeId, out var employeeId))
+            return BadRequest("Invalid employee ID");
+
+        var projects = await _projectService.GetProjectsByEmployeeIdAsync(employeeId);
+        return Ok(projects);
     }
 
     /// <summary>

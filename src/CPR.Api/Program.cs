@@ -40,8 +40,19 @@ builder.Logging.AddFilter("Microsoft.EntityFrameworkCore.Database.Command", LogL
 builder.Logging.AddFilter("Microsoft.AspNetCore", LogLevel.Warning);
 builder.Logging.AddFilter("Npgsql", LogLevel.Warning);
 
-// Add minimal services
-builder.Services.AddControllers().AddNewtonsoftJson();
+// Add minimal services with snake_case JSON serialization (per CPR Constitution)
+builder.Services.AddControllers().AddNewtonsoftJson(options =>
+{
+    options.SerializerSettings.ContractResolver = new Newtonsoft.Json.Serialization.DefaultContractResolver
+    {
+        NamingStrategy = new CPR.Api.Json.SnakeCaseNamingStrategy()
+    };
+    // Preserve null values in responses for explicit null fields
+    options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Include;
+    // Use ISO 8601 date format
+    options.SerializerSettings.DateFormatString = "yyyy-MM-ddTHH:mm:ss.fffZ";
+    options.SerializerSettings.DateTimeZoneHandling = Newtonsoft.Json.DateTimeZoneHandling.Utc;
+});
 
 // CORS: get allowed origins from configuration
 var allowedOrigins = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>()

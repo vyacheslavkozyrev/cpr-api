@@ -133,6 +133,42 @@ namespace CPR.Infrastructure.Repositories
             return query;
         }
 
+        public IQueryable<ProjectTeam> QueryTeamByEmployeeId(Guid employeeId, bool includeDeleted = false)
+        {
+            var query = _db.ProjectTeams
+                .Where(pt => pt.EmployeeId == employeeId);
+
+            if (!includeDeleted)
+            {
+                query = query.Where(pt => !pt.IsDeleted);
+            }
+
+            return query;
+        }
+
+        public async Task<Guid[]> GetProjectIdsByEmployeeIdAsync(Guid employeeId, bool includeDeleted = false)
+        {
+            // Get all project role IDs for this employee
+            var projectRoleIds = await _db.ProjectTeams
+                .Where(pt => pt.EmployeeId == employeeId && (includeDeleted || !pt.IsDeleted))
+                .Select(pt => pt.ProjectRoleId)
+                .ToListAsync();
+
+            if (!projectRoleIds.Any())
+            {
+                return Array.Empty<Guid>();
+            }
+
+            // Get project IDs from those roles
+            var projectIds = await _db.ProjectRoles
+                .Where(pr => projectRoleIds.Contains(pr.Id) && (includeDeleted || !pr.IsDeleted))
+                .Select(pr => pr.ProjectId)
+                .Distinct()
+                .ToArrayAsync();
+
+            return projectIds;
+        }
+
         public async Task AddTeamMemberAsync(ProjectTeam projectTeam)
         {
             await _db.ProjectTeams.AddAsync(projectTeam);

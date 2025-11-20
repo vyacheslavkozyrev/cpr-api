@@ -28,50 +28,8 @@ public class FeedbackController : ControllerBase
         _feedbackService = feedbackService;
     }
 
-    /// <summary>
-    /// Create a new feedback request
-    /// </summary>
-    /// <param name="dto">Feedback request data</param>
-    /// <returns>The created feedback request</returns>
-    [Authorize]
-    [HttpPost("request")]
-    [ProducesResponseType(typeof(FeedbackRequestDto), 201)]
-    [ProducesResponseType(400)]
-    [ProducesResponseType(401)]
-    public async Task<IActionResult> CreateFeedbackRequest([FromBody] CreateFeedbackRequestDto dto)
-    {
-        if (!ModelState.IsValid)
-        {
-            return BadRequest(ModelState);
-        }
-
-        var profile = await _userService.GetCurrentUserProfileAsync(User);
-        if (profile == null)
-        {
-            return Unauthorized();
-        }
-
-        if (!Guid.TryParse(profile.EmployeeId, out var requestorId))
-        {
-            return Problem(
-                title: "Invalid employee ID",
-                detail: "The employee ID in the user profile is not valid",
-                statusCode: StatusCodes.Status400BadRequest);
-        }
-
-        try
-        {
-            var result = await _feedbackService.CreateFeedbackRequestAsync(requestorId, dto);
-            return CreatedAtAction(nameof(CreateFeedbackRequest), result);
-        }
-        catch (ArgumentException ex)
-        {
-            return Problem(
-                title: "Invalid feedback request data",
-                detail: ex.Message,
-                statusCode: StatusCodes.Status400BadRequest);
-        }
-    }
+    // NOTE: Feedback request creation moved to FeedbackRequestController
+    // This controller now only handles feedback submission (responses)
 
     /// <summary>
     /// Submit feedback from one employee to another
@@ -180,89 +138,11 @@ public class MeFeedbackController : ControllerBase
         _feedbackService = feedbackService;
     }
 
-    /// <summary>
-    /// Get feedback requests sent by the current user
-    /// </summary>
-    /// <returns>List of feedback requests sent by the current user</returns>
-    [Authorize]
-    [HttpGet("request")]
-    [ProducesResponseType(typeof(IEnumerable<FeedbackRequestDto>), 200)]
-    [ProducesResponseType(typeof(Microsoft.AspNetCore.Mvc.ProblemDetails), 401)]
-    [ProducesResponseType(typeof(Microsoft.AspNetCore.Mvc.ProblemDetails), 400)]
-    public async Task<IActionResult> GetSentRequests()
-    {
-        var profile = await _userService.GetCurrentUserProfileAsync(User);
-        if (profile == null)
-        {
-            return Problem(
-                title: "Authentication required",
-                detail: "User profile not found",
-                statusCode: StatusCodes.Status401Unauthorized);
-        }
+    // NOTE: GetSentRequests moved to MeController with pagination support
+    // Use GET /api/me/feedback/request instead
 
-        if (!Guid.TryParse(profile.EmployeeId, out var employeeId))
-        {
-            return Problem(
-                title: "Invalid employee ID",
-                detail: "The employee ID in the user profile is not valid",
-                statusCode: StatusCodes.Status400BadRequest);
-        }
-
-        try
-        {
-            var requests = await _feedbackService.GetSentRequestsAsync(employeeId);
-            return Ok(requests);
-        }
-        catch (Exception)
-        {
-            return Problem(
-                title: "Failed to retrieve feedback requests",
-                detail: "An error occurred while retrieving sent feedback requests",
-                statusCode: StatusCodes.Status500InternalServerError);
-        }
-    }
-
-    /// <summary>
-    /// Get feedback requests addressed to the current user (to respond to)
-    /// </summary>
-    /// <returns>List of feedback requests addressed to the current user</returns>
-    [Authorize]
-    [HttpGet("request/todo")]
-    [ProducesResponseType(typeof(IEnumerable<FeedbackRequestDto>), 200)]
-    [ProducesResponseType(typeof(Microsoft.AspNetCore.Mvc.ProblemDetails), 401)]
-    [ProducesResponseType(typeof(Microsoft.AspNetCore.Mvc.ProblemDetails), 400)]
-    public async Task<IActionResult> GetTodoRequests()
-    {
-        var profile = await _userService.GetCurrentUserProfileAsync(User);
-        if (profile == null)
-        {
-            return Problem(
-                title: "Authentication required",
-                detail: "User profile not found",
-                statusCode: StatusCodes.Status401Unauthorized);
-        }
-
-        if (!Guid.TryParse(profile.EmployeeId, out var employeeId))
-        {
-            return Problem(
-                title: "Invalid employee ID",
-                detail: "The employee ID in the user profile is not valid",
-                statusCode: StatusCodes.Status400BadRequest);
-        }
-
-        try
-        {
-            var requests = await _feedbackService.GetTodoRequestsAsync(employeeId);
-            return Ok(requests);
-        }
-        catch (Exception)
-        {
-            return Problem(
-                title: "Failed to retrieve feedback requests",
-                detail: "An error occurred while retrieving todo feedback requests",
-                statusCode: StatusCodes.Status500InternalServerError);
-        }
-    }
+    // NOTE: GetTodoRequests moved to MeController with pagination support
+    // Use GET /api/me/feedback/request/todo instead
 
     /// <summary>
     /// Get feedback addressed to the current user

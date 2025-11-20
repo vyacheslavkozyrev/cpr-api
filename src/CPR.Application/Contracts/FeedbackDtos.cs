@@ -394,25 +394,34 @@ namespace CPR.Application.Contracts
     [NoSelfFeedback]
     public class SubmitFeedbackRequestDto
     {
+        /// <summary>The feedback request this feedback is responding to (optional)</summary>
+        [JsonPropertyName("feedback_request_id")]
+        public Guid? FeedbackRequestId { get; set; }
+
         /// <summary>The project this feedback is for</summary>
+        [JsonPropertyName("project_id")]
         public Guid? ProjectId { get; set; }
 
         /// <summary>The goal this feedback is for</summary>
         [Required(ErrorMessage = "Goal ID is required")]
+        [JsonPropertyName("goal_id")]
         public Guid GoalId { get; set; }
 
         /// <summary>The employee receiving the feedback</summary>
         [Required(ErrorMessage = "Employee ID is required")]
+        [JsonPropertyName("employee_id")]
         public Guid EmployeeId { get; set; }
 
         /// <summary>The feedback content</summary>
         [Required(ErrorMessage = "Feedback content is required")]
         [StringLength(2000, MinimumLength = 10, ErrorMessage = "Feedback content must be between 10 and 2000 characters")]
+        [JsonPropertyName("content")]
         public string Content { get; set; } = null!;
 
         /// <summary>The rating (1-5 scale)</summary>
         [Required(ErrorMessage = "Rating is required")]
         [Range(1, 5, ErrorMessage = "Rating must be between 1 and 5")]
+        [JsonPropertyName("rating")]
         public int Rating { get; set; }
     }
 

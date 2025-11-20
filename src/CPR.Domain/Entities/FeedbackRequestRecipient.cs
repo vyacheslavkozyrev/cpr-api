@@ -49,10 +49,5 @@ namespace CPR.Domain.Entities
         // Navigation properties
         public virtual FeedbackRequest FeedbackRequest { get; set; } = null!;
         public virtual Employee Employee { get; set; } = null!;
-
-        /// <summary>
-        /// Optional link to feedback response (if responded)
-        /// </summary>
-        public virtual Feedback? Feedback { get; set; }
     }
 }

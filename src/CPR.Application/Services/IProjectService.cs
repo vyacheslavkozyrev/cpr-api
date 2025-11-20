@@ -17,6 +17,13 @@ namespace CPR.Application.Services
         Task<ProjectDto[]> GetAllProjectsAsync();
 
         /// <summary>
+        /// Get projects assigned to a specific employee
+        /// </summary>
+        /// <param name="employeeId">The employee ID</param>
+        /// <returns>Array of project DTOs where the employee is a team member</returns>
+        Task<ProjectDto[]> GetProjectsByEmployeeIdAsync(Guid employeeId);
+
+        /// <summary>
         /// Get project by ID
         /// </summary>
         /// <param name="projectId">The project ID</param>
