@@ -353,12 +353,12 @@ namespace CPR.Infrastructure.Repositories
             var today = DateTime.UtcNow.Date;
             var tomorrow = today.AddDays(1);
 
-            return await _db.FeedbackRequests
-                .Where(fr => fr.RequestorId == requestorId &&
-                             fr.CreatedAt >= today &&
-                             fr.CreatedAt < tomorrow &&
-                             !fr.IsDeleted)
-                .CountAsync();
+            // Use ToListAsync to evaluate on client side for better SQLite compatibility
+            var requests = await _db.FeedbackRequests
+                .Where(fr => fr.RequestorId == requestorId && !fr.IsDeleted)
+                .ToListAsync();
+
+            return requests.Count(fr => fr.CreatedAt.Date == today);
         }
 
         /// <inheritdoc/>
