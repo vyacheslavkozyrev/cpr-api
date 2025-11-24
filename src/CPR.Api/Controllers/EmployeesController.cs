@@ -69,6 +69,44 @@ public class EmployeesController : ControllerBase
     }
 
     /// <summary>
+    /// Get direct reports for the current user (employees where manager_id = current user's employee_id)
+    /// </summary>
+    /// <returns>List of direct report employees</returns>
+    [HttpGet("direct-reports")]
+    [ProducesResponseType(typeof(List<EmployeeSummaryDto>), 200)]
+    [ProducesResponseType(401)]
+    [ProducesResponseType(403)]
+    public async Task<IActionResult> GetDirectReports()
+    {
+        // TODO: Get current user's employee ID from JWT
+        // TODO: Query database for employees where manager_id = current user's employee_id
+        // For now, return sample data for development
+        var sampleDirectReports = new List<EmployeeSummaryDto>
+        {
+            new EmployeeSummaryDto
+            {
+                Id = Guid.Parse("00000000-0000-0000-0000-000000000002"),
+                DisplayName = "Jane Smith",
+                Email = "jane.smith@example.com",
+                JobTitle = "Product Manager",
+                Department = "Product"
+            },
+            new EmployeeSummaryDto
+            {
+                Id = Guid.Parse("00000000-0000-0000-0000-000000000003"),
+                DisplayName = "Bob Johnson",
+                Email = "bob.johnson@example.com",
+                JobTitle = "Senior Engineer",
+                Department = "Engineering"
+            }
+        };
+
+        await Task.CompletedTask; // Simulate async operation
+
+        return Ok(sampleDirectReports);
+    }
+
+    /// <summary>
     /// Get sample employee data for development
     /// TODO: Replace with actual database query from Employees table
     /// </summary>

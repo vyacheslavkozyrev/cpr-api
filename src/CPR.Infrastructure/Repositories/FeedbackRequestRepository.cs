@@ -36,6 +36,7 @@ namespace CPR.Infrastructure.Repositories
         public async Task<FeedbackRequest?> GetByIdAsync(Guid id, bool includeDeleted = false)
         {
             var query = _db.FeedbackRequests
+                .AsNoTracking()
                 .Include(fr => fr.Recipients)
                     .ThenInclude(r => r.Employee)
                         .ThenInclude(e => e!.User)
@@ -276,7 +277,15 @@ namespace CPR.Infrastructure.Repositories
         public async Task UpdateAsync(FeedbackRequest feedbackRequest)
         {
             feedbackRequest.ModifiedAt = DateTimeOffset.UtcNow;
-            _db.FeedbackRequests.Update(feedbackRequest);
+
+            // Clear change tracker to avoid tracking conflicts
+            _db.ChangeTracker.Clear();
+
+            // Attach and mark as modified without tracking navigation properties
+            // This prevents EF Core from trying to track Department, Position, etc.
+            var entry = _db.Entry(feedbackRequest);
+            entry.State = EntityState.Modified;
+
             await _db.SaveChangesAsync();
         }
 
@@ -362,6 +371,14 @@ namespace CPR.Infrastructure.Repositories
         }
 
         /// <inheritdoc/>
+        public async Task<int> CountRequestsByRequestorSinceAsync(Guid requestorId, DateTimeOffset since)
+        {
+            return await _db.FeedbackRequests
+                .Where(fr => fr.RequestorId == requestorId && !fr.IsDeleted && fr.CreatedAt >= since)
+                .CountAsync();
+        }
+
+        /// <inheritdoc/>
         public async Task<List<FeedbackRequest>> GetRequestsDueWithinAsync(
             DateTimeOffset startDate,
             DateTimeOffset endDate,
@@ -370,7 +387,9 @@ namespace CPR.Infrastructure.Repositories
             var query = _db.FeedbackRequests
                 .Include(fr => fr.Recipients)
                     .ThenInclude(r => r.Employee)
+                        .ThenInclude(e => e.User)
                 .Include(fr => fr.Requestor)
+                    .ThenInclude(e => e.User)
                 .Include(fr => fr.Project)
                 .Include(fr => fr.Goal)
                 .Where(fr => fr.DueDate.HasValue &&
@@ -393,7 +412,9 @@ namespace CPR.Infrastructure.Repositories
             var query = _db.FeedbackRequests
                 .Include(fr => fr.Recipients)
                     .ThenInclude(r => r.Employee)
+                        .ThenInclude(e => e.User)
                 .Include(fr => fr.Requestor)
+                    .ThenInclude(e => e.User)
                 .Include(fr => fr.Project)
                 .Include(fr => fr.Goal)
                 .Where(fr => fr.DueDate.HasValue &&

@@ -102,9 +102,20 @@ namespace CPR.IntegrationTests
 
                 db.EmployeeSkills.RemoveRange(db.EmployeeSkills.Where(es => testEmployeeIds.Contains(es.EmployeeId)));
 
+                // Clean up ALL feedback requests and recipients created during tests
+                // This ensures no duplicate detection conflicts between test runs
+                var allFeedbackRequests = db.FeedbackRequests
+                    .Include(fr => fr.Recipients)
+                    .Where(fr => !fr.IsDeleted)
+                    .ToList();
+
+                if (allFeedbackRequests.Any())
+                {
+                    db.FeedbackRequests.RemoveRange(allFeedbackRequests);
+                }
+
                 // Clean up feedback data created by tests
                 db.Feedback.RemoveRange(db.Feedback.Where(f => testEmployeeIds.Contains(f.FromEmployeeId) || testEmployeeIds.Contains(f.ToEmployeeId)));
-                db.FeedbackRequests.RemoveRange(db.FeedbackRequests.Where(fr => testEmployeeIds.Contains(fr.RequestorId) || testEmployeeIds.Contains(fr.EmployeeId)));
 
                 // Clean up test user role assignments
                 var testUserIds = new[] { Guid.Parse("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"), Guid.Parse("cccccccc-cccc-cccc-cccc-cccccccccccc") };
@@ -313,6 +324,10 @@ namespace CPR.IntegrationTests
 
             using var db = new CPR.Infrastructure.Data.CprDbContext(options);
 
+            // Ensure ASPNETCORE_ENVIRONMENT is set to Test for seeder
+            // CustomWebApplicationFactory already sets this, but ensure it's set here too
+            Environment.SetEnvironmentVariable("ASPNETCORE_ENVIRONMENT", "Test");
+
             // Seed data - the seeder already has logic to skip if data exists
             var loggerFactory = LoggerFactory.Create(builder => builder.AddConsole());
             var logger = loggerFactory.CreateLogger<CPR.Infrastructure.Services.DatabaseSeeder>();
@@ -348,9 +363,19 @@ namespace CPR.IntegrationTests
 
                 db.EmployeeSkills.RemoveRange(db.EmployeeSkills.Where(es => testEmployeeIds.Contains(es.EmployeeId)));
 
+                // Clean up ALL feedback requests and recipients created during tests
+                var allFeedbackRequests = db.FeedbackRequests
+                    .Include(fr => fr.Recipients)
+                    .Where(fr => !fr.IsDeleted)
+                    .ToList();
+
+                if (allFeedbackRequests.Any())
+                {
+                    db.FeedbackRequests.RemoveRange(allFeedbackRequests);
+                }
+
                 // Clean up feedback data created by tests
                 db.Feedback.RemoveRange(db.Feedback.Where(f => testEmployeeIds.Contains(f.FromEmployeeId) || testEmployeeIds.Contains(f.ToEmployeeId)));
-                db.FeedbackRequests.RemoveRange(db.FeedbackRequests.Where(fr => testEmployeeIds.Contains(fr.RequestorId) || testEmployeeIds.Contains(fr.EmployeeId)));
 
                 // Clean up test user role assignments
                 var testUserIds = new[] { Guid.Parse("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"), Guid.Parse("cccccccc-cccc-cccc-cccc-cccccccccccc") };

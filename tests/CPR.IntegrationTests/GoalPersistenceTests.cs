@@ -11,11 +11,11 @@ using System.Linq;
 namespace CPR.IntegrationTests
 {
     [Collection("IntegrationTestCollection")]
-    public class GoalPersistenceTests : IClassFixture<WebApplicationFactory<Program>>
+    public class GoalPersistenceTests : IClassFixture<CustomWebApplicationFactory>
     {
-        private readonly WebApplicationFactory<Program> _factory;
+        private readonly CustomWebApplicationFactory _factory;
 
-        public GoalPersistenceTests(WebApplicationFactory<Program> factory)
+        public GoalPersistenceTests(CustomWebApplicationFactory factory)
         {
             _factory = factory;
         }

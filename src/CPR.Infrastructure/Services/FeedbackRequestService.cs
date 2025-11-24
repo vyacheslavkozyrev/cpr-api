@@ -202,34 +202,23 @@ namespace CPR.Infrastructure.Services
             var existingRequest = await _repository.GetByIdAsync(id, includeDeleted: false);
             if (existingRequest == null)
             {
-                throw new ArgumentException("Feedback request not found", nameof(id));
+                throw new KeyNotFoundException($"Feedback request with ID {id} not found");
             }
 
             // Verify ownership
             if (existingRequest.RequestorId != requestorId)
             {
-                throw new ArgumentException("Not authorized to update this request", nameof(requestorId));
+                throw new UnauthorizedAccessException("Not authorized to update this request");
             }
 
-            // Map to entity (only due_date can be updated)
-            var feedbackRequest = new FeedbackRequest
-            {
-                Id = existingRequest.Id,
-                RequestorId = existingRequest.RequestorId,
-                Message = existingRequest.Message,
-                DueDate = dto.DueDate.HasValue ? dto.DueDate.Value.Date : null,
-                ProjectId = existingRequest.ProjectId,
-                GoalId = existingRequest.GoalId,
-                CreatedAt = existingRequest.CreatedAt,
-                ModifiedAt = DateTimeOffset.UtcNow,
-                IsDeleted = existingRequest.IsDeleted
-            };
+            // Update only the DueDate (only field that can be modified)
+            existingRequest.DueDate = dto.DueDate.HasValue ? dto.DueDate.Value.Date : null;
+            existingRequest.ModifiedAt = DateTimeOffset.UtcNow;
 
-            await _repository.UpdateAsync(feedbackRequest);
+            await _repository.UpdateAsync(existingRequest);
 
             // Return updated request
-            var updated = await _repository.GetByIdAsync(id, includeDeleted: false);
-            return MapToDto(updated!);
+            return MapToDto(existingRequest);
         }
 
         /// <inheritdoc />
@@ -239,30 +228,17 @@ namespace CPR.Infrastructure.Services
             var existingRequest = await _repository.GetByIdAsync(id, includeDeleted: false);
             if (existingRequest == null)
             {
-                throw new ArgumentException("Feedback request not found", nameof(id));
+                throw new KeyNotFoundException($"Feedback request with ID {id} not found");
             }
 
             // Verify ownership
             if (existingRequest.RequestorId != requestorId)
             {
-                throw new ArgumentException("Not authorized to cancel this request", nameof(requestorId));
+                throw new UnauthorizedAccessException("Not authorized to cancel this request");
             }
 
-            // Map to entity for deletion
-            var feedbackRequest = new FeedbackRequest
-            {
-                Id = existingRequest.Id,
-                RequestorId = existingRequest.RequestorId,
-                Message = existingRequest.Message,
-                DueDate = existingRequest.DueDate,
-                ProjectId = existingRequest.ProjectId,
-                GoalId = existingRequest.GoalId,
-                CreatedAt = existingRequest.CreatedAt,
-                ModifiedAt = existingRequest.ModifiedAt,
-                IsDeleted = false
-            };
-
-            await _repository.DeleteAsync(feedbackRequest, requestorId);
+            // Use existing tracked entity for deletion
+            await _repository.DeleteAsync(existingRequest, requestorId);
         }
 
         /// <inheritdoc />
@@ -272,16 +248,16 @@ namespace CPR.Infrastructure.Services
             var existingRequest = await _repository.GetByIdAsync(requestId, includeDeleted: false);
             if (existingRequest == null)
             {
-                throw new ArgumentException("Feedback request not found", nameof(requestId));
+                throw new KeyNotFoundException($"Feedback request with ID {requestId} not found");
             }
 
             // Verify ownership
             if (existingRequest.RequestorId != requestorId)
             {
-                throw new ArgumentException("Not authorized to modify this request", nameof(requestorId));
+                throw new UnauthorizedAccessException("Not authorized to modify this request");
             }
 
-            // Verify recipient exists in this request
+            // Verify recipient exists in this request (recipientId parameter is recipient's internal ID)
             var recipient = existingRequest.Recipients?.FirstOrDefault(r => r.Id == recipientId);
             if (recipient == null)
             {
@@ -294,7 +270,14 @@ namespace CPR.Infrastructure.Services
                 throw new ArgumentException("Cannot cancel a recipient who has already responded", nameof(recipientId));
             }
 
-            await _repository.CancelRecipientAsync(recipientId);
+            // Check if this is the last recipient
+            var activeRecipientCount = existingRequest.Recipients?.Count(r => !r.IsCompleted) ?? 0;
+            if (activeRecipientCount <= 1)
+            {
+                throw new InvalidOperationException("Cannot cancel the last recipient. Cancel the entire request instead");
+            }
+
+            await _repository.CancelRecipientAsync(recipient.Id);
         }
 
         /// <inheritdoc />
@@ -313,7 +296,7 @@ namespace CPR.Infrastructure.Services
                 throw new ArgumentException("Not authorized to send reminders for this request", nameof(requestorId));
             }
 
-            // Verify recipient exists in this request
+            // Verify recipient exists in this request (recipientId parameter is recipient's internal ID)
             var recipient = existingRequest.Recipients?.FirstOrDefault(r => r.Id == recipientId);
             if (recipient == null)
             {
@@ -323,7 +306,7 @@ namespace CPR.Infrastructure.Services
             // Check if already completed
             if (recipient.IsCompleted)
             {
-                throw new ArgumentException("Cannot send reminder to recipient who has already responded", nameof(recipientId));
+                throw new InvalidOperationException("Cannot send reminder to recipient who has already responded");
             }
 
             // Check cooldown period (48 hours since last reminder)
@@ -339,8 +322,8 @@ namespace CPR.Infrastructure.Services
                 }
             }
 
-            // Update last reminder timestamp
-            await _repository.UpdateLastReminderAsync(recipientId, DateTimeOffset.UtcNow);
+            // Update last reminder timestamp using recipient's internal ID
+            await _repository.UpdateLastReminderAsync(recipient.Id, DateTimeOffset.UtcNow);
 
             // Send reminder email (Feature US-004, T031)
             await SendReminderEmailAsync(existingRequest, recipient, isOverdue: false);

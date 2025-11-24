@@ -106,6 +106,14 @@ namespace CPR.Application.Repositories
         Task<int> GetTodayRequestCountAsync(Guid requestorId);
 
         /// <summary>
+        /// Count requests created by a specific requestor since a given timestamp (for rate limiting)
+        /// </summary>
+        /// <param name="requestorId">The employee ID who created the requests</param>
+        /// <param name="since">The timestamp to count requests from</param>
+        /// <returns>Count of requests created since the timestamp</returns>
+        Task<int> CountRequestsByRequestorSinceAsync(Guid requestorId, DateTimeOffset since);
+
+        /// <summary>
         /// Get feedback requests with due dates within a specified time range (for automatic reminders)
         /// </summary>
         /// <param name="startDate">Start of the date range</param>

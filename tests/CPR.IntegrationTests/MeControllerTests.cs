@@ -115,23 +115,24 @@ public class MeControllerTests : IClassFixture<CustomWebApplicationFactory>, ICl
         var key = System.Environment.GetEnvironmentVariable("JWT_SIGNING_KEY") ?? "local-test-key";
         System.Environment.SetEnvironmentVariable("JWT_SIGNING_KEY", key);
         var client = _factory.CreateClient();
-        var token = CPR.Api.Auth.TokenGenerator.CreateToken("44444444-4444-4444-4444-444444444444", key);
+        var token = CPR.Api.Auth.TokenGenerator.CreateToken("679add6e-6c29-4e00-b6a5-b69c8e0f3445", key); // John Doe
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-        // Get an existing skill and its beginner level from the database
+        // Get any existing skill and its first level from the database
         var options = new Microsoft.EntityFrameworkCore.DbContextOptionsBuilder<CPR.Infrastructure.Data.CprDbContext>()
             .UseNpgsql(_dbFixture.ConnectionString)
             .ConfigureWarnings(warnings => warnings.Ignore(RelationalEventId.PendingModelChangesWarning))
             .Options;
         using var db = new CPR.Infrastructure.Data.CprDbContext(options);
-        var skill = db.Skills.FirstOrDefault(s => s.Title == "Software Development");
+        var skill = await db.Skills.FirstOrDefaultAsync(s => !s.IsDeleted);
         Assert.NotNull(skill); // Ensure skill exists
-        var beginnerLevel = db.SkillLevels.FirstOrDefault(sl => sl.SkillId == skill.Id && sl.Title == "Beginner");
-        Assert.NotNull(beginnerLevel); // Ensure level exists
+        var firstLevel = await db.SkillLevels.Where(sl => sl.SkillId == skill.Id && !sl.IsDeleted).OrderBy(l => l.Value).FirstOrDefaultAsync();
+        Assert.NotNull(firstLevel); // Ensure level exists
 
         var createDto = new EmployeeSkillCreateDto
         {
             SkillId = skill.Id,
+            CurrentLevelId = firstLevel.Id,
             Source = "Self-assessment",
             EffectiveDate = DateTimeOffset.UtcNow,
             IsTarget = false
@@ -144,7 +145,7 @@ public class MeControllerTests : IClassFixture<CustomWebApplicationFactory>, ICl
         Assert.Equal(System.Net.HttpStatusCode.Created, resp.StatusCode);
         var skillDto = await resp.Content.ReadFromJsonAsync<EmployeeSkillDto>();
         Assert.NotNull(skillDto);
-        Assert.Equal("Software Development", skillDto.Skill.Title);
+        Assert.Equal(skill.Title, skillDto.Skill.Title);
     }
 
     [Fact]
@@ -154,7 +155,7 @@ public class MeControllerTests : IClassFixture<CustomWebApplicationFactory>, ICl
         var key = System.Environment.GetEnvironmentVariable("JWT_SIGNING_KEY") ?? "local-test-key";
         System.Environment.SetEnvironmentVariable("JWT_SIGNING_KEY", key);
         var client = _factory.CreateClient();
-        var token = CPR.Api.Auth.TokenGenerator.CreateToken("33333333-3333-3333-3333-333333333333", key);
+        var token = CPR.Api.Auth.TokenGenerator.CreateToken("679add6e-6c29-4e00-b6a5-b69c8e0f3445", key); // John Doe
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
         var createDto = new EmployeeSkillCreateDto
@@ -202,12 +203,15 @@ public class MeControllerTests : IClassFixture<CustomWebApplicationFactory>, ICl
             .ConfigureWarnings(warnings => warnings.Ignore(RelationalEventId.PendingModelChangesWarning))
             .Options;
         using var db = new CPR.Infrastructure.Data.CprDbContext(options);
-        var skill = db.Skills.FirstOrDefault(s => s.Title == "Software Development");
+        var skill = await db.Skills.FirstOrDefaultAsync(s => !s.IsDeleted);
         Assert.NotNull(skill); // Ensure skill exists
+        var firstLevel = await db.SkillLevels.Where(sl => sl.SkillId == skill.Id && !sl.IsDeleted).OrderBy(l => l.Value).FirstOrDefaultAsync();
+        Assert.NotNull(firstLevel); // Ensure level exists
 
         var createDto = new EmployeeSkillCreateDto
         {
             SkillId = skill.Id,
+            CurrentLevelId = firstLevel.Id,
             Source = "Self-assessment",
             IsTarget = false
         };
@@ -231,7 +235,7 @@ public class MeControllerTests : IClassFixture<CustomWebApplicationFactory>, ICl
         var key = System.Environment.GetEnvironmentVariable("JWT_SIGNING_KEY") ?? "local-test-key";
         System.Environment.SetEnvironmentVariable("JWT_SIGNING_KEY", key);
         var client = _factory.CreateClient();
-        var token = CPR.Api.Auth.TokenGenerator.CreateToken("44444444-4444-4444-4444-444444444444", key);
+        var token = CPR.Api.Auth.TokenGenerator.CreateToken("679add6e-6c29-4e00-b6a5-b69c8e0f3445", key); // John Doe
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
         // Get existing skill and level from the database
@@ -240,15 +244,16 @@ public class MeControllerTests : IClassFixture<CustomWebApplicationFactory>, ICl
             .ConfigureWarnings(warnings => warnings.Ignore(RelationalEventId.PendingModelChangesWarning))
             .Options;
         using var db = new CPR.Infrastructure.Data.CprDbContext(options);
-        var skill = db.Skills.FirstOrDefault(s => s.Title == "Software Development");
+        var skill = await db.Skills.FirstOrDefaultAsync(s => !s.IsDeleted);
         Assert.NotNull(skill); // Ensure skill exists
-        var beginnerLevel = db.SkillLevels.FirstOrDefault(sl => sl.SkillId == skill.Id && sl.Title == "Beginner");
-        Assert.NotNull(beginnerLevel); // Ensure level exists
+        var firstLevel = await db.SkillLevels.Where(sl => sl.SkillId == skill.Id && !sl.IsDeleted).OrderBy(l => l.Value).FirstOrDefaultAsync();
+        Assert.NotNull(firstLevel); // Ensure level exists
 
         // First create a skill assessment
         var createDto = new EmployeeSkillCreateDto
         {
             SkillId = skill.Id,
+            CurrentLevelId = firstLevel.Id,
             Source = "Self-assessment",
             IsTarget = false
         };
@@ -319,13 +324,16 @@ public class MeControllerTests : IClassFixture<CustomWebApplicationFactory>, ICl
             .ConfigureWarnings(warnings => warnings.Ignore(RelationalEventId.PendingModelChangesWarning))
             .Options;
         using var db = new CPR.Infrastructure.Data.CprDbContext(options);
-        var skill = db.Skills.FirstOrDefault(s => s.Title == "Software Development");
+        var skill = await db.Skills.FirstOrDefaultAsync(s => !s.IsDeleted);
         Assert.NotNull(skill); // Ensure skill exists
+        var firstLevel = await db.SkillLevels.Where(sl => sl.SkillId == skill.Id && !sl.IsDeleted).OrderBy(l => l.Value).FirstOrDefaultAsync();
+        Assert.NotNull(firstLevel); // Ensure level exists
 
         // First create a skill assessment
         var createDto = new EmployeeSkillCreateDto
         {
             SkillId = skill.Id,
+            CurrentLevelId = firstLevel.Id,
             Source = "Self-assessment",
             IsTarget = false
         };

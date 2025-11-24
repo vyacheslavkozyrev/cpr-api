@@ -9,13 +9,13 @@ using Xunit;
 
 namespace CPR.IntegrationTests;
 
-[Collection("IntegrationTestCollection")]
-public class TaxonomyIntegrationTests : IClassFixture<WebApplicationFactory<Program>>, IClassFixture<DatabaseCleanupFixture>
+[Collection("SequentialIntegrationTestCollection")]
+public class TaxonomyIntegrationTests : IClassFixture<CustomWebApplicationFactory>, IClassFixture<DatabaseCleanupFixture>
 {
-    private readonly WebApplicationFactory<Program> _factory;
+    private readonly CustomWebApplicationFactory _factory;
     private readonly DatabaseCleanupFixture _dbFixture;
 
-    public TaxonomyIntegrationTests(WebApplicationFactory<Program> factory, DatabaseCleanupFixture dbFixture)
+    public TaxonomyIntegrationTests(CustomWebApplicationFactory factory, DatabaseCleanupFixture dbFixture)
     {
         _factory = factory;
         _dbFixture = dbFixture;

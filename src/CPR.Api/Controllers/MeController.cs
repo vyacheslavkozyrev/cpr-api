@@ -172,9 +172,9 @@ public class MeController : ControllerBase
     [ProducesResponseType(401)]
     public async Task<IActionResult> GetSentFeedbackRequests(
         [FromQuery] int page = 1,
-        [FromQuery] int pageSize = 20,
-        [FromQuery] string sortBy = "created_at",
-        [FromQuery] string sortOrder = "desc",
+        [FromQuery(Name = "page_size")] int pageSize = 20,
+        [FromQuery(Name = "sort_by")] string sortBy = "created_at",
+        [FromQuery(Name = "sort_order")] string sortOrder = "desc",
         [FromQuery] string? status = null,
         [FromQuery] string? search = null)
     {
@@ -222,9 +222,9 @@ public class MeController : ControllerBase
     [ProducesResponseType(401)]
     public async Task<IActionResult> GetTodoFeedbackRequests(
         [FromQuery] int page = 1,
-        [FromQuery] int pageSize = 20,
-        [FromQuery] string sortBy = "created_at",
-        [FromQuery] string sortOrder = "desc",
+        [FromQuery(Name = "page_size")] int pageSize = 20,
+        [FromQuery(Name = "sort_by")] string sortBy = "created_at",
+        [FromQuery(Name = "sort_order")] string sortOrder = "desc",
         [FromQuery] string? status = null,
         [FromQuery] string? search = null)
     {

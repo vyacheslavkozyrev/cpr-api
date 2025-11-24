@@ -34,6 +34,15 @@ public class FeedbackRequestController : ControllerBase
         _calendarService = calendarService;
     }
 
+    private IActionResult HandleArgumentException(ArgumentException ex)
+    {
+        if (ex.Message.Contains("not found", StringComparison.OrdinalIgnoreCase))
+            return NotFound(new { error = ex.Message });
+        if (ex.Message.Contains("not authorized", StringComparison.OrdinalIgnoreCase))
+            return StatusCode(StatusCodes.Status403Forbidden, new { error = ex.Message });
+        return Problem(title: "Invalid request", detail: ex.Message, statusCode: StatusCodes.Status400BadRequest);
+    }
+
     /// <summary>
     /// Create a new multi-recipient feedback request
     /// </summary>
@@ -159,12 +168,17 @@ public class FeedbackRequestController : ControllerBase
             var result = await _feedbackRequestService.UpdateAsync(id, requestorId, dto);
             return Ok(result);
         }
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(new { error = ex.Message });
+        }
+        catch (UnauthorizedAccessException ex)
+        {
+            return StatusCode(StatusCodes.Status403Forbidden, new { error = ex.Message });
+        }
         catch (ArgumentException ex)
         {
-            return Problem(
-                title: "Invalid request",
-                detail: ex.Message,
-                statusCode: StatusCodes.Status400BadRequest);
+            return HandleArgumentException(ex);
         }
     }
 
@@ -200,12 +214,17 @@ public class FeedbackRequestController : ControllerBase
             await _feedbackRequestService.CancelRequestAsync(id, requestorId);
             return NoContent();
         }
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(new { error = ex.Message });
+        }
+        catch (UnauthorizedAccessException ex)
+        {
+            return StatusCode(StatusCodes.Status403Forbidden, new { error = ex.Message });
+        }
         catch (ArgumentException ex)
         {
-            return Problem(
-                title: "Invalid request",
-                detail: ex.Message,
-                statusCode: StatusCodes.Status400BadRequest);
+            return HandleArgumentException(ex);
         }
     }
 
@@ -242,12 +261,21 @@ public class FeedbackRequestController : ControllerBase
             await _feedbackRequestService.CancelRecipientAsync(id, recipientId, requestorId);
             return NoContent();
         }
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(new { error = ex.Message });
+        }
+        catch (UnauthorizedAccessException ex)
+        {
+            return StatusCode(StatusCodes.Status403Forbidden, new { error = ex.Message });
+        }
         catch (ArgumentException ex)
         {
-            return Problem(
-                title: "Invalid request",
-                detail: ex.Message,
-                statusCode: StatusCodes.Status400BadRequest);
+            return HandleArgumentException(ex);
+        }
+        catch (InvalidOperationException ex)
+        {
+            return Problem(title: "Operation not allowed", detail: ex.Message, statusCode: StatusCodes.Status400BadRequest);
         }
     }
 
@@ -282,14 +310,11 @@ public class FeedbackRequestController : ControllerBase
         try
         {
             await _feedbackRequestService.SendReminderAsync(id, recipientId, requestorId);
-            return NoContent();
+            return Ok(new { message = "Reminder sent successfully" });
         }
         catch (ArgumentException ex)
         {
-            return Problem(
-                title: "Invalid request",
-                detail: ex.Message,
-                statusCode: StatusCodes.Status400BadRequest);
+            return HandleArgumentException(ex);
         }
         catch (InvalidOperationException ex)
         {
@@ -334,10 +359,7 @@ public class FeedbackRequestController : ControllerBase
         }
         catch (ArgumentException ex)
         {
-            return Problem(
-                title: "Invalid request",
-                detail: ex.Message,
-                statusCode: StatusCodes.Status400BadRequest);
+            return HandleArgumentException(ex);
         }
     }
 

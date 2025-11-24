@@ -193,15 +193,18 @@ builder.Services.AddDbContext<CprDbContext>(options =>
         .ConfigureWarnings(warnings => warnings.Ignore(RelationalEventId.PendingModelChangesWarning))
 );
 
-// Configure Hangfire for background jobs
-builder.Services.AddHangfire(config => config
-    .SetDataCompatibilityLevel(Hangfire.CompatibilityLevel.Version_180)
-    .UseSimpleAssemblyNameTypeSerializer()
-    .UseRecommendedSerializerSettings()
-    .UsePostgreSqlStorage(options =>
-        options.UseNpgsqlConnection(connectionString)));
+// Configure Hangfire for background jobs (skip in Test environment to avoid database initialization issues)
+if (!builder.Environment.IsEnvironment("Test"))
+{
+    builder.Services.AddHangfire(config => config
+        .SetDataCompatibilityLevel(Hangfire.CompatibilityLevel.Version_180)
+        .UseSimpleAssemblyNameTypeSerializer()
+        .UseRecommendedSerializerSettings()
+        .UsePostgreSqlStorage(options =>
+            options.UseNpgsqlConnection(connectionString)));
 
-builder.Services.AddHangfireServer();
+    builder.Services.AddHangfireServer();
+}
 
 // Register background job classes
 builder.Services.AddScoped<CPR.Infrastructure.Jobs.FeedbackRequestReminderJob>();
@@ -262,6 +265,9 @@ app.UseCors("LocalDevCors");
 app.UseAuthentication();
 app.UseAuthorization();
 
+// Add rate limiting middleware for feedback requests (after authentication)
+app.UseMiddleware<CPR.Api.Middleware.FeedbackRequestRateLimitMiddleware>();
+
 // Enable Hangfire Dashboard (only in development for security)
 if (app.Environment.IsDevelopment())
 {
@@ -271,16 +277,19 @@ if (app.Environment.IsDevelopment())
     });
 }
 
-// Schedule recurring jobs
-RecurringJob.AddOrUpdate<CPR.Infrastructure.Jobs.FeedbackRequestReminderJob>(
-    "send-upcoming-due-date-reminders",
-    job => job.SendUpcomingDueDateRemindersAsync(),
-    "0 9 * * *"); // Daily at 9:00 AM UTC
+// Schedule recurring jobs (skip in Test environment to avoid Hangfire initialization issues)
+if (!app.Environment.IsEnvironment("Test"))
+{
+    RecurringJob.AddOrUpdate<CPR.Infrastructure.Jobs.FeedbackRequestReminderJob>(
+        "send-upcoming-due-date-reminders",
+        job => job.SendUpcomingDueDateRemindersAsync(),
+        "0 9 * * *"); // Daily at 9:00 AM UTC
 
-RecurringJob.AddOrUpdate<CPR.Infrastructure.Jobs.FeedbackRequestReminderJob>(
-    "send-overdue-reminders",
-    job => job.SendOverdueRemindersAsync(),
-    "0 10 * * *"); // Daily at 10:00 AM UTC
+    RecurringJob.AddOrUpdate<CPR.Infrastructure.Jobs.FeedbackRequestReminderJob>(
+        "send-overdue-reminders",
+        job => job.SendOverdueRemindersAsync(),
+        "0 10 * * *"); // Daily at 10:00 AM UTC
+}
 
 // Test-only endpoints for integration tests that intentionally throw so ProblemDetails
 // middleware can be validated. Using MapGet ensures the TestHost routing matches
