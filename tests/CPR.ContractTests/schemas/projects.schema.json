@@ -7,7 +7,7 @@
             "id",
             "code",
             "title",
-            "createdAt",
+            "created_at",
             "roles",
             "team"
         ],
@@ -28,25 +28,25 @@
                     "null"
                 ]
             },
-            "ownerId": {
+            "owner_id": {
                 "type": [
                     "string",
                     "null"
                 ],
                 "format": "uuid"
             },
-            "sponsorId": {
+            "sponsor_id": {
                 "type": [
                     "string",
                     "null"
                 ],
                 "format": "uuid"
             },
-            "createdAt": {
+            "created_at": {
                 "type": "string",
                 "format": "date-time"
             },
-            "modifiedAt": {
+            "modified_at": {
                 "type": [
                     "string",
                     "null"

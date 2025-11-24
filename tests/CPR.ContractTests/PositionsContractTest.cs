@@ -53,7 +53,8 @@ public class PositionsContractTest : IClassFixture<CustomWebApplicationFactory>
         Assert.True(item.TryGetProperty("expectations", out var expProp));
         JsonAssertions.AssertIsStringOrNull(expProp);
 
-        Assert.True(item.TryGetProperty("careerTrackId", out var ctProp));
+        Assert.True(item.TryGetProperty("career_track_id", out var ctProp));
         JsonAssertions.AssertIsGuidString(ctProp);
     }
 }
+

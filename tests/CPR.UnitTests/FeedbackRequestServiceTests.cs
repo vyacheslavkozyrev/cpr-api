@@ -1217,8 +1217,14 @@ namespace CPR.UnitTests
             };
             var created = await _service.CreateAsync(_requestorId, dto);
 
+            // Get actual recipient ID from database
+            var recipientId = await _db.FeedbackRequestRecipients
+                .Where(r => r.FeedbackRequestId == created.Id && r.EmployeeId == _recipient1Id)
+                .Select(r => r.Id)
+                .FirstAsync();
+
             // Act
-            await _service.CancelRecipientAsync(created.Id, _recipient1Id, _requestorId);
+            await _service.CancelRecipientAsync(created.Id, recipientId, _requestorId);
 
             // Assert
             var result = await _service.GetByIdAsync(created.Id, _requestorId);
@@ -1239,9 +1245,15 @@ namespace CPR.UnitTests
             };
             var created = await _service.CreateAsync(_requestorId, dto);
 
+            // Get actual recipient ID from database
+            var recipientId = await _db.FeedbackRequestRecipients
+                .Where(r => r.FeedbackRequestId == created.Id && r.EmployeeId == _recipient1Id)
+                .Select(r => r.Id)
+                .FirstAsync();
+
             // Act & Assert
             await Assert.ThrowsAsync<UnauthorizedAccessException>(
-                () => _service.CancelRecipientAsync(created.Id, _recipient1Id, Guid.NewGuid()));
+                () => _service.CancelRecipientAsync(created.Id, recipientId, Guid.NewGuid()));
         }
 
         [Fact]
@@ -1255,9 +1267,15 @@ namespace CPR.UnitTests
             };
             var created = await _service.CreateAsync(_requestorId, dto);
 
+            // Get actual recipient ID from database
+            var recipientId = await _db.FeedbackRequestRecipients
+                .Where(r => r.FeedbackRequestId == created.Id && r.EmployeeId == _recipient1Id)
+                .Select(r => r.Id)
+                .FirstAsync();
+
             // Act & Assert
             await Assert.ThrowsAsync<InvalidOperationException>(
-                () => _service.CancelRecipientAsync(created.Id, _recipient1Id, _requestorId));
+                () => _service.CancelRecipientAsync(created.Id, recipientId, _requestorId));
         }
 
         // ====================================
@@ -1276,11 +1294,17 @@ namespace CPR.UnitTests
             };
             var created = await _service.CreateAsync(_requestorId, dto);
 
+            // Get actual recipient ID from database
+            var recipientId = await _db.FeedbackRequestRecipients
+                .Where(r => r.FeedbackRequestId == created.Id && r.EmployeeId == _recipient1Id)
+                .Select(r => r.Id)
+                .FirstAsync();
+
             // Reset mock to clear creation notification
             _emailServiceMock.Invocations.Clear();
 
             // Act
-            await _service.SendReminderAsync(created.Id, _recipient1Id, _requestorId);
+            await _service.SendReminderAsync(created.Id, recipientId, _requestorId);
 
             // Assert - Email was sent
             _emailServiceMock.Verify(
@@ -1306,12 +1330,18 @@ namespace CPR.UnitTests
             };
             var created = await _service.CreateAsync(_requestorId, dto);
 
+            // Get actual recipient ID from database
+            var recipientId = await _db.FeedbackRequestRecipients
+                .Where(r => r.FeedbackRequestId == created.Id && r.EmployeeId == _recipient1Id)
+                .Select(r => r.Id)
+                .FirstAsync();
+
             // Send first reminder
-            await _service.SendReminderAsync(created.Id, _recipient1Id, _requestorId);
+            await _service.SendReminderAsync(created.Id, recipientId, _requestorId);
 
             // Act & Assert - Try to send again immediately (within 48h cooldown)
             await Assert.ThrowsAsync<InvalidOperationException>(
-                () => _service.SendReminderAsync(created.Id, _recipient1Id, _requestorId));
+                () => _service.SendReminderAsync(created.Id, recipientId, _requestorId));
         }
 
         [Fact]
@@ -1334,7 +1364,7 @@ namespace CPR.UnitTests
 
             // Act & Assert
             await Assert.ThrowsAsync<InvalidOperationException>(
-                () => _service.SendReminderAsync(created.Id, _recipient1Id, _requestorId));
+                () => _service.SendReminderAsync(created.Id, recipient.Id, _requestorId));
         }
 
         // ====================================
@@ -1384,8 +1414,14 @@ namespace CPR.UnitTests
             };
             var created = await _service.CreateAsync(_requestorId, dto);
 
+            // Get actual recipient ID from database
+            var recipient1Id = await _db.FeedbackRequestRecipients
+                .Where(r => r.FeedbackRequestId == created.Id && r.EmployeeId == _recipient1Id)
+                .Select(r => r.Id)
+                .FirstAsync();
+
             // Send reminder to one recipient
-            await _service.SendReminderAsync(created.Id, _recipient1Id, _requestorId);
+            await _service.SendReminderAsync(created.Id, recipient1Id, _requestorId);
 
             // Reset mock
             _emailServiceMock.Invocations.Clear();

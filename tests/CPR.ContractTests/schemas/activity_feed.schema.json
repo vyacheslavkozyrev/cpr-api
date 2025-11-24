@@ -5,7 +5,7 @@
         "items",
         "total",
         "page",
-        "perPage"
+        "per_page"
     ],
     "properties": {
         "items": {
@@ -41,28 +41,28 @@
                     "metadata": {
                         "type": "object",
                         "properties": {
-                            "goalId": {
+                            "goal_id": {
                                 "type": [
                                     "string",
                                     "null"
                                 ],
                                 "format": "uuid"
                             },
-                            "feedbackId": {
+                            "feedback_id": {
                                 "type": [
                                     "string",
                                     "null"
                                 ],
                                 "format": "uuid"
                             },
-                            "skillId": {
+                            "skill_id": {
                                 "type": [
                                     "string",
                                     "null"
                                 ],
                                 "format": "uuid"
                             },
-                            "fromUserId": {
+                            "from_user_id": {
                                 "type": [
                                     "string",
                                     "null"
@@ -92,7 +92,7 @@
             "type": "integer",
             "minimum": 1
         },
-        "perPage": {
+        "per_page": {
             "type": "integer",
             "minimum": 1
         }

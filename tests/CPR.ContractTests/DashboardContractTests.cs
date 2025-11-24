@@ -259,7 +259,7 @@ public class DashboardContractTests : IClassFixture<CustomWebApplicationFactory>
         Assert.Equal(JsonValueKind.Array, items.ValueKind);
         Assert.True(doc.RootElement.TryGetProperty("total", out _));
         Assert.True(doc.RootElement.TryGetProperty("page", out _));
-        Assert.True(doc.RootElement.TryGetProperty("perPage", out _));
+        Assert.True(doc.RootElement.TryGetProperty("per_page", out _));
     }
 
     [Fact]
@@ -345,9 +345,9 @@ public class DashboardContractTests : IClassFixture<CustomWebApplicationFactory>
         var doc = JsonDocument.Parse(json);
         Assert.Equal(JsonValueKind.Object, doc.RootElement.ValueKind);
         Assert.True(doc.RootElement.TryGetProperty("statistics", out _));
-        Assert.True(doc.RootElement.TryGetProperty("recentGoals", out var goals));
+        Assert.True(doc.RootElement.TryGetProperty("recent_goals", out var goals));
         Assert.Equal(JsonValueKind.Array, goals.ValueKind);
-        Assert.True(doc.RootElement.TryGetProperty("progressTrend", out var trend));
+        Assert.True(doc.RootElement.TryGetProperty("progress_trend", out var trend));
         Assert.Equal(JsonValueKind.Array, trend.ValueKind);
     }
 
@@ -389,9 +389,9 @@ public class DashboardContractTests : IClassFixture<CustomWebApplicationFactory>
         var doc = JsonDocument.Parse(json);
         Assert.Equal(JsonValueKind.Object, doc.RootElement.ValueKind);
         Assert.True(doc.RootElement.TryGetProperty("statistics", out _));
-        Assert.True(doc.RootElement.TryGetProperty("recentFeedback", out var feedback));
+        Assert.True(doc.RootElement.TryGetProperty("recent_feedback", out var feedback));
         Assert.Equal(JsonValueKind.Array, feedback.ValueKind);
-        Assert.True(doc.RootElement.TryGetProperty("ratingTrend", out var trend));
+        Assert.True(doc.RootElement.TryGetProperty("rating_trend", out var trend));
         Assert.Equal(JsonValueKind.Array, trend.ValueKind);
     }
 
@@ -433,9 +433,9 @@ public class DashboardContractTests : IClassFixture<CustomWebApplicationFactory>
         var doc = JsonDocument.Parse(json);
         Assert.Equal(JsonValueKind.Object, doc.RootElement.ValueKind);
         Assert.True(doc.RootElement.TryGetProperty("statistics", out _));
-        Assert.True(doc.RootElement.TryGetProperty("skillCategories", out var categories));
+        Assert.True(doc.RootElement.TryGetProperty("skill_categories", out var categories));
         Assert.Equal(JsonValueKind.Array, categories.ValueKind);
-        Assert.True(doc.RootElement.TryGetProperty("recentAssessments", out var assessments));
+        Assert.True(doc.RootElement.TryGetProperty("recent_assessments", out var assessments));
         Assert.Equal(JsonValueKind.Array, assessments.ValueKind);
     }
 

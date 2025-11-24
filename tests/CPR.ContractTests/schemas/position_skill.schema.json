@@ -4,37 +4,37 @@
     "type": "object",
     "required": [
         "id",
-        "positionId",
-        "skillId",
-        "skillTitle",
-        "skillLevelId",
-        "skillLevelTitle",
-        "createdAt"
+        "position_id",
+        "skill_id",
+        "skill_title",
+        "skill_level_id",
+        "skill_level_title",
+        "created_at"
     ],
     "properties": {
         "id": {
             "type": "string",
             "format": "uuid"
         },
-        "positionId": {
+        "position_id": {
             "type": "string",
             "format": "uuid"
         },
-        "skillId": {
+        "skill_id": {
             "type": "string",
             "format": "uuid"
         },
-        "skillTitle": {
+        "skill_title": {
             "type": "string"
         },
-        "skillLevelId": {
+        "skill_level_id": {
             "type": "string",
             "format": "uuid"
         },
-        "skillLevelTitle": {
+        "skill_level_title": {
             "type": "string"
         },
-        "createdAt": {
+        "created_at": {
             "type": "string",
             "format": "date-time"
         }

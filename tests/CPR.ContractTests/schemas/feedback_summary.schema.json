@@ -3,33 +3,33 @@
     "type": "object",
     "required": [
         "statistics",
-        "recentFeedback",
-        "ratingTrend"
+        "recent_feedback",
+        "rating_trend"
     ],
     "properties": {
         "statistics": {
             "type": "object",
             "required": [
-                "totalReceived",
-                "pendingRequests",
-                "averageRating",
-                "ratingDistribution"
+                "total_received",
+                "pending_requests",
+                "average_rating",
+                "rating_distribution"
             ],
             "properties": {
-                "totalReceived": {
+                "total_received": {
                     "type": "integer",
                     "minimum": 0
                 },
-                "pendingRequests": {
+                "pending_requests": {
                     "type": "integer",
                     "minimum": 0
                 },
-                "averageRating": {
+                "average_rating": {
                     "type": "number",
                     "minimum": 0,
                     "maximum": 5
                 },
-                "ratingDistribution": {
+                "rating_distribution": {
                     "type": "object",
                     "additionalProperties": {
                         "type": "integer",
@@ -39,30 +39,30 @@
             },
             "additionalProperties": false
         },
-        "recentFeedback": {
+        "recent_feedback": {
             "type": "array",
             "items": {
                 "type": "object",
                 "required": [
                     "id",
-                    "fromEmployeeId",
-                    "fromEmployeeName",
-                    "goalTitle",
-                    "createdAt"
+                    "from_employee_id",
+                    "from_employee_name",
+                    "goal_title",
+                    "created_at"
                 ],
                 "properties": {
                     "id": {
                         "type": "string",
                         "format": "uuid"
                     },
-                    "fromEmployeeId": {
+                    "from_employee_id": {
                         "type": "string",
                         "format": "uuid"
                     },
-                    "fromEmployeeName": {
+                    "from_employee_name": {
                         "type": "string"
                     },
-                    "goalTitle": {
+                    "goal_title": {
                         "type": "string"
                     },
                     "rating": {
@@ -73,7 +73,7 @@
                         "minimum": 1,
                         "maximum": 5
                     },
-                    "createdAt": {
+                    "created_at": {
                         "type": "string",
                         "format": "date-time"
                     }
@@ -81,20 +81,20 @@
                 "additionalProperties": false
             }
         },
-        "ratingTrend": {
+        "rating_trend": {
             "type": "array",
             "items": {
                 "type": "object",
                 "required": [
                     "period",
-                    "averageRating",
+                    "average_rating",
                     "count"
                 ],
                 "properties": {
                     "period": {
                         "type": "string"
                     },
-                    "averageRating": {
+                    "average_rating": {
                         "type": "number",
                         "minimum": 0,
                         "maximum": 5

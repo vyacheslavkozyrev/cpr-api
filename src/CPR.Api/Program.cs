@@ -88,23 +88,55 @@ if (authenticationMode.Equals("EntraExternalId", StringComparison.OrdinalIgnoreC
     builder.Services.AddAuthentication(Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerDefaults.AuthenticationScheme)
         .AddJwtBearer(options =>
         {
-            // Configure token validation parameters to bypass signature validation for development
+            // Force use of the legacy JwtSecurityTokenHandler which properly extracts claims
+            options.UseSecurityTokenValidators = true;
+
+            // Bypass signature validation completely - accept any token structure
             options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
             {
                 ValidateIssuer = false,
                 ValidateAudience = false,
                 ValidateLifetime = false,
                 ValidateIssuerSigningKey = false,
-
-                // Use SignatureValidator to bypass signature validation - return JsonWebToken for .NET 8+ compatibility
+                RequireSignedTokens = false,
                 SignatureValidator = (token, parameters) =>
                 {
-                    // Parse the token using JsonWebToken for .NET 8+ compatibility
-                    return new Microsoft.IdentityModel.JsonWebTokens.JsonWebToken(token);
+                    // Parse using legacy handler and return JwtSecurityToken
+                    var handler = new System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler
+                    {
+                        MapInboundClaims = false // Preserve original claim names like 'oid'
+                    };
+                    return handler.ReadJwtToken(token);
                 }
             };
 
+            // Add event handlers for debugging
+            options.Events = new Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerEvents
+            {
+                OnAuthenticationFailed = context =>
+                {
+                    Console.WriteLine($"DEBUG Auth Failed: {context.Exception.Message}");
+                    return Task.CompletedTask;
+                },
+                OnTokenValidated = context =>
+                {
+                    Console.WriteLine($"DEBUG Token Validated: User={context.Principal?.Identity?.Name}, IsAuthenticated={context.Principal?.Identity?.IsAuthenticated}");
+                    var claims = context.Principal?.Claims?.ToList();
+                    Console.WriteLine($"DEBUG Claims count: {claims?.Count ?? 0}");
+                    if (claims != null)
+                    {
+                        // Look specifically for oid claim
+                        var oidClaim = claims.FirstOrDefault(c => c.Type == "oid" || c.Type.Contains("objectidentifier"));
+                        Console.WriteLine($"DEBUG   oid claim found: {oidClaim != null}, value: {oidClaim?.Value}");
 
+                        foreach (var claim in claims.Take(10))
+                        {
+                            Console.WriteLine($"DEBUG   {claim.Type} = {claim.Value}");
+                        }
+                    }
+                    return Task.CompletedTask;
+                }
+            };
         });
 }
 else

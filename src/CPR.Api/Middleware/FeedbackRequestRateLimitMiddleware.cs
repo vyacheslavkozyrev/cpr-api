@@ -33,11 +33,73 @@ public class FeedbackRequestRateLimitMiddleware
         if (context.Request.Method == HttpMethods.Post &&
             context.Request.Path.StartsWithSegments("/api/feedback/request", StringComparison.OrdinalIgnoreCase))
         {
-            // Support both employee_id claim (Entra) and sub/NameIdentifier (Stub auth)
-            var employeeIdClaim = context.User.FindFirst("employee_id")?.Value;
+            Console.WriteLine("DEBUG RateLimitMiddleware: Processing feedback request");
+            Console.WriteLine($"DEBUG RateLimitMiddleware: User.Identity.IsAuthenticated = {context.User?.Identity?.IsAuthenticated}");
+            Console.WriteLine($"DEBUG RateLimitMiddleware: Total claims = {context.User?.Claims?.Count()}");
+
+            // Debug: print all claim types
+            if (context.User?.Claims != null)
+            {
+                foreach (var claim in context.User.Claims.Take(5))
+                {
+                    Console.WriteLine($"DEBUG RateLimitMiddleware:   {claim.Type} = {claim.Value}");
+                }
+            }
+
+            var db = context.RequestServices.GetRequiredService<CPR.Infrastructure.Data.CprDbContext>();
             Guid employeeId;
 
-            if (string.IsNullOrEmpty(employeeIdClaim))
+            // Try Entra External ID authentication first (oid claim)
+            var oidClaim = context.User.FindFirst("oid")?.Value
+                          ?? context.User.FindFirst("http://schemas.microsoft.com/identity/claims/objectidentifier")?.Value;
+            Console.WriteLine($"DEBUG RateLimitMiddleware: oid claim = {oidClaim}");
+
+            if (!string.IsNullOrEmpty(oidClaim) && Guid.TryParse(oidClaim, out var oid))
+            {
+                Console.WriteLine($"DEBUG RateLimitMiddleware: Looking up user by oid = {oid}");
+                // Look up employee by entra_external_id (stored as string in database)
+                var oidString = oid.ToString();
+                var user = await db.Users
+                    .Where(u => u.EntraExternalId == oidString && !u.IsDeleted)
+                    .FirstOrDefaultAsync();
+
+                Console.WriteLine($"DEBUG RateLimitMiddleware: User found = {user != null}, UserId = {user?.Id}");
+
+                if (user?.Id == null)
+                {
+                    Console.WriteLine("DEBUG RateLimitMiddleware: Returning 401 - User not found");
+                    context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                    await context.Response.WriteAsJsonAsync(new
+                    {
+                        error = "Unauthorized",
+                        message = "User record not found for Entra OID"
+                    });
+                    return;
+                }
+
+                // Now get the employee record
+                var employee = await db.Employees
+                    .Where(e => e.UserId == user.Id && !e.IsDeleted)
+                    .FirstOrDefaultAsync();
+
+                Console.WriteLine($"DEBUG RateLimitMiddleware: Employee found = {employee != null}, EmployeeId = {employee?.Id}");
+
+                if (employee == null)
+                {
+                    Console.WriteLine("DEBUG RateLimitMiddleware: Returning 401 - Employee not found");
+                    context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                    await context.Response.WriteAsJsonAsync(new
+                    {
+                        error = "Unauthorized",
+                        message = "Employee record not found for user"
+                    });
+                    return;
+                }
+
+                employeeId = employee.Id;
+                Console.WriteLine($"DEBUG RateLimitMiddleware: Rate limit check for employee {employeeId}");
+            }
+            else
             {
                 // Fallback to stub authentication - use UserId from NameIdentifier claim
                 var userIdClaim = context.User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value
@@ -55,8 +117,7 @@ public class FeedbackRequestRateLimitMiddleware
                 }
 
                 // Look up employee by UserId for stub authentication
-                var employee = await context.RequestServices.GetRequiredService<CPR.Infrastructure.Data.CprDbContext>()
-                    .Employees.FirstOrDefaultAsync(e => e.UserId == userId && !e.IsDeleted);
+                var employee = await db.Employees.FirstOrDefaultAsync(e => e.UserId == userId && !e.IsDeleted);
 
                 if (employee == null)
                 {
@@ -64,22 +125,12 @@ public class FeedbackRequestRateLimitMiddleware
                     await context.Response.WriteAsJsonAsync(new
                     {
                         error = "Unauthorized",
-                        message = "Employee record not found"
+                        message = "Employee record not found for stub user"
                     });
                     return;
                 }
 
                 employeeId = employee.Id;
-            }
-            else if (!Guid.TryParse(employeeIdClaim, out employeeId))
-            {
-                context.Response.StatusCode = StatusCodes.Status401Unauthorized;
-                await context.Response.WriteAsJsonAsync(new
-                {
-                    error = "Unauthorized",
-                    message = "Invalid employee_id claim format"
-                });
-                return;
             }
 
             // Check requests created in last 24 hours

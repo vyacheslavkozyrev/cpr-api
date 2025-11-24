@@ -55,14 +55,34 @@ public class FeedbackRequestController : ControllerBase
     [ProducesResponseType(401)]
     public async Task<IActionResult> CreateFeedbackRequest([FromBody] CreateFeedbackRequestDto dto)
     {
+        // DEBUG: Log authentication status
+        Console.WriteLine($"DEBUG CreateFeedbackRequest: User.Identity.IsAuthenticated = {User?.Identity?.IsAuthenticated}");
+        Console.WriteLine($"DEBUG CreateFeedbackRequest: User.Identity.Name = {User?.Identity?.Name}");
+        Console.WriteLine($"DEBUG CreateFeedbackRequest: Claims count = {User?.Claims?.Count()}");
+        if (User?.Claims != null)
+        {
+            foreach (var claim in User.Claims.Take(5))
+            {
+                Console.WriteLine($"DEBUG Claim: {claim.Type} = {claim.Value}");
+            }
+        }
+
         if (!ModelState.IsValid)
         {
+            Console.WriteLine("DEBUG CreateFeedbackRequest: ModelState is invalid");
+            foreach (var error in ModelState)
+            {
+                Console.WriteLine($"DEBUG   {error.Key}: {string.Join(", ", error.Value?.Errors.Select(e => e.ErrorMessage) ?? [])}");
+            }
             return BadRequest(ModelState);
         }
 
         var profile = await _userService.GetCurrentUserProfileAsync(User);
+        Console.WriteLine($"DEBUG CreateFeedbackRequest: profile = {(profile == null ? "NULL" : $"EmployeeId={profile.EmployeeId}")}");
+
         if (profile == null)
         {
+            Console.WriteLine("DEBUG CreateFeedbackRequest: Returning Unauthorized because profile is null");
             return Unauthorized();
         }
 
@@ -76,11 +96,14 @@ public class FeedbackRequestController : ControllerBase
 
         try
         {
+            Console.WriteLine($"DEBUG CreateFeedbackRequest: Calling service with requestorId={requestorId}, employees={dto.EmployeeIds?.Count ?? 0}");
             var result = await _feedbackRequestService.CreateAsync(requestorId, dto);
+            Console.WriteLine($"DEBUG CreateFeedbackRequest: Success! Created feedback request {result.Id}");
             return CreatedAtAction(nameof(GetFeedbackRequest), new { id = result.Id }, result);
         }
         catch (ArgumentException ex)
         {
+            Console.WriteLine($"DEBUG CreateFeedbackRequest: ArgumentException - {ex.Message}");
             return Problem(
                 title: "Invalid feedback request data",
                 detail: ex.Message,
@@ -88,6 +111,7 @@ public class FeedbackRequestController : ControllerBase
         }
         catch (InvalidOperationException ex)
         {
+            Console.WriteLine($"DEBUG CreateFeedbackRequest: InvalidOperationException - {ex.Message}");
             return Problem(
                 title: "Operation not allowed",
                 detail: ex.Message,

@@ -409,6 +409,9 @@ namespace CPR.Infrastructure.Repositories
             DateTimeOffset currentDate,
             bool includeDeleted = false)
         {
+            // Convert DateTimeOffset to DateTime for comparison since DueDate is DateTime
+            var currentDateTime = currentDate.DateTime;
+            
             var query = _db.FeedbackRequests
                 .Include(fr => fr.Recipients)
                     .ThenInclude(r => r.Employee)
@@ -418,7 +421,7 @@ namespace CPR.Infrastructure.Repositories
                 .Include(fr => fr.Project)
                 .Include(fr => fr.Goal)
                 .Where(fr => fr.DueDate.HasValue &&
-                             fr.DueDate.Value < currentDate);
+                             fr.DueDate.Value < currentDateTime);
 
             if (!includeDeleted)
             {

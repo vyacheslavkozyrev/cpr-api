@@ -5,7 +5,7 @@
         "id",
         "code",
         "title",
-        "createdAt",
+        "created_at",
         "roles",
         "team"
     ],
@@ -26,25 +26,25 @@
                 "null"
             ]
         },
-        "ownerId": {
+        "owner_id": {
             "type": [
                 "string",
                 "null"
             ],
             "format": "uuid"
         },
-        "sponsorId": {
+        "sponsor_id": {
             "type": [
                 "string",
                 "null"
             ],
             "format": "uuid"
         },
-        "createdAt": {
+        "created_at": {
             "type": "string",
             "format": "date-time"
         },
-        "modifiedAt": {
+        "modified_at": {
             "type": [
                 "string",
                 "null"
@@ -57,16 +57,16 @@
                 "type": "object",
                 "required": [
                     "id",
-                    "projectId",
+                    "project_id",
                     "title",
-                    "createdAt"
+                    "created_at"
                 ],
                 "properties": {
                     "id": {
                         "type": "string",
                         "format": "uuid"
                     },
-                    "projectId": {
+                    "project_id": {
                         "type": "string",
                         "format": "uuid"
                     },
@@ -79,11 +79,11 @@
                             "null"
                         ]
                     },
-                    "createdAt": {
+                    "created_at": {
                         "type": "string",
                         "format": "date-time"
                     },
-                    "modifiedAt": {
+                    "modified_at": {
                         "type": [
                             "string",
                             "null"
@@ -100,28 +100,28 @@
                 "type": "object",
                 "required": [
                     "id",
-                    "projectRoleId",
-                    "employeeId",
-                    "createdAt"
+                    "project_role_id",
+                    "employee_id",
+                    "created_at"
                 ],
                 "properties": {
                     "id": {
                         "type": "string",
                         "format": "uuid"
                     },
-                    "projectRoleId": {
+                    "project_role_id": {
                         "type": "string",
                         "format": "uuid"
                     },
-                    "employeeId": {
+                    "employee_id": {
                         "type": "string",
                         "format": "uuid"
                     },
-                    "createdAt": {
+                    "created_at": {
                         "type": "string",
                         "format": "date-time"
                     },
-                    "modifiedAt": {
+                    "modified_at": {
                         "type": [
                             "string",
                             "null"
