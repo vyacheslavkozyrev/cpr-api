@@ -5,7 +5,7 @@ namespace CPR.Domain.Entities
     public class Feedback : AuditableEntity
     {
         public Guid Id { get; set; }
-        public Guid GoalId { get; set; }
+        public Guid? GoalId { get; set; }
         public Guid? ProjectId { get; set; }
         public Guid FromEmployeeId { get; set; }
         public Guid ToEmployeeId { get; set; }

@@ -8,6 +8,7 @@ namespace CPR.Application.Services
     {
         Task<GoalDto> CreateGoalAsync(Guid ownerId, CreateGoalDto dto);
         Task<GoalDto[]> GetGoalsForUserAsync(Guid ownerId, int page = 1, int perPage = 20);
+        Task<GoalDto[]> GetEmployeeGoalsAsync(Guid employeeId, Guid requestingUserId, int page = 1, int perPage = 20);
         Task<GoalDto?> GetGoalByIdAsync(Guid id, Guid requestingUserId);
         Task<GoalDto> UpdateGoalAsync(Guid id, Guid requestingUserId, UpdateGoalDto dto);
         Task DeleteGoalAsync(Guid id, Guid requestingUserId);

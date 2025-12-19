@@ -272,6 +272,58 @@ namespace CPR.Infrastructure.Services
             }).ToArray();
         }
 
+        public async Task<GoalDto[]> GetEmployeeGoalsAsync(Guid employeeId, Guid requestingUserId, int page = 1, int perPage = 20)
+        {
+            if (page < 1) throw new ArgumentOutOfRangeException(nameof(page));
+            if (perPage < 1) throw new ArgumentOutOfRangeException(nameof(perPage));
+
+            // Fetch all goals for the employee
+            var all = await _repo.QueryByEmployee(employeeId).ToListAsync();
+
+            // Filter by visibility:
+            // - If requesting user is the owner, show all goals
+            // - Otherwise, only show goals with visibility 'team' or 'org' (exclude 'private' or null)
+            var visibleGoals = all.Where(g =>
+                g.EmployeeId == requestingUserId ||
+                (g.Visibility != null && g.Visibility.ToLower() != "private")
+            ).ToList();
+
+            var items = visibleGoals.OrderByDescending(g => g.CreatedAt).Skip((page - 1) * perPage).Take(perPage).ToArray();
+
+            // Load tasks for the returned page of goals
+            var goalIds = items.Select(g => g.Id).ToArray();
+            var tasks = await _db.GoalTasks.Where(t => goalIds.Contains(t.GoalId) && !t.IsDeleted).ToListAsync();
+
+            return items.Select(g => new GoalDto
+            {
+                Id = g.Id,
+                EmployeeId = g.EmployeeId,
+                Title = g.Title,
+                Description = g.Description,
+                Status = g.Status,
+                CreatedAt = g.CreatedAt,
+                RelatedSkillId = g.RelatedSkillId,
+                RelatedSkillLevelId = g.RelatedSkillLevelId,
+                Deadline = g.Deadline,
+                IsCompleted = g.IsCompleted,
+                CompletedAt = g.CompletedAt,
+                ProgressPercent = g.ProgressPercent,
+                Priority = g.Priority,
+                Tasks = tasks.Where(t => t.GoalId == g.Id).Select(t => new TaskDto
+                {
+                    Id = t.Id,
+                    GoalId = t.GoalId,
+                    Title = t.Title,
+                    Description = t.Description,
+                    Deadline = t.Deadline,
+                    IsCompleted = t.IsCompleted,
+                    CompletedAt = t.CompletedAt,
+                    CreatedAt = t.CreatedAt,
+                    ModifiedAt = t.ModifiedAt
+                }).ToList()
+            }).ToArray();
+        }
+
         public async Task<GoalDto?> GetGoalByIdAsync(Guid id, Guid requestingUserId)
         {
             var g = await _repo.GetByIdAsync(id);

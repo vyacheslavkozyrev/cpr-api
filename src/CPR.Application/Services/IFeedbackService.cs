@@ -53,5 +53,13 @@ namespace CPR.Application.Services
         /// <param name="employeeId">Employee ID to get feedback for</param>
         /// <returns>List of feedback addressed to the current user</returns>
         Task<IEnumerable<MyFeedbackDto>> GetMyFeedbackAsync(Guid employeeId);
+
+        /// <summary>
+        /// Get a specific feedback by ID
+        /// </summary>
+        /// <param name="feedbackId">Feedback ID</param>
+        /// <param name="requestingEmployeeId">Employee ID making the request</param>
+        /// <returns>Feedback details</returns>
+        Task<FeedbackDto?> GetFeedbackByIdAsync(Guid feedbackId, Guid requestingEmployeeId);
     }
 }

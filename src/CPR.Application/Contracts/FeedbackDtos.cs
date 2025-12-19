@@ -402,10 +402,9 @@ namespace CPR.Application.Contracts
         [JsonPropertyName("project_id")]
         public Guid? ProjectId { get; set; }
 
-        /// <summary>The goal this feedback is for</summary>
-        [Required(ErrorMessage = "Goal ID is required")]
+        /// <summary>The goal this feedback is for (optional for unsolicited feedback)</summary>
         [JsonPropertyName("goal_id")]
-        public Guid GoalId { get; set; }
+        public Guid? GoalId { get; set; }
 
         /// <summary>The employee receiving the feedback</summary>
         [Required(ErrorMessage = "Employee ID is required")]
@@ -436,8 +435,8 @@ namespace CPR.Application.Contracts
         /// <summary>The project this feedback is for</summary>
         public Guid? ProjectId { get; set; }
 
-        /// <summary>The goal this feedback is for</summary>
-        public Guid GoalId { get; set; }
+        /// <summary>The goal this feedback is for (optional for unsolicited feedback)</summary>
+        public Guid? GoalId { get; set; }
 
         /// <summary>The employee providing the feedback</summary>
         public Guid FromEmployeeId { get; set; }
@@ -479,8 +478,8 @@ namespace CPR.Application.Contracts
         /// <summary>The project this feedback is for</summary>
         public Guid? ProjectId { get; set; }
 
-        /// <summary>The goal this feedback is for</summary>
-        public Guid GoalId { get; set; }
+        /// <summary>The goal this feedback is for (optional for unsolicited feedback)</summary>
+        public Guid? GoalId { get; set; }
 
         /// <summary>The employee providing the feedback</summary>
         public Guid FromEmployeeId { get; set; }
