@@ -247,4 +247,65 @@ public class MeFeedbackController : ControllerBase
                 statusCode: StatusCodes.Status500InternalServerError);
         }
     }
+
+    /// <summary>
+    /// Get feedback analytics for the current user
+    /// </summary>
+    /// <param name="date_from">Start date (ISO 8601 format)</param>
+    /// <param name="date_to">End date (ISO 8601 format)</param>
+    /// <param name="include_comparison">Include comparison with previous period</param>
+    /// <returns>Analytics data</returns>
+    [Authorize]
+    [HttpGet("/api/me/feedback/analytics")]
+    [ProducesResponseType(typeof(FeedbackAnalyticsDto), 200)]
+    [ProducesResponseType(typeof(Microsoft.AspNetCore.Mvc.ProblemDetails), 401)]
+    [ProducesResponseType(typeof(Microsoft.AspNetCore.Mvc.ProblemDetails), 400)]
+    public async Task<IActionResult> GetMyFeedbackAnalytics(
+        [FromQuery] string date_from,
+        [FromQuery] string date_to,
+        [FromQuery] bool include_comparison = false)
+    {
+        var profile = await _userService.GetCurrentUserProfileAsync(User);
+        if (profile == null)
+        {
+            return Problem(
+                title: "Authentication required",
+                detail: "User profile not found",
+                statusCode: StatusCodes.Status401Unauthorized);
+        }
+
+        if (!Guid.TryParse(profile.EmployeeId, out var employeeId))
+        {
+            return Problem(
+                title: "Invalid employee ID",
+                detail: "The employee ID in the user profile is not valid",
+                statusCode: StatusCodes.Status400BadRequest);
+        }
+
+        if (string.IsNullOrWhiteSpace(date_from) || string.IsNullOrWhiteSpace(date_to))
+        {
+            return Problem(
+                title: "Invalid date range",
+                detail: "Both date_from and date_to are required",
+                statusCode: StatusCodes.Status400BadRequest);
+        }
+
+        try
+        {
+            var analytics = await _feedbackService.GetFeedbackAnalyticsAsync(
+                employeeId,
+                date_from,
+                date_to,
+                include_comparison);
+            return Ok(analytics);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Failed to retrieve analytics for employee {EmployeeId}", employeeId);
+            return Problem(
+                title: "Failed to retrieve analytics",
+                detail: $"An error occurred while retrieving feedback analytics: {ex.Message}",
+                statusCode: StatusCodes.Status500InternalServerError);
+        }
+    }
 }

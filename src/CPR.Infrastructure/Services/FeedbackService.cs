@@ -524,5 +524,230 @@ namespace CPR.Infrastructure.Services
                 }
             };
         }
+
+        /// <inheritdoc/>
+        public async Task<FeedbackAnalyticsDto> GetFeedbackAnalyticsAsync(Guid employeeId, string dateFrom, string dateTo, bool includeComparison)
+        {
+            // Parse dates and convert to UTC (PostgreSQL requires UTC for timestamp with time zone)
+            if (!DateTime.TryParse(dateFrom, out var startDateTime))
+            {
+                throw new ArgumentException("Invalid date format for date_from", nameof(dateFrom));
+            }
+
+            if (!DateTime.TryParse(dateTo, out var endDateTime))
+            {
+                throw new ArgumentException("Invalid date format for date_to", nameof(dateTo));
+            }
+
+            // Convert to UTC DateTimeOffset
+            var startDate = new DateTimeOffset(startDateTime, TimeSpan.Zero);
+            var endDate = new DateTimeOffset(endDateTime.AddDays(1).AddTicks(-1), TimeSpan.Zero); // End of day
+
+            // Get all feedback for the employee in the date range
+            var feedbackQuery = _feedbackRepo.QueryByToEmployeeId(employeeId)
+                .Where(f => f.CreatedAt >= startDate && f.CreatedAt <= endDate);
+
+            var feedbackList = await feedbackQuery.ToListAsync();
+
+            // Calculate basic metrics
+            var totalCount = feedbackList.Count;
+            var averageRating = feedbackList.Any()
+                ? (decimal)feedbackList.Average(f => f.Rating ?? 0)
+                : 0m;
+
+            // Rating distribution
+            var ratingDistribution = new RatingDistributionDto
+            {
+                OneStar = feedbackList.Count(f => f.Rating == 1),
+                TwoStar = feedbackList.Count(f => f.Rating == 2),
+                ThreeStar = feedbackList.Count(f => f.Rating == 3),
+                FourStar = feedbackList.Count(f => f.Rating == 4),
+                FiveStar = feedbackList.Count(f => f.Rating == 5)
+            };
+
+            // Monthly trend (last 12 months from end date)
+            var monthlyTrend = new List<MonthlyFeedbackTrendDto>();
+            var startMonth = endDate.AddMonths(-11); // Go back 11 months for 12 total months
+
+            for (int i = 0; i < 12; i++)
+            {
+                var monthStart = startMonth.AddMonths(i);
+                var monthEnd = monthStart.AddMonths(1);
+
+                var monthFeedback = feedbackList
+                    .Where(f => f.CreatedAt >= monthStart && f.CreatedAt < monthEnd)
+                    .ToList();
+
+                monthlyTrend.Add(new MonthlyFeedbackTrendDto
+                {
+                    Month = monthStart.ToString("yyyy-MM"),
+                    Count = monthFeedback.Count,
+                    AverageRating = monthFeedback.Any()
+                        ? (decimal)monthFeedback.Average(f => f.Rating ?? 0)
+                        : 0m
+                });
+            }
+
+            // Top providers (top 5 employees who gave feedback)
+            var topProviders = await feedbackQuery
+                .GroupBy(f => f.FromEmployeeId)
+                .Select(g => new
+                {
+                    EmployeeId = g.Key,
+                    Count = g.Count(),
+                    AverageRating = g.Average(f => (double?)f.Rating) ?? 0
+                })
+                .OrderByDescending(x => x.Count)
+                .Take(5)
+                .ToListAsync();
+
+            var topProviderDtos = new List<TopProviderDto>();
+            foreach (var provider in topProviders)
+            {
+                var employee = await _db.Employees
+                    .Include(e => e.Position)
+                    .Include(e => e.Department)
+                    .FirstOrDefaultAsync(e => e.Id == provider.EmployeeId);
+
+                if (employee == null) continue;
+
+                var user = await _db.Users.FirstOrDefaultAsync(u => u.Id == employee.UserId);
+
+                topProviderDtos.Add(new TopProviderDto
+                {
+                    Employee = new EmployeeSummaryDto
+                    {
+                        Id = employee.Id,
+                        DisplayName = user?.DisplayName ?? "Unknown",
+                        Email = null,
+                        JobTitle = employee.Position?.Title,
+                        Department = employee.Department?.Name
+                    },
+                    Count = provider.Count,
+                    AverageRating = (decimal)provider.AverageRating
+                });
+            }
+
+            // Top goals (top 5 goals with most feedback)
+            var topGoals = await feedbackQuery
+                .Where(f => f.GoalId.HasValue)
+                .GroupBy(f => f.GoalId)
+                .Select(g => new
+                {
+                    GoalId = g.Key,
+                    Count = g.Count(),
+                    AverageRating = g.Average(f => (double?)f.Rating) ?? 0
+                })
+                .OrderByDescending(x => x.Count)
+                .Take(5)
+                .ToListAsync();
+
+            var topGoalDtos = new List<TopGoalDto>();
+            foreach (var goalStat in topGoals)
+            {
+                if (goalStat.GoalId.HasValue)
+                {
+                    var goal = await _db.Goals.FirstOrDefaultAsync(g => g.Id == goalStat.GoalId.Value);
+                    if (goal != null)
+                    {
+                        topGoalDtos.Add(new TopGoalDto
+                        {
+                            Goal = new GoalSummaryDto
+                            {
+                                Id = goal.Id,
+                                Title = goal.Title ?? "Unknown Goal",
+                                Description = goal.Description
+                            },
+                            Count = goalStat.Count,
+                            AverageRating = (decimal)goalStat.AverageRating
+                        });
+                    }
+                }
+            }
+
+            // Top projects (top 5 projects with most feedback)
+            var topProjects = await feedbackQuery
+                .Where(f => f.ProjectId.HasValue)
+                .GroupBy(f => f.ProjectId)
+                .Select(g => new
+                {
+                    ProjectId = g.Key,
+                    Count = g.Count(),
+                    AverageRating = g.Average(f => (double?)f.Rating) ?? 0
+                })
+                .OrderByDescending(x => x.Count)
+                .Take(5)
+                .ToListAsync();
+
+            var topProjectDtos = new List<TopProjectDto>();
+            foreach (var projectStat in topProjects)
+            {
+                if (projectStat.ProjectId.HasValue)
+                {
+                    var project = await _db.Projects.FirstOrDefaultAsync(p => p.Id == projectStat.ProjectId.Value);
+                    if (project != null)
+                    {
+                        topProjectDtos.Add(new TopProjectDto
+                        {
+                            Project = new ProjectSummaryDto
+                            {
+                                Id = project.Id,
+                                Name = project.Title ?? "Unknown Project",
+                                Description = project.Description
+                            },
+                            Count = projectStat.Count,
+                            AverageRating = (decimal)projectStat.AverageRating
+                        });
+                    }
+                }
+            }
+
+            // Comparison data (if requested)
+            ComparisonDataDto? comparison = null;
+            if (includeComparison)
+            {
+                var duration = endDate - startDate;
+                var previousStart = startDate.AddTicks(-duration.Ticks);
+                var previousEnd = startDate;
+
+                var previousFeedback = await _feedbackRepo.QueryByToEmployeeId(employeeId)
+                    .Where(f => f.CreatedAt >= previousStart && f.CreatedAt < previousEnd)
+                    .ToListAsync();
+
+                var previousTotal = previousFeedback.Count;
+                var previousAvgRating = previousFeedback.Any()
+                    ? (decimal)previousFeedback.Average(f => f.Rating ?? 0)
+                    : 0m;
+
+                var totalDelta = totalCount - previousTotal;
+                var totalDeltaPercent = previousTotal > 0
+                    ? (decimal)totalDelta / previousTotal * 100
+                    : 0m;
+
+                var ratingDelta = averageRating - previousAvgRating;
+
+                comparison = new ComparisonDataDto
+                {
+                    PreviousTotal = previousTotal,
+                    PreviousAverageRating = previousAvgRating,
+                    TotalDeltaPercent = totalDeltaPercent,
+                    RatingDelta = ratingDelta,
+                    PreviousPeriodStart = previousStart.ToString("yyyy-MM-dd"),
+                    PreviousPeriodEnd = previousEnd.ToString("yyyy-MM-dd")
+                };
+            }
+
+            return new FeedbackAnalyticsDto
+            {
+                TotalCount = totalCount,
+                AverageRating = averageRating,
+                RatingDistribution = ratingDistribution,
+                MonthlyTrend = monthlyTrend,
+                TopProviders = topProviderDtos,
+                TopGoals = topGoalDtos,
+                TopProjects = topProjectDtos,
+                Comparison = comparison
+            };
+        }
     }
 }
