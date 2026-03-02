@@ -31,6 +31,8 @@ namespace CPR.Api
             services.AddScoped<CPR.Application.Services.IProjectService, CPR.Infrastructure.Services.ProjectService>();
             services.AddScoped<CPR.Application.Services.IUserSyncService, CPR.Infrastructure.Services.UserSyncService>();
             services.AddScoped<CPR.Application.Services.IDashboardService, CPR.Infrastructure.Services.DashboardService>();
+            services.AddScoped<CPR.Application.Repositories.IReviewCycleRepository, CPR.Infrastructure.Repositories.ReviewCycleRepository>();
+            services.AddScoped<CPR.Application.Services.IReviewCycleService, CPR.Infrastructure.Services.ReviewCycleService>();
 
             // Register database seeder
             services.AddScoped<CPR.Infrastructure.Services.DatabaseSeeder>();

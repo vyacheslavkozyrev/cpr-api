@@ -1,6 +1,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using CPR.Domain.Entities;
+using CPR.Infrastructure.Data.Configurations;
 
 namespace CPR.Infrastructure.Data
 {
@@ -36,6 +37,9 @@ namespace CPR.Infrastructure.Data
         public DbSet<ProjectTeam> ProjectTeams { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<UserToRole> UserRoles { get; set; }
+        public DbSet<ReviewCycle> ReviewCycles { get; set; }
+        public DbSet<ReviewNominee> ReviewNominees { get; set; }
+        public DbSet<ReviewResponse> ReviewResponses { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -461,6 +465,10 @@ namespace CPR.Infrastructure.Data
                 b.Property(r => r.DeletedBy).HasColumnName("deleted_by");
                 b.Property(r => r.DeletedAt).HasColumnName("deleted_at");
             });
+
+            modelBuilder.ApplyConfiguration(new ReviewCycleConfiguration());
+            modelBuilder.ApplyConfiguration(new ReviewNomineeConfiguration());
+            modelBuilder.ApplyConfiguration(new ReviewResponseConfiguration());
 
             modelBuilder.Entity<UserToRole>(b =>
             {

@@ -1,10 +1,13 @@
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using CPR.Api.Services;
 using CPR.Application.Services;
 using CPR.Application.Contracts;
-using System.Security.Claims;
-// ...existing usings...
+using CPR.Application.DTOs.ReviewCycles;
+using System.Collections.Generic;
 
 namespace CPR.Api.Controllers;
 
@@ -17,16 +20,19 @@ public class MeController : ControllerBase
 {
     private readonly IUserService _userService;
     private readonly IClassificationService _classificationService;
+    private readonly IReviewCycleService _reviewCycleService;
 
     /// <summary>
     /// Creates a new instance of <see cref="MeController"/>.
     /// </summary>
     /// <param name="userService">Service to read the current user's profile.</param>
     /// <param name="classificationService">Service to manage skill assessments.</param>
-    public MeController(IUserService userService, IClassificationService classificationService)
+    /// <param name="reviewCycleService">Service for review cycle operations.</param>
+    public MeController(IUserService userService, IClassificationService classificationService, IReviewCycleService reviewCycleService)
     {
         _userService = userService;
         _classificationService = classificationService;
+        _reviewCycleService = reviewCycleService;
     }
 
     /// <summary>
@@ -95,6 +101,25 @@ public class MeController : ControllerBase
         {
             return Conflict(ex.Message);
         }
+    }
+
+    /// <summary>
+    /// Get the current user's pending 360-degree review requests.
+    /// </summary>
+    [Authorize]
+    [HttpGet("review-requests")]
+    [ProducesResponseType(typeof(DataListDto<ReviewRequestDto>), 200)]
+    [ProducesResponseType(401)]
+    public async Task<IActionResult> GetMyReviewRequests(CancellationToken ct)
+    {
+        var profile = await _userService.GetCurrentUserProfileAsync(User);
+        if (profile == null) return Unauthorized();
+
+        if (!Guid.TryParse(profile.EmployeeId, out var employeeId))
+            return BadRequest("Invalid employee ID");
+
+        var requests = await _reviewCycleService.ListMyReviewRequestsAsync(employeeId, ct);
+        return Ok(requests);
     }
 
     /// <summary>
