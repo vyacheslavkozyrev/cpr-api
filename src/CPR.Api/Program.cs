@@ -183,6 +183,12 @@ builder.Services.AddDbContext<CprDbContext>(options =>
 // Configure ProblemDetails (Hellang middleware) - register before building the app
 builder.Services.AddProblemDetails(options =>
 {
+    // Include exception details in non-production environments for debugging
+    options.IncludeExceptionDetails = (ctx, ex) =>
+        ctx.RequestServices.GetRequiredService<Microsoft.AspNetCore.Hosting.IWebHostEnvironment>()
+            .IsEnvironment("Test") || ctx.RequestServices.GetRequiredService<Microsoft.AspNetCore.Hosting.IWebHostEnvironment>()
+            .IsDevelopment();
+
     // Map ArgumentNullException to 400
     options.Map<ArgumentNullException>(ex => new Microsoft.AspNetCore.Mvc.ProblemDetails
     {
