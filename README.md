@@ -161,6 +161,7 @@ The API will:
 3. Seed initial data (roles, users, skills, etc.)
 4. Start on `http://localhost:5000`
 5. Swagger UI available at `http://localhost:5000/swagger`
+6. Hangfire dashboard available at `http://localhost:5000/hangfire` (dev only)
 
 ### 3. Access Swagger UI
 
@@ -207,6 +208,8 @@ The API uses HMAC-signed tokens for development:
 **Token Format:** `{userId}.{base64Signature}`
 
 Where: `signature = HMACSHA256(JWT_SIGNING_KEY, userId)`
+
+> **Note**: The `JWT_SIGNING_KEY` is treated as a plain UTF-8 string — do not base64-decode it. This stub is for local development and testing only; do not use it in production.
 
 ### Generate Token Manually
 
@@ -343,41 +346,11 @@ dotnet ef database update --project src\CPR.Infrastructure --startup-project src
 
 Internal project - All rights reserved
 
-4) Call `/me` from PowerShell (no Swagger):
+## OpenAPI & Client Generation
 
-```powershell
-# assumes $token variable is available or re-run generation snippet
-Invoke-RestMethod -Uri http://localhost:5000/me -Headers @{ Authorization = "Bearer $token" } -Method Get
-```
-
-## Running integration tests locally with Postgres
-
-Both dev and test PostgreSQL instances are provided in `docker/docker-compose.yml`.
-
-Start the databases:
-
-```powershell
-docker-compose -f docker/docker-compose.yml up -d
-```
-
-The test database runs on port 5433 and is automatically used by integration tests via `.env.test` configuration.
-
-Run the integration tests:
-
-```powershell
-dotnet test tests/CPR.IntegrationTests/CPR.IntegrationTests.csproj
-```
-
-When finished, bring down the databases:
-
-```powershell
-docker-compose -f docker/docker-compose.yml down
-```
-OpenAPI & client generation
----------------------------
 You can generate client SDKs from the API OpenAPI document exposed at `/swagger/v1/swagger.json`.
 
-1) Run the API locally (PowerShell):
+1. Run the API locally (PowerShell):
 
 ```powershell
 $env:JWT_SIGNING_KEY = 'test-signing-key-12345'
@@ -385,14 +358,13 @@ $env:ASPNETCORE_ENVIRONMENT = 'Development'
 dotnet run --project src\CPR.Api --urls "http://localhost:5000"
 ```
 
-2) Download the OpenAPI JSON (PowerShell):
+2. Download the OpenAPI JSON (PowerShell):
 
 ```powershell
-# fetch swagger.json
 Invoke-WebRequest -Uri http://localhost:5000/swagger/v1/swagger.json -OutFile .\swagger.json
 ```
 
-3) Generate a C# client using NSwag (recommended):
+3. Generate a C# client using NSwag (recommended):
 
 ```powershell
 # install once
@@ -409,108 +381,12 @@ var client = new CprApi.Client.CprApiClient(http);
 var positions = await client.GetPositionsAsync();
 ```
 
-4) Generate TypeScript (optional) with OpenAPI Generator (requires Java):
+4. Generate TypeScript (optional) with OpenAPI Generator (requires Java):
 
 ```powershell
-# generate TypeScript fetch client (openapi-generator-cli required)
 java -jar openapi-generator-cli.jar generate -i swagger.json -g typescript-fetch -o sdk/typescript
 ```
 
-Publishing / CI
-- You can generate SDKs in CI and publish to an internal NuGet/NPM feed. Save `swagger.json` as a pipeline artifact or fetch `$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/...` in GitHub Actions, then run the above generator commands.
+You can generate SDKs in CI and publish to an internal NuGet/NPM feed. Save `swagger.json` as a pipeline artifact, then run the generator commands above.
 
-Notes
-- The Swagger UI in development will include example responses for taxonomy endpoints (career, career_track, positions).
-- If you prefer a different generator (AutoRest, NSwag, openapi-generator), choose the language generator that fits your release workflow.
-
-## API Security & Validation Features
-
-This API includes comprehensive security and validation features to ensure data integrity and prevent common web vulnerabilities:
-
-### Input Validation
-- **Model Validation**: All endpoints use DataAnnotations for request validation
-- **Custom Validators**: Business rule validation (e.g., preventing self-feedback)
-- **Range Validation**: Numeric fields validated within acceptable ranges
-- **String Length Validation**: Text fields validated for minimum/maximum lengths
-
-### Input Sanitization
-- **HTML Tag Removal**: Automatic stripping of HTML tags from user input
-- **Script Filtering**: Prevention of JavaScript injection attacks
-- **SQL Injection Prevention**: Filtering of suspicious SQL keywords
-- **Content Validation**: Special character ratio validation to prevent spam/malicious content
-
-### Error Handling
-- **RFC7807 Compliance**: All errors follow Problem Details format for consistent API responses
-- **Detailed Validation Messages**: Clear, actionable error messages for validation failures
-- **Structured Error Responses**: Machine-readable error format for better client integration
-
-### Security Best Practices
-- **Authentication Required**: JWT Bearer token authentication for all protected endpoints
-- **Authorization**: Role-based access control for different user types (Employee, Manager, HR, Admin)
-- **Input Sanitization**: Automatic cleaning of user-generated content
-- **Validation Layers**: Multiple validation layers (model, business logic, data integrity)
-
-### Example Validation Error Response
-```json
-{
-  "type": "https://tools.ietf.org/html/rfc7807",
-  "title": "Validation failed",
-  "detail": "One or more validation errors occurred",
-  "status": 400,
-  "instance": "/api/feedback",
-  "errors": {
-    "Content": ["Feedback content must be between 10 and 2000 characters"],
-    "Rating": ["Rating must be between 1 and 5"]
-  }
-}
-```
-
-For detailed API endpoint documentation including validation requirements, see `endpoints.md`.
-
-Notes
-- The stub signing key stored in the `JWT_SIGNING_KEY` environment variable is treated as a plain UTF-8 string (do not base64-decode it).
-- This auth stub is for local development and testing only. Do not use it in production.
-
-Scripts
--------
-This repo includes convenience scripts in the `scripts/` folder for running tests and starting the API with a generated token.
-
-Windows (PowerShell):
-
-```powershell
-# run all tests (unit, contract, integration)
-.\scripts\run-tests.cmd
-
-# start API as employee (token copied to clipboard)
-.\scripts\run-api-as-employee.cmd
-
-# start API as manager (token copied to clipboard)
-.\scripts\run-api-as-manager.cmd
-
-# start API as administrator (token copied to clipboard)
-.\scripts\run-api-as-administrator.cmd
-```
-
-Unix / CI (bash):
-
-```bash
-# make sure script is executable once on your machine or CI job
-chmod +x ./scripts/run-tests.sh
-./scripts/run-tests.sh    # default: runs unit, contract, integration
-./scripts/run-tests.sh integration
-```
-
-If you need to override the test database name set `DATABASE_NAME` before invoking the scripts.
-
-PowerShell helpers
-------------------
-Use the included PowerShell scripts on Windows rather than the shell scripts:
-
-```powershell
-# generate a token and copy to clipboard
-.\scripts\generate-token.ps1 -SigningKey 'test-signing-key-12345' -UserId '00000000-0000-0000-0000-000000000123' -Copy
-
-# run tests (unit, contract, integration)
-.\scripts\run-tests.ps1
-```
-
+> **Note**: The Swagger UI in development includes example responses for taxonomy endpoints (career, career_track, positions). If you prefer a different generator (AutoRest, NSwag, openapi-generator), choose the language generator that fits your release workflow.
