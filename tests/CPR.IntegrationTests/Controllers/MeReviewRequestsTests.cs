@@ -9,17 +9,21 @@ using CPR.Application.DTOs.ReviewCycles;
 
 namespace CPR.IntegrationTests.Controllers
 {
-    [Collection("SequentialIntegrationTestCollection")]
-    public class MeReviewRequestsTests : IClassFixture<CustomWebApplicationFactory>, IClassFixture<DatabaseCleanupFixture>
+    [Collection("Integration")]
+    public class MeReviewRequestsTests : IAsyncLifetime
     {
-        private readonly CustomWebApplicationFactory _factory;
+        private readonly IntegrationTestFixture _fixture;
+        private CustomWebApplicationFactory _factory => _fixture.Factory;
 
         private const string EmployeeUserId = "c6874b28-e2fa-4835-8e8f-159bd5067091";
 
-        public MeReviewRequestsTests(CustomWebApplicationFactory factory, DatabaseCleanupFixture dbFixture)
+        public MeReviewRequestsTests(IntegrationTestFixture fixture)
         {
-            _factory = factory;
+            _fixture = fixture;
         }
+
+        public Task InitializeAsync() => _fixture.ResetAsync();
+        public Task DisposeAsync() => Task.CompletedTask;
 
         private HttpClient CreateAuthenticatedClient(string userId)
         {

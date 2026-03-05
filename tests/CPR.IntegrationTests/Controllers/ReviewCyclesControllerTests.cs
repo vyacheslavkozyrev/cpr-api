@@ -9,20 +9,24 @@ using CPR.Application.DTOs.ReviewCycles;
 
 namespace CPR.IntegrationTests.Controllers
 {
-    [Collection("SequentialIntegrationTestCollection")]
-    public class ReviewCyclesControllerTests : IClassFixture<CustomWebApplicationFactory>, IClassFixture<DatabaseCleanupFixture>
+    [Collection("Integration")]
+    public class ReviewCyclesControllerTests : IAsyncLifetime
     {
-        private readonly CustomWebApplicationFactory _factory;
+        private readonly IntegrationTestFixture _fixture;
+        private CustomWebApplicationFactory _factory => _fixture.Factory;
 
         // Seeded user: John Doe (VP Engineering) — has Director-level access in seed data
         private const string DirectorUserId = "679add6e-6c29-4e00-b6a5-b69c8e0f3445";
         // Seeded user: Jane Smith — regular employee
         private const string EmployeeUserId = "c6874b28-e2fa-4835-8e8f-159bd5067091";
 
-        public ReviewCyclesControllerTests(CustomWebApplicationFactory factory, DatabaseCleanupFixture dbFixture)
+        public ReviewCyclesControllerTests(IntegrationTestFixture fixture)
         {
-            _factory = factory;
+            _fixture = fixture;
         }
+
+        public Task InitializeAsync() => _fixture.ResetAsync();
+        public Task DisposeAsync() => Task.CompletedTask;
 
         private HttpClient CreateAuthenticatedClient(string userId)
         {

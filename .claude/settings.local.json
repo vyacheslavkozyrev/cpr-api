@@ -2,5 +2,10 @@
   "enabledMcpjsonServers": [
     "postgres",
     "sequential-thinking"
-  ]
+  ],
+  "permissions": {
+    "allow": [
+      "Bash(dotnet build:*)"
+    ]
+  }
 }

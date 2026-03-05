@@ -9,14 +9,15 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace CPR.IntegrationTests
 {
-    [Collection("IntegrationTestCollection")]
-    public class SeedVerificationTests : IClassFixture<CustomWebApplicationFactory>
+    [Collection("Integration")]
+    public class SeedVerificationTests
     {
-        private readonly CustomWebApplicationFactory _factory;
+        private readonly IntegrationTestFixture _fixture;
+        private CustomWebApplicationFactory _factory => _fixture.Factory;
 
-        public SeedVerificationTests(CustomWebApplicationFactory factory)
+        public SeedVerificationTests(IntegrationTestFixture fixture)
         {
-            _factory = factory;
+            _fixture = fixture;
         }
 
         [Fact]

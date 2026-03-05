@@ -12,14 +12,16 @@ using Xunit;
 
 namespace CPR.IntegrationTests
 {
-    public class ValidationTests : IClassFixture<CustomWebApplicationFactory>
+    [Collection("Integration")]
+    public class ValidationTests
     {
-        private readonly CustomWebApplicationFactory _factory;
+        private readonly IntegrationTestFixture _fixture;
+        private CustomWebApplicationFactory _factory => _fixture.Factory;
         private readonly string _testToken;
 
-        public ValidationTests(CustomWebApplicationFactory factory)
+        public ValidationTests(IntegrationTestFixture fixture)
         {
-            _factory = factory;
+            _fixture = fixture;
             // configure the stub signing key and create a valid test token
             var key = Environment.GetEnvironmentVariable("JWT_SIGNING_KEY") ?? "local-test-key";
             var userId = "679add6e-6c29-4e00-b6a5-b69c8e0f3445"; // John Doe - Administrator from seed data
@@ -32,20 +34,13 @@ namespace CPR.IntegrationTests
             var client = _factory.CreateClient();
             client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _testToken);
 
-            // craft JSON with an invalid GUID string for employeeId
-            var json = "{ \"title\": \"x\", \"employeeId\": \"not-a-guid\" }";
+            // Use snake_case field name (API enforces snake_case) with a non-GUID value
+            var json = "{ \"title\": \"x\", \"employee_id\": \"not-a-guid\" }";
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
             var resp = await client.PostAsync("/api/goals", content);
 
-            // Goals endpoint validates authentication first (needs valid employee in JWT), so if JWT is valid but employeeId in request is invalid, we get 400
-            // However, the JWT stub doesn't set employee claims properly, so we get 401 Unauthorized
-            Assert.Equal(HttpStatusCode.Unauthorized, resp.StatusCode);
-            // 401 responses have Content-Type that may include charset
-            Assert.True(
-                resp.Content.Headers.ContentType?.MediaType?.Contains("application/problem+json") == true ||
-                resp.Content.Headers.ContentType?.MediaType?.Contains("application/json") == true,
-                $"Expected problem+json or json content type, got: {resp.Content.Headers.ContentType?.MediaType}");
+            Assert.Equal(HttpStatusCode.BadRequest, resp.StatusCode);
         }
 
         [Fact]

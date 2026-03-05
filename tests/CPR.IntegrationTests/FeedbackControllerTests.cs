@@ -15,17 +15,19 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CPR.IntegrationTests;
 
-[Collection("SequentialIntegrationTestCollection")]
-public class FeedbackControllerTests : IClassFixture<CustomWebApplicationFactory>, IClassFixture<DatabaseCleanupFixture>
+[Collection("Integration")]
+public class FeedbackControllerTests : IAsyncLifetime
 {
-    private readonly CustomWebApplicationFactory _factory;
-    private readonly DatabaseCleanupFixture _dbFixture;
+    private readonly IntegrationTestFixture _fixture;
+    private CustomWebApplicationFactory _factory => _fixture.Factory;
 
-    public FeedbackControllerTests(CustomWebApplicationFactory factory, DatabaseCleanupFixture dbFixture)
+    public FeedbackControllerTests(IntegrationTestFixture fixture)
     {
-        _factory = factory;
-        _dbFixture = dbFixture;
+        _fixture = fixture;
     }
+
+    public Task InitializeAsync() => _fixture.ResetAsync();
+    public Task DisposeAsync() => Task.CompletedTask;
 
     // Unique employee IDs for each test to avoid isolation issues
     private const string TestEmployeeId1 = "33333333-3333-3333-3333-333333333333"; // For self-feedback tests

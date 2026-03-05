@@ -50,8 +50,8 @@ public class FeedbackRequestRateLimitMiddleware
             Guid employeeId;
 
             // Try Entra External ID authentication first (oid claim)
-            var oidClaim = context.User.FindFirst("oid")?.Value
-                          ?? context.User.FindFirst("http://schemas.microsoft.com/identity/claims/objectidentifier")?.Value;
+            var oidClaim = context.User?.FindFirst("oid")?.Value
+                          ?? context.User?.FindFirst("http://schemas.microsoft.com/identity/claims/objectidentifier")?.Value;
             Console.WriteLine($"DEBUG RateLimitMiddleware: oid claim = {oidClaim}");
 
             if (!string.IsNullOrEmpty(oidClaim) && Guid.TryParse(oidClaim, out var oid))
@@ -102,8 +102,8 @@ public class FeedbackRequestRateLimitMiddleware
             else
             {
                 // Fallback to stub authentication - use UserId from NameIdentifier claim
-                var userIdClaim = context.User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value
-                                 ?? context.User.FindFirst("sub")?.Value;
+                var userIdClaim = context.User?.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value
+                                 ?? context.User?.FindFirst("sub")?.Value;
 
                 if (string.IsNullOrEmpty(userIdClaim) || !Guid.TryParse(userIdClaim, out var userId))
                 {

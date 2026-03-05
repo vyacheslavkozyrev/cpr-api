@@ -7,14 +7,19 @@ using Xunit;
 
 namespace CPR.IntegrationTests
 {
-    public class GoalsControllerTaskDeleteTests : IClassFixture<CustomWebApplicationFactory>, IClassFixture<DatabaseCleanupFixture>
+    [Collection("Integration")]
+    public class GoalsControllerTaskDeleteTests : IAsyncLifetime
     {
-        private readonly CustomWebApplicationFactory _factory;
+        private readonly IntegrationTestFixture _fixture;
+        private CustomWebApplicationFactory _factory => _fixture.Factory;
 
-        public GoalsControllerTaskDeleteTests(CustomWebApplicationFactory factory, DatabaseCleanupFixture dbFixture)
+        public GoalsControllerTaskDeleteTests(IntegrationTestFixture fixture)
         {
-            _factory = factory;
+            _fixture = fixture;
         }
+
+        public Task InitializeAsync() => _fixture.ResetAsync();
+        public Task DisposeAsync() => Task.CompletedTask;
 
         [Fact]
         public async Task DeleteTask_ValidRequest_ReturnsNoContent()

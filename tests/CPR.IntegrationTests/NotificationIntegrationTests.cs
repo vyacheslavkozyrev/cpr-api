@@ -17,16 +17,17 @@ namespace CPR.IntegrationTests;
 /// Tests: .ics generation, notification triggers on create/remind, email content validation
 /// 6 test cases covering calendar generation, email notifications, and content validation
 /// </summary>
-[Collection("SequentialIntegrationTestCollection")]
-public class NotificationIntegrationTests : IClassFixture<CustomWebApplicationFactory>
+[Collection("Integration")]
+public class NotificationIntegrationTests
 {
-    private readonly CustomWebApplicationFactory _factory;
+    private readonly IntegrationTestFixture _fixture;
+    private CustomWebApplicationFactory _factory => _fixture.Factory;
     private readonly ICalendarService _calendarService;
     private readonly IEmailService _emailService;
 
-    public NotificationIntegrationTests(CustomWebApplicationFactory factory)
+    public NotificationIntegrationTests(IntegrationTestFixture fixture)
     {
-        _factory = factory;
+        _fixture = fixture;
 
         // Create real service instances for integration testing
         using var scope = _factory.Services.CreateScope();

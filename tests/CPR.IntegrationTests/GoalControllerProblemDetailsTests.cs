@@ -13,14 +13,19 @@ using System.Net;
 
 namespace CPR.IntegrationTests
 {
-    public class GoalControllerProblemDetailsTests : IClassFixture<CustomWebApplicationFactory>, IClassFixture<DatabaseCleanupFixture>
+    [Collection("Integration")]
+    public class GoalControllerProblemDetailsTests : IAsyncLifetime
     {
-        private readonly CustomWebApplicationFactory _factory;
+        private readonly IntegrationTestFixture _fixture;
+        private CustomWebApplicationFactory _factory => _fixture.Factory;
 
-        public GoalControllerProblemDetailsTests(CustomWebApplicationFactory factory, DatabaseCleanupFixture dbFixture)
+        public GoalControllerProblemDetailsTests(IntegrationTestFixture fixture)
         {
-            _factory = factory;
+            _fixture = fixture;
         }
+
+        public Task InitializeAsync() => _fixture.ResetAsync();
+        public Task DisposeAsync() => Task.CompletedTask;
 
         [Fact]
         public async Task CreateGoal_WhenServiceThrowsArgumentNull_Returns400ProblemDetails()

@@ -8,6 +8,7 @@ namespace CPR.Api
     /// </summary>
     public class HangfireAuthorizationFilter : IDashboardAuthorizationFilter
     {
+        /// <inheritdoc />
         public bool Authorize(DashboardContext context)
         {
             // In development, allow all access

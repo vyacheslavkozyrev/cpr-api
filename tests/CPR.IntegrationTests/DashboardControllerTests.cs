@@ -16,21 +16,19 @@ using System.Linq;
 
 namespace CPR.IntegrationTests;
 
-[Collection("SequentialIntegrationTestCollection")]
-public class DashboardControllerTests : IClassFixture<CustomWebApplicationFactory>, IClassFixture<DatabaseCleanupFixture>
+[Collection("Integration")]
+public class DashboardControllerTests : IAsyncLifetime
 {
-    private readonly CustomWebApplicationFactory _factory;
-    private readonly DatabaseCleanupFixture _dbFixture;
+    private readonly IntegrationTestFixture _fixture;
+    private CustomWebApplicationFactory _factory => _fixture.Factory;
 
-    public DashboardControllerTests(CustomWebApplicationFactory factory, DatabaseCleanupFixture dbFixture)
+    public DashboardControllerTests(IntegrationTestFixture fixture)
     {
-        _factory = factory;
-        _dbFixture = dbFixture;
-
-        // Ensure the test environment is properly configured
-        Environment.SetEnvironmentVariable("ASPNETCORE_ENVIRONMENT", "Test");
-        Environment.SetEnvironmentVariable("JWT_SIGNING_KEY", "test-key");
+        _fixture = fixture;
     }
+
+    public Task InitializeAsync() => _fixture.ResetAsync();
+    public Task DisposeAsync() => Task.CompletedTask;
 
     // Test employee IDs
     private const string TestEmployeeId = "11111111-1111-1111-1111-111111111111";

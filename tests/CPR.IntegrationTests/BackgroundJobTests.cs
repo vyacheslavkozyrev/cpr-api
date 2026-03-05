@@ -71,17 +71,19 @@ public class FakeCalendarService : ICalendarService
 /// Tests: Automatic reminder execution, 3-day/1-day before logic, batch processing, cooldown enforcement
 /// 4 test cases covering scheduled reminder functionality
 /// </summary>
-[Collection("SequentialIntegrationTestCollection")]
-public class BackgroundJobTests : IClassFixture<CustomWebApplicationFactory>, IClassFixture<DatabaseCleanupFixture>
+[Collection("Integration")]
+public class BackgroundJobTests : IAsyncLifetime
 {
-    private readonly CustomWebApplicationFactory _factory;
-    private readonly DatabaseCleanupFixture _dbFixture;
+    private readonly IntegrationTestFixture _fixture;
+    private CustomWebApplicationFactory _factory => _fixture.Factory;
 
-    public BackgroundJobTests(CustomWebApplicationFactory factory, DatabaseCleanupFixture dbFixture)
+    public BackgroundJobTests(IntegrationTestFixture fixture)
     {
-        _factory = factory;
-        _dbFixture = dbFixture;
+        _fixture = fixture;
     }
+
+    public Task InitializeAsync() => _fixture.ResetAsync();
+    public Task DisposeAsync() => Task.CompletedTask;
 
     #region Helper Methods
 

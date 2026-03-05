@@ -11,23 +11,24 @@ using System.Collections.Generic;
 
 namespace CPR.IntegrationTests
 {
-    [Collection("SequentialIntegrationTestCollection")]
-    public class TeamControllerIntegrationTests : IClassFixture<CustomWebApplicationFactory>, IClassFixture<DatabaseCleanupFixture>
+    [Collection("Integration")]
+    public class TeamControllerIntegrationTests : IAsyncLifetime
     {
-        private readonly CustomWebApplicationFactory _factory;
-        private readonly DatabaseCleanupFixture _dbFixture;
+        private readonly IntegrationTestFixture _fixture;
+        private CustomWebApplicationFactory _factory => _fixture.Factory;
 
-        public TeamControllerIntegrationTests(CustomWebApplicationFactory factory, DatabaseCleanupFixture dbFixture)
+        public TeamControllerIntegrationTests(IntegrationTestFixture fixture)
         {
-            _factory = factory;
-            _dbFixture = dbFixture;
+            _fixture = fixture;
         }
+
+        public Task InitializeAsync() => _fixture.ResetAsync();
+        public Task DisposeAsync() => Task.CompletedTask;
 
         private async Task EnsureTestRolesAssigned()
         {
-            // Ensure test user roles are assigned for this test
             var options = new DbContextOptionsBuilder<CPR.Infrastructure.Data.CprDbContext>()
-                .UseNpgsql(_dbFixture.ConnectionString)
+                .UseNpgsql(_fixture.ConnectionString)
                 .ConfigureWarnings(warnings => warnings.Ignore(RelationalEventId.PendingModelChangesWarning))
                 .Options;
 
@@ -36,47 +37,92 @@ namespace CPR.IntegrationTests
             var managerUserId = Guid.Parse("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa");
             var employeeUserId = Guid.Parse("cccccccc-cccc-cccc-cccc-cccccccccccc");
 
-            // Check if roles are already assigned
-            var managerRoles = await db.UserRoles.Where(ur => ur.UserId == managerUserId && !ur.IsDeleted).Include(ur => ur.Role).ToListAsync();
-            var employeeRoles = await db.UserRoles.Where(ur => ur.UserId == employeeUserId && !ur.IsDeleted).Include(ur => ur.Role).ToListAsync();
-
-            if (!managerRoles.Any(ur => ur.Role.Title == "People Manager") || !employeeRoles.Any(ur => ur.Role.Title == "Employee"))
+            // Create users, positions, and employees if they don't exist
+            if (!await db.Users.AnyAsync(u => u.Id == managerUserId))
             {
-                // Clean up existing assignments
-                db.UserRoles.RemoveRange(db.UserRoles.Where(ur => ur.UserId == managerUserId || ur.UserId == employeeUserId));
-                await db.SaveChangesAsync();
-
-                // Assign roles
-                var employeeRole = await db.Roles.FirstOrDefaultAsync(r => r.Title == "Employee");
-                var managerRole = await db.Roles.FirstOrDefaultAsync(r => r.Title == "People Manager");
-
-                if (employeeRole != null && managerRole != null)
+                var managerPosition = new CPR.Domain.Entities.Position
                 {
-                    var managerUserRole = new CPR.Domain.Entities.UserToRole
-                    {
-                        Id = Guid.NewGuid(),
-                        UserId = managerUserId,
-                        RoleId = managerRole.Id,
-                        CreatedBy = Guid.Empty,
-                        CreatedAt = DateTimeOffset.UtcNow,
-                        IsDeleted = false
-                    };
+                    Id = Guid.Parse("99999999-9999-9999-9999-999999999999"),
+                    Title = "Manager",
+                    CareerTrackId = Guid.Parse("22e5ed0b-43c4-4ce6-829d-3943e4b7bdd1"),
+                    IsDeleted = false
+                };
+                var employeePosition = new CPR.Domain.Entities.Position
+                {
+                    Id = Guid.Parse("88888888-8888-8888-8888-888888888888"),
+                    Title = "Developer",
+                    CareerTrackId = Guid.Parse("22e5ed0b-43c4-4ce6-829d-3943e4b7bdd1"),
+                    IsDeleted = false
+                };
+                var managerUser = new CPR.Domain.Entities.User
+                {
+                    Id = managerUserId,
+                    UserName = "test_manager",
+                    DisplayName = "Test Manager User",
+                    IsDeleted = false
+                };
+                var employeeUser = new CPR.Domain.Entities.User
+                {
+                    Id = employeeUserId,
+                    UserName = "test_employee",
+                    DisplayName = "Test Employee User",
+                    IsDeleted = false
+                };
+                var managerEmployee = new CPR.Domain.Entities.Employee
+                {
+                    Id = Guid.Parse("bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb"),
+                    UserId = managerUserId,
+                    PositionId = managerPosition.Id,
+                    DepartmentId = Guid.Parse("fff11111-1111-1111-1111-111111111111"),
+                    IsDeleted = false
+                };
+                var employee = new CPR.Domain.Entities.Employee
+                {
+                    Id = Guid.Parse("dddddddd-dddd-dddd-dddd-dddddddddddd"),
+                    UserId = employeeUserId,
+                    ManagerId = managerEmployee.Id,
+                    PositionId = employeePosition.Id,
+                    DepartmentId = Guid.Parse("fff11111-1111-1111-1111-111111111111"),
+                    IsDeleted = false
+                };
 
-                    var employeeUserRole = new CPR.Domain.Entities.UserToRole
-                    {
-                        Id = Guid.NewGuid(),
-                        UserId = employeeUserId,
-                        RoleId = employeeRole.Id,
-                        CreatedBy = Guid.Empty,
-                        CreatedAt = DateTimeOffset.UtcNow,
-                        IsDeleted = false
-                    };
-
-                    db.UserRoles.Add(managerUserRole);
-                    db.UserRoles.Add(employeeUserRole);
-                    await db.SaveChangesAsync();
-                }
+                db.Positions.AddRange(managerPosition, employeePosition);
+                db.Users.AddRange(managerUser, employeeUser);
+                db.Employees.AddRange(managerEmployee, employee);
+                await db.SaveChangesAsync();
             }
+
+            // Assign roles if not already assigned
+            var employeeRole = await db.Roles.FirstOrDefaultAsync(r => r.Title == "Employee");
+            var managerRole = await db.Roles.FirstOrDefaultAsync(r => r.Title == "People Manager");
+
+            if (managerRole != null && !await db.UserRoles.AnyAsync(ur => ur.UserId == managerUserId && !ur.IsDeleted))
+            {
+                db.UserRoles.Add(new CPR.Domain.Entities.UserToRole
+                {
+                    Id = Guid.NewGuid(),
+                    UserId = managerUserId,
+                    RoleId = managerRole.Id,
+                    CreatedBy = Guid.Empty,
+                    CreatedAt = DateTimeOffset.UtcNow,
+                    IsDeleted = false
+                });
+            }
+
+            if (employeeRole != null && !await db.UserRoles.AnyAsync(ur => ur.UserId == employeeUserId && !ur.IsDeleted))
+            {
+                db.UserRoles.Add(new CPR.Domain.Entities.UserToRole
+                {
+                    Id = Guid.NewGuid(),
+                    UserId = employeeUserId,
+                    RoleId = employeeRole.Id,
+                    CreatedBy = Guid.Empty,
+                    CreatedAt = DateTimeOffset.UtcNow,
+                    IsDeleted = false
+                });
+            }
+
+            await db.SaveChangesAsync();
         }
 
         [Fact]
@@ -93,7 +139,7 @@ namespace CPR.IntegrationTests
         {
             // Manually create test data instead of relying on fixture
             var options = new DbContextOptionsBuilder<CPR.Infrastructure.Data.CprDbContext>()
-                .UseNpgsql(_dbFixture.ConnectionString)
+                .UseNpgsql(_fixture.ConnectionString)
                 .ConfigureWarnings(warnings => warnings.Ignore(RelationalEventId.PendingModelChangesWarning))
                 .Options;
 
@@ -247,7 +293,7 @@ namespace CPR.IntegrationTests
             client.DefaultRequestHeaders.Authorization =
                 new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", CreateManagerTestToken());
 
-            // Test data is set up automatically by the DatabaseCleanupFixture
+            // Test data is set up automatically by IntegrationTestFixture.ResetAsync()
             var response = await client.GetAsync("/api/team/goals");
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
@@ -275,7 +321,7 @@ namespace CPR.IntegrationTests
 
             // Get the actual employee ID from the database
             var options = new DbContextOptionsBuilder<CPR.Infrastructure.Data.CprDbContext>()
-                .UseNpgsql(_dbFixture.ConnectionString)
+                .UseNpgsql(_fixture.ConnectionString)
                 .ConfigureWarnings(warnings => warnings.Ignore(RelationalEventId.PendingModelChangesWarning))
                 .Options;
 

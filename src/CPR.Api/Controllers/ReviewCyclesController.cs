@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CPR.Api.Controllers;
 
+/// <summary>Manages 360° review cycles, nominees, responses, and results.</summary>
 [ApiController]
 [Route("api/review-cycles")]
 public class ReviewCyclesController : ControllerBase
@@ -21,6 +22,7 @@ public class ReviewCyclesController : ControllerBase
     private readonly IUserService _userService;
     private readonly IRoleService _roleService;
 
+    /// <summary>Initializes a new instance of <see cref="ReviewCyclesController"/>.</summary>
     public ReviewCyclesController(IReviewCycleService reviewCycleService, IUserService userService, IRoleService roleService)
     {
         _reviewCycleService = reviewCycleService;
@@ -28,6 +30,7 @@ public class ReviewCyclesController : ControllerBase
         _roleService = roleService;
     }
 
+    /// <summary>Creates a new review cycle.</summary>
     [HttpPost]
     [RequireRole("Director", "Administrator")]
     [ProducesResponseType(typeof(ReviewCycleDetailDto), 201)]
@@ -49,6 +52,7 @@ public class ReviewCyclesController : ControllerBase
         catch (KeyNotFoundException ex) { return Problem(ex.Message, statusCode: StatusCodes.Status404NotFound); }
     }
 
+    /// <summary>Lists review cycles with optional status filter and pagination.</summary>
     [HttpGet]
     [Authorize]
     [ProducesResponseType(typeof(PagedResponseDto<ReviewCycleSummaryDto>), 200)]
@@ -68,6 +72,7 @@ public class ReviewCyclesController : ControllerBase
         return Ok(result);
     }
 
+    /// <summary>Gets a single review cycle by ID.</summary>
     [HttpGet("{id:guid}")]
     [Authorize]
     [ProducesResponseType(typeof(ReviewCycleDetailDto), 200)]
@@ -87,6 +92,7 @@ public class ReviewCyclesController : ControllerBase
         catch (UnauthorizedAccessException ex) { return Problem(ex.Message, statusCode: StatusCodes.Status403Forbidden); }
     }
 
+    /// <summary>Transitions a review cycle to the next status.</summary>
     [HttpPatch("{id:guid}/status")]
     [RequireRole("Director", "Administrator")]
     [ProducesResponseType(typeof(ReviewCycleStatusTransitionDto), 200)]
@@ -116,6 +122,7 @@ public class ReviewCyclesController : ControllerBase
         catch (InvalidOperationException ex) { return Problem(ex.Message, statusCode: StatusCodes.Status409Conflict); }
     }
 
+    /// <summary>Adds a nominee to a review cycle.</summary>
     [HttpPost("{id:guid}/nominees")]
     [Authorize]
     [ProducesResponseType(typeof(ReviewNomineeDto), 201)]
@@ -145,6 +152,7 @@ public class ReviewCyclesController : ControllerBase
         catch (InvalidOperationException ex) { return Problem(ex.Message, statusCode: StatusCodes.Status409Conflict); }
     }
 
+    /// <summary>Removes a nominee from a review cycle.</summary>
     [HttpDelete("{id:guid}/nominees/{nomineeId:guid}")]
     [Authorize]
     [ProducesResponseType(204)]
@@ -165,6 +173,7 @@ public class ReviewCyclesController : ControllerBase
         catch (InvalidOperationException ex) { return Problem(ex.Message, statusCode: StatusCodes.Status409Conflict); }
     }
 
+    /// <summary>Gets all nominees for a review cycle.</summary>
     [HttpGet("{id:guid}/nominees")]
     [Authorize]
     [ProducesResponseType(200)]
@@ -185,6 +194,7 @@ public class ReviewCyclesController : ControllerBase
         catch (UnauthorizedAccessException ex) { return Problem(ex.Message, statusCode: StatusCodes.Status403Forbidden); }
     }
 
+    /// <summary>Submits a review response for a cycle.</summary>
     [HttpPost("{id:guid}/responses")]
     [Authorize]
     [ProducesResponseType(typeof(ReviewResponseDto), 201)]
@@ -209,6 +219,7 @@ public class ReviewCyclesController : ControllerBase
         catch (InvalidOperationException ex) { return Problem(ex.Message, statusCode: StatusCodes.Status409Conflict); }
     }
 
+    /// <summary>Gets the aggregated results for a completed review cycle.</summary>
     [HttpGet("{id:guid}/results")]
     [Authorize]
     [ProducesResponseType(200)]

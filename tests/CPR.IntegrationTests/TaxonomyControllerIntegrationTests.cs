@@ -15,20 +15,21 @@ using Xunit;
 
 namespace CPR.IntegrationTests
 {
-    [Collection("SequentialIntegrationTestCollection")]
-    public class TaxonomyControllerIntegrationTests : IClassFixture<CustomWebApplicationFactory>, IClassFixture<DatabaseCleanupFixture>
+    [Collection("Integration")]
+    public class TaxonomyControllerIntegrationTests : IAsyncLifetime
     {
-        private readonly CustomWebApplicationFactory _factory;
-        private readonly DatabaseCleanupFixture _dbFixture;
+        private readonly IntegrationTestFixture _fixture;
+        private CustomWebApplicationFactory _factory => _fixture.Factory;
         private readonly string _jwtKey;
 
-        public TaxonomyControllerIntegrationTests(CustomWebApplicationFactory factory, DatabaseCleanupFixture dbFixture)
+        public TaxonomyControllerIntegrationTests(IntegrationTestFixture fixture)
         {
-            _factory = factory;
-            _dbFixture = dbFixture;
+            _fixture = fixture;
             _jwtKey = Environment.GetEnvironmentVariable("JWT_SIGNING_KEY") ?? "local-test-key";
-            Environment.SetEnvironmentVariable("JWT_SIGNING_KEY", _jwtKey);
         }
+
+        public Task InitializeAsync() => _fixture.ResetAsync();
+        public Task DisposeAsync() => Task.CompletedTask;
 
         private HttpClient CreateAuthenticatedClient(string userId)
         {
@@ -41,7 +42,7 @@ namespace CPR.IntegrationTests
         private async Task<string> GetAdministratorUserId()
         {
             var options = new DbContextOptionsBuilder<CPR.Infrastructure.Data.CprDbContext>()
-                .UseNpgsql(_dbFixture.ConnectionString)
+                .UseNpgsql(_fixture.ConnectionString)
                 .ConfigureWarnings(warnings => warnings.Ignore(RelationalEventId.PendingModelChangesWarning))
                 .Options;
 
@@ -77,7 +78,7 @@ namespace CPR.IntegrationTests
         private async Task<string> GetRegularEmployeeUserId()
         {
             var options = new DbContextOptionsBuilder<CPR.Infrastructure.Data.CprDbContext>()
-                .UseNpgsql(_dbFixture.ConnectionString)
+                .UseNpgsql(_fixture.ConnectionString)
                 .ConfigureWarnings(warnings => warnings.Ignore(RelationalEventId.PendingModelChangesWarning))
                 .Options;
 
@@ -98,7 +99,7 @@ namespace CPR.IntegrationTests
         private async Task<Guid> GetOrCreateCareerPathId()
         {
             var options = new DbContextOptionsBuilder<CPR.Infrastructure.Data.CprDbContext>()
-                .UseNpgsql(_dbFixture.ConnectionString)
+                .UseNpgsql(_fixture.ConnectionString)
                 .ConfigureWarnings(warnings => warnings.Ignore(RelationalEventId.PendingModelChangesWarning))
                 .Options;
 
@@ -110,7 +111,7 @@ namespace CPR.IntegrationTests
         private async Task<Guid> GetOrCreateCareerTrackId()
         {
             var options = new DbContextOptionsBuilder<CPR.Infrastructure.Data.CprDbContext>()
-                .UseNpgsql(_dbFixture.ConnectionString)
+                .UseNpgsql(_fixture.ConnectionString)
                 .ConfigureWarnings(warnings => warnings.Ignore(RelationalEventId.PendingModelChangesWarning))
                 .Options;
 
@@ -122,7 +123,7 @@ namespace CPR.IntegrationTests
         private async Task<Guid> GetOrCreateSkillCategoryId()
         {
             var options = new DbContextOptionsBuilder<CPR.Infrastructure.Data.CprDbContext>()
-                .UseNpgsql(_dbFixture.ConnectionString)
+                .UseNpgsql(_fixture.ConnectionString)
                 .ConfigureWarnings(warnings => warnings.Ignore(RelationalEventId.PendingModelChangesWarning))
                 .Options;
 
@@ -134,7 +135,7 @@ namespace CPR.IntegrationTests
         private async Task<Guid> GetOrCreateSkillId()
         {
             var options = new DbContextOptionsBuilder<CPR.Infrastructure.Data.CprDbContext>()
-                .UseNpgsql(_dbFixture.ConnectionString)
+                .UseNpgsql(_fixture.ConnectionString)
                 .ConfigureWarnings(warnings => warnings.Ignore(RelationalEventId.PendingModelChangesWarning))
                 .Options;
 

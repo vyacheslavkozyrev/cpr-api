@@ -20,21 +20,23 @@ namespace CPR.IntegrationTests;
 /// Feature 0004 - Task T093
 /// Tests all 7 endpoints with database, authorization, validation, and edge cases
 /// </summary>
-[Collection("SequentialIntegrationTestCollection")]
-public class FeedbackRequestApiTests : IClassFixture<CustomWebApplicationFactory>, IClassFixture<DatabaseCleanupFixture>
+[Collection("Integration")]
+public class FeedbackRequestApiTests : IAsyncLifetime
 {
-    private readonly CustomWebApplicationFactory _factory;
-    private readonly DatabaseCleanupFixture _dbFixture;
+    private readonly IntegrationTestFixture _fixture;
+    private CustomWebApplicationFactory _factory => _fixture.Factory;
 
     // Test user IDs from seed data
     private const string JohnDoeUserId = "679add6e-6c29-4e00-b6a5-b69c8e0f3445"; // Administrator
     private const string JaneSmithUserId = "c6874b28-e2fa-4835-8e8f-159bd5067091"; // Employee
 
-    public FeedbackRequestApiTests(CustomWebApplicationFactory factory, DatabaseCleanupFixture dbFixture)
+    public FeedbackRequestApiTests(IntegrationTestFixture fixture)
     {
-        _factory = factory;
-        _dbFixture = dbFixture;
+        _fixture = fixture;
     }
+
+    public Task InitializeAsync() => _fixture.ResetAsync();
+    public Task DisposeAsync() => Task.CompletedTask;
 
     #region Helper Methods
 

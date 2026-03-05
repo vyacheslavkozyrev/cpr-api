@@ -10,15 +10,19 @@ using System.Linq;
 
 namespace CPR.IntegrationTests
 {
-    [Collection("IntegrationTestCollection")]
-    public class GoalPersistenceTests : IClassFixture<CustomWebApplicationFactory>
+    [Collection("Integration")]
+    public class GoalPersistenceTests : IAsyncLifetime
     {
-        private readonly CustomWebApplicationFactory _factory;
+        private readonly IntegrationTestFixture _fixture;
+        private CustomWebApplicationFactory _factory => _fixture.Factory;
 
-        public GoalPersistenceTests(CustomWebApplicationFactory factory)
+        public GoalPersistenceTests(IntegrationTestFixture fixture)
         {
-            _factory = factory;
+            _fixture = fixture;
         }
+
+        public Task InitializeAsync() => _fixture.ResetAsync();
+        public Task DisposeAsync() => Task.CompletedTask;
 
         [Fact]
         public async Task CanCreateAndReadGoal()

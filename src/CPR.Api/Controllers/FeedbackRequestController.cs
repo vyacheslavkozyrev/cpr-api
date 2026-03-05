@@ -77,7 +77,7 @@ public class FeedbackRequestController : ControllerBase
             return BadRequest(ModelState);
         }
 
-        var profile = await _userService.GetCurrentUserProfileAsync(User);
+        var profile = await _userService.GetCurrentUserProfileAsync(User!);
         Console.WriteLine($"DEBUG CreateFeedbackRequest: profile = {(profile == null ? "NULL" : $"EmployeeId={profile.EmployeeId}")}");
 
         if (profile == null)

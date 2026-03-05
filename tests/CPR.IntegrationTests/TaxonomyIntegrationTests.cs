@@ -9,17 +9,19 @@ using Xunit;
 
 namespace CPR.IntegrationTests;
 
-[Collection("SequentialIntegrationTestCollection")]
-public class TaxonomyIntegrationTests : IClassFixture<CustomWebApplicationFactory>, IClassFixture<DatabaseCleanupFixture>
+[Collection("Integration")]
+public class TaxonomyIntegrationTests : IAsyncLifetime
 {
-    private readonly CustomWebApplicationFactory _factory;
-    private readonly DatabaseCleanupFixture _dbFixture;
+    private readonly IntegrationTestFixture _fixture;
+    private CustomWebApplicationFactory _factory => _fixture.Factory;
 
-    public TaxonomyIntegrationTests(CustomWebApplicationFactory factory, DatabaseCleanupFixture dbFixture)
+    public TaxonomyIntegrationTests(IntegrationTestFixture fixture)
     {
-        _factory = factory;
-        _dbFixture = dbFixture;
+        _fixture = fixture;
     }
+
+    public Task InitializeAsync() => _fixture.ResetAsync();
+    public Task DisposeAsync() => Task.CompletedTask;
 
     [Fact]
     public async Task GetCareer_ReturnsSeededPaths()
@@ -47,7 +49,7 @@ public class TaxonomyIntegrationTests : IClassFixture<CustomWebApplicationFactor
 
         // find Technology career path id from DB
         var options = new Microsoft.EntityFrameworkCore.DbContextOptionsBuilder<CPR.Infrastructure.Data.CprDbContext>()
-            .UseNpgsql(_dbFixture.ConnectionString)
+            .UseNpgsql(_fixture.ConnectionString)
             .ConfigureWarnings(warnings => warnings.Ignore(RelationalEventId.PendingModelChangesWarning))
             .Options;
         using var db = new CPR.Infrastructure.Data.CprDbContext(options);
@@ -101,7 +103,7 @@ public class TaxonomyIntegrationTests : IClassFixture<CustomWebApplicationFactor
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
         var options = new Microsoft.EntityFrameworkCore.DbContextOptionsBuilder<CPR.Infrastructure.Data.CprDbContext>()
-            .UseNpgsql(_dbFixture.ConnectionString)
+            .UseNpgsql(_fixture.ConnectionString)
             .ConfigureWarnings(warnings => warnings.Ignore(RelationalEventId.PendingModelChangesWarning))
             .Options;
         var resp = await client.GetAsync($"/api/skills?position_id={Guid.NewGuid()}");
@@ -135,7 +137,7 @@ public class TaxonomyIntegrationTests : IClassFixture<CustomWebApplicationFactor
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
         var options = new Microsoft.EntityFrameworkCore.DbContextOptionsBuilder<CPR.Infrastructure.Data.CprDbContext>()
-            .UseNpgsql(_dbFixture.ConnectionString)
+            .UseNpgsql(_fixture.ConnectionString)
             .ConfigureWarnings(warnings => warnings.Ignore(RelationalEventId.PendingModelChangesWarning))
             .Options;
         using var db = new CPR.Infrastructure.Data.CprDbContext(options);

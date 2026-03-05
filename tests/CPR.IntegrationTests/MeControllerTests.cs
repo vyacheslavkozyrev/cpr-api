@@ -13,16 +13,19 @@ using Microsoft.EntityFrameworkCore.Diagnostics;
 
 namespace CPR.IntegrationTests;
 
-public class MeControllerTests : IClassFixture<CustomWebApplicationFactory>, IClassFixture<DatabaseCleanupFixture>
+[Collection("Integration")]
+public class MeControllerTests : IAsyncLifetime
 {
-    private readonly CustomWebApplicationFactory _factory;
-    private readonly DatabaseCleanupFixture _dbFixture;
+    private readonly IntegrationTestFixture _fixture;
+    private CustomWebApplicationFactory _factory => _fixture.Factory;
 
-    public MeControllerTests(CustomWebApplicationFactory factory, DatabaseCleanupFixture dbFixture)
+    public MeControllerTests(IntegrationTestFixture fixture)
     {
-        _factory = factory;
-        _dbFixture = dbFixture;
+        _fixture = fixture;
     }
+
+    public Task InitializeAsync() => _fixture.ResetAsync();
+    public Task DisposeAsync() => Task.CompletedTask;
 
     private async Task CleanupEmployeeSkills()
     {
@@ -120,7 +123,7 @@ public class MeControllerTests : IClassFixture<CustomWebApplicationFactory>, ICl
 
         // Get any existing skill and its first level from the database
         var options = new Microsoft.EntityFrameworkCore.DbContextOptionsBuilder<CPR.Infrastructure.Data.CprDbContext>()
-            .UseNpgsql(_dbFixture.ConnectionString)
+            .UseNpgsql(_fixture.ConnectionString)
             .ConfigureWarnings(warnings => warnings.Ignore(RelationalEventId.PendingModelChangesWarning))
             .Options;
         using var db = new CPR.Infrastructure.Data.CprDbContext(options);
@@ -199,7 +202,7 @@ public class MeControllerTests : IClassFixture<CustomWebApplicationFactory>, ICl
 
         // Get an existing skill from the database
         var options = new Microsoft.EntityFrameworkCore.DbContextOptionsBuilder<CPR.Infrastructure.Data.CprDbContext>()
-            .UseNpgsql(_dbFixture.ConnectionString)
+            .UseNpgsql(_fixture.ConnectionString)
             .ConfigureWarnings(warnings => warnings.Ignore(RelationalEventId.PendingModelChangesWarning))
             .Options;
         using var db = new CPR.Infrastructure.Data.CprDbContext(options);
@@ -240,7 +243,7 @@ public class MeControllerTests : IClassFixture<CustomWebApplicationFactory>, ICl
 
         // Get existing skill and level from the database
         var options = new Microsoft.EntityFrameworkCore.DbContextOptionsBuilder<CPR.Infrastructure.Data.CprDbContext>()
-            .UseNpgsql(_dbFixture.ConnectionString)
+            .UseNpgsql(_fixture.ConnectionString)
             .ConfigureWarnings(warnings => warnings.Ignore(RelationalEventId.PendingModelChangesWarning))
             .Options;
         using var db = new CPR.Infrastructure.Data.CprDbContext(options);
@@ -320,7 +323,7 @@ public class MeControllerTests : IClassFixture<CustomWebApplicationFactory>, ICl
 
         // Get an existing skill from the database
         var options = new Microsoft.EntityFrameworkCore.DbContextOptionsBuilder<CPR.Infrastructure.Data.CprDbContext>()
-            .UseNpgsql(_dbFixture.ConnectionString)
+            .UseNpgsql(_fixture.ConnectionString)
             .ConfigureWarnings(warnings => warnings.Ignore(RelationalEventId.PendingModelChangesWarning))
             .Options;
         using var db = new CPR.Infrastructure.Data.CprDbContext(options);

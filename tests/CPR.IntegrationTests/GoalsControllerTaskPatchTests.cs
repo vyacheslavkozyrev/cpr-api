@@ -8,14 +8,19 @@ using Xunit;
 
 namespace CPR.IntegrationTests
 {
-    public class GoalsControllerTaskPatchTests : IClassFixture<CustomWebApplicationFactory>, IClassFixture<DatabaseCleanupFixture>
+    [Collection("Integration")]
+    public class GoalsControllerTaskPatchTests : IAsyncLifetime
     {
-        private readonly CustomWebApplicationFactory _factory;
+        private readonly IntegrationTestFixture _fixture;
+        private CustomWebApplicationFactory _factory => _fixture.Factory;
 
-        public GoalsControllerTaskPatchTests(CustomWebApplicationFactory factory, DatabaseCleanupFixture dbFixture)
+        public GoalsControllerTaskPatchTests(IntegrationTestFixture fixture)
         {
-            _factory = factory;
+            _fixture = fixture;
         }
+
+        public Task InitializeAsync() => _fixture.ResetAsync();
+        public Task DisposeAsync() => Task.CompletedTask;
 
         [Fact]
         public async Task PatchTask_CanUpdateFields_AndToggleCompletion()

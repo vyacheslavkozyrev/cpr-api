@@ -18,21 +18,23 @@ namespace CPR.IntegrationTests;
 /// Integration tests for FeedbackRequestController POST endpoint
 /// Tests HTTP status codes, request/response serialization, authentication, and validation
 /// </summary>
-[Collection("SequentialIntegrationTestCollection")]
-public class FeedbackRequestControllerTests : IClassFixture<CustomWebApplicationFactory>, IClassFixture<DatabaseCleanupFixture>
+[Collection("Integration")]
+public class FeedbackRequestControllerTests : IAsyncLifetime
 {
-    private readonly CustomWebApplicationFactory _factory;
-    private readonly DatabaseCleanupFixture _dbFixture;
+    private readonly IntegrationTestFixture _fixture;
+    private CustomWebApplicationFactory _factory => _fixture.Factory;
 
     // Test user IDs from seed data
     private const string JohnDoeUserId = "679add6e-6c29-4e00-b6a5-b69c8e0f3445"; // John Doe (Administrator)
     private const string JaneSmithUserId = "c6874b28-e2fa-4835-8e8f-159bd5067091"; // Jane Smith (Employee)
 
-    public FeedbackRequestControllerTests(CustomWebApplicationFactory factory, DatabaseCleanupFixture dbFixture)
+    public FeedbackRequestControllerTests(IntegrationTestFixture fixture)
     {
-        _factory = factory;
-        _dbFixture = dbFixture;
+        _fixture = fixture;
     }
+
+    public Task InitializeAsync() => _fixture.ResetAsync();
+    public Task DisposeAsync() => Task.CompletedTask;
 
     private HttpClient CreateAuthenticatedClient(string userId)
     {

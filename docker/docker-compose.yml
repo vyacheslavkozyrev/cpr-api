@@ -11,15 +11,6 @@ services:
     ports:
       - "5432:5432"
 
-  db_test:
-    image: postgres:15
-    container_name: cpr_postgres_test
-    env_file: ../.env.test
-    restart: unless-stopped
-    volumes:
-      - db_data_test:/var/lib/postgresql/data
-    ports:
-      - "5433:5432"
 
   smtp4dev:
     image: rnwood/smtp4dev:v3
@@ -33,4 +24,3 @@ services:
 
 volumes:
   db_data_dev:
-  db_data_test:

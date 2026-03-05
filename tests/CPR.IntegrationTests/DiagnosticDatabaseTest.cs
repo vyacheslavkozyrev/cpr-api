@@ -9,17 +9,21 @@ using Xunit.Abstractions;
 
 namespace CPR.IntegrationTests;
 
-[Collection("SequentialIntegrationTestCollection")]
-public class DiagnosticDatabaseTest : IClassFixture<CustomWebApplicationFactory>, IClassFixture<DatabaseCleanupFixture>
+[Collection("Integration")]
+public class DiagnosticDatabaseTest : IAsyncLifetime
 {
-    private readonly CustomWebApplicationFactory _factory;
+    private readonly IntegrationTestFixture _fixture;
+    private CustomWebApplicationFactory _factory => _fixture.Factory;
     private readonly ITestOutputHelper _output;
 
-    public DiagnosticDatabaseTest(CustomWebApplicationFactory factory, DatabaseCleanupFixture dbFixture, ITestOutputHelper output)
+    public DiagnosticDatabaseTest(IntegrationTestFixture fixture, ITestOutputHelper output)
     {
-        _factory = factory;
+        _fixture = fixture;
         _output = output;
     }
+
+    public Task InitializeAsync() => _fixture.ResetAsync();
+    public Task DisposeAsync() => Task.CompletedTask;
 
     [Fact]
     public async Task CheckDatabaseState()

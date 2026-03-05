@@ -11,14 +11,15 @@ using System;
 
 namespace CPR.IntegrationTests
 {
-    [Collection("IntegrationTestCollection")]
-    public class MigrationSmokeTests : IClassFixture<CustomWebApplicationFactory>
+    [Collection("Integration")]
+    public class MigrationSmokeTests
     {
-        private readonly CustomWebApplicationFactory _factory;
+        private readonly IntegrationTestFixture _fixture;
+        private CustomWebApplicationFactory _factory => _fixture.Factory;
 
-        public MigrationSmokeTests(CustomWebApplicationFactory factory)
+        public MigrationSmokeTests(IntegrationTestFixture fixture)
         {
-            _factory = factory;
+            _fixture = fixture;
         }
 
         [Fact]

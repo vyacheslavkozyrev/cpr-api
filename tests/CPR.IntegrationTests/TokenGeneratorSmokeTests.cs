@@ -8,16 +8,15 @@ using Xunit;
 
 namespace CPR.IntegrationTests;
 
-[Collection("SequentialIntegrationTestCollection")]
-public class TokenGeneratorSmokeTests : IClassFixture<CustomWebApplicationFactory>, IClassFixture<DatabaseCleanupFixture>
+[Collection("Integration")]
+public class TokenGeneratorSmokeTests
 {
-    private readonly CustomWebApplicationFactory _factory;
-    private readonly DatabaseCleanupFixture _dbFixture;
+    private readonly IntegrationTestFixture _fixture;
+    private CustomWebApplicationFactory _factory => _fixture.Factory;
 
-    public TokenGeneratorSmokeTests(CustomWebApplicationFactory factory, DatabaseCleanupFixture dbFixture)
+    public TokenGeneratorSmokeTests(IntegrationTestFixture fixture)
     {
-        _factory = factory;
-        _dbFixture = dbFixture;
+        _fixture = fixture;
     }
 
     [Fact]

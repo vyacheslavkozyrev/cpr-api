@@ -11,16 +11,19 @@ namespace CPR.IntegrationTests;
 /// Integration tests for authentication with /api/me endpoint.
 /// Tests both Stub authentication mode and validates user profile responses.
 /// </summary>
-public class AuthenticationIntegrationTests : IClassFixture<CustomWebApplicationFactory>, IClassFixture<DatabaseCleanupFixture>
+[Collection("Integration")]
+public class AuthenticationIntegrationTests : IAsyncLifetime
 {
-    private readonly CustomWebApplicationFactory _factory;
-    private readonly DatabaseCleanupFixture _dbFixture;
+    private readonly IntegrationTestFixture _fixture;
+    private CustomWebApplicationFactory _factory => _fixture.Factory;
 
-    public AuthenticationIntegrationTests(CustomWebApplicationFactory factory, DatabaseCleanupFixture dbFixture)
+    public AuthenticationIntegrationTests(IntegrationTestFixture fixture)
     {
-        _factory = factory;
-        _dbFixture = dbFixture;
+        _fixture = fixture;
     }
+
+    public Task InitializeAsync() => _fixture.ResetAsync();
+    public Task DisposeAsync() => Task.CompletedTask;
 
     #region Stub Authentication Tests
 
