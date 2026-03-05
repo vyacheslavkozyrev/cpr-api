@@ -10,11 +10,11 @@ using Microsoft.Extensions.DependencyInjection;
 namespace CPR.IntegrationTests
 {
     [Collection("IntegrationTestCollection")]
-    public class SeedVerificationTests : IClassFixture<WebApplicationFactory<Program>>
+    public class SeedVerificationTests : IClassFixture<CustomWebApplicationFactory>
     {
-        private readonly WebApplicationFactory<Program> _factory;
+        private readonly CustomWebApplicationFactory _factory;
 
-        public SeedVerificationTests(WebApplicationFactory<Program> factory)
+        public SeedVerificationTests(CustomWebApplicationFactory factory)
         {
             _factory = factory;
         }

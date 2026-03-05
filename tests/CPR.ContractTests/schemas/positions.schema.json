@@ -6,7 +6,7 @@
         "required": [
             "id",
             "title",
-            "careerTrackId"
+            "career_track_id"
         ],
         "properties": {
             "id": {
@@ -28,7 +28,7 @@
                     "null"
                 ]
             },
-            "careerTrackId": {
+            "career_track_id": {
                 "type": "string",
                 "format": "uuid"
             }

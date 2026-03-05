@@ -17,12 +17,12 @@ using System.Linq;
 namespace CPR.IntegrationTests;
 
 [Collection("SequentialIntegrationTestCollection")]
-public class DashboardControllerTests : IClassFixture<WebApplicationFactory<Program>>, IClassFixture<DatabaseCleanupFixture>
+public class DashboardControllerTests : IClassFixture<CustomWebApplicationFactory>, IClassFixture<DatabaseCleanupFixture>
 {
-    private readonly WebApplicationFactory<Program> _factory;
+    private readonly CustomWebApplicationFactory _factory;
     private readonly DatabaseCleanupFixture _dbFixture;
 
-    public DashboardControllerTests(WebApplicationFactory<Program> factory, DatabaseCleanupFixture dbFixture)
+    public DashboardControllerTests(CustomWebApplicationFactory factory, DatabaseCleanupFixture dbFixture)
     {
         _factory = factory;
         _dbFixture = dbFixture;

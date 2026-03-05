@@ -12,11 +12,11 @@ using System;
 namespace CPR.IntegrationTests
 {
     [Collection("IntegrationTestCollection")]
-    public class MigrationSmokeTests : IClassFixture<WebApplicationFactory<Program>>
+    public class MigrationSmokeTests : IClassFixture<CustomWebApplicationFactory>
     {
-        private readonly WebApplicationFactory<Program> _factory;
+        private readonly CustomWebApplicationFactory _factory;
 
-        public MigrationSmokeTests(WebApplicationFactory<Program> factory)
+        public MigrationSmokeTests(CustomWebApplicationFactory factory)
         {
             _factory = factory;
         }

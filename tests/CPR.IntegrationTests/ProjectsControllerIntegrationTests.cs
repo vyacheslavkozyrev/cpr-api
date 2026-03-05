@@ -15,13 +15,13 @@ using Xunit;
 namespace CPR.IntegrationTests
 {
     [Collection("SequentialIntegrationTestCollection")]
-    public class ProjectsControllerIntegrationTests : IClassFixture<WebApplicationFactory<Program>>, IClassFixture<DatabaseCleanupFixture>
+    public class ProjectsControllerIntegrationTests : IClassFixture<CustomWebApplicationFactory>, IClassFixture<DatabaseCleanupFixture>
     {
-        private readonly WebApplicationFactory<Program> _factory;
+        private readonly CustomWebApplicationFactory _factory;
         private readonly DatabaseCleanupFixture _dbFixture;
         private readonly string _jwtKey;
 
-        public ProjectsControllerIntegrationTests(WebApplicationFactory<Program> factory, DatabaseCleanupFixture dbFixture)
+        public ProjectsControllerIntegrationTests(CustomWebApplicationFactory factory, DatabaseCleanupFixture dbFixture)
         {
             _factory = factory;
             _dbFixture = dbFixture;

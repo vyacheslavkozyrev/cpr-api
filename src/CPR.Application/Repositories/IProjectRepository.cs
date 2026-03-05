@@ -74,6 +74,16 @@ namespace CPR.Application.Repositories
         IQueryable<ProjectTeam> QueryTeamByProjectId(Guid projectId, bool includeDeleted = false);
 
         /// <summary>
+        /// Query project team members by employee ID
+        /// </summary>
+        IQueryable<ProjectTeam> QueryTeamByEmployeeId(Guid employeeId, bool includeDeleted = false);
+
+        /// <summary>
+        /// Get all project IDs where an employee is a team member
+        /// </summary>
+        Task<Guid[]> GetProjectIdsByEmployeeIdAsync(Guid employeeId, bool includeDeleted = false);
+
+        /// <summary>
         /// Add team member to project
         /// </summary>
         Task AddTeamMemberAsync(ProjectTeam projectTeam);

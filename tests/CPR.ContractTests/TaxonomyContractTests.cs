@@ -228,7 +228,7 @@ public class TaxonomyContractTests : IClassFixture<CustomWebApplicationFactory>
 
         var dto = new
         {
-            careerPathId = Guid.Parse(careerPathId!),
+            career_path_id = Guid.Parse(careerPathId!),
             title = $"Career Track {Guid.NewGuid().ToString().Substring(0, 8)}",
             description = "Contract test career track"
         };
@@ -248,7 +248,7 @@ public class TaxonomyContractTests : IClassFixture<CustomWebApplicationFactory>
         Assert.True(doc.RootElement.TryGetProperty("title", out var title));
         Assert.Equal(dto.title, title.GetString());
 
-        Assert.True(doc.RootElement.TryGetProperty("careerPathId", out var returnedCareerPathId));
+        Assert.True(doc.RootElement.TryGetProperty("career_path_id", out var returnedCareerPathId));
         Assert.Equal(careerPathId, returnedCareerPathId.GetString());
     }
 
@@ -286,7 +286,7 @@ public class TaxonomyContractTests : IClassFixture<CustomWebApplicationFactory>
         // Create career track
         var trackDto = new
         {
-            careerPathId = Guid.Parse(careerPathId!),
+            career_path_id = Guid.Parse(careerPathId!),
             title = $"Track {Guid.NewGuid().ToString().Substring(0, 8)}",
             description = "For position testing"
         };
@@ -298,7 +298,7 @@ public class TaxonomyContractTests : IClassFixture<CustomWebApplicationFactory>
 
         var dto = new
         {
-            careerTrackId = Guid.Parse(careerTrackId!),
+            career_track_id = Guid.Parse(careerTrackId!),
             title = $"Position {Guid.NewGuid().ToString().Substring(0, 8)}",
             description = "Contract test position"
         };
@@ -318,7 +318,7 @@ public class TaxonomyContractTests : IClassFixture<CustomWebApplicationFactory>
         Assert.True(doc.RootElement.TryGetProperty("title", out var title));
         Assert.Equal(dto.title, title.GetString());
 
-        Assert.True(doc.RootElement.TryGetProperty("careerTrackId", out var returnedCareerTrackId));
+        Assert.True(doc.RootElement.TryGetProperty("career_track_id", out var returnedCareerTrackId));
         Assert.Equal(careerTrackId, returnedCareerTrackId.GetString());
     }
 
@@ -426,7 +426,7 @@ public class TaxonomyContractTests : IClassFixture<CustomWebApplicationFactory>
 
         var dto = new
         {
-            categoryId = Guid.Parse(categoryId!),
+            category_id = Guid.Parse(categoryId!),
             title = $"Skill {Guid.NewGuid().ToString().Substring(0, 8)}",
             description = "Contract test skill"
         };
@@ -447,7 +447,7 @@ public class TaxonomyContractTests : IClassFixture<CustomWebApplicationFactory>
         Assert.True(doc.RootElement.TryGetProperty("title", out var title));
         Assert.Equal(dto.title, title.GetString());
 
-        Assert.True(doc.RootElement.TryGetProperty("categoryId", out var returnedCategoryId));
+        Assert.True(doc.RootElement.TryGetProperty("category_id", out var returnedCategoryId));
         Assert.Equal(categoryId, returnedCategoryId.GetString());
     }
 
@@ -470,7 +470,7 @@ public class TaxonomyContractTests : IClassFixture<CustomWebApplicationFactory>
 
         var createSkillDto = new
         {
-            categoryId = Guid.Parse(categoryId!),
+            category_id = Guid.Parse(categoryId!),
             title = $"Skill {Guid.NewGuid().ToString().Substring(0, 8)}",
             description = "For level testing"
         };
@@ -482,7 +482,7 @@ public class TaxonomyContractTests : IClassFixture<CustomWebApplicationFactory>
 
         var dto = new
         {
-            skillId = Guid.Parse(skillId!),
+            skill_id = Guid.Parse(skillId!),
             value = 3,
             title = $"Level {Guid.NewGuid().ToString().Substring(0, 8)}",
             description = "Contract test skill level"
@@ -504,7 +504,7 @@ public class TaxonomyContractTests : IClassFixture<CustomWebApplicationFactory>
         Assert.True(doc.RootElement.TryGetProperty("value", out var value));
         Assert.Equal(3, value.GetInt32());
 
-        Assert.True(doc.RootElement.TryGetProperty("skillId", out var returnedSkillId));
+        Assert.True(doc.RootElement.TryGetProperty("skill_id", out var returnedSkillId));
         Assert.Equal(skillId, returnedSkillId.GetString());
     }
 
@@ -562,14 +562,14 @@ public class TaxonomyContractTests : IClassFixture<CustomWebApplicationFactory>
         var careerJson = await createCareerResponse.Content.ReadAsStringAsync();
         var careerPathId = JsonDocument.Parse(careerJson).RootElement.GetProperty("id").GetString();
 
-        var createTrackDto = new { careerPathId = Guid.Parse(careerPathId!), title = $"Track {Guid.NewGuid().ToString().Substring(0, 8)}", description = "For testing" };
+        var createTrackDto = new { career_path_id = Guid.Parse(careerPathId!), title = $"Track {Guid.NewGuid().ToString().Substring(0, 8)}", description = "For testing" };
         var createTrackResponse = await client.PostAsync("/api/career_track",
             new StringContent(JsonSerializer.Serialize(createTrackDto), Encoding.UTF8, "application/json"));
         createTrackResponse.EnsureSuccessStatusCode();
         var trackJson = await createTrackResponse.Content.ReadAsStringAsync();
         var careerTrackId = JsonDocument.Parse(trackJson).RootElement.GetProperty("id").GetString();
 
-        var createPositionDto = new { careerTrackId = Guid.Parse(careerTrackId!), title = $"Position {Guid.NewGuid().ToString().Substring(0, 8)}", description = "For testing" };
+        var createPositionDto = new { career_track_id = Guid.Parse(careerTrackId!), title = $"Position {Guid.NewGuid().ToString().Substring(0, 8)}", description = "For testing" };
         var createPositionResponse = await client.PostAsync("/api/positions",
             new StringContent(JsonSerializer.Serialize(createPositionDto), Encoding.UTF8, "application/json"));
         createPositionResponse.EnsureSuccessStatusCode();
@@ -584,14 +584,14 @@ public class TaxonomyContractTests : IClassFixture<CustomWebApplicationFactory>
         var categoryJson = await createCategoryResponse.Content.ReadAsStringAsync();
         var categoryId = JsonDocument.Parse(categoryJson).RootElement.GetProperty("id").GetString();
 
-        var createSkillDto = new { categoryId = Guid.Parse(categoryId!), title = $"Skill {Guid.NewGuid().ToString().Substring(0, 8)}", description = "For testing" };
+        var createSkillDto = new { category_id = Guid.Parse(categoryId!), title = $"Skill {Guid.NewGuid().ToString().Substring(0, 8)}", description = "For testing" };
         var createSkillResponse = await client.PostAsync("/api/skills",
             new StringContent(JsonSerializer.Serialize(createSkillDto), Encoding.UTF8, "application/json"));
         createSkillResponse.EnsureSuccessStatusCode();
         var skillJson = await createSkillResponse.Content.ReadAsStringAsync();
         var skillId = JsonDocument.Parse(skillJson).RootElement.GetProperty("id").GetString();
 
-        var createLevelDto = new { skillId = Guid.Parse(skillId!), value = 3, title = "Intermediate", description = "Mid level" };
+        var createLevelDto = new { skill_id = Guid.Parse(skillId!), value = 3, title = "Intermediate", description = "Mid level" };
         var createLevelResponse = await client.PostAsync("/api/skill_levels",
             new StringContent(JsonSerializer.Serialize(createLevelDto), Encoding.UTF8, "application/json"));
         createLevelResponse.EnsureSuccessStatusCode();
@@ -600,8 +600,8 @@ public class TaxonomyContractTests : IClassFixture<CustomWebApplicationFactory>
 
         var dto = new
         {
-            skillId = Guid.Parse(skillId!),
-            skillLevelId = Guid.Parse(skillLevelId!)
+            skill_id = Guid.Parse(skillId!),
+            skill_level_id = Guid.Parse(skillLevelId!)
         };
 
         // Act
@@ -617,15 +617,17 @@ public class TaxonomyContractTests : IClassFixture<CustomWebApplicationFactory>
         Assert.True(doc.RootElement.TryGetProperty("id", out var id));
         JsonAssertions.AssertIsGuidString(id);
 
-        Assert.True(doc.RootElement.TryGetProperty("positionId", out var returnedPositionId));
+        Assert.True(doc.RootElement.TryGetProperty("position_id", out var returnedPositionId));
         Assert.Equal(positionId, returnedPositionId.GetString());
 
-        Assert.True(doc.RootElement.TryGetProperty("skillId", out var returnedSkillId));
+        Assert.True(doc.RootElement.TryGetProperty("skill_id", out var returnedSkillId));
         Assert.Equal(skillId, returnedSkillId.GetString());
 
-        Assert.True(doc.RootElement.TryGetProperty("skillLevelId", out var returnedSkillLevelId));
+        Assert.True(doc.RootElement.TryGetProperty("skill_level_id", out var returnedSkillLevelId));
         Assert.Equal(skillLevelId, returnedSkillLevelId.GetString());
     }
 
     #endregion
 }
+
+

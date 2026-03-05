@@ -16,13 +16,13 @@ using Xunit;
 namespace CPR.IntegrationTests
 {
     [Collection("SequentialIntegrationTestCollection")]
-    public class TaxonomyControllerIntegrationTests : IClassFixture<WebApplicationFactory<Program>>, IClassFixture<DatabaseCleanupFixture>
+    public class TaxonomyControllerIntegrationTests : IClassFixture<CustomWebApplicationFactory>, IClassFixture<DatabaseCleanupFixture>
     {
-        private readonly WebApplicationFactory<Program> _factory;
+        private readonly CustomWebApplicationFactory _factory;
         private readonly DatabaseCleanupFixture _dbFixture;
         private readonly string _jwtKey;
 
-        public TaxonomyControllerIntegrationTests(WebApplicationFactory<Program> factory, DatabaseCleanupFixture dbFixture)
+        public TaxonomyControllerIntegrationTests(CustomWebApplicationFactory factory, DatabaseCleanupFixture dbFixture)
         {
             _factory = factory;
             _dbFixture = dbFixture;

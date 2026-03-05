@@ -32,6 +32,7 @@ namespace CPR.Infrastructure.Data
         public DbSet<GoalTask> GoalTasks { get; set; }
         public DbSet<Feedback> Feedback { get; set; }
         public DbSet<FeedbackRequest> FeedbackRequests { get; set; }
+        public DbSet<FeedbackRequestRecipient> FeedbackRequestRecipients { get; set; }
         public DbSet<EmployeeToSkill> EmployeeSkills { get; set; }
         public DbSet<PositionToSkill> PositionToSkills { get; set; }
         public DbSet<ProjectTeam> ProjectTeams { get; set; }
@@ -364,6 +365,8 @@ namespace CPR.Infrastructure.Data
                 b.Property(f => f.ProjectId).HasColumnName("project_id");
                 b.Property(f => f.Rating).HasColumnName("rating");
                 b.Property(f => f.Content).HasColumnName("content").IsRequired();
+                b.Property(f => f.FeedbackRequestId).HasColumnName("feedback_request_id");
+
                 b.Property(f => f.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("CURRENT_TIMESTAMP");
                 b.Property(f => f.CreatedBy).HasColumnName("created_by");
                 b.Property(f => f.ModifiedBy).HasColumnName("modified_by");
@@ -371,6 +374,16 @@ namespace CPR.Infrastructure.Data
                 b.Property(f => f.IsDeleted).HasColumnName("is_deleted");
                 b.Property(f => f.DeletedBy).HasColumnName("deleted_by");
                 b.Property(f => f.DeletedAt).HasColumnName("deleted_at");
+
+                // Relationship to FeedbackRequest
+                b.HasOne(f => f.FeedbackRequest)
+                    .WithMany()
+                    .HasForeignKey(f => f.FeedbackRequestId)
+                    .OnDelete(DeleteBehavior.SetNull);
+
+                // Index for feedback_request_id
+                b.HasIndex(f => f.FeedbackRequestId)
+                    .HasDatabaseName("IX_feedback_feedback_request_id");
             });
 
             modelBuilder.Entity<FeedbackRequest>(b =>
@@ -378,19 +391,107 @@ namespace CPR.Infrastructure.Data
                 b.ToTable("feedback_requests");
                 b.HasKey(fr => fr.Id);
                 b.Property(fr => fr.Id).HasColumnName("id");
-                b.Property(fr => fr.RequestorId).HasColumnName("requestor_id");
-                b.Property(fr => fr.EmployeeId).HasColumnName("employee_id");
-                b.Property(fr => fr.Message).HasColumnName("message");
-                b.Property(fr => fr.DueDate).HasColumnName("due_date");
+                b.Property(fr => fr.RequestorId).HasColumnName("requestor_id").IsRequired();
                 b.Property(fr => fr.ProjectId).HasColumnName("project_id");
                 b.Property(fr => fr.GoalId).HasColumnName("goal_id");
-                b.Property(fr => fr.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("CURRENT_TIMESTAMP");
+                b.Property(fr => fr.Message).HasColumnName("message").HasMaxLength(500);
+                b.Property(fr => fr.DueDate).HasColumnName("due_date").HasColumnType("date");
+
+                // Audit properties
                 b.Property(fr => fr.CreatedBy).HasColumnName("created_by");
+                b.Property(fr => fr.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("now()");
                 b.Property(fr => fr.ModifiedBy).HasColumnName("modified_by");
                 b.Property(fr => fr.ModifiedAt).HasColumnName("modified_at");
                 b.Property(fr => fr.IsDeleted).HasColumnName("is_deleted");
                 b.Property(fr => fr.DeletedBy).HasColumnName("deleted_by");
                 b.Property(fr => fr.DeletedAt).HasColumnName("deleted_at");
+
+                // Relationships
+                b.HasOne(fr => fr.Requestor)
+                    .WithMany()
+                    .HasForeignKey(fr => fr.RequestorId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                b.HasOne(fr => fr.Project)
+                    .WithMany()
+                    .HasForeignKey(fr => fr.ProjectId)
+                    .OnDelete(DeleteBehavior.SetNull);
+
+                b.HasOne(fr => fr.Goal)
+                    .WithMany()
+                    .HasForeignKey(fr => fr.GoalId)
+                    .OnDelete(DeleteBehavior.SetNull);
+
+                b.HasMany(fr => fr.Recipients)
+                    .WithOne(r => r.FeedbackRequest)
+                    .HasForeignKey(r => r.FeedbackRequestId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                // Indexes (with filters matching migration)
+                b.HasIndex(fr => fr.RequestorId)
+                    .HasDatabaseName("IX_feedback_requests_requestor_id")
+                    .HasFilter("is_deleted = false");
+
+                b.HasIndex(fr => fr.DueDate)
+                    .HasDatabaseName("IX_feedback_requests_due_date")
+                    .HasFilter("is_deleted = false");
+
+                b.HasIndex(fr => fr.ProjectId)
+                    .HasDatabaseName("IX_feedback_requests_project_id")
+                    .HasFilter("is_deleted = false AND project_id IS NOT NULL");
+
+                b.HasIndex(fr => fr.GoalId)
+                    .HasDatabaseName("IX_feedback_requests_goal_id")
+                    .HasFilter("is_deleted = false AND goal_id IS NOT NULL");
+
+                b.HasIndex(fr => fr.CreatedAt)
+                    .HasDatabaseName("IX_feedback_requests_created_at")
+                    .IsDescending()
+                    .HasFilter("is_deleted = false");
+            });
+
+            modelBuilder.Entity<FeedbackRequestRecipient>(b =>
+            {
+                b.ToTable("feedback_request_recipients");
+                b.HasKey(r => r.Id);
+                b.Property(r => r.Id).HasColumnName("id");
+                b.Property(r => r.FeedbackRequestId).HasColumnName("feedback_request_id").IsRequired();
+                b.Property(r => r.EmployeeId).HasColumnName("employee_id").IsRequired();
+                b.Property(r => r.IsCompleted).HasColumnName("is_completed").HasDefaultValue(false);
+                b.Property(r => r.RespondedAt).HasColumnName("responded_at");
+                b.Property(r => r.LastReminderAt).HasColumnName("last_reminder_at");
+                b.Property(r => r.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("now()");
+                b.Property(r => r.UpdatedAt).HasColumnName("updated_at").HasDefaultValueSql("now()");
+
+                // Relationships
+                b.HasOne(r => r.FeedbackRequest)
+                    .WithMany(fr => fr.Recipients)
+                    .HasForeignKey(r => r.FeedbackRequestId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                b.HasOne(r => r.Employee)
+                    .WithMany()
+                    .HasForeignKey(r => r.EmployeeId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                // Unique constraint: one recipient per request per employee
+                b.HasIndex(r => new { r.FeedbackRequestId, r.EmployeeId })
+                    .IsUnique()
+                    .HasDatabaseName("UX_feedback_request_recipients_request_employee");
+
+                // Indexes
+                b.HasIndex(r => r.FeedbackRequestId)
+                    .HasDatabaseName("IX_feedback_request_recipients_feedback_request_id");
+
+                b.HasIndex(r => r.EmployeeId)
+                    .HasDatabaseName("IX_feedback_request_recipients_employee_id");
+
+                b.HasIndex(r => r.IsCompleted)
+                    .HasDatabaseName("IX_feedback_request_recipients_is_completed");
+
+                b.HasIndex(r => new { r.EmployeeId, r.IsCompleted })
+                    .HasDatabaseName("IX_feedback_request_recipients_pending")
+                    .HasFilter("is_completed = false");
             });
 
             modelBuilder.Entity<EmployeeToSkill>(b =>

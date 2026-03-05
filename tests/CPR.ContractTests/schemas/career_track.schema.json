@@ -6,7 +6,7 @@
         "required": [
             "id",
             "title",
-            "careerPathId"
+            "career_path_id"
         ],
         "properties": {
             "id": {
@@ -22,7 +22,7 @@
                     "null"
                 ]
             },
-            "careerPathId": {
+            "career_path_id": {
                 "type": "string",
                 "format": "uuid"
             }

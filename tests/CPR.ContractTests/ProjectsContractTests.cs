@@ -116,7 +116,7 @@ public class ProjectsContractTests : IClassFixture<CustomWebApplicationFactory>
         Assert.Equal(JsonValueKind.String, title.ValueKind);
 
         Assert.True(project.TryGetProperty("description", out _));
-        Assert.True(project.TryGetProperty("createdAt", out _));
+        Assert.True(project.TryGetProperty("created_at", out _));
         Assert.True(project.TryGetProperty("roles", out var roles));
         Assert.Equal(JsonValueKind.Array, roles.ValueKind);
 
@@ -351,7 +351,7 @@ public class ProjectsContractTests : IClassFixture<CustomWebApplicationFactory>
         Assert.True(doc.RootElement.TryGetProperty("id", out var id));
         JsonAssertions.AssertIsGuidString(id);
 
-        Assert.True(doc.RootElement.TryGetProperty("projectId", out var returnedProjectId));
+        Assert.True(doc.RootElement.TryGetProperty("project_id", out var returnedProjectId));
         Assert.Equal(projectId, returnedProjectId.GetString());
 
         Assert.True(doc.RootElement.TryGetProperty("title", out var title));
@@ -441,3 +441,4 @@ public class ProjectsContractTests : IClassFixture<CustomWebApplicationFactory>
 
     #endregion
 }
+

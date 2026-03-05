@@ -31,6 +31,25 @@ namespace CPR.Infrastructure.Services
             return projects.Select(p => MapToDto(p)).ToArray();
         }
 
+        public async Task<ProjectDto[]> GetProjectsByEmployeeIdAsync(Guid employeeId)
+        {
+            // Get all project IDs where this employee is a team member
+            var projectIds = await _repo.GetProjectIdsByEmployeeIdAsync(employeeId);
+
+            if (projectIds.Length == 0)
+            {
+                return Array.Empty<ProjectDto>();
+            }
+
+            // Get the actual projects
+            var projects = await _repo.QueryAll()
+                .Where(p => projectIds.Contains(p.Id))
+                .OrderBy(p => p.Code)
+                .ToListAsync();
+
+            return projects.Select(p => MapToDto(p)).ToArray();
+        }
+
         public async Task<ProjectDto?> GetProjectByIdAsync(Guid projectId)
         {
             var project = await _repo.GetByIdAsync(projectId);

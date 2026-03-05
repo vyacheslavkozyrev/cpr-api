@@ -11,6 +11,8 @@ using Microsoft.Extensions.Hosting;
 using Hellang.Middleware.ProblemDetails;
 using CPR.Infrastructure.Data;
 using CPR.Infrastructure.Services;
+using Hangfire;
+using Hangfire.PostgreSql;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -40,8 +42,19 @@ builder.Logging.AddFilter("Microsoft.EntityFrameworkCore.Database.Command", LogL
 builder.Logging.AddFilter("Microsoft.AspNetCore", LogLevel.Warning);
 builder.Logging.AddFilter("Npgsql", LogLevel.Warning);
 
-// Add minimal services
-builder.Services.AddControllers().AddNewtonsoftJson();
+// Add minimal services with snake_case JSON serialization (per CPR Constitution)
+builder.Services.AddControllers().AddNewtonsoftJson(options =>
+{
+    options.SerializerSettings.ContractResolver = new Newtonsoft.Json.Serialization.DefaultContractResolver
+    {
+        NamingStrategy = new CPR.Api.Json.SnakeCaseNamingStrategy()
+    };
+    // Preserve null values in responses for explicit null fields
+    options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Include;
+    // Use ISO 8601 date format
+    options.SerializerSettings.DateFormatString = "yyyy-MM-ddTHH:mm:ss.fffZ";
+    options.SerializerSettings.DateTimeZoneHandling = Newtonsoft.Json.DateTimeZoneHandling.Utc;
+});
 
 // CORS: get allowed origins from configuration
 var allowedOrigins = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>()
@@ -75,23 +88,55 @@ if (authenticationMode.Equals("EntraExternalId", StringComparison.OrdinalIgnoreC
     builder.Services.AddAuthentication(Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerDefaults.AuthenticationScheme)
         .AddJwtBearer(options =>
         {
-            // Configure token validation parameters to bypass signature validation for development
+            // Force use of the legacy JwtSecurityTokenHandler which properly extracts claims
+            options.UseSecurityTokenValidators = true;
+
+            // Bypass signature validation completely - accept any token structure
             options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
             {
                 ValidateIssuer = false,
                 ValidateAudience = false,
                 ValidateLifetime = false,
                 ValidateIssuerSigningKey = false,
-
-                // Use SignatureValidator to bypass signature validation - return JsonWebToken for .NET 8+ compatibility
+                RequireSignedTokens = false,
                 SignatureValidator = (token, parameters) =>
                 {
-                    // Parse the token using JsonWebToken for .NET 8+ compatibility
-                    return new Microsoft.IdentityModel.JsonWebTokens.JsonWebToken(token);
+                    // Parse using legacy handler and return JwtSecurityToken
+                    var handler = new System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler
+                    {
+                        MapInboundClaims = false // Preserve original claim names like 'oid'
+                    };
+                    return handler.ReadJwtToken(token);
                 }
             };
 
+            // Add event handlers for debugging
+            options.Events = new Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerEvents
+            {
+                OnAuthenticationFailed = context =>
+                {
+                    Console.WriteLine($"DEBUG Auth Failed: {context.Exception.Message}");
+                    return Task.CompletedTask;
+                },
+                OnTokenValidated = context =>
+                {
+                    Console.WriteLine($"DEBUG Token Validated: User={context.Principal?.Identity?.Name}, IsAuthenticated={context.Principal?.Identity?.IsAuthenticated}");
+                    var claims = context.Principal?.Claims?.ToList();
+                    Console.WriteLine($"DEBUG Claims count: {claims?.Count ?? 0}");
+                    if (claims != null)
+                    {
+                        // Look specifically for oid claim
+                        var oidClaim = claims.FirstOrDefault(c => c.Type == "oid" || c.Type.Contains("objectidentifier"));
+                        Console.WriteLine($"DEBUG   oid claim found: {oidClaim != null}, value: {oidClaim?.Value}");
 
+                        foreach (var claim in claims.Take(10))
+                        {
+                            Console.WriteLine($"DEBUG   {claim.Type} = {claim.Value}");
+                        }
+                    }
+                    return Task.CompletedTask;
+                }
+            };
         });
 }
 else
@@ -180,6 +225,22 @@ builder.Services.AddDbContext<CprDbContext>(options =>
         .ConfigureWarnings(warnings => warnings.Ignore(RelationalEventId.PendingModelChangesWarning))
 );
 
+// Configure Hangfire for background jobs (skip in Test environment to avoid database initialization issues)
+if (!builder.Environment.IsEnvironment("Test"))
+{
+    builder.Services.AddHangfire(config => config
+        .SetDataCompatibilityLevel(Hangfire.CompatibilityLevel.Version_180)
+        .UseSimpleAssemblyNameTypeSerializer()
+        .UseRecommendedSerializerSettings()
+        .UsePostgreSqlStorage(options =>
+            options.UseNpgsqlConnection(connectionString)));
+
+    builder.Services.AddHangfireServer();
+}
+
+// Register background job classes
+builder.Services.AddScoped<CPR.Infrastructure.Jobs.FeedbackRequestReminderJob>();
+
 // Configure ProblemDetails (Hellang middleware) - register before building the app
 builder.Services.AddProblemDetails(options =>
 {
@@ -241,6 +302,32 @@ app.UseCors("LocalDevCors");
 // Add authentication and authorization middleware
 app.UseAuthentication();
 app.UseAuthorization();
+
+// Add rate limiting middleware for feedback requests (after authentication)
+app.UseMiddleware<CPR.Api.Middleware.FeedbackRequestRateLimitMiddleware>();
+
+// Enable Hangfire Dashboard (only in development for security)
+if (app.Environment.IsDevelopment())
+{
+    app.UseHangfireDashboard("/hangfire", new DashboardOptions
+    {
+        Authorization = new[] { new HangfireAuthorizationFilter() }
+    });
+}
+
+// Schedule recurring jobs (skip in Test environment to avoid Hangfire initialization issues)
+if (!app.Environment.IsEnvironment("Test"))
+{
+    RecurringJob.AddOrUpdate<CPR.Infrastructure.Jobs.FeedbackRequestReminderJob>(
+        "send-upcoming-due-date-reminders",
+        job => job.SendUpcomingDueDateRemindersAsync(),
+        "0 9 * * *"); // Daily at 9:00 AM UTC
+
+    RecurringJob.AddOrUpdate<CPR.Infrastructure.Jobs.FeedbackRequestReminderJob>(
+        "send-overdue-reminders",
+        job => job.SendOverdueRemindersAsync(),
+        "0 10 * * *"); // Daily at 10:00 AM UTC
+}
 
 // Test-only endpoints for integration tests that intentionally throw so ProblemDetails
 // middleware can be validated. Using MapGet ensures the TestHost routing matches

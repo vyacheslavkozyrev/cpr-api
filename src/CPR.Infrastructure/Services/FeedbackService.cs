@@ -27,13 +27,12 @@ namespace CPR.Infrastructure.Services
         /// <inheritdoc/>
         public async Task<FeedbackRequestDto> CreateFeedbackRequestAsync(Guid requestorId, CreateFeedbackRequestDto dto)
         {
-            // Validate that the target employee exists
-            var targetEmployee = await _db.Employees
-                .FirstOrDefaultAsync(e => e.Id == dto.EmployeeId && !e.IsDeleted);
+            // NOTE: This is updated to handle multi-recipient DTOs, creating recipients for all employees in list
+            // For backward compatibility with existing endpoints, supports both single and multiple recipients
 
-            if (targetEmployee == null)
+            if (dto.EmployeeIds == null || dto.EmployeeIds.Count == 0)
             {
-                throw new ArgumentException("Target employee not found", nameof(dto.EmployeeId));
+                throw new ArgumentException("At least one employee must be selected", nameof(dto.EmployeeIds));
             }
 
             // Validate project if provided
@@ -60,19 +59,45 @@ namespace CPR.Infrastructure.Services
                 }
             }
 
-            // Create the feedback request
+            // Validate all target employees exist
+            var targetEmployees = await _db.Employees
+                .Where(e => dto.EmployeeIds.Contains(e.Id) && !e.IsDeleted)
+                .ToListAsync();
+
+            if (targetEmployees.Count != dto.EmployeeIds.Count)
+            {
+                var foundIds = targetEmployees.Select(e => e.Id).ToHashSet();
+                var missingIds = dto.EmployeeIds.Where(id => !foundIds.Contains(id)).ToList();
+                throw new ArgumentException($"Employees not found: {string.Join(", ", missingIds)}", nameof(dto.EmployeeIds));
+            }
+
+            // Create the feedback request (multi-recipient architecture)
             var feedbackRequest = new FeedbackRequest
             {
                 Id = Guid.NewGuid(),
                 RequestorId = requestorId,
-                EmployeeId = dto.EmployeeId,
                 ProjectId = dto.ProjectId,
                 GoalId = dto.GoalId,
                 Message = dto.Message,
-                DueDate = dto.DueDate,
+                DueDate = dto.DueDate.HasValue ? dto.DueDate.Value.Date : null,
                 CreatedBy = requestorId,
                 CreatedAt = DateTimeOffset.UtcNow
             };
+
+            // Add all recipients
+            foreach (var employeeId in dto.EmployeeIds)
+            {
+                var recipient = new FeedbackRequestRecipient
+                {
+                    Id = Guid.NewGuid(),
+                    FeedbackRequestId = feedbackRequest.Id,
+                    EmployeeId = employeeId,
+                    IsCompleted = false,
+                    CreatedAt = DateTimeOffset.UtcNow,
+                    UpdatedAt = DateTimeOffset.UtcNow
+                };
+                feedbackRequest.Recipients.Add(recipient);
+            }
 
             _db.FeedbackRequests.Add(feedbackRequest);
             await _db.SaveChangesAsync();
@@ -84,35 +109,45 @@ namespace CPR.Infrastructure.Services
         /// <inheritdoc/>
         public async Task<IEnumerable<FeedbackRequestDto>> GetSentRequestsAsync(Guid requestorId)
         {
+            // NOTE: Returns flattened list - one DTO per recipient (backward compatibility)
             var requests = await _db.FeedbackRequests
                 .Where(fr => fr.RequestorId == requestorId && !fr.IsDeleted)
                 .Include(fr => fr.Requestor)
                     .ThenInclude(r => r!.User)
-                .Include(fr => fr.Employee)
-                    .ThenInclude(e => e!.User)
+                .Include(fr => fr.Recipients)
+                    .ThenInclude(r => r.Employee)
+                        .ThenInclude(e => e.User)
                 .Include(fr => fr.Project)
                 .Include(fr => fr.Goal)
                 .OrderByDescending(fr => fr.CreatedAt)
                 .ToListAsync();
 
-            return requests.Select(MapToDto);
+            // Flatten: create one DTO per recipient
+            return requests.SelectMany(request =>
+                request.Recipients.Select(recipient => MapToDtoFromRecipient(request, recipient))
+            );
         }
 
         /// <inheritdoc/>
         public async Task<IEnumerable<FeedbackRequestDto>> GetTodoRequestsAsync(Guid employeeId)
         {
-            var requests = await _db.FeedbackRequests
-                .Where(fr => fr.EmployeeId == employeeId && !fr.IsDeleted)
-                .Include(fr => fr.Requestor)
-                    .ThenInclude(r => r!.User)
-                .Include(fr => fr.Employee)
-                    .ThenInclude(e => e!.User)
-                .Include(fr => fr.Project)
-                .Include(fr => fr.Goal)
-                .OrderByDescending(fr => fr.CreatedAt)
+            // NOTE: Query through Recipients collection for multi-recipient architecture
+            var recipientRequests = await _db.FeedbackRequestRecipients
+                .Where(r => r.EmployeeId == employeeId && !r.IsCompleted)
+                .Include(r => r.FeedbackRequest)
+                    .ThenInclude(fr => fr.Requestor)
+                        .ThenInclude(req => req.User)
+                .Include(r => r.FeedbackRequest)
+                    .ThenInclude(fr => fr.Project)
+                .Include(r => r.FeedbackRequest)
+                    .ThenInclude(fr => fr.Goal)
+                .Include(r => r.Employee)
+                    .ThenInclude(e => e.User)
+                .Where(r => !r.FeedbackRequest.IsDeleted)
+                .OrderByDescending(r => r.FeedbackRequest.CreatedAt)
                 .ToListAsync();
 
-            return requests.Select(MapToDto);
+            return recipientRequests.Select(r => MapToDtoFromRecipient(r.FeedbackRequest, r));
         }
 
         private async Task<FeedbackRequestDto> GetFeedbackRequestDtoAsync(Guid requestId)
@@ -120,8 +155,9 @@ namespace CPR.Infrastructure.Services
             var request = await _db.FeedbackRequests
                 .Include(fr => fr.Requestor)
                     .ThenInclude(r => r!.User)
-                .Include(fr => fr.Employee)
-                    .ThenInclude(e => e!.User)
+                .Include(fr => fr.Recipients)
+                    .ThenInclude(r => r.Employee)
+                        .ThenInclude(e => e.User)
                 .Include(fr => fr.Project)
                 .Include(fr => fr.Goal)
                 .FirstOrDefaultAsync(fr => fr.Id == requestId && !fr.IsDeleted);
@@ -131,42 +167,79 @@ namespace CPR.Infrastructure.Services
                 throw new InvalidOperationException("Feedback request not found");
             }
 
-            return MapToDto(request);
+            // Return first recipient (backward compatibility with single-recipient API)
+            var firstRecipient = request.Recipients.FirstOrDefault();
+            if (firstRecipient == null)
+            {
+                throw new InvalidOperationException("Feedback request has no recipients");
+            }
+
+            return MapToDtoFromRecipient(request, firstRecipient);
         }
 
-        private static FeedbackRequestDto MapToDto(FeedbackRequest request)
+        /// <summary>
+        /// Maps a FeedbackRequest + FeedbackRequestRecipient to the multi-recipient DTO
+        /// For backward compatibility, when called with single recipient, returns DTO with one recipient
+        /// </summary>
+        private static FeedbackRequestDto MapToDtoFromRecipient(FeedbackRequest request, FeedbackRequestRecipient recipient)
         {
+            var recipientDto = new FeedbackRequestRecipientDto
+            {
+                Id = recipient.Id,
+                FeedbackRequestId = recipient.FeedbackRequestId,
+                EmployeeId = recipient.EmployeeId,
+                IsCompleted = recipient.IsCompleted,
+                RespondedAt = recipient.RespondedAt,
+                LastReminderAt = recipient.LastReminderAt,
+                CreatedAt = recipient.CreatedAt,
+                UpdatedAt = recipient.UpdatedAt,
+                Employee = recipient.Employee != null ? new EmployeeSummaryDto
+                {
+                    Id = recipient.Employee.Id,
+                    DisplayName = recipient.Employee.User?.DisplayName ?? "Unknown",
+                    Email = null, // Email not on User entity
+                    JobTitle = recipient.Employee.Position?.Title,
+                    Department = recipient.Employee.Department?.Name
+                } : null,
+                Status = recipient.IsCompleted ? "responded" : "pending"
+            };
+
             return new FeedbackRequestDto
             {
                 Id = request.Id,
                 RequestorId = request.RequestorId,
-                EmployeeId = request.EmployeeId,
                 ProjectId = request.ProjectId,
                 GoalId = request.GoalId,
                 Message = request.Message,
-                DueDate = request.DueDate,
+                DueDate = request.DueDate.HasValue ? new DateTimeOffset(request.DueDate.Value, TimeSpan.Zero) : null,
                 CreatedAt = request.CreatedAt,
+                UpdatedAt = request.ModifiedAt ?? request.CreatedAt,
                 CreatedBy = request.CreatedBy,
+                IsDeleted = request.IsDeleted,
+                Recipients = new List<FeedbackRequestRecipientDto> { recipientDto },
                 Requestor = request.Requestor != null ? new EmployeeSummaryDto
                 {
                     Id = request.Requestor.Id,
-                    DisplayName = request.Requestor.User?.DisplayName ?? "Unknown"
-                } : null,
-                Employee = request.Employee != null ? new EmployeeSummaryDto
-                {
-                    Id = request.Employee.Id,
-                    DisplayName = request.Employee.User?.DisplayName ?? "Unknown"
+                    DisplayName = request.Requestor.User?.DisplayName ?? "Unknown",
+                    Email = null, // Email not on User entity
+                    JobTitle = request.Requestor.Position?.Title,
+                    Department = request.Requestor.Department?.Name
                 } : null,
                 Project = request.Project != null ? new ProjectSummaryDto
                 {
                     Id = request.Project.Id,
-                    Title = request.Project.Title ?? "Unknown Project"
+                    Name = request.Project.Title ?? "Unknown Project",
+                    Description = request.Project.Description
                 } : null,
                 Goal = request.Goal != null ? new GoalSummaryDto
                 {
                     Id = request.Goal.Id,
-                    Title = request.Goal.Title ?? "Unknown Goal"
-                } : null
+                    Title = request.Goal.Title ?? "Unknown Goal",
+                    Description = request.Goal.Description
+                } : null,
+                Status = recipientDto.IsCompleted ? "complete" : "pending",
+                RespondedCount = recipientDto.IsCompleted ? 1 : 0,
+                TotalRecipients = 1
             };
         }
 
@@ -239,6 +312,25 @@ namespace CPR.Infrastructure.Services
             };
 
             await _feedbackRepo.AddAsync(feedback);
+
+            // If this feedback is in response to a feedback request, mark the recipient as completed
+            if (dto.FeedbackRequestId.HasValue)
+            {
+                var recipient = await _db.FeedbackRequestRecipients
+                    .FirstOrDefaultAsync(r =>
+                        r.FeedbackRequestId == dto.FeedbackRequestId.Value &&
+                        r.EmployeeId == fromEmployeeId &&
+                        !r.IsCompleted);
+
+                if (recipient != null)
+                {
+                    recipient.IsCompleted = true;
+                    recipient.RespondedAt = DateTimeOffset.UtcNow;
+                    recipient.UpdatedAt = DateTimeOffset.UtcNow;
+                    _db.FeedbackRequestRecipients.Update(recipient);
+                    await _db.SaveChangesAsync();
+                }
+            }
 
             // Return the created feedback with related data
             return await GetFeedbackDtoAsync(feedback.Id);
@@ -338,22 +430,30 @@ namespace CPR.Infrastructure.Services
                 Goal = new GoalSummaryDto
                 {
                     Id = goal.Id,
-                    Title = goal.Title ?? "Unknown Goal"
+                    Title = goal.Title ?? "Unknown Goal",
+                    Description = goal.Description
                 },
                 Project = project != null ? new ProjectSummaryDto
                 {
                     Id = project.Id,
-                    Title = project.Title ?? "Unknown Project"
+                    Name = project.Title ?? "Unknown Project",
+                    Description = project.Description
                 } : null,
                 FromEmployee = new EmployeeSummaryDto
                 {
                     Id = fromEmployee.Id,
-                    DisplayName = fromUser?.DisplayName ?? "Unknown"
+                    DisplayName = fromUser?.DisplayName ?? "Unknown",
+                    Email = null,
+                    JobTitle = fromEmployee.Position?.Title,
+                    Department = fromEmployee.Department?.Name
                 },
                 ToEmployee = new EmployeeSummaryDto
                 {
                     Id = toEmployee.Id,
-                    DisplayName = toUser?.DisplayName ?? "Unknown"
+                    DisplayName = toUser?.DisplayName ?? "Unknown",
+                    Email = null,
+                    JobTitle = toEmployee.Position?.Title,
+                    Department = toEmployee.Department?.Name
                 }
             };
         }
@@ -372,17 +472,22 @@ namespace CPR.Infrastructure.Services
                 Goal = new GoalSummaryDto
                 {
                     Id = goal.Id,
-                    Title = goal.Title ?? "Unknown Goal"
+                    Title = goal.Title ?? "Unknown Goal",
+                    Description = goal.Description
                 },
                 Project = project != null ? new ProjectSummaryDto
                 {
                     Id = project.Id,
-                    Title = project.Title ?? "Unknown Project"
+                    Name = project.Title ?? "Unknown Project",
+                    Description = project.Description
                 } : null,
                 FromEmployee = new EmployeeSummaryDto
                 {
                     Id = fromEmployee.Id,
-                    DisplayName = fromUser?.DisplayName ?? "Unknown"
+                    DisplayName = fromUser?.DisplayName ?? "Unknown",
+                    Email = null,
+                    JobTitle = fromEmployee.Position?.Title,
+                    Department = fromEmployee.Department?.Name
                 }
             };
         }

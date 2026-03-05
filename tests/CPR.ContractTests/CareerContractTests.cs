@@ -90,7 +90,8 @@ public class CareerContractTests : IClassFixture<CustomWebApplicationFactory>
         Assert.True(item.TryGetProperty("description", out var descProp));
         JsonAssertions.AssertIsStringOrNull(descProp);
 
-        Assert.True(item.TryGetProperty("careerPathId", out var cpProp));
+        Assert.True(item.TryGetProperty("career_path_id", out var cpProp));
         JsonAssertions.AssertIsGuidString(cpProp);
     }
 }
+

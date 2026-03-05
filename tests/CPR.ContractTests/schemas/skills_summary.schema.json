@@ -3,72 +3,72 @@
     "type": "object",
     "required": [
         "statistics",
-        "skillCategories",
-        "recentAssessments"
+        "skill_categories",
+        "recent_assessments"
     ],
     "properties": {
         "statistics": {
             "type": "object",
             "required": [
-                "totalSkills",
-                "assessedSkills",
-                "assessmentProgress",
-                "averageLevel",
-                "skillGaps"
+                "total_skills",
+                "assessed_skills",
+                "assessment_progress",
+                "average_level",
+                "skill_gaps"
             ],
             "properties": {
-                "totalSkills": {
+                "total_skills": {
                     "type": "integer",
                     "minimum": 0
                 },
-                "assessedSkills": {
+                "assessed_skills": {
                     "type": "integer",
                     "minimum": 0
                 },
-                "assessmentProgress": {
+                "assessment_progress": {
                     "type": "number",
                     "minimum": 0,
                     "maximum": 100
                 },
-                "averageLevel": {
+                "average_level": {
                     "type": "number",
                     "minimum": 0
                 },
-                "skillGaps": {
+                "skill_gaps": {
                     "type": "integer",
                     "minimum": 0
                 }
             },
             "additionalProperties": false
         },
-        "skillCategories": {
+        "skill_categories": {
             "type": "array",
             "items": {
                 "type": "object",
                 "required": [
-                    "categoryId",
-                    "categoryName",
-                    "totalSkills",
-                    "assessedSkills",
-                    "averageLevel"
+                    "category_id",
+                    "category_name",
+                    "total_skills",
+                    "assessed_skills",
+                    "average_level"
                 ],
                 "properties": {
-                    "categoryId": {
+                    "category_id": {
                         "type": "string",
                         "format": "uuid"
                     },
-                    "categoryName": {
+                    "category_name": {
                         "type": "string"
                     },
-                    "totalSkills": {
+                    "total_skills": {
                         "type": "integer",
                         "minimum": 0
                     },
-                    "assessedSkills": {
+                    "assessed_skills": {
                         "type": "integer",
                         "minimum": 0
                     },
-                    "averageLevel": {
+                    "average_level": {
                         "type": "number",
                         "minimum": 0
                     }
@@ -76,22 +76,22 @@
                 "additionalProperties": false
             }
         },
-        "recentAssessments": {
+        "recent_assessments": {
             "type": "array",
             "items": {
                 "type": "object",
                 "required": [
-                    "skillId",
-                    "skillName",
+                    "skill_id",
+                    "skill_name",
                     "level",
-                    "assessedAt"
+                    "assessed_at"
                 ],
                 "properties": {
-                    "skillId": {
+                    "skill_id": {
                         "type": "string",
                         "format": "uuid"
                     },
-                    "skillName": {
+                    "skill_name": {
                         "type": "string"
                     },
                     "level": {
@@ -99,7 +99,7 @@
                         "minimum": 1,
                         "maximum": 5
                     },
-                    "assessedAt": {
+                    "assessed_at": {
                         "type": "string",
                         "format": "date-time"
                     }

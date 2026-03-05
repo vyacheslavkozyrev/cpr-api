@@ -21,6 +21,16 @@ services:
     ports:
       - "5433:5432"
 
+  smtp4dev:
+    image: rnwood/smtp4dev:v3
+    container_name: cpr_smtp4dev
+    restart: unless-stopped
+    ports:
+      - "3333:80" # Web UI
+      - "1025:25" # SMTP port
+    environment:
+      - ServerOptions__HostName=smtp4dev
+
 volumes:
   db_data_dev:
   db_data_test:

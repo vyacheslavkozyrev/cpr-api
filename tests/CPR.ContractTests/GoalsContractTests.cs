@@ -94,7 +94,7 @@ public class GoalsContractTests : IClassFixture<CustomWebApplicationFactory>
         Assert.Equal(JsonValueKind.String, id.ValueKind);
         Assert.True(Guid.TryParse(id.GetString(), out _));
 
-        Assert.True(root.TryGetProperty("employeeId", out var employeeId));
+        Assert.True(root.TryGetProperty("employee_id", out var employeeId));
         Assert.Equal(JsonValueKind.String, employeeId.ValueKind);
         Assert.True(Guid.TryParse(employeeId.GetString(), out _));
 
@@ -105,26 +105,26 @@ public class GoalsContractTests : IClassFixture<CustomWebApplicationFactory>
         Assert.True(root.TryGetProperty("status", out var status));
         Assert.Equal(JsonValueKind.String, status.ValueKind);
 
-        Assert.True(root.TryGetProperty("createdAt", out var createdAt));
+        Assert.True(root.TryGetProperty("created_at", out var createdAt));
         Assert.Equal(JsonValueKind.String, createdAt.ValueKind);
         Assert.True(DateTimeOffset.TryParse(createdAt.GetString(), out _));
 
         Assert.True(root.TryGetProperty("tasks", out var tasks));
         Assert.Equal(JsonValueKind.Array, tasks.ValueKind);
 
-        Assert.True(root.TryGetProperty("isCompleted", out var isCompleted));
+        Assert.True(root.TryGetProperty("is_completed", out var isCompleted));
         Assert.Equal(JsonValueKind.False, isCompleted.ValueKind);
 
         // Optional properties (should be present but may be null)
         Assert.True(root.TryGetProperty("description", out var description));
-        Assert.True(root.TryGetProperty("updatedAt", out var updatedAt));
+        Assert.True(root.TryGetProperty("modified_at", out var updatedAt));
         Assert.True(root.TryGetProperty("deadline", out var deadline));
-        Assert.True(root.TryGetProperty("relatedSkillId", out var relatedSkillId));
-        Assert.True(root.TryGetProperty("relatedSkillLevelId", out var relatedSkillLevelId));
+        Assert.True(root.TryGetProperty("related_skill_id", out var relatedSkillId));
+        Assert.True(root.TryGetProperty("related_skill_level_id", out var relatedSkillLevelId));
         Assert.True(root.TryGetProperty("priority", out var priority));
         Assert.True(root.TryGetProperty("visibility", out var visibility));
-        Assert.True(root.TryGetProperty("progressPercent", out var progressPercent));
-        Assert.True(root.TryGetProperty("completedAt", out var completedAt));
+        Assert.True(root.TryGetProperty("progress_percent", out var progressPercent));
+        Assert.True(root.TryGetProperty("completed_at", out var completedAt));
 
         // Validate Location header
         Assert.NotNull(response.Headers.Location);
@@ -191,7 +191,7 @@ public class GoalsContractTests : IClassFixture<CustomWebApplicationFactory>
         // Validate first goal in array matches GoalDto schema
         var firstGoal = root[0];
         Assert.True(firstGoal.TryGetProperty("id", out var id));
-        Assert.True(firstGoal.TryGetProperty("employeeId", out var employeeId));
+        Assert.True(firstGoal.TryGetProperty("employee_id", out var employeeId));
         Assert.True(firstGoal.TryGetProperty("title", out var title));
         Assert.True(firstGoal.TryGetProperty("status", out var status));
         Assert.True(firstGoal.TryGetProperty("tasks", out var tasks));
@@ -302,23 +302,23 @@ public class GoalsContractTests : IClassFixture<CustomWebApplicationFactory>
         Assert.Equal(JsonValueKind.String, id.ValueKind);
         Assert.True(Guid.TryParse(id.GetString(), out _));
 
-        Assert.True(root.TryGetProperty("goalId", out var taskGoalId));
+        Assert.True(root.TryGetProperty("goal_id", out var taskGoalId));
         Assert.Equal(goalId, taskGoalId.GetString());
 
         Assert.True(root.TryGetProperty("title", out var title));
         Assert.Equal("Contract Test Task", title.GetString());
 
-        Assert.True(root.TryGetProperty("isCompleted", out var isCompleted));
+        Assert.True(root.TryGetProperty("is_completed", out var isCompleted));
         Assert.Equal(JsonValueKind.False, isCompleted.ValueKind);
 
-        Assert.True(root.TryGetProperty("createdAt", out var createdAt));
+        Assert.True(root.TryGetProperty("created_at", out var createdAt));
         Assert.Equal(JsonValueKind.String, createdAt.ValueKind);
         Assert.True(DateTimeOffset.TryParse(createdAt.GetString(), out _));
 
         // Optional properties
         Assert.True(root.TryGetProperty("description", out var description));
         Assert.True(root.TryGetProperty("deadline", out var deadline));
-        Assert.True(root.TryGetProperty("completedAt", out var completedAt));
+        Assert.True(root.TryGetProperty("completed_at", out var completedAt));
 
         // Validate Location header
         Assert.NotNull(response.Headers.Location);
@@ -511,7 +511,7 @@ public class GoalsContractTests : IClassFixture<CustomWebApplicationFactory>
         {
             title = "Updated Task Title",
             description = "Updated description",
-            isCompleted = true
+            is_completed = true
         };
 
         // Act
@@ -531,9 +531,9 @@ public class GoalsContractTests : IClassFixture<CustomWebApplicationFactory>
         Assert.Equal(taskId, id.GetString());
         Assert.True(root.TryGetProperty("title", out var title));
         Assert.Equal("Updated Task Title", title.GetString());
-        Assert.True(root.TryGetProperty("isCompleted", out var isCompleted));
+        Assert.True(root.TryGetProperty("is_completed", out var isCompleted));
         Assert.Equal(JsonValueKind.True, isCompleted.ValueKind);
-        Assert.True(root.TryGetProperty("completedAt", out var completedAt));
+        Assert.True(root.TryGetProperty("completed_at", out var completedAt));
         Assert.NotEqual(JsonValueKind.Null, completedAt.ValueKind); // Should be set when completed
     }
 

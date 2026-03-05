@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace CPR.Application.Contracts
 {
@@ -9,10 +10,13 @@ namespace CPR.Application.Contracts
     public class CareerPathDto
     {
         /// <summary>Identifier (GUID)</summary>
+        [JsonPropertyName("id")]
         public Guid Id { get; set; }
         /// <summary>Human-friendly title</summary>
+        [JsonPropertyName("title")]
         public string Title { get; set; } = null!;
         /// <summary>Optional description</summary>
+        [JsonPropertyName("description")]
         public string? Description { get; set; }
     }
 
@@ -22,12 +26,16 @@ namespace CPR.Application.Contracts
     public class CareerTrackDto
     {
         /// <summary>Identifier (GUID)</summary>
+        [JsonPropertyName("id")]
         public Guid Id { get; set; }
         /// <summary>Human-friendly title</summary>
+        [JsonPropertyName("title")]
         public string Title { get; set; } = null!;
         /// <summary>Optional description</summary>
+        [JsonPropertyName("description")]
         public string? Description { get; set; }
         /// <summary>Parent career path id</summary>
+        [JsonPropertyName("career_path_id")]
         public Guid CareerPathId { get; set; }
     }
 
@@ -37,14 +45,19 @@ namespace CPR.Application.Contracts
     public class PositionDto
     {
         /// <summary>Identifier (GUID)</summary>
+        [JsonPropertyName("id")]
         public Guid Id { get; set; }
         /// <summary>Human-friendly title</summary>
+        [JsonPropertyName("title")]
         public string Title { get; set; } = null!;
         /// <summary>Optional description</summary>
+        [JsonPropertyName("description")]
         public string? Description { get; set; }
         /// <summary>Optional expectations text for the position</summary>
+        [JsonPropertyName("expectations")]
         public string? Expectations { get; set; }
         /// <summary>Parent career track id</summary>
+        [JsonPropertyName("career_track_id")]
         public Guid CareerTrackId { get; set; }
     }
 
@@ -54,12 +67,16 @@ namespace CPR.Application.Contracts
     public class SkillDto
     {
         /// <summary>Identifier (GUID)</summary>
+        [JsonPropertyName("id")]
         public Guid Id { get; set; }
         /// <summary>Human-friendly title</summary>
+        [JsonPropertyName("title")]
         public string Title { get; set; } = null!;
         /// <summary>Optional description</summary>
+        [JsonPropertyName("description")]
         public string? Description { get; set; }
         /// <summary>Parent skill category id</summary>
+        [JsonPropertyName("category_id")]
         public Guid CategoryId { get; set; }
     }
 
@@ -69,14 +86,19 @@ namespace CPR.Application.Contracts
     public class SkillLevelDto
     {
         /// <summary>Identifier (GUID)</summary>
+        [JsonPropertyName("id")]
         public Guid Id { get; set; }
         /// <summary>Human-friendly title</summary>
+        [JsonPropertyName("title")]
         public string Title { get; set; } = null!;
         /// <summary>Optional description</summary>
+        [JsonPropertyName("description")]
         public string? Description { get; set; }
         /// <summary>Parent skill id</summary>
+        [JsonPropertyName("skill_id")]
         public Guid SkillId { get; set; }
         /// <summary>Numeric value representing the level</summary>
+        [JsonPropertyName("value")]
         public int Value { get; set; }
     }
 
@@ -86,24 +108,34 @@ namespace CPR.Application.Contracts
     public class EmployeeSkillDto
     {
         /// <summary>Identifier (GUID)</summary>
+        [JsonPropertyName("id")]
         public Guid Id { get; set; }
         /// <summary>Employee identifier</summary>
+        [JsonPropertyName("employee_id")]
         public Guid EmployeeId { get; set; }
         /// <summary>Skill details</summary>
+        [JsonPropertyName("skill")]
         public SkillDto Skill { get; set; } = null!;
         /// <summary>Current skill level (optional)</summary>
+        [JsonPropertyName("current_level")]
         public SkillLevelDto? CurrentLevel { get; set; }
         /// <summary>Target skill level (optional)</summary>
+        [JsonPropertyName("target_level")]
         public SkillLevelDto? TargetLevel { get; set; }
         /// <summary>Source of the assessment</summary>
+        [JsonPropertyName("source")]
         public string? Source { get; set; }
         /// <summary>Effective date of the assessment</summary>
+        [JsonPropertyName("effective_date")]
         public DateTimeOffset? EffectiveDate { get; set; }
         /// <summary>Whether this is a target assessment</summary>
+        [JsonPropertyName("is_target")]
         public bool IsTarget { get; set; }
         /// <summary>When the assessment was created</summary>
+        [JsonPropertyName("created_at")]
         public DateTimeOffset CreatedAt { get; set; }
         /// <summary>When the assessment was last modified</summary>
+        [JsonPropertyName("modified_at")]
         public DateTimeOffset? ModifiedAt { get; set; }
     }
 
@@ -113,16 +145,22 @@ namespace CPR.Application.Contracts
     public class EmployeeSkillCreateDto
     {
         /// <summary>Skill identifier</summary>
+        [JsonPropertyName("skill_id")]
         public Guid SkillId { get; set; }
         /// <summary>Current skill level identifier (optional)</summary>
+        [JsonPropertyName("current_level_id")]
         public Guid? CurrentLevelId { get; set; }
         /// <summary>Target skill level identifier (optional)</summary>
+        [JsonPropertyName("target_level_id")]
         public Guid? TargetLevelId { get; set; }
         /// <summary>Source of the assessment</summary>
+        [JsonPropertyName("source")]
         public string? Source { get; set; }
         /// <summary>Effective date of the assessment</summary>
+        [JsonPropertyName("effective_date")]
         public DateTimeOffset? EffectiveDate { get; set; }
         /// <summary>Whether this is a target assessment</summary>
+        [JsonPropertyName("is_target")]
         public bool IsTarget { get; set; }
     }
 
@@ -132,14 +170,19 @@ namespace CPR.Application.Contracts
     public class EmployeeSkillUpdateDto
     {
         /// <summary>Current skill level identifier (optional)</summary>
+        [JsonPropertyName("current_level_id")]
         public Guid? CurrentLevelId { get; set; }
         /// <summary>Target skill level identifier (optional)</summary>
+        [JsonPropertyName("target_level_id")]
         public Guid? TargetLevelId { get; set; }
         /// <summary>Source of the assessment</summary>
+        [JsonPropertyName("source")]
         public string? Source { get; set; }
         /// <summary>Effective date of the assessment</summary>
+        [JsonPropertyName("effective_date")]
         public DateTimeOffset? EffectiveDate { get; set; }
         /// <summary>Whether this is a target assessment</summary>
+        [JsonPropertyName("is_target")]
         public bool IsTarget { get; set; }
     }
 
@@ -151,10 +194,13 @@ namespace CPR.Application.Contracts
     public class SkillCategoryDto
     {
         /// <summary>Identifier (GUID)</summary>
+        [JsonPropertyName("id")]
         public Guid Id { get; set; }
         /// <summary>Human-friendly title</summary>
+        [JsonPropertyName("title")]
         public string Title { get; set; } = null!;
         /// <summary>Optional description</summary>
+        [JsonPropertyName("description")]
         public string? Description { get; set; }
     }
 
@@ -166,10 +212,12 @@ namespace CPR.Application.Contracts
         /// <summary>Human-friendly title (required, 1-250 characters)</summary>
         [Required(ErrorMessage = "Title is required")]
         [MaxLength(250, ErrorMessage = "Title cannot exceed 250 characters")]
+        [JsonPropertyName("title")]
         public string Title { get; set; } = null!;
 
         /// <summary>Optional description (max 2000 characters)</summary>
         [MaxLength(2000, ErrorMessage = "Description cannot exceed 2000 characters")]
+        [JsonPropertyName("description")]
         public string? Description { get; set; }
     }
 
@@ -180,10 +228,12 @@ namespace CPR.Application.Contracts
     {
         /// <summary>Human-friendly title (optional, 1-250 characters)</summary>
         [MaxLength(250, ErrorMessage = "Title cannot exceed 250 characters")]
+        [JsonPropertyName("title")]
         public string? Title { get; set; }
 
         /// <summary>Optional description (max 2000 characters)</summary>
         [MaxLength(2000, ErrorMessage = "Description cannot exceed 2000 characters")]
+        [JsonPropertyName("description")]
         public string? Description { get; set; }
     }
 
@@ -197,10 +247,12 @@ namespace CPR.Application.Contracts
         /// <summary>Human-friendly title (required, 1-250 characters)</summary>
         [Required(ErrorMessage = "Title is required")]
         [MaxLength(250, ErrorMessage = "Title cannot exceed 250 characters")]
+        [JsonPropertyName("title")]
         public string Title { get; set; } = null!;
 
         /// <summary>Optional description (max 2000 characters)</summary>
         [MaxLength(2000, ErrorMessage = "Description cannot exceed 2000 characters")]
+        [JsonPropertyName("description")]
         public string? Description { get; set; }
     }
 
@@ -211,10 +263,12 @@ namespace CPR.Application.Contracts
     {
         /// <summary>Human-friendly title (optional, 1-250 characters)</summary>
         [MaxLength(250, ErrorMessage = "Title cannot exceed 250 characters")]
+        [JsonPropertyName("title")]
         public string? Title { get; set; }
 
         /// <summary>Optional description (max 2000 characters)</summary>
         [MaxLength(2000, ErrorMessage = "Description cannot exceed 2000 characters")]
+        [JsonPropertyName("description")]
         public string? Description { get; set; }
     }
 
@@ -228,14 +282,17 @@ namespace CPR.Application.Contracts
         /// <summary>Human-friendly title (required, 1-250 characters)</summary>
         [Required(ErrorMessage = "Title is required")]
         [MaxLength(250, ErrorMessage = "Title cannot exceed 250 characters")]
+        [JsonPropertyName("title")]
         public string Title { get; set; } = null!;
 
         /// <summary>Optional description (max 2000 characters)</summary>
         [MaxLength(2000, ErrorMessage = "Description cannot exceed 2000 characters")]
+        [JsonPropertyName("description")]
         public string? Description { get; set; }
 
         /// <summary>Parent career path identifier (required)</summary>
         [Required(ErrorMessage = "CareerPathId is required")]
+        [JsonPropertyName("career_path_id")]
         public Guid CareerPathId { get; set; }
     }
 
@@ -246,13 +303,16 @@ namespace CPR.Application.Contracts
     {
         /// <summary>Human-friendly title (optional, 1-250 characters)</summary>
         [MaxLength(250, ErrorMessage = "Title cannot exceed 250 characters")]
+        [JsonPropertyName("title")]
         public string? Title { get; set; }
 
         /// <summary>Optional description (max 2000 characters)</summary>
         [MaxLength(2000, ErrorMessage = "Description cannot exceed 2000 characters")]
+        [JsonPropertyName("description")]
         public string? Description { get; set; }
 
         /// <summary>Parent career path identifier (optional)</summary>
+        [JsonPropertyName("career_path_id")]
         public Guid? CareerPathId { get; set; }
     }
 
@@ -266,18 +326,22 @@ namespace CPR.Application.Contracts
         /// <summary>Human-friendly title (required, 1-250 characters)</summary>
         [Required(ErrorMessage = "Title is required")]
         [MaxLength(250, ErrorMessage = "Title cannot exceed 250 characters")]
+        [JsonPropertyName("title")]
         public string Title { get; set; } = null!;
 
         /// <summary>Optional description (max 2000 characters)</summary>
         [MaxLength(2000, ErrorMessage = "Description cannot exceed 2000 characters")]
+        [JsonPropertyName("description")]
         public string? Description { get; set; }
 
         /// <summary>Optional expectations text for the position (max 2000 characters)</summary>
         [MaxLength(2000, ErrorMessage = "Expectations cannot exceed 2000 characters")]
+        [JsonPropertyName("expectations")]
         public string? Expectations { get; set; }
 
         /// <summary>Parent career track identifier (required)</summary>
         [Required(ErrorMessage = "CareerTrackId is required")]
+        [JsonPropertyName("career_track_id")]
         public Guid CareerTrackId { get; set; }
     }
 
@@ -288,17 +352,21 @@ namespace CPR.Application.Contracts
     {
         /// <summary>Human-friendly title (optional, 1-250 characters)</summary>
         [MaxLength(250, ErrorMessage = "Title cannot exceed 250 characters")]
+        [JsonPropertyName("title")]
         public string? Title { get; set; }
 
         /// <summary>Optional description (max 2000 characters)</summary>
         [MaxLength(2000, ErrorMessage = "Description cannot exceed 2000 characters")]
+        [JsonPropertyName("description")]
         public string? Description { get; set; }
 
         /// <summary>Optional expectations text for the position (max 2000 characters)</summary>
         [MaxLength(2000, ErrorMessage = "Expectations cannot exceed 2000 characters")]
+        [JsonPropertyName("expectations")]
         public string? Expectations { get; set; }
 
         /// <summary>Parent career track identifier (optional)</summary>
+        [JsonPropertyName("career_track_id")]
         public Guid? CareerTrackId { get; set; }
     }
 
@@ -312,14 +380,17 @@ namespace CPR.Application.Contracts
         /// <summary>Human-friendly title (required, 1-250 characters)</summary>
         [Required(ErrorMessage = "Title is required")]
         [MaxLength(250, ErrorMessage = "Title cannot exceed 250 characters")]
+        [JsonPropertyName("title")]
         public string Title { get; set; } = null!;
 
         /// <summary>Optional description (max 2000 characters)</summary>
         [MaxLength(2000, ErrorMessage = "Description cannot exceed 2000 characters")]
+        [JsonPropertyName("description")]
         public string? Description { get; set; }
 
         /// <summary>Parent skill category identifier (required)</summary>
         [Required(ErrorMessage = "CategoryId is required")]
+        [JsonPropertyName("category_id")]
         public Guid CategoryId { get; set; }
     }
 
@@ -330,13 +401,16 @@ namespace CPR.Application.Contracts
     {
         /// <summary>Human-friendly title (optional, 1-250 characters)</summary>
         [MaxLength(250, ErrorMessage = "Title cannot exceed 250 characters")]
+        [JsonPropertyName("title")]
         public string? Title { get; set; }
 
         /// <summary>Optional description (max 2000 characters)</summary>
         [MaxLength(2000, ErrorMessage = "Description cannot exceed 2000 characters")]
+        [JsonPropertyName("description")]
         public string? Description { get; set; }
 
         /// <summary>Parent skill category identifier (optional)</summary>
+        [JsonPropertyName("category_id")]
         public Guid? CategoryId { get; set; }
     }
 
@@ -350,19 +424,23 @@ namespace CPR.Application.Contracts
         /// <summary>Human-friendly title (required, 1-250 characters)</summary>
         [Required(ErrorMessage = "Title is required")]
         [MaxLength(250, ErrorMessage = "Title cannot exceed 250 characters")]
+        [JsonPropertyName("title")]
         public string Title { get; set; } = null!;
 
         /// <summary>Optional description (max 2000 characters)</summary>
         [MaxLength(2000, ErrorMessage = "Description cannot exceed 2000 characters")]
+        [JsonPropertyName("description")]
         public string? Description { get; set; }
 
         /// <summary>Numeric value representing the level (1-5, required)</summary>
         [Required(ErrorMessage = "Value is required")]
         [Range(1, 5, ErrorMessage = "Value must be between 1 and 5")]
+        [JsonPropertyName("value")]
         public int Value { get; set; }
 
         /// <summary>Parent skill identifier (required)</summary>
         [Required(ErrorMessage = "SkillId is required")]
+        [JsonPropertyName("skill_id")]
         public Guid SkillId { get; set; }
     }
 
@@ -373,17 +451,21 @@ namespace CPR.Application.Contracts
     {
         /// <summary>Human-friendly title (optional, 1-250 characters)</summary>
         [MaxLength(250, ErrorMessage = "Title cannot exceed 250 characters")]
+        [JsonPropertyName("title")]
         public string? Title { get; set; }
 
         /// <summary>Optional description (max 2000 characters)</summary>
         [MaxLength(2000, ErrorMessage = "Description cannot exceed 2000 characters")]
+        [JsonPropertyName("description")]
         public string? Description { get; set; }
 
         /// <summary>Numeric value representing the level (1-5, optional)</summary>
         [Range(1, 5, ErrorMessage = "Value must be between 1 and 5")]
+        [JsonPropertyName("value")]
         public int? Value { get; set; }
 
         /// <summary>Parent skill identifier (optional)</summary>
+        [JsonPropertyName("skill_id")]
         public Guid? SkillId { get; set; }
     }
 
@@ -396,10 +478,12 @@ namespace CPR.Application.Contracts
     {
         /// <summary>Skill identifier (required)</summary>
         [Required(ErrorMessage = "SkillId is required")]
+        [JsonPropertyName("skill_id")]
         public Guid SkillId { get; set; }
 
         /// <summary>Required skill level identifier (required)</summary>
         [Required(ErrorMessage = "SkillLevelId is required")]
+        [JsonPropertyName("skill_level_id")]
         public Guid SkillLevelId { get; set; }
     }
 
@@ -409,24 +493,31 @@ namespace CPR.Application.Contracts
     public class PositionSkillMappingDto
     {
         /// <summary>Mapping identifier (GUID)</summary>
+        [JsonPropertyName("id")]
         public Guid Id { get; set; }
 
         /// <summary>Position identifier</summary>
+        [JsonPropertyName("position_id")]
         public Guid PositionId { get; set; }
 
         /// <summary>Skill identifier</summary>
+        [JsonPropertyName("skill_id")]
         public Guid SkillId { get; set; }
 
         /// <summary>Skill title</summary>
+        [JsonPropertyName("skill_title")]
         public string SkillTitle { get; set; } = null!;
 
         /// <summary>Required skill level identifier</summary>
+        [JsonPropertyName("skill_level_id")]
         public Guid SkillLevelId { get; set; }
 
         /// <summary>Skill level title</summary>
+        [JsonPropertyName("skill_level_title")]
         public string SkillLevelTitle { get; set; } = null!;
 
         /// <summary>When the mapping was created</summary>
+        [JsonPropertyName("created_at")]
         public DateTimeOffset CreatedAt { get; set; }
     }
 }
