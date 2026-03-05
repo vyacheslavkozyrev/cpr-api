@@ -53,5 +53,23 @@ namespace CPR.Application.Services
         /// <param name="employeeId">Employee ID to get feedback for</param>
         /// <returns>List of feedback addressed to the current user</returns>
         Task<IEnumerable<MyFeedbackDto>> GetMyFeedbackAsync(Guid employeeId);
+
+        /// <summary>
+        /// Get a specific feedback by ID
+        /// </summary>
+        /// <param name="feedbackId">Feedback ID</param>
+        /// <param name="requestingEmployeeId">Employee ID making the request</param>
+        /// <returns>Feedback details</returns>
+        Task<FeedbackDto?> GetFeedbackByIdAsync(Guid feedbackId, Guid requestingEmployeeId);
+
+        /// <summary>
+        /// Get feedback analytics for an employee
+        /// </summary>
+        /// <param name="employeeId">Employee ID to get analytics for</param>
+        /// <param name="dateFrom">Start date (ISO 8601 format)</param>
+        /// <param name="dateTo">End date (ISO 8601 format)</param>
+        /// <param name="includeComparison">Include comparison with previous period</param>
+        /// <returns>Analytics data</returns>
+        Task<FeedbackAnalyticsDto> GetFeedbackAnalyticsAsync(Guid employeeId, string dateFrom, string dateTo, bool includeComparison);
     }
 }

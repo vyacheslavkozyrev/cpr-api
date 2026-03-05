@@ -540,7 +540,7 @@ namespace CPR.Infrastructure.Migrations
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
-                    goal_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    goal_id = table.Column<Guid>(type: "uuid", nullable: true),
                     project_id = table.Column<Guid>(type: "uuid", nullable: true),
                     from_employee_id = table.Column<Guid>(type: "uuid", nullable: false),
                     to_employee_id = table.Column<Guid>(type: "uuid", nullable: false),

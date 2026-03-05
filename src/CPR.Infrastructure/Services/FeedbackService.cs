@@ -264,13 +264,16 @@ namespace CPR.Infrastructure.Services
                 throw new ArgumentException("Employee not found", nameof(dto.EmployeeId));
             }
 
-            // Validate that the goal exists
-            var goal = await _db.Goals
-                .FirstOrDefaultAsync(g => g.Id == dto.GoalId && !g.IsDeleted);
-
-            if (goal == null)
+            // Validate that the goal exists (if provided)
+            if (dto.GoalId.HasValue)
             {
-                throw new ArgumentException("Goal not found", nameof(dto.GoalId));
+                var goal = await _db.Goals
+                    .FirstOrDefaultAsync(g => g.Id == dto.GoalId.Value && !g.IsDeleted);
+
+                if (goal == null)
+                {
+                    throw new ArgumentException("Goal not found", nameof(dto.GoalId));
+                }
             }
 
             // Validate project if provided
@@ -340,60 +343,90 @@ namespace CPR.Infrastructure.Services
         public async Task<IEnumerable<FeedbackDto>> GetFeedbackForEmployeeAsync(Guid employeeId)
         {
             var feedbacks = await _feedbackRepo.QueryByToEmployeeId(employeeId)
-                .Join(_db.Goals.Where(g => !g.IsDeleted),
-                    f => f.GoalId,
-                    g => g.Id,
-                    (f, g) => new { Feedback = f, Goal = g })
-                .Join(_db.Employees.Where(e => !e.IsDeleted),
-                    fg => fg.Feedback.FromEmployeeId,
-                    fe => fe.Id,
-                    (fg, fe) => new { fg.Feedback, fg.Goal, FromEmployee = fe })
-                .Join(_db.Employees.Where(e => !e.IsDeleted),
-                    fge => fge.Feedback.ToEmployeeId,
-                    te => te.Id,
-                    (fge, te) => new { fge.Feedback, fge.Goal, fge.FromEmployee, ToEmployee = te })
-                .Join(_db.Users,
-                    fget => fget.FromEmployee.UserId,
-                    fu => fu.Id,
-                    (fget, fu) => new { fget.Feedback, fget.Goal, fget.FromEmployee, fget.ToEmployee, FromUser = fu })
-                .Join(_db.Users,
-                    fgetu => fgetu.ToEmployee.UserId,
-                    tu => tu.Id,
-                    (fgetu, tu) => new { fgetu.Feedback, fgetu.Goal, fgetu.FromEmployee, fgetu.ToEmployee, fgetu.FromUser, ToUser = tu })
-                .GroupJoin(_db.Projects.Where(p => !p.IsDeleted),
-                    fgetu => fgetu.Feedback.ProjectId,
-                    p => p.Id,
-                    (fgetu, projects) => new { fgetu.Feedback, fgetu.Goal, fgetu.FromEmployee, fgetu.ToEmployee, fgetu.FromUser, fgetu.ToUser, Project = projects.FirstOrDefault() })
+                .Select(f => new
+                {
+                    Feedback = f,
+                    Goal = f.GoalId.HasValue ? _db.Goals.Where(g => g.Id == f.GoalId.Value && !g.IsDeleted).FirstOrDefault() : null,
+                    FromEmployee = _db.Employees.Where(e => e.Id == f.FromEmployeeId && !e.IsDeleted).FirstOrDefault(),
+                    ToEmployee = _db.Employees.Where(e => e.Id == f.ToEmployeeId && !e.IsDeleted).FirstOrDefault(),
+                    Project = f.ProjectId.HasValue ? _db.Projects.Where(p => p.Id == f.ProjectId.Value && !p.IsDeleted).FirstOrDefault() : null
+                })
+                .Where(x => x.FromEmployee != null && x.ToEmployee != null)
+                .Select(x => new
+                {
+                    x.Feedback,
+                    x.Goal,
+                    x.FromEmployee,
+                    x.ToEmployee,
+                    FromUser = _db.Users.Where(u => u.Id == x.FromEmployee!.UserId).FirstOrDefault(),
+                    ToUser = _db.Users.Where(u => u.Id == x.ToEmployee!.UserId).FirstOrDefault(),
+                    x.Project
+                })
                 .OrderByDescending(f => f.Feedback.CreatedAt)
                 .ToListAsync();
 
-            return feedbacks.Select(f => MapToFeedbackDto(f.Feedback, f.Goal, f.FromEmployee, f.ToEmployee, f.FromUser, f.ToUser, f.Project));
+            return feedbacks
+                .Where(f => f.FromUser != null && f.ToUser != null)
+                .Select(f => MapToFeedbackDto(f.Feedback, f.Goal, f.FromEmployee!, f.ToEmployee!, f.FromUser!, f.ToUser!, f.Project));
         }
 
         /// <inheritdoc/>
         public async Task<IEnumerable<MyFeedbackDto>> GetMyFeedbackAsync(Guid employeeId)
         {
             var feedbacks = await _feedbackRepo.QueryByToEmployeeId(employeeId)
-                .Join(_db.Goals.Where(g => !g.IsDeleted),
-                    f => f.GoalId,
-                    g => g.Id,
-                    (f, g) => new { Feedback = f, Goal = g })
-                .Join(_db.Employees.Where(e => !e.IsDeleted),
-                    fg => fg.Feedback.FromEmployeeId,
-                    fe => fe.Id,
-                    (fg, fe) => new { fg.Feedback, fg.Goal, FromEmployee = fe })
-                .Join(_db.Users,
-                    fge => fge.FromEmployee.UserId,
-                    fu => fu.Id,
-                    (fge, fu) => new { fge.Feedback, fge.Goal, fge.FromEmployee, FromUser = fu })
-                .GroupJoin(_db.Projects.Where(p => !p.IsDeleted),
-                    fge => fge.Feedback.ProjectId,
-                    p => p.Id,
-                    (fge, projects) => new { fge.Feedback, fge.Goal, fge.FromEmployee, fge.FromUser, Project = projects.FirstOrDefault() })
+                .Select(f => new
+                {
+                    Feedback = f,
+                    Goal = f.GoalId.HasValue ? _db.Goals.Where(g => g.Id == f.GoalId.Value && !g.IsDeleted).FirstOrDefault() : null,
+                    FromEmployee = _db.Employees.Where(e => e.Id == f.FromEmployeeId && !e.IsDeleted).FirstOrDefault(),
+                    Project = f.ProjectId.HasValue ? _db.Projects.Where(p => p.Id == f.ProjectId.Value && !p.IsDeleted).FirstOrDefault() : null
+                })
+                .Where(x => x.FromEmployee != null)
+                .Select(x => new
+                {
+                    x.Feedback,
+                    x.Goal,
+                    x.FromEmployee,
+                    FromUser = _db.Users.Where(u => u.Id == x.FromEmployee!.UserId).FirstOrDefault(),
+                    x.Project
+                })
                 .OrderByDescending(f => f.Feedback.CreatedAt)
                 .ToListAsync();
 
-            return feedbacks.Select(f => MapToMyFeedbackDto(f.Feedback, f.Goal, f.FromEmployee, f.FromUser, f.Project));
+            return feedbacks
+                .Where(f => f.FromUser != null)
+                .Select(f => MapToMyFeedbackDto(f.Feedback, f.Goal, f.FromEmployee!, f.FromUser!, f.Project));
+        }
+
+        /// <inheritdoc/>
+        public async Task<FeedbackDto?> GetFeedbackByIdAsync(Guid feedbackId, Guid requestingEmployeeId)
+        {
+            var feedback = await _feedbackRepo.GetByIdAsync(feedbackId);
+            if (feedback == null || feedback.IsDeleted)
+            {
+                return null;
+            }
+
+            // Check authorization - user must be either the giver or receiver
+            if (feedback.FromEmployeeId != requestingEmployeeId && feedback.ToEmployeeId != requestingEmployeeId)
+            {
+                return null; // Not authorized
+            }
+
+            // Get related entities for mapping
+            var goal = feedback.GoalId.HasValue ? await _db.Goals.FindAsync(feedback.GoalId.Value) : null;
+            var fromEmployee = await _db.Employees.FindAsync(feedback.FromEmployeeId);
+            var toEmployee = await _db.Employees.FindAsync(feedback.ToEmployeeId);
+            var fromUser = fromEmployee != null ? await _db.Users.FindAsync(fromEmployee.UserId) : null;
+            var toUser = toEmployee != null ? await _db.Users.FindAsync(toEmployee.UserId) : null;
+            var project = feedback.ProjectId.HasValue ? await _db.Projects.FindAsync(feedback.ProjectId.Value) : null;
+
+            if (fromEmployee == null || toEmployee == null || fromUser == null || toUser == null)
+            {
+                return null;
+            }
+
+            return MapToFeedbackDto(feedback, goal, fromEmployee, toEmployee, fromUser, toUser, project);
         }
 
         private async Task<FeedbackDto> GetFeedbackDtoAsync(Guid feedbackId)
@@ -405,17 +438,17 @@ namespace CPR.Infrastructure.Services
             }
 
             // Get related entities for mapping
-            var goal = await _db.Goals.FindAsync(feedback.GoalId);
+            var goal = feedback.GoalId.HasValue ? await _db.Goals.FindAsync(feedback.GoalId.Value) : null;
             var fromEmployee = await _db.Employees.FindAsync(feedback.FromEmployeeId);
             var toEmployee = await _db.Employees.FindAsync(feedback.ToEmployeeId);
             var fromUser = fromEmployee != null ? await _db.Users.FindAsync(fromEmployee.UserId) : null;
             var toUser = toEmployee != null ? await _db.Users.FindAsync(toEmployee.UserId) : null;
             var project = feedback.ProjectId.HasValue ? await _db.Projects.FindAsync(feedback.ProjectId.Value) : null;
 
-            return MapToFeedbackDto(feedback, goal!, fromEmployee!, toEmployee!, fromUser!, toUser!, project);
+            return MapToFeedbackDto(feedback, goal, fromEmployee!, toEmployee!, fromUser!, toUser!, project);
         }
 
-        private static FeedbackDto MapToFeedbackDto(Feedback feedback, Goal goal, Employee fromEmployee, Employee toEmployee, User fromUser, User toUser, Project? project = null)
+        private static FeedbackDto MapToFeedbackDto(Feedback feedback, Goal? goal, Employee fromEmployee, Employee toEmployee, User fromUser, User toUser, Project? project = null)
         {
             return new FeedbackDto
             {
@@ -427,12 +460,12 @@ namespace CPR.Infrastructure.Services
                 Content = feedback.Content,
                 Rating = feedback.Rating ?? 0, // Default to 0 if null
                 CreatedAt = feedback.CreatedAt.DateTime, // Convert DateTimeOffset to DateTime
-                Goal = new GoalSummaryDto
+                Goal = goal != null ? new GoalSummaryDto
                 {
                     Id = goal.Id,
                     Title = goal.Title ?? "Unknown Goal",
                     Description = goal.Description
-                },
+                } : null,
                 Project = project != null ? new ProjectSummaryDto
                 {
                     Id = project.Id,
@@ -458,7 +491,7 @@ namespace CPR.Infrastructure.Services
             };
         }
 
-        private static MyFeedbackDto MapToMyFeedbackDto(Feedback feedback, Goal goal, Employee fromEmployee, User fromUser, Project? project = null)
+        private static MyFeedbackDto MapToMyFeedbackDto(Feedback feedback, Goal? goal, Employee fromEmployee, User fromUser, Project? project = null)
         {
             return new MyFeedbackDto
             {
@@ -469,12 +502,12 @@ namespace CPR.Infrastructure.Services
                 Content = feedback.Content,
                 Rating = feedback.Rating ?? 0, // Default to 0 if null
                 CreatedAt = feedback.CreatedAt.DateTime, // Convert DateTimeOffset to DateTime
-                Goal = new GoalSummaryDto
+                Goal = goal != null ? new GoalSummaryDto
                 {
                     Id = goal.Id,
                     Title = goal.Title ?? "Unknown Goal",
                     Description = goal.Description
-                },
+                } : null,
                 Project = project != null ? new ProjectSummaryDto
                 {
                     Id = project.Id,
@@ -489,6 +522,231 @@ namespace CPR.Infrastructure.Services
                     JobTitle = fromEmployee.Position?.Title,
                     Department = fromEmployee.Department?.Name
                 }
+            };
+        }
+
+        /// <inheritdoc/>
+        public async Task<FeedbackAnalyticsDto> GetFeedbackAnalyticsAsync(Guid employeeId, string dateFrom, string dateTo, bool includeComparison)
+        {
+            // Parse dates and convert to UTC (PostgreSQL requires UTC for timestamp with time zone)
+            if (!DateTime.TryParse(dateFrom, out var startDateTime))
+            {
+                throw new ArgumentException("Invalid date format for date_from", nameof(dateFrom));
+            }
+
+            if (!DateTime.TryParse(dateTo, out var endDateTime))
+            {
+                throw new ArgumentException("Invalid date format for date_to", nameof(dateTo));
+            }
+
+            // Convert to UTC DateTimeOffset
+            var startDate = new DateTimeOffset(startDateTime, TimeSpan.Zero);
+            var endDate = new DateTimeOffset(endDateTime.AddDays(1).AddTicks(-1), TimeSpan.Zero); // End of day
+
+            // Get all feedback for the employee in the date range
+            var feedbackQuery = _feedbackRepo.QueryByToEmployeeId(employeeId)
+                .Where(f => f.CreatedAt >= startDate && f.CreatedAt <= endDate);
+
+            var feedbackList = await feedbackQuery.ToListAsync();
+
+            // Calculate basic metrics
+            var totalCount = feedbackList.Count;
+            var averageRating = feedbackList.Any()
+                ? (decimal)feedbackList.Average(f => f.Rating ?? 0)
+                : 0m;
+
+            // Rating distribution
+            var ratingDistribution = new RatingDistributionDto
+            {
+                OneStar = feedbackList.Count(f => f.Rating == 1),
+                TwoStar = feedbackList.Count(f => f.Rating == 2),
+                ThreeStar = feedbackList.Count(f => f.Rating == 3),
+                FourStar = feedbackList.Count(f => f.Rating == 4),
+                FiveStar = feedbackList.Count(f => f.Rating == 5)
+            };
+
+            // Monthly trend (last 12 months from end date)
+            var monthlyTrend = new List<MonthlyFeedbackTrendDto>();
+            var startMonth = endDate.AddMonths(-11); // Go back 11 months for 12 total months
+
+            for (int i = 0; i < 12; i++)
+            {
+                var monthStart = startMonth.AddMonths(i);
+                var monthEnd = monthStart.AddMonths(1);
+
+                var monthFeedback = feedbackList
+                    .Where(f => f.CreatedAt >= monthStart && f.CreatedAt < monthEnd)
+                    .ToList();
+
+                monthlyTrend.Add(new MonthlyFeedbackTrendDto
+                {
+                    Month = monthStart.ToString("yyyy-MM"),
+                    Count = monthFeedback.Count,
+                    AverageRating = monthFeedback.Any()
+                        ? (decimal)monthFeedback.Average(f => f.Rating ?? 0)
+                        : 0m
+                });
+            }
+
+            // Top providers (top 5 employees who gave feedback)
+            var topProviders = await feedbackQuery
+                .GroupBy(f => f.FromEmployeeId)
+                .Select(g => new
+                {
+                    EmployeeId = g.Key,
+                    Count = g.Count(),
+                    AverageRating = g.Average(f => (double?)f.Rating) ?? 0
+                })
+                .OrderByDescending(x => x.Count)
+                .Take(5)
+                .ToListAsync();
+
+            var topProviderDtos = new List<TopProviderDto>();
+            foreach (var provider in topProviders)
+            {
+                var employee = await _db.Employees
+                    .Include(e => e.Position)
+                    .Include(e => e.Department)
+                    .FirstOrDefaultAsync(e => e.Id == provider.EmployeeId);
+
+                if (employee == null) continue;
+
+                var user = await _db.Users.FirstOrDefaultAsync(u => u.Id == employee.UserId);
+
+                topProviderDtos.Add(new TopProviderDto
+                {
+                    Employee = new EmployeeSummaryDto
+                    {
+                        Id = employee.Id,
+                        DisplayName = user?.DisplayName ?? "Unknown",
+                        Email = null,
+                        JobTitle = employee.Position?.Title,
+                        Department = employee.Department?.Name
+                    },
+                    Count = provider.Count,
+                    AverageRating = (decimal)provider.AverageRating
+                });
+            }
+
+            // Top goals (top 5 goals with most feedback)
+            var topGoals = await feedbackQuery
+                .Where(f => f.GoalId.HasValue)
+                .GroupBy(f => f.GoalId)
+                .Select(g => new
+                {
+                    GoalId = g.Key,
+                    Count = g.Count(),
+                    AverageRating = g.Average(f => (double?)f.Rating) ?? 0
+                })
+                .OrderByDescending(x => x.Count)
+                .Take(5)
+                .ToListAsync();
+
+            var topGoalDtos = new List<TopGoalDto>();
+            foreach (var goalStat in topGoals)
+            {
+                if (goalStat.GoalId.HasValue)
+                {
+                    var goal = await _db.Goals.FirstOrDefaultAsync(g => g.Id == goalStat.GoalId.Value);
+                    if (goal != null)
+                    {
+                        topGoalDtos.Add(new TopGoalDto
+                        {
+                            Goal = new GoalSummaryDto
+                            {
+                                Id = goal.Id,
+                                Title = goal.Title ?? "Unknown Goal",
+                                Description = goal.Description
+                            },
+                            Count = goalStat.Count,
+                            AverageRating = (decimal)goalStat.AverageRating
+                        });
+                    }
+                }
+            }
+
+            // Top projects (top 5 projects with most feedback)
+            var topProjects = await feedbackQuery
+                .Where(f => f.ProjectId.HasValue)
+                .GroupBy(f => f.ProjectId)
+                .Select(g => new
+                {
+                    ProjectId = g.Key,
+                    Count = g.Count(),
+                    AverageRating = g.Average(f => (double?)f.Rating) ?? 0
+                })
+                .OrderByDescending(x => x.Count)
+                .Take(5)
+                .ToListAsync();
+
+            var topProjectDtos = new List<TopProjectDto>();
+            foreach (var projectStat in topProjects)
+            {
+                if (projectStat.ProjectId.HasValue)
+                {
+                    var project = await _db.Projects.FirstOrDefaultAsync(p => p.Id == projectStat.ProjectId.Value);
+                    if (project != null)
+                    {
+                        topProjectDtos.Add(new TopProjectDto
+                        {
+                            Project = new ProjectSummaryDto
+                            {
+                                Id = project.Id,
+                                Name = project.Title ?? "Unknown Project",
+                                Description = project.Description
+                            },
+                            Count = projectStat.Count,
+                            AverageRating = (decimal)projectStat.AverageRating
+                        });
+                    }
+                }
+            }
+
+            // Comparison data (if requested)
+            ComparisonDataDto? comparison = null;
+            if (includeComparison)
+            {
+                var duration = endDate - startDate;
+                var previousStart = startDate.AddTicks(-duration.Ticks);
+                var previousEnd = startDate;
+
+                var previousFeedback = await _feedbackRepo.QueryByToEmployeeId(employeeId)
+                    .Where(f => f.CreatedAt >= previousStart && f.CreatedAt < previousEnd)
+                    .ToListAsync();
+
+                var previousTotal = previousFeedback.Count;
+                var previousAvgRating = previousFeedback.Any()
+                    ? (decimal)previousFeedback.Average(f => f.Rating ?? 0)
+                    : 0m;
+
+                var totalDelta = totalCount - previousTotal;
+                var totalDeltaPercent = previousTotal > 0
+                    ? (decimal)totalDelta / previousTotal * 100
+                    : 0m;
+
+                var ratingDelta = averageRating - previousAvgRating;
+
+                comparison = new ComparisonDataDto
+                {
+                    PreviousTotal = previousTotal,
+                    PreviousAverageRating = previousAvgRating,
+                    TotalDeltaPercent = totalDeltaPercent,
+                    RatingDelta = ratingDelta,
+                    PreviousPeriodStart = previousStart.ToString("yyyy-MM-dd"),
+                    PreviousPeriodEnd = previousEnd.ToString("yyyy-MM-dd")
+                };
+            }
+
+            return new FeedbackAnalyticsDto
+            {
+                TotalCount = totalCount,
+                AverageRating = averageRating,
+                RatingDistribution = ratingDistribution,
+                MonthlyTrend = monthlyTrend,
+                TopProviders = topProviderDtos,
+                TopGoals = topGoalDtos,
+                TopProjects = topProjectDtos,
+                Comparison = comparison
             };
         }
     }

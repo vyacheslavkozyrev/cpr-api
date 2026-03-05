@@ -65,6 +65,27 @@ namespace CPR.Api.Controllers
         }
 
         /// <summary>
+        /// Get goals for a specific employee (filtered by visibility).
+        /// Returns goals with 'team' or 'org' visibility, or all goals if requesting user is the owner.
+        /// </summary>
+        /// <param name="employeeId">Employee identifier.</param>
+        /// <param name="page">Page number (1-based).</param>
+        /// <param name="per_page">Items per page.</param>
+        [HttpGet("~/api/employees/{employeeId}/goals")]
+        [Authorize]
+        public async Task<IActionResult> GetEmployeeGoals(Guid employeeId, [FromQuery] int page = 1, [FromQuery] int per_page = 20)
+        {
+            var profile = await _userService.GetCurrentUserProfileAsync(User);
+            if (profile == null) return Unauthorized();
+            if (!Guid.TryParse(profile.EmployeeId, out var requestingUserId)) return Unauthorized();
+            if (page < 1) { await Task.Yield(); throw new ArgumentOutOfRangeException(nameof(page)); }
+            if (per_page < 1) { await Task.Yield(); throw new ArgumentOutOfRangeException(nameof(per_page)); }
+
+            var goals = await _goalService.GetEmployeeGoalsAsync(employeeId, requestingUserId, page, per_page);
+            return Ok(goals);
+        }
+
+        /// <summary>
         /// Get a specific goal by id. Access is limited to owner/manager/admin as applicable.
         /// </summary>
         /// <param name="id">Goal identifier.</param>

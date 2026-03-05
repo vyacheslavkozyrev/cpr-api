@@ -402,10 +402,9 @@ namespace CPR.Application.Contracts
         [JsonPropertyName("project_id")]
         public Guid? ProjectId { get; set; }
 
-        /// <summary>The goal this feedback is for</summary>
-        [Required(ErrorMessage = "Goal ID is required")]
+        /// <summary>The goal this feedback is for (optional for unsolicited feedback)</summary>
         [JsonPropertyName("goal_id")]
-        public Guid GoalId { get; set; }
+        public Guid? GoalId { get; set; }
 
         /// <summary>The employee receiving the feedback</summary>
         [Required(ErrorMessage = "Employee ID is required")]
@@ -436,8 +435,8 @@ namespace CPR.Application.Contracts
         /// <summary>The project this feedback is for</summary>
         public Guid? ProjectId { get; set; }
 
-        /// <summary>The goal this feedback is for</summary>
-        public Guid GoalId { get; set; }
+        /// <summary>The goal this feedback is for (optional for unsolicited feedback)</summary>
+        public Guid? GoalId { get; set; }
 
         /// <summary>The employee providing the feedback</summary>
         public Guid FromEmployeeId { get; set; }
@@ -479,8 +478,8 @@ namespace CPR.Application.Contracts
         /// <summary>The project this feedback is for</summary>
         public Guid? ProjectId { get; set; }
 
-        /// <summary>The goal this feedback is for</summary>
-        public Guid GoalId { get; set; }
+        /// <summary>The goal this feedback is for (optional for unsolicited feedback)</summary>
+        public Guid? GoalId { get; set; }
 
         /// <summary>The employee providing the feedback</summary>
         public Guid FromEmployeeId { get; set; }
@@ -568,5 +567,195 @@ namespace CPR.Application.Contracts
         /// <summary>Search in message content</summary>
         [JsonPropertyName("search")]
         public string? Search { get; set; }
+    }
+
+    // ====================================
+    // FEEDBACK ANALYTICS DTOs
+    // ====================================
+
+    /// <summary>
+    /// Query parameters for feedback analytics
+    /// </summary>
+    public class FeedbackAnalyticsQuery
+    {
+        /// <summary>Start date for analytics period (ISO 8601)</summary>
+        [JsonPropertyName("date_from")]
+        [Required(ErrorMessage = "Start date is required")]
+        public string DateFrom { get; set; } = null!;
+
+        /// <summary>End date for analytics period (ISO 8601)</summary>
+        [JsonPropertyName("date_to")]
+        [Required(ErrorMessage = "End date is required")]
+        public string DateTo { get; set; } = null!;
+
+        /// <summary>Include comparison with previous period</summary>
+        [JsonPropertyName("include_comparison")]
+        public bool IncludeComparison { get; set; } = false;
+    }
+
+    /// <summary>
+    /// Feedback analytics data
+    /// </summary>
+    public class FeedbackAnalyticsDto
+    {
+        /// <summary>Total feedback received</summary>
+        [JsonPropertyName("total_count")]
+        public int TotalCount { get; set; }
+
+        /// <summary>Average rating (1-5, decimal)</summary>
+        [JsonPropertyName("average_rating")]
+        public decimal AverageRating { get; set; }
+
+        /// <summary>Rating distribution (count per rating value)</summary>
+        [JsonPropertyName("rating_distribution")]
+        public RatingDistributionDto RatingDistribution { get; set; } = new();
+
+        /// <summary>Monthly feedback trend (last 12 months)</summary>
+        [JsonPropertyName("monthly_trend")]
+        public List<MonthlyFeedbackTrendDto> MonthlyTrend { get; set; } = new();
+
+        /// <summary>Top feedback providers</summary>
+        [JsonPropertyName("top_providers")]
+        public List<TopProviderDto> TopProviders { get; set; } = new();
+
+        /// <summary>Goals with most feedback</summary>
+        [JsonPropertyName("top_goals")]
+        public List<TopGoalDto> TopGoals { get; set; } = new();
+
+        /// <summary>Projects with most feedback</summary>
+        [JsonPropertyName("top_projects")]
+        public List<TopProjectDto> TopProjects { get; set; } = new();
+
+        /// <summary>Comparison data (if enabled)</summary>
+        [JsonPropertyName("comparison")]
+        public ComparisonDataDto? Comparison { get; set; }
+    }
+
+    /// <summary>
+    /// Rating distribution (count per rating value)
+    /// </summary>
+    public class RatingDistributionDto
+    {
+        /// <summary>Count of 1-star ratings</summary>
+        [JsonPropertyName("one_star")]
+        public int OneStar { get; set; }
+
+        /// <summary>Count of 2-star ratings</summary>
+        [JsonPropertyName("two_star")]
+        public int TwoStar { get; set; }
+
+        /// <summary>Count of 3-star ratings</summary>
+        [JsonPropertyName("three_star")]
+        public int ThreeStar { get; set; }
+
+        /// <summary>Count of 4-star ratings</summary>
+        [JsonPropertyName("four_star")]
+        public int FourStar { get; set; }
+
+        /// <summary>Count of 5-star ratings</summary>
+        [JsonPropertyName("five_star")]
+        public int FiveStar { get; set; }
+    }
+
+    /// <summary>
+    /// Monthly feedback trend data point
+    /// </summary>
+    public class MonthlyFeedbackTrendDto
+    {
+        /// <summary>Month identifier (YYYY-MM format)</summary>
+        [JsonPropertyName("month")]
+        public string Month { get; set; } = null!;
+
+        /// <summary>Count of feedback received in this month</summary>
+        [JsonPropertyName("count")]
+        public int Count { get; set; }
+
+        /// <summary>Average rating for this month</summary>
+        [JsonPropertyName("average_rating")]
+        public decimal AverageRating { get; set; }
+    }
+
+    /// <summary>
+    /// Top feedback provider
+    /// </summary>
+    public class TopProviderDto
+    {
+        /// <summary>Employee details</summary>
+        [JsonPropertyName("employee")]
+        public EmployeeSummaryDto Employee { get; set; } = null!;
+
+        /// <summary>Number of feedback items from this employee</summary>
+        [JsonPropertyName("count")]
+        public int Count { get; set; }
+
+        /// <summary>Average rating from this employee</summary>
+        [JsonPropertyName("average_rating")]
+        public decimal AverageRating { get; set; }
+    }
+
+    /// <summary>
+    /// Goal with most feedback
+    /// </summary>
+    public class TopGoalDto
+    {
+        /// <summary>Goal details</summary>
+        [JsonPropertyName("goal")]
+        public GoalSummaryDto Goal { get; set; } = null!;
+
+        /// <summary>Number of feedback items for this goal</summary>
+        [JsonPropertyName("count")]
+        public int Count { get; set; }
+
+        /// <summary>Average rating for this goal</summary>
+        [JsonPropertyName("average_rating")]
+        public decimal AverageRating { get; set; }
+    }
+
+    /// <summary>
+    /// Project with most feedback
+    /// </summary>
+    public class TopProjectDto
+    {
+        /// <summary>Project details</summary>
+        [JsonPropertyName("project")]
+        public ProjectSummaryDto Project { get; set; } = null!;
+
+        /// <summary>Number of feedback items for this project</summary>
+        [JsonPropertyName("count")]
+        public int Count { get; set; }
+
+        /// <summary>Average rating for this project</summary>
+        [JsonPropertyName("average_rating")]
+        public decimal AverageRating { get; set; }
+    }
+
+    /// <summary>
+    /// Comparison data for analytics (current vs previous period)
+    /// </summary>
+    public class ComparisonDataDto
+    {
+        /// <summary>Previous period total count</summary>
+        [JsonPropertyName("previous_total")]
+        public int PreviousTotal { get; set; }
+
+        /// <summary>Previous period average rating</summary>
+        [JsonPropertyName("previous_average_rating")]
+        public decimal PreviousAverageRating { get; set; }
+
+        /// <summary>Delta percentage for total count</summary>
+        [JsonPropertyName("total_delta_percent")]
+        public decimal TotalDeltaPercent { get; set; }
+
+        /// <summary>Delta value for average rating</summary>
+        [JsonPropertyName("rating_delta")]
+        public decimal RatingDelta { get; set; }
+
+        /// <summary>Previous period start date (ISO 8601)</summary>
+        [JsonPropertyName("previous_period_start")]
+        public string PreviousPeriodStart { get; set; } = null!;
+
+        /// <summary>Previous period end date (ISO 8601)</summary>
+        [JsonPropertyName("previous_period_end")]
+        public string PreviousPeriodEnd { get; set; } = null!;
     }
 }

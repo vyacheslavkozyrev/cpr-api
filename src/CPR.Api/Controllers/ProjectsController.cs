@@ -81,6 +81,27 @@ namespace CPR.Api.Controllers
         }
 
         /// <summary>
+        /// Get projects for a specific employee.
+        /// Returns projects where the employee is a team member.
+        /// </summary>
+        /// <param name="employeeId">Employee identifier</param>
+        /// <returns>Array of projects</returns>
+        [HttpGet("~/api/employees/{employeeId}/projects")]
+        [ProducesResponseType(typeof(ProjectDto[]), 200)]
+        [ProducesResponseType(401)]
+        public async Task<IActionResult> GetEmployeeProjects(Guid employeeId)
+        {
+            var profile = await _userService.GetCurrentUserProfileAsync(User);
+            if (profile == null)
+            {
+                return Unauthorized();
+            }
+
+            var projects = await _projectService.GetProjectsByEmployeeIdAsync(employeeId);
+            return Ok(projects);
+        }
+
+        /// <summary>
         /// Create a new project.
         /// </summary>
         /// <param name="dto">Project creation payload</param>
