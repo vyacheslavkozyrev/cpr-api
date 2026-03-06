@@ -11,6 +11,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CPR.Api.Controllers;
 
+/// <summary>
+/// API controller for managing employee skill assessments, targets, and evidence.
+/// </summary>
 [ApiController]
 [Route("api/skill-assessment")]
 public class SkillAssessmentController : ControllerBase
@@ -19,6 +22,12 @@ public class SkillAssessmentController : ControllerBase
     private readonly IUserService _userService;
     private readonly IRoleService _roleService;
 
+    /// <summary>
+    /// Creates a new instance of <see cref="SkillAssessmentController"/>.
+    /// </summary>
+    /// <param name="skillAssessmentService">Service implementing skill assessment operations.</param>
+    /// <param name="userService">Service to resolve current user profile.</param>
+    /// <param name="roleService">Service to resolve user role titles.</param>
     public SkillAssessmentController(
         ISkillAssessmentService skillAssessmentService,
         IUserService userService,
@@ -29,6 +38,9 @@ public class SkillAssessmentController : ControllerBase
         _roleService = roleService;
     }
 
+    /// <summary>
+    /// Returns the authenticated employee's full skill assessment.
+    /// </summary>
     [HttpGet("~/api/me/skill-assessment")]
     [Authorize]
     [ProducesResponseType(typeof(SkillAssessmentResponseDto), 200)]
@@ -42,6 +54,12 @@ public class SkillAssessmentController : ControllerBase
         return Ok(result);
     }
 
+    /// <summary>
+    /// Creates or updates the authenticated employee's current level for a skill.
+    /// </summary>
+    /// <param name="skillId">The skill identifier.</param>
+    /// <param name="dto">Assessment payload.</param>
+    /// <param name="ct">Cancellation token.</param>
     [HttpPut("~/api/me/skill-assessment/skills/{skillId:guid}")]
     [Authorize]
     [ProducesResponseType(typeof(AssessedLevelDto), 200)]
@@ -69,6 +87,11 @@ public class SkillAssessmentController : ControllerBase
         }
     }
 
+    /// <summary>
+    /// Deletes the authenticated employee's current level assessment for a skill.
+    /// </summary>
+    /// <param name="skillId">The skill identifier.</param>
+    /// <param name="ct">Cancellation token.</param>
     [HttpDelete("~/api/me/skill-assessment/skills/{skillId:guid}")]
     [Authorize]
     [ProducesResponseType(204)]
@@ -87,6 +110,12 @@ public class SkillAssessmentController : ControllerBase
         catch (KeyNotFoundException ex) { return Problem(ex.Message, statusCode: StatusCodes.Status404NotFound); }
     }
 
+    /// <summary>
+    /// Creates or updates the authenticated employee's skill target level.
+    /// </summary>
+    /// <param name="skillId">The skill identifier.</param>
+    /// <param name="dto">Target payload.</param>
+    /// <param name="ct">Cancellation token.</param>
     [HttpPut("~/api/me/skill-assessment/skills/{skillId:guid}/target")]
     [Authorize]
     [ProducesResponseType(typeof(TargetLevelDto), 200)]
@@ -114,6 +143,11 @@ public class SkillAssessmentController : ControllerBase
         }
     }
 
+    /// <summary>
+    /// Deletes the authenticated employee's skill target level.
+    /// </summary>
+    /// <param name="skillId">The skill identifier.</param>
+    /// <param name="ct">Cancellation token.</param>
     [HttpDelete("~/api/me/skill-assessment/skills/{skillId:guid}/target")]
     [Authorize]
     [ProducesResponseType(204)]
@@ -132,6 +166,12 @@ public class SkillAssessmentController : ControllerBase
         catch (KeyNotFoundException ex) { return Problem(ex.Message, statusCode: StatusCodes.Status404NotFound); }
     }
 
+    /// <summary>
+    /// Links a feedback item as evidence to the authenticated employee's skill assessment.
+    /// </summary>
+    /// <param name="skillId">The skill identifier.</param>
+    /// <param name="dto">Evidence link payload.</param>
+    /// <param name="ct">Cancellation token.</param>
     [HttpPost("~/api/me/skill-assessment/skills/{skillId:guid}/evidence")]
     [Authorize]
     [ProducesResponseType(typeof(EvidenceItemDto), 201)]
@@ -159,6 +199,12 @@ public class SkillAssessmentController : ControllerBase
         }
     }
 
+    /// <summary>
+    /// Removes a feedback evidence link from the authenticated employee's skill assessment.
+    /// </summary>
+    /// <param name="skillId">The skill identifier.</param>
+    /// <param name="feedbackId">The feedback identifier to unlink.</param>
+    /// <param name="ct">Cancellation token.</param>
     [HttpDelete("~/api/me/skill-assessment/skills/{skillId:guid}/evidence/{feedbackId:guid}")]
     [Authorize]
     [ProducesResponseType(204)]
@@ -177,6 +223,9 @@ public class SkillAssessmentController : ControllerBase
         catch (KeyNotFoundException ex) { return Problem(ex.Message, statusCode: StatusCodes.Status404NotFound); }
     }
 
+    /// <summary>
+    /// Returns a skill assessment summary for all direct reports of the authenticated People Manager.
+    /// </summary>
     [HttpGet("~/api/me/team/skill-assessment-summary")]
     [RequireRole("People Manager")]
     [ProducesResponseType(typeof(TeamSkillSummaryResponseDto), 200)]
@@ -191,6 +240,11 @@ public class SkillAssessmentController : ControllerBase
         return Ok(result);
     }
 
+    /// <summary>
+    /// Returns the full skill assessment for a specific employee.
+    /// </summary>
+    /// <param name="employeeId">The employee identifier.</param>
+    /// <param name="ct">Cancellation token.</param>
     [HttpGet("~/api/employees/{employeeId:guid}/skill-assessment")]
     [RequireRole("People Manager", "Director", "Administrator")]
     [ProducesResponseType(typeof(EmployeeSkillAssessmentResponseDto), 200)]

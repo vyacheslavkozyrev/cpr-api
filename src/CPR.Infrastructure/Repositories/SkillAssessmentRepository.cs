@@ -295,7 +295,7 @@ namespace CPR.Infrastructure.Repositories
             existing.DeletedAt = DateTimeOffset.UtcNow;
         }
 
-        public async Task<EmployeeSkillEvidence> LinkEvidenceAsync(Guid employeeToSkillId, Guid feedbackId, Guid actorId, CancellationToken ct)
+        public Task<EmployeeSkillEvidence> LinkEvidenceAsync(Guid employeeToSkillId, Guid feedbackId, Guid actorId, CancellationToken ct)
         {
             var record = new EmployeeSkillEvidence
             {
@@ -306,7 +306,7 @@ namespace CPR.Infrastructure.Repositories
                 CreatedAt = DateTimeOffset.UtcNow
             };
             _db.EmployeeSkillEvidences.Add(record);
-            return record;
+            return Task.FromResult(record);
         }
 
         public async Task UnlinkEvidenceAsync(Guid employeeToSkillId, Guid feedbackId, CancellationToken ct)
