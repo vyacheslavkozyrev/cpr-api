@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace CPR.Domain.Entities
 {
@@ -12,5 +13,9 @@ namespace CPR.Domain.Entities
         public string? Source { get; set; }
         public DateTime? EffectiveDate { get; set; }
         public bool IsTarget { get; set; }
+        public string? Notes { get; set; }
+
+        // Navigation properties
+        public virtual ICollection<EmployeeSkillEvidence> Evidence { get; set; } = new List<EmployeeSkillEvidence>();
     }
 }

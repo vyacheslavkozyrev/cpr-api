@@ -50,8 +50,11 @@ namespace CPR.IntegrationTests
 
             // john.doe has Administrator role
             var adminUserId = "679add6e-6c29-4e00-b6a5-b69c8e0f3445";
-            var adminRoleId = Guid.Parse("22222222-2222-2222-2222-222222222222");
             var userId = Guid.Parse(adminUserId);
+
+            // Look up the actual Administrator role by title (not by hardcoded ID)
+            var adminRole = await db.Roles.FirstAsync(r => r.Title == "Administrator" && !r.IsDeleted);
+            var adminRoleId = adminRole.Id;
 
             // Ensure john.doe has Administrator role
             var roleAssignment = await db.UserRoles

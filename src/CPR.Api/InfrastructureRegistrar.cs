@@ -43,6 +43,8 @@ namespace CPR.Api
             services.AddScoped<CPR.Application.Services.IDashboardService, CPR.Infrastructure.Services.DashboardService>();
             services.AddScoped<CPR.Application.Repositories.IReviewCycleRepository, CPR.Infrastructure.Repositories.ReviewCycleRepository>();
             services.AddScoped<CPR.Application.Services.IReviewCycleService, CPR.Infrastructure.Services.ReviewCycleService>();
+            services.AddScoped<CPR.Application.Repositories.ISkillAssessmentRepository, CPR.Infrastructure.Repositories.SkillAssessmentRepository>();
+            services.AddScoped<CPR.Application.Services.ISkillAssessmentService, CPR.Infrastructure.Services.SkillAssessmentService>();
 
             // Register database seeder
             services.AddScoped<CPR.Infrastructure.Services.DatabaseSeeder>();

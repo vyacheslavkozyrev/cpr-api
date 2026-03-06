@@ -41,6 +41,7 @@ namespace CPR.Infrastructure.Data
         public DbSet<ReviewCycle> ReviewCycles { get; set; }
         public DbSet<ReviewNominee> ReviewNominees { get; set; }
         public DbSet<ReviewResponse> ReviewResponses { get; set; }
+        public DbSet<EmployeeSkillEvidence> EmployeeSkillEvidences { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -197,6 +198,7 @@ namespace CPR.Infrastructure.Data
                 b.Property(p => p.CareerTrackId).HasColumnName("career_track_id");
                 b.Property(p => p.Description).HasColumnName("description");
                 b.Property(p => p.Expectations).HasColumnName("expectations");
+                b.Property(p => p.SortOrder).HasColumnName("sort_order").HasDefaultValue(0);
                 b.Property(p => p.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("CURRENT_TIMESTAMP");
                 b.Property(p => p.CreatedBy).HasColumnName("created_by");
                 b.Property(p => p.ModifiedBy).HasColumnName("modified_by");
@@ -204,6 +206,9 @@ namespace CPR.Infrastructure.Data
                 b.Property(p => p.IsDeleted).HasColumnName("is_deleted");
                 b.Property(p => p.DeletedBy).HasColumnName("deleted_by");
                 b.Property(p => p.DeletedAt).HasColumnName("deleted_at");
+
+                b.HasIndex(p => new { p.CareerTrackId, p.SortOrder })
+                    .HasDatabaseName("IX_positions_career_track_sort_order");
             });
 
             modelBuilder.Entity<SkillCategory>(b =>
@@ -506,6 +511,7 @@ namespace CPR.Infrastructure.Data
                 b.Property(es => es.Source).HasColumnName("source");
                 b.Property(es => es.EffectiveDate).HasColumnName("effective_date");
                 b.Property(es => es.IsTarget).HasColumnName("is_target");
+                b.Property(es => es.Notes).HasColumnName("notes");
                 b.Property(es => es.CreatedBy).HasColumnName("created_by");
                 b.Property(es => es.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("CURRENT_TIMESTAMP");
                 b.Property(es => es.ModifiedBy).HasColumnName("modified_by");
@@ -513,6 +519,12 @@ namespace CPR.Infrastructure.Data
                 b.Property(es => es.IsDeleted).HasColumnName("is_deleted");
                 b.Property(es => es.DeletedBy).HasColumnName("deleted_by");
                 b.Property(es => es.DeletedAt).HasColumnName("deleted_at");
+
+                // Partial unique index: one self-assessment per (employee, skill, is_target)
+                b.HasIndex(es => new { es.EmployeeId, es.SkillId, es.IsTarget })
+                    .HasFilter("source = 'self'")
+                    .IsUnique()
+                    .HasDatabaseName("UX_employee_to_skill_self");
             });
 
             modelBuilder.Entity<PositionToSkill>(b =>
@@ -565,6 +577,39 @@ namespace CPR.Infrastructure.Data
                 b.Property(r => r.IsDeleted).HasColumnName("is_deleted");
                 b.Property(r => r.DeletedBy).HasColumnName("deleted_by");
                 b.Property(r => r.DeletedAt).HasColumnName("deleted_at");
+            });
+
+            modelBuilder.Entity<EmployeeSkillEvidence>(b =>
+            {
+                b.ToTable("employee_skill_evidence");
+                b.HasKey(e => e.Id);
+                b.Property(e => e.Id).HasColumnName("id");
+                b.Property(e => e.EmployeeToSkillId).HasColumnName("employee_to_skill_id").IsRequired();
+                b.Property(e => e.FeedbackId).HasColumnName("feedback_id").IsRequired();
+                b.Property(e => e.CreatedBy).HasColumnName("created_by");
+                b.Property(e => e.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("CURRENT_TIMESTAMP");
+                b.Property(e => e.ModifiedBy).HasColumnName("modified_by");
+                b.Property(e => e.ModifiedAt).HasColumnName("modified_at");
+                b.Property(e => e.IsDeleted).HasColumnName("is_deleted");
+                b.Property(e => e.DeletedBy).HasColumnName("deleted_by");
+                b.Property(e => e.DeletedAt).HasColumnName("deleted_at");
+
+                b.HasOne(e => e.EmployeeToSkill)
+                    .WithMany(es => es.Evidence)
+                    .HasForeignKey(e => e.EmployeeToSkillId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                b.HasOne(e => e.Feedback)
+                    .WithMany()
+                    .HasForeignKey(e => e.FeedbackId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                b.HasIndex(e => e.EmployeeToSkillId)
+                    .HasDatabaseName("IX_employee_skill_evidence_employee_to_skill_id");
+
+                b.HasIndex(e => new { e.EmployeeToSkillId, e.FeedbackId })
+                    .IsUnique()
+                    .HasDatabaseName("UX_employee_skill_evidence_assessment_feedback");
             });
 
             modelBuilder.ApplyConfiguration(new ReviewCycleConfiguration());
