@@ -170,6 +170,12 @@ namespace CPR.Infrastructure.Data
                 b.Property(c => c.IsDeleted).HasColumnName("is_deleted");
                 b.Property(c => c.DeletedBy).HasColumnName("deleted_by");
                 b.Property(c => c.DeletedAt).HasColumnName("deleted_at");
+
+                // Navigation: one CareerPath has many CareerTracks
+                b.HasMany(c => c.Tracks)
+                    .WithOne(ct => ct.CareerPath)
+                    .HasForeignKey(ct => ct.CareerPathId)
+                    .OnDelete(DeleteBehavior.Restrict);
             });
 
             modelBuilder.Entity<CareerTrack>(b =>
@@ -187,6 +193,12 @@ namespace CPR.Infrastructure.Data
                 b.Property(c => c.IsDeleted).HasColumnName("is_deleted");
                 b.Property(c => c.DeletedBy).HasColumnName("deleted_by");
                 b.Property(c => c.DeletedAt).HasColumnName("deleted_at");
+
+                // Navigation: one CareerTrack has many Positions
+                b.HasMany(c => c.Positions)
+                    .WithOne(p => p.CareerTrack)
+                    .HasForeignKey(p => p.CareerTrackId)
+                    .OnDelete(DeleteBehavior.Restrict);
             });
 
             modelBuilder.Entity<Position>(b =>
@@ -209,6 +221,12 @@ namespace CPR.Infrastructure.Data
 
                 b.HasIndex(p => new { p.CareerTrackId, p.SortOrder })
                     .HasDatabaseName("IX_positions_career_track_sort_order");
+
+                // Navigation: one Position has many PositionToSkill mappings
+                b.HasMany(p => p.PositionSkills)
+                    .WithOne(pts => pts.Position)
+                    .HasForeignKey(pts => pts.PositionId)
+                    .OnDelete(DeleteBehavior.Restrict);
             });
 
             modelBuilder.Entity<SkillCategory>(b =>
@@ -225,6 +243,12 @@ namespace CPR.Infrastructure.Data
                 b.Property(s => s.IsDeleted).HasColumnName("is_deleted");
                 b.Property(s => s.DeletedBy).HasColumnName("deleted_by");
                 b.Property(s => s.DeletedAt).HasColumnName("deleted_at");
+
+                // Navigation: one SkillCategory has many Skills
+                b.HasMany(sc => sc.Skills)
+                    .WithOne(s => s.SkillCategory)
+                    .HasForeignKey(s => s.CategoryId)
+                    .OnDelete(DeleteBehavior.Restrict);
             });
 
             modelBuilder.Entity<Skill>(b =>
@@ -242,6 +266,12 @@ namespace CPR.Infrastructure.Data
                 b.Property(s => s.IsDeleted).HasColumnName("is_deleted");
                 b.Property(s => s.DeletedBy).HasColumnName("deleted_by");
                 b.Property(s => s.DeletedAt).HasColumnName("deleted_at");
+
+                // Navigation: one Skill has many SkillLevels
+                b.HasMany(s => s.Levels)
+                    .WithOne(sl => sl.Skill)
+                    .HasForeignKey(sl => sl.SkillId)
+                    .OnDelete(DeleteBehavior.Restrict);
             });
 
             modelBuilder.Entity<SkillLevel>(b =>
@@ -535,8 +565,8 @@ namespace CPR.Infrastructure.Data
                 b.Property(p => p.PositionId).HasColumnName("position_id").IsRequired();
                 b.Property(p => p.SkillId).HasColumnName("skill_id").IsRequired();
                 b.Property(p => p.SkillLevelId).HasColumnName("skill_level_id").IsRequired();
-                b.Property(p => p.Weight).HasColumnName("weight");
-                b.Property(p => p.IsMandatory).HasColumnName("is_mandatory");
+                b.Property(p => p.Weight).HasColumnName("weight").HasColumnType("numeric(5,2)");
+                b.Property(p => p.IsMandatory).HasColumnName("is_mandatory").HasDefaultValue(false);
                 b.Property(p => p.Rationale).HasColumnName("rationale");
                 b.Property(p => p.CreatedBy).HasColumnName("created_by");
                 b.Property(p => p.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("CURRENT_TIMESTAMP");
@@ -545,6 +575,23 @@ namespace CPR.Infrastructure.Data
                 b.Property(p => p.IsDeleted).HasColumnName("is_deleted");
                 b.Property(p => p.DeletedBy).HasColumnName("deleted_by");
                 b.Property(p => p.DeletedAt).HasColumnName("deleted_at");
+
+                // Navigation: FK to Position (already configured on Position side above, but explicit here for clarity)
+                b.HasOne(pts => pts.Skill)
+                    .WithMany()
+                    .HasForeignKey(pts => pts.SkillId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                b.HasOne(pts => pts.SkillLevel)
+                    .WithMany()
+                    .HasForeignKey(pts => pts.SkillLevelId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                // Unique partial index: only one active requirement per (position, skill)
+                b.HasIndex(pts => new { pts.PositionId, pts.SkillId })
+                    .IsUnique()
+                    .HasFilter("is_deleted = false")
+                    .HasDatabaseName("UX_position_to_skill_position_skill_active");
             });
 
             modelBuilder.Entity<ProjectTeam>(b =>
