@@ -1,3 +1,9 @@
-// This file is intentionally empty.
 // DatabaseCleanupFixture has been replaced by IntegrationTestFixture (Testcontainers + Respawn).
-// All tests now use [Collection("Integration")] backed by IntegrationTestFixture.
+// This stub keeps backward compatibility for legacy test classes that still reference it.
+namespace CPR.IntegrationTests;
+
+/// <summary>
+/// Stub fixture — retained for backward compatibility only.
+/// New tests should use IntegrationTestFixture via [Collection("Integration")].
+/// </summary>
+public class DatabaseCleanupFixture { }
