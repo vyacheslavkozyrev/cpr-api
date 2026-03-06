@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
+using CPR.Application.Contracts;
 
 namespace CPR.Application.DTOs.ReviewCycles
 {
@@ -248,21 +249,6 @@ namespace CPR.Application.DTOs.ReviewCycles
 
         [JsonPropertyName("pagination")]
         public PaginationDto Pagination { get; set; } = new();
-    }
-
-    public class PaginationDto
-    {
-        [JsonPropertyName("page")]
-        public int Page { get; set; }
-
-        [JsonPropertyName("page_size")]
-        public int PageSize { get; set; }
-
-        [JsonPropertyName("total_items")]
-        public int TotalCount { get; set; }
-
-        [JsonPropertyName("total_pages")]
-        public int TotalPages { get; set; }
     }
 
     public class DataListDto<T>

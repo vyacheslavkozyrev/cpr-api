@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using CPR.Application.Contracts;
 using CPR.Application.DTOs.ReviewCycles;
 using CPR.Application.Repositories;
 using CPR.Application.Services;
@@ -358,7 +359,7 @@ namespace CPR.Infrastructure.Services
                 {
                     Page = query.Page,
                     PageSize = query.PageSize,
-                    TotalCount = total,
+                    TotalItems = total,
                     TotalPages = (int)Math.Ceiling(total / (double)query.PageSize)
                 }
             };

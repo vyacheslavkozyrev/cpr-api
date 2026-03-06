@@ -8,13 +8,12 @@ using CPR.Domain.Entities;
 using CPR.Infrastructure.Data;
 using CPR.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
-using Npgsql;
 using Xunit;
 
 namespace CPR.UnitTests
 {
     /// <summary>
-    /// Integration tests for FeedbackRequestRepository using PostgreSQL test database
+    /// Unit tests for FeedbackRequestRepository using in-memory EF Core database
     /// Tests GetSentRequestsAsync with 15 scenarios covering pagination, filters, aggregation, edge cases
     /// Feature 0004 - T089
     /// </summary>
@@ -31,16 +30,12 @@ namespace CPR.UnitTests
 
         public FeedbackRequestRepositoryTests()
         {
-            // Setup PostgreSQL test database connection
-            var connectionString = "Host=localhost;Port=5433;Database=cpr_test;Username=postgres;Password=postgres";
+            // Setup in-memory database (unique per test instance for isolation)
             var options = new DbContextOptionsBuilder<CprDbContext>()
-                .UseNpgsql(connectionString)
+                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
                 .Options;
 
             _db = new CprDbContext(options);
-
-            // Clean up test data from previous runs
-            CleanupTestData();
 
             // Create repository
             _repository = new FeedbackRequestRepository(_db);
@@ -128,32 +123,7 @@ namespace CPR.UnitTests
 
         public void Dispose()
         {
-            // Clean up test data after each test
-            CleanupTestData();
             _db.Dispose();
-        }
-
-        private void CleanupTestData()
-        {
-            // Delete test data in correct order to respect foreign keys
-            var testUserIds = new[] { _requestorId, _recipient1Id, _recipient2Id, _recipient3Id };
-
-            _db.FeedbackRequestRecipients.RemoveRange(
-                _db.FeedbackRequestRecipients.Where(r => testUserIds.Contains(r.EmployeeId)));
-
-            _db.FeedbackRequests.RemoveRange(
-                _db.FeedbackRequests.Where(r => r.RequestorId == _requestorId));
-
-            _db.Projects.RemoveRange(
-                _db.Projects.Where(p => p.Id == _projectId));
-
-            _db.Employees.RemoveRange(
-                _db.Employees.Where(e => testUserIds.Contains(e.Id)));
-
-            _db.Users.RemoveRange(
-                _db.Users.Where(u => testUserIds.Contains(u.Id)));
-
-            _db.SaveChanges();
         }
 
         [Fact]
@@ -579,7 +549,8 @@ namespace CPR.UnitTests
                 Message = message,
                 DueDate = dueDate?.DateTime,
                 ProjectId = projectId,
-                GoalId = goalId
+                GoalId = goalId,
+                CreatedAt = DateTimeOffset.UtcNow
             };
 
             _db.FeedbackRequests.Add(request);

@@ -1,3 +1,4 @@
+#nullable enable
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,11 +17,10 @@ using Xunit;
 namespace CPR.UnitTests
 {
     /// <summary>
-    /// Unit tests for FeedbackRequestService using PostgreSQL test database
+    /// Unit tests for FeedbackRequestService using in-memory EF Core database
     /// Tests CreateAsync with 1/10/20 recipients, duplicate detection, validation errors
     /// Covers all CRUD operations, rate limiting, reminders - 43 test cases (T090)
     /// </summary>
-    [Collection("SequentialIntegrationTestCollection")]
     public class FeedbackRequestServiceTests : IAsyncLifetime
     {
         private readonly CprDbContext _db;
@@ -38,16 +38,9 @@ namespace CPR.UnitTests
 
         public FeedbackRequestServiceTests()
         {
-            // Setup PostgreSQL test database
-            Environment.SetEnvironmentVariable("POSTGRES_HOST", "localhost");
-            Environment.SetEnvironmentVariable("POSTGRES_PORT", "5433");
-            Environment.SetEnvironmentVariable("POSTGRES_DB", "cpr_test");
-            Environment.SetEnvironmentVariable("POSTGRES_USER", "postgres");
-            Environment.SetEnvironmentVariable("POSTGRES_PASSWORD", "postgres");
-
-            var connectionString = "Host=localhost;Port=5433;Database=cpr_test;Username=postgres;Password=postgres";
+            // Setup in-memory database (unique per test instance for isolation)
             var options = new DbContextOptionsBuilder<CprDbContext>()
-                .UseNpgsql(connectionString)
+                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
                 .Options;
 
             _db = new CprDbContext(options);
@@ -240,64 +233,22 @@ namespace CPR.UnitTests
             _db.SaveChanges();
         }
 
-        public async Task InitializeAsync()
+        public Task InitializeAsync()
         {
-            // Cleanup before tests, then seed
-            await CleanupTestDataAsync();
+            // Seed fresh in-memory database for each test
             SeedTestData();
+            return Task.CompletedTask;
         }
 
         public async Task DisposeAsync()
         {
-            // Cleanup after tests
-            await CleanupTestDataAsync();
             await _db.DisposeAsync();
         }
 
-        private async Task CleanupTestDataAsync()
+        private Task CleanupTestDataAsync()
         {
-            // Delete test data in correct order (respecting foreign keys)
-            var testUserIds = new[] { _requestorId, _recipient1Id, _recipient2Id, _recipient10Id }
-                .Concat(_recipient20Ids)
-                .ToList();
-
-            // Delete feedback request recipients
-            var recipients = await _db.FeedbackRequestRecipients
-                .Where(r => testUserIds.Contains(r.EmployeeId))
-                .ToListAsync();
-            _db.FeedbackRequestRecipients.RemoveRange(recipients);
-
-            // Delete feedback requests
-            var requests = await _db.FeedbackRequests
-                .Where(r => testUserIds.Contains(r.RequestorId))
-                .ToListAsync();
-            _db.FeedbackRequests.RemoveRange(requests);
-
-            // Delete goals
-            var goals = await _db.Goals
-                .Where(g => g.Id == _goalId || testUserIds.Contains(g.EmployeeId))
-                .ToListAsync();
-            _db.Goals.RemoveRange(goals);
-
-            // Delete projects
-            var projects = await _db.Projects
-                .Where(p => p.Id == _projectId)
-                .ToListAsync();
-            _db.Projects.RemoveRange(projects);
-
-            // Delete employees
-            var employees = await _db.Employees
-                .Where(e => testUserIds.Contains(e.Id))
-                .ToListAsync();
-            _db.Employees.RemoveRange(employees);
-
-            // Delete users
-            var users = await _db.Users
-                .Where(u => testUserIds.Contains(u.Id))
-                .ToListAsync();
-            _db.Users.RemoveRange(users);
-
-            await _db.SaveChangesAsync();
+            // No-op: in-memory DB is isolated per test instance, no cleanup needed
+            return Task.CompletedTask;
         }
 
         // ====================================
