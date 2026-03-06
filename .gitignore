@@ -14,4 +14,4 @@ obj/
 **/appsettings.*.json
 **/secrets.json
 .idea/
-**/*.trx
+**/*.trxbuild.log
