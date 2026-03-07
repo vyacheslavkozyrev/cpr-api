@@ -6,7 +6,6 @@ namespace CPR.Domain.Repositories
 {
     /// <summary>
     /// Repository interface for write operations on all taxonomy domain entities.
-    /// Read operations are handled directly via CprDbContext in TaxonomyService.
     /// </summary>
     public interface ITaxonomyRepository
     {
