@@ -269,7 +269,7 @@ namespace CPR.Infrastructure.Services
         {
             var careerPath = await _db.CareerPaths.FirstOrDefaultAsync(cp => cp.Id == dto.CareerPathId && !cp.IsDeleted);
             if (careerPath == null)
-                throw new KeyNotFoundException("errors.career_paths.not_found");
+                throw new InvalidOperationException("errors.validation.career_path_not_found");
 
             var entity = new CareerTrack
             {
@@ -307,7 +307,7 @@ namespace CPR.Infrastructure.Services
             {
                 var cpExists = await _db.CareerPaths.AnyAsync(cp => cp.Id == dto.CareerPathId.Value && !cp.IsDeleted);
                 if (!cpExists)
-                    throw new KeyNotFoundException("errors.career_paths.not_found");
+                    throw new InvalidOperationException("errors.validation.career_path_not_found");
             }
 
             if (dto.Title != null) entity.Title = dto.Title;
@@ -394,7 +394,7 @@ namespace CPR.Infrastructure.Services
         {
             var track = await _db.CareerTracks.FirstOrDefaultAsync(ct => ct.Id == dto.CareerTrackId && !ct.IsDeleted);
             if (track == null)
-                throw new KeyNotFoundException("errors.career_tracks.not_found");
+                throw new InvalidOperationException("errors.validation.career_track_not_found");
 
             var entity = new Position
             {
@@ -436,7 +436,7 @@ namespace CPR.Infrastructure.Services
             {
                 var trackExists = await _db.CareerTracks.AnyAsync(ct => ct.Id == dto.CareerTrackId.Value && !ct.IsDeleted);
                 if (!trackExists)
-                    throw new KeyNotFoundException("errors.career_tracks.not_found");
+                    throw new InvalidOperationException("errors.validation.career_track_not_found");
             }
 
             if (dto.Title != null) entity.Title = dto.Title;
@@ -641,7 +641,7 @@ namespace CPR.Infrastructure.Services
         {
             var category = await _db.SkillCategories.FirstOrDefaultAsync(sc => sc.Id == dto.CategoryId && !sc.IsDeleted);
             if (category == null)
-                throw new KeyNotFoundException("errors.skill_categories.not_found");
+                throw new InvalidOperationException("errors.validation.category_not_found");
 
             var entity = new Skill
             {
@@ -654,6 +654,36 @@ namespace CPR.Infrastructure.Services
             };
 
             await _repo.AddSkillAsync(entity);
+
+            var createdLevels = new List<SkillLevelSummaryDto>();
+            if (dto.Levels != null && dto.Levels.Count > 0)
+            {
+                foreach (var levelDto in dto.Levels)
+                {
+                    var levelEntity = new SkillLevel
+                    {
+                        Id = Guid.NewGuid(),
+                        Title = levelDto.Title,
+                        Description = levelDto.Description,
+                        Value = levelDto.Value,
+                        SkillId = entity.Id,
+                        CreatedBy = currentUserId,
+                        CreatedAt = DateTimeOffset.UtcNow
+                    };
+                    await _repo.AddSkillLevelAsync(levelEntity);
+                    createdLevels.Add(new SkillLevelSummaryDto
+                    {
+                        Id = levelEntity.Id,
+                        Title = levelEntity.Title,
+                        Description = levelEntity.Description,
+                        Value = levelEntity.Value,
+                        SkillId = levelEntity.SkillId,
+                        CreatedAt = levelEntity.CreatedAt,
+                        ModifiedAt = levelEntity.ModifiedAt
+                    });
+                }
+            }
+
             await _repo.SaveChangesAsync();
 
             return new SkillDetailDto
@@ -665,7 +695,7 @@ namespace CPR.Infrastructure.Services
                 CategoryTitle = category.Title,
                 CreatedAt = entity.CreatedAt,
                 ModifiedAt = entity.ModifiedAt,
-                Levels = new List<SkillLevelSummaryDto>()
+                Levels = createdLevels
             };
         }
 
@@ -680,7 +710,7 @@ namespace CPR.Infrastructure.Services
             {
                 var catExists = await _db.SkillCategories.AnyAsync(sc => sc.Id == dto.CategoryId.Value && !sc.IsDeleted);
                 if (!catExists)
-                    throw new KeyNotFoundException("errors.skill_categories.not_found");
+                    throw new InvalidOperationException("errors.validation.category_not_found");
             }
 
             if (dto.Title != null) entity.Title = dto.Title;
@@ -719,12 +749,12 @@ namespace CPR.Infrastructure.Services
                 throw new KeyNotFoundException("errors.skills.not_found");
 
             if (dto.Value < 1 || dto.Value > 5)
-                throw new InvalidOperationException("errors.skill_levels.value_out_of_range");
+                throw new InvalidOperationException("errors.validation.level_value_out_of_range");
 
             var valueExists = await _db.SkillLevels
                 .AnyAsync(sl => sl.SkillId == skillId && sl.Value == dto.Value && !sl.IsDeleted);
             if (valueExists)
-                throw new InvalidOperationException("errors.skill_levels.value_duplicate");
+                throw new InvalidOperationException("errors.validation.level_value_duplicate");
 
             var entity = new SkillLevel
             {
@@ -764,14 +794,14 @@ namespace CPR.Infrastructure.Services
             if (dto.Value.HasValue)
             {
                 if (dto.Value.Value < 1 || dto.Value.Value > 5)
-                    throw new InvalidOperationException("errors.skill_levels.value_out_of_range");
+                    throw new InvalidOperationException("errors.validation.level_value_out_of_range");
 
                 if (dto.Value.Value != entity.Value)
                 {
                     var valueExists = await _db.SkillLevels
                         .AnyAsync(sl => sl.SkillId == skillId && sl.Value == dto.Value.Value && !sl.IsDeleted && sl.Id != levelId);
                     if (valueExists)
-                        throw new InvalidOperationException("errors.skill_levels.value_duplicate");
+                        throw new InvalidOperationException("errors.validation.level_value_duplicate");
                 }
             }
 
@@ -805,9 +835,11 @@ namespace CPR.Infrastructure.Services
             if (position == null)
                 throw new KeyNotFoundException("errors.positions.not_found");
 
-            var skill = await _db.Skills.FirstOrDefaultAsync(s => s.Id == dto.SkillId && !s.IsDeleted);
+            var skill = await _db.Skills.FirstOrDefaultAsync(s => s.Id == dto.SkillId);
             if (skill == null)
                 throw new KeyNotFoundException("errors.skills.not_found");
+            if (skill.IsDeleted)
+                throw new InvalidOperationException("errors.validation.skill_deleted");
 
             var skillLevel = await _db.SkillLevels
                 .FirstOrDefaultAsync(sl => sl.Id == dto.SkillLevelId && !sl.IsDeleted);
@@ -815,12 +847,12 @@ namespace CPR.Infrastructure.Services
                 throw new KeyNotFoundException("errors.skill_levels.not_found");
 
             if (skillLevel.SkillId != dto.SkillId)
-                throw new InvalidOperationException("errors.skill_levels.not_belong_to_skill");
+                throw new InvalidOperationException("errors.validation.skill_level_mismatch");
 
             var duplicate = await _db.PositionToSkills
                 .AnyAsync(pts => pts.PositionId == positionId && pts.SkillId == dto.SkillId && !pts.IsDeleted);
             if (duplicate)
-                throw new InvalidOperationException("errors.position_skills.duplicate");
+                throw new InvalidOperationException("errors.validation.skill_already_assigned");
 
             var entity = new PositionToSkill
             {
@@ -875,7 +907,7 @@ namespace CPR.Infrastructure.Services
                     throw new KeyNotFoundException("errors.skill_levels.not_found");
 
                 if (skillLevel.SkillId != entity.SkillId)
-                    throw new InvalidOperationException("errors.skill_levels.not_belong_to_skill");
+                    throw new InvalidOperationException("errors.validation.skill_level_mismatch");
 
                 entity.SkillLevelId = dto.SkillLevelId.Value;
             }

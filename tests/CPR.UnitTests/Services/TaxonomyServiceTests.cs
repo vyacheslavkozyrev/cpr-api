@@ -303,10 +303,10 @@ namespace CPR.UnitTests.Services
         {
             var cp = MakeCareerPath(deleted: true);
 
-            var ex = await Assert.ThrowsAsync<KeyNotFoundException>(() =>
+            var ex = await Assert.ThrowsAsync<InvalidOperationException>(() =>
                 _service.CreateCareerTrackAsync(
                     new CreateCareerTrackDto { Title = "Backend", CareerPathId = cp.Id }, AdminId));
-            Assert.Contains("career_paths.not_found", ex.Message);
+            Assert.Contains("career_path_not_found", ex.Message);
         }
 
         // ==================== GetPositionByIdAsync ====================
@@ -373,7 +373,7 @@ namespace CPR.UnitTests.Services
             var cp = MakeCareerPath();
             var ct = MakeCareerTrack(cp.Id, deleted: true);
 
-            await Assert.ThrowsAsync<KeyNotFoundException>(() =>
+            await Assert.ThrowsAsync<InvalidOperationException>(() =>
                 _service.CreatePositionAsync(
                     new CreatePositionDto { Title = "Dev", CareerTrackId = ct.Id }, AdminId));
         }
@@ -433,9 +433,9 @@ namespace CPR.UnitTests.Services
         {
             var cat = MakeSkillCategory(deleted: true);
 
-            var ex = await Assert.ThrowsAsync<KeyNotFoundException>(() =>
+            var ex = await Assert.ThrowsAsync<InvalidOperationException>(() =>
                 _service.CreateSkillAsync(new CreateSkillDto { Title = "C#", CategoryId = cat.Id }, AdminId));
-            Assert.Contains("skill_categories.not_found", ex.Message);
+            Assert.Contains("category_not_found", ex.Message);
         }
 
         // ==================== DeleteSkillAsync ====================
@@ -549,7 +549,7 @@ namespace CPR.UnitTests.Services
                     pos.Id,
                     new AddPositionSkillDto { SkillId = skill1.Id, SkillLevelId = levelForSkill2.Id, IsMandatory = false },
                     AdminId));
-            Assert.Contains("not_belong_to_skill", ex.Message);
+            Assert.Contains("skill_level_mismatch", ex.Message);
         }
 
         [Fact]
@@ -568,7 +568,7 @@ namespace CPR.UnitTests.Services
                     pos.Id,
                     new AddPositionSkillDto { SkillId = skill.Id, SkillLevelId = level.Id, IsMandatory = false },
                     AdminId));
-            Assert.Contains("duplicate", ex.Message);
+            Assert.Contains("skill_already_assigned", ex.Message);
         }
 
         [Fact]
@@ -583,11 +583,12 @@ namespace CPR.UnitTests.Services
             _db.SkillLevels.Add(level);
             await _db.SaveChangesAsync();
 
-            await Assert.ThrowsAsync<KeyNotFoundException>(() =>
+            var ex = await Assert.ThrowsAsync<InvalidOperationException>(() =>
                 _service.AddPositionSkillAsync(
                     pos.Id,
                     new AddPositionSkillDto { SkillId = skill.Id, SkillLevelId = level.Id, IsMandatory = false },
                     AdminId));
+            Assert.Contains("skill_deleted", ex.Message);
         }
 
         // ==================== UpdatePositionSkillAsync ====================
@@ -610,7 +611,7 @@ namespace CPR.UnitTests.Services
                     pos.Id, pts.Id,
                     new UpdatePositionSkillDto { SkillLevelId = level2.Id },
                     AdminId));
-            Assert.Contains("not_belong_to_skill", ex.Message);
+            Assert.Contains("skill_level_mismatch", ex.Message);
         }
 
         // ==================== GetSkillsAsync ====================

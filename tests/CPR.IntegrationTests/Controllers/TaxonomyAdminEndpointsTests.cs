@@ -161,13 +161,13 @@ namespace CPR.IntegrationTests.Controllers
         }
 
         [Fact]
-        public async Task CreateCareerTrack_DeletedCareerPath_Returns404()
+        public async Task CreateCareerTrack_DeletedCareerPath_Returns400()
         {
             var client   = CreateAuthenticatedClient(AdminUserId);
-            // Use random ID that doesn't exist
+            // Use random ID that doesn't exist — service throws InvalidOperationException → 400
             var response = await client.PostAsJsonAsync("/api/taxonomy/career-tracks",
                 new CreateCareerTrackDto { Title = "Test Track", CareerPathId = Guid.NewGuid() });
-            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         }
 
         // ==================== Skill Categories ====================
@@ -234,12 +234,13 @@ namespace CPR.IntegrationTests.Controllers
         }
 
         [Fact]
-        public async Task CreateSkill_DeletedCategory_Returns404()
+        public async Task CreateSkill_CategoryNotFound_Returns400()
         {
             var client   = CreateAuthenticatedClient(AdminUserId);
+            // Non-existent category ID — service throws InvalidOperationException → 400
             var response = await client.PostAsJsonAsync("/api/taxonomy/skills",
                 new CreateSkillDto { Title = "Test Skill", CategoryId = Guid.NewGuid() });
-            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         }
 
         [Fact]
@@ -413,6 +414,254 @@ namespace CPR.IntegrationTests.Controllers
                 new AddPositionSkillDto { SkillId = Guid.Parse(skillId), SkillLevelId = Guid.Parse(lvlId), IsMandatory = false });
 
             Assert.Equal(HttpStatusCode.BadRequest, dup.StatusCode);
+        }
+
+        // ==================== Update Career Track (AC-026) ====================
+
+        [Fact]
+        public async Task UpdateCareerTrack_Admin_Returns200()
+        {
+            var client  = CreateAuthenticatedClient(AdminUserId);
+            var cpTitle = $"Path {Guid.NewGuid()}";
+            var cpResp  = await client.PostAsJsonAsync("/api/taxonomy/career-paths", new CreateCareerPathDto { Title = cpTitle });
+            var cpId    = ParseBody(await cpResp.Content.ReadAsStringAsync())["id"]!.GetValue<string>();
+
+            var ctResp = await client.PostAsJsonAsync("/api/taxonomy/career-tracks",
+                new CreateCareerTrackDto { Title = "Backend", CareerPathId = Guid.Parse(cpId) });
+            var ctId   = ParseBody(await ctResp.Content.ReadAsStringAsync())["id"]!.GetValue<string>();
+
+            var response = await client.PatchAsJsonAsync($"/api/taxonomy/career-tracks/{ctId}",
+                new UpdateCareerTrackDto { Title = "Backend Updated" });
+            var body = await response.Content.ReadAsStringAsync();
+
+            Assert.True(response.StatusCode == HttpStatusCode.OK,
+                $"Status={response.StatusCode}, Body={body}");
+        }
+
+        [Fact]
+        public async Task UpdateCareerTrack_EmployeeRole_Returns403()
+        {
+            var client   = CreateAuthenticatedClient(EmployeeUserId);
+            var response = await client.PatchAsJsonAsync(
+                $"/api/taxonomy/career-tracks/{Guid.NewGuid()}",
+                new UpdateCareerTrackDto { Title = "X" });
+            Assert.Equal(HttpStatusCode.Forbidden, response.StatusCode);
+        }
+
+        // ==================== Update Position (AC-030) ====================
+
+        [Fact]
+        public async Task UpdatePosition_Admin_Returns200()
+        {
+            var client  = CreateAuthenticatedClient(AdminUserId);
+            var cpResp  = await client.PostAsJsonAsync("/api/taxonomy/career-paths", new CreateCareerPathDto { Title = $"P {Guid.NewGuid()}" });
+            var cpId    = ParseBody(await cpResp.Content.ReadAsStringAsync())["id"]!.GetValue<string>();
+            var ctResp  = await client.PostAsJsonAsync("/api/taxonomy/career-tracks", new CreateCareerTrackDto { Title = "Track", CareerPathId = Guid.Parse(cpId) });
+            var ctId    = ParseBody(await ctResp.Content.ReadAsStringAsync())["id"]!.GetValue<string>();
+            var posResp = await client.PostAsJsonAsync("/api/taxonomy/positions", new CreatePositionDto { Title = "Dev", CareerTrackId = Guid.Parse(ctId) });
+            var posId   = ParseBody(await posResp.Content.ReadAsStringAsync())["id"]!.GetValue<string>();
+
+            var response = await client.PatchAsJsonAsync($"/api/taxonomy/positions/{posId}",
+                new UpdatePositionDto { Title = "Dev Updated", SortOrder = 1 });
+            var body = await response.Content.ReadAsStringAsync();
+
+            Assert.True(response.StatusCode == HttpStatusCode.OK,
+                $"Status={response.StatusCode}, Body={body}");
+        }
+
+        [Fact]
+        public async Task UpdatePosition_EmployeeRole_Returns403()
+        {
+            var client   = CreateAuthenticatedClient(EmployeeUserId);
+            var response = await client.PatchAsJsonAsync(
+                $"/api/taxonomy/positions/{Guid.NewGuid()}",
+                new UpdatePositionDto { Title = "X" });
+            Assert.Equal(HttpStatusCode.Forbidden, response.StatusCode);
+        }
+
+        // ==================== Update Skill Category (AC-033) ====================
+
+        [Fact]
+        public async Task UpdateSkillCategory_Admin_Returns200()
+        {
+            var client  = CreateAuthenticatedClient(AdminUserId);
+            var catResp = await client.PostAsJsonAsync("/api/taxonomy/skill-categories",
+                new CreateSkillCategoryDto { Title = $"Cat {Guid.NewGuid()}" });
+            var catId   = ParseBody(await catResp.Content.ReadAsStringAsync())["id"]!.GetValue<string>();
+
+            var response = await client.PatchAsJsonAsync($"/api/taxonomy/skill-categories/{catId}",
+                new UpdateSkillCategoryDto { Title = $"Cat Updated {Guid.NewGuid()}" });
+            var body = await response.Content.ReadAsStringAsync();
+
+            Assert.True(response.StatusCode == HttpStatusCode.OK,
+                $"Status={response.StatusCode}, Body={body}");
+        }
+
+        [Fact]
+        public async Task UpdateSkillCategory_EmployeeRole_Returns403()
+        {
+            var client   = CreateAuthenticatedClient(EmployeeUserId);
+            var response = await client.PatchAsJsonAsync(
+                $"/api/taxonomy/skill-categories/{Guid.NewGuid()}",
+                new UpdateSkillCategoryDto { Title = "X" });
+            Assert.Equal(HttpStatusCode.Forbidden, response.StatusCode);
+        }
+
+        // ==================== Update Skill (AC-037) ====================
+
+        [Fact]
+        public async Task UpdateSkill_Admin_Returns200()
+        {
+            var client   = CreateAuthenticatedClient(AdminUserId);
+            var catResp  = await client.PostAsJsonAsync("/api/taxonomy/skill-categories",
+                new CreateSkillCategoryDto { Title = $"Cat {Guid.NewGuid()}" });
+            var catId    = ParseBody(await catResp.Content.ReadAsStringAsync())["id"]!.GetValue<string>();
+            var skillResp = await client.PostAsJsonAsync("/api/taxonomy/skills",
+                new CreateSkillDto { Title = $"Skill {Guid.NewGuid()}", CategoryId = Guid.Parse(catId) });
+            var skillId  = ParseBody(await skillResp.Content.ReadAsStringAsync())["id"]!.GetValue<string>();
+
+            var response = await client.PatchAsJsonAsync($"/api/taxonomy/skills/{skillId}",
+                new UpdateSkillDto { Title = $"Skill Updated {Guid.NewGuid()}" });
+            var body = await response.Content.ReadAsStringAsync();
+
+            Assert.True(response.StatusCode == HttpStatusCode.OK,
+                $"Status={response.StatusCode}, Body={body}");
+        }
+
+        [Fact]
+        public async Task UpdateSkill_EmployeeRole_Returns403()
+        {
+            var client   = CreateAuthenticatedClient(EmployeeUserId);
+            var response = await client.PatchAsJsonAsync(
+                $"/api/taxonomy/skills/{Guid.NewGuid()}",
+                new UpdateSkillDto { Title = "X" });
+            Assert.Equal(HttpStatusCode.Forbidden, response.StatusCode);
+        }
+
+        // ==================== Update Skill Level (AC-038) ====================
+
+        [Fact]
+        public async Task UpdateSkillLevel_Admin_Returns200()
+        {
+            var client   = CreateAuthenticatedClient(AdminUserId);
+            var catResp  = await client.PostAsJsonAsync("/api/taxonomy/skill-categories",
+                new CreateSkillCategoryDto { Title = $"Cat {Guid.NewGuid()}" });
+            var catId    = ParseBody(await catResp.Content.ReadAsStringAsync())["id"]!.GetValue<string>();
+            var skillResp = await client.PostAsJsonAsync("/api/taxonomy/skills",
+                new CreateSkillDto { Title = $"Skill {Guid.NewGuid()}", CategoryId = Guid.Parse(catId) });
+            var skillId  = ParseBody(await skillResp.Content.ReadAsStringAsync())["id"]!.GetValue<string>();
+            var lvlResp  = await client.PostAsJsonAsync($"/api/taxonomy/skills/{skillId}/levels",
+                new AddSkillLevelDto { Value = 2, Title = "Basic" });
+            var lvlId    = ParseBody(await lvlResp.Content.ReadAsStringAsync())["id"]!.GetValue<string>();
+
+            var response = await client.PatchAsJsonAsync($"/api/taxonomy/skills/{skillId}/levels/{lvlId}",
+                new UpdateSkillLevelDto { Title = "Basic Updated" });
+            var body = await response.Content.ReadAsStringAsync();
+
+            Assert.True(response.StatusCode == HttpStatusCode.OK,
+                $"Status={response.StatusCode}, Body={body}");
+        }
+
+        [Fact]
+        public async Task UpdateSkillLevel_EmployeeRole_Returns403()
+        {
+            var client   = CreateAuthenticatedClient(EmployeeUserId);
+            var response = await client.PatchAsJsonAsync(
+                $"/api/taxonomy/skills/{Guid.NewGuid()}/levels/{Guid.NewGuid()}",
+                new UpdateSkillLevelDto { Title = "X" });
+            Assert.Equal(HttpStatusCode.Forbidden, response.StatusCode);
+        }
+
+        // ==================== Update Position Skill (AC-043) ====================
+
+        [Fact]
+        public async Task UpdatePositionSkill_Admin_Returns200()
+        {
+            var client  = CreateAuthenticatedClient(AdminUserId);
+            // Set up: category → skill → level → career path → track → position → position-skill
+            var catResp   = await client.PostAsJsonAsync("/api/taxonomy/skill-categories", new CreateSkillCategoryDto { Title = $"Cat {Guid.NewGuid()}" });
+            var catId     = ParseBody(await catResp.Content.ReadAsStringAsync())["id"]!.GetValue<string>();
+            var skillResp = await client.PostAsJsonAsync("/api/taxonomy/skills", new CreateSkillDto { Title = $"S {Guid.NewGuid()}", CategoryId = Guid.Parse(catId) });
+            var skillId   = ParseBody(await skillResp.Content.ReadAsStringAsync())["id"]!.GetValue<string>();
+            var lvlResp   = await client.PostAsJsonAsync($"/api/taxonomy/skills/{skillId}/levels", new AddSkillLevelDto { Value = 2, Title = "Basic" });
+            var lvlId     = ParseBody(await lvlResp.Content.ReadAsStringAsync())["id"]!.GetValue<string>();
+            var cpResp    = await client.PostAsJsonAsync("/api/taxonomy/career-paths", new CreateCareerPathDto { Title = $"P {Guid.NewGuid()}" });
+            var cpId      = ParseBody(await cpResp.Content.ReadAsStringAsync())["id"]!.GetValue<string>();
+            var ctResp    = await client.PostAsJsonAsync("/api/taxonomy/career-tracks", new CreateCareerTrackDto { Title = "Track", CareerPathId = Guid.Parse(cpId) });
+            var ctId      = ParseBody(await ctResp.Content.ReadAsStringAsync())["id"]!.GetValue<string>();
+            var posResp   = await client.PostAsJsonAsync("/api/taxonomy/positions", new CreatePositionDto { Title = "Dev", CareerTrackId = Guid.Parse(ctId) });
+            var posId     = ParseBody(await posResp.Content.ReadAsStringAsync())["id"]!.GetValue<string>();
+            var ptsResp   = await client.PostAsJsonAsync($"/api/taxonomy/positions/{posId}/skills",
+                new AddPositionSkillDto { SkillId = Guid.Parse(skillId), SkillLevelId = Guid.Parse(lvlId), IsMandatory = true });
+            var ptsId     = ParseBody(await ptsResp.Content.ReadAsStringAsync())["id"]!.GetValue<string>();
+
+            var response = await client.PatchAsJsonAsync($"/api/taxonomy/positions/{posId}/skills/{ptsId}",
+                new UpdatePositionSkillDto { IsMandatory = false });
+            var body = await response.Content.ReadAsStringAsync();
+
+            Assert.True(response.StatusCode == HttpStatusCode.OK,
+                $"Status={response.StatusCode}, Body={body}");
+        }
+
+        [Fact]
+        public async Task UpdatePositionSkill_EmployeeRole_Returns403()
+        {
+            var client   = CreateAuthenticatedClient(EmployeeUserId);
+            var response = await client.PatchAsJsonAsync(
+                $"/api/taxonomy/positions/{Guid.NewGuid()}/skills/{Guid.NewGuid()}",
+                new UpdatePositionSkillDto { IsMandatory = false });
+            Assert.Equal(HttpStatusCode.Forbidden, response.StatusCode);
+        }
+
+        // ==================== Delete Position Skill (AC-044) ====================
+
+        [Fact]
+        public async Task DeletePositionSkill_Admin_Returns204()
+        {
+            var client  = CreateAuthenticatedClient(AdminUserId);
+            var catResp   = await client.PostAsJsonAsync("/api/taxonomy/skill-categories", new CreateSkillCategoryDto { Title = $"Cat {Guid.NewGuid()}" });
+            var catId     = ParseBody(await catResp.Content.ReadAsStringAsync())["id"]!.GetValue<string>();
+            var skillResp = await client.PostAsJsonAsync("/api/taxonomy/skills", new CreateSkillDto { Title = $"S {Guid.NewGuid()}", CategoryId = Guid.Parse(catId) });
+            var skillId   = ParseBody(await skillResp.Content.ReadAsStringAsync())["id"]!.GetValue<string>();
+            var lvlResp   = await client.PostAsJsonAsync($"/api/taxonomy/skills/{skillId}/levels", new AddSkillLevelDto { Value = 3, Title = "Mid" });
+            var lvlId     = ParseBody(await lvlResp.Content.ReadAsStringAsync())["id"]!.GetValue<string>();
+            var cpResp    = await client.PostAsJsonAsync("/api/taxonomy/career-paths", new CreateCareerPathDto { Title = $"P {Guid.NewGuid()}" });
+            var cpId      = ParseBody(await cpResp.Content.ReadAsStringAsync())["id"]!.GetValue<string>();
+            var ctResp    = await client.PostAsJsonAsync("/api/taxonomy/career-tracks", new CreateCareerTrackDto { Title = "Track", CareerPathId = Guid.Parse(cpId) });
+            var ctId      = ParseBody(await ctResp.Content.ReadAsStringAsync())["id"]!.GetValue<string>();
+            var posResp   = await client.PostAsJsonAsync("/api/taxonomy/positions", new CreatePositionDto { Title = "Dev", CareerTrackId = Guid.Parse(ctId) });
+            var posId     = ParseBody(await posResp.Content.ReadAsStringAsync())["id"]!.GetValue<string>();
+            var ptsResp   = await client.PostAsJsonAsync($"/api/taxonomy/positions/{posId}/skills",
+                new AddPositionSkillDto { SkillId = Guid.Parse(skillId), SkillLevelId = Guid.Parse(lvlId), IsMandatory = true });
+            var ptsId     = ParseBody(await ptsResp.Content.ReadAsStringAsync())["id"]!.GetValue<string>();
+
+            var response = await client.DeleteAsync($"/api/taxonomy/positions/{posId}/skills/{ptsId}");
+            Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task DeletePositionSkill_EmployeeRole_Returns403()
+        {
+            var client   = CreateAuthenticatedClient(EmployeeUserId);
+            var response = await client.DeleteAsync(
+                $"/api/taxonomy/positions/{Guid.NewGuid()}/skills/{Guid.NewGuid()}");
+            Assert.Equal(HttpStatusCode.Forbidden, response.StatusCode);
+        }
+
+        // ==================== AC-040: No individual skill level delete endpoint ====================
+
+        [Fact]
+        public async Task DeleteSkillLevel_Returns404or405()
+        {
+            // AC-040: Proficiency levels are managed only via the parent skill — no individual DELETE endpoint.
+            // Hitting DELETE on this route should return 404 (no route) or 405 (method not allowed).
+            var client   = CreateAuthenticatedClient(AdminUserId);
+            var response = await client.DeleteAsync(
+                $"/api/taxonomy/skills/{Guid.NewGuid()}/levels/{Guid.NewGuid()}");
+            Assert.True(
+                response.StatusCode == HttpStatusCode.NotFound ||
+                response.StatusCode == HttpStatusCode.MethodNotAllowed,
+                $"Expected 404 or 405 but got {response.StatusCode}");
         }
     }
 }

@@ -566,7 +566,7 @@ namespace CPR.Infrastructure.Data
                 b.Property(p => p.SkillId).HasColumnName("skill_id").IsRequired();
                 b.Property(p => p.SkillLevelId).HasColumnName("skill_level_id").IsRequired();
                 b.Property(p => p.Weight).HasColumnName("weight").HasColumnType("numeric(5,2)");
-                b.Property(p => p.IsMandatory).HasColumnName("is_mandatory").HasDefaultValue(false);
+                b.Property(p => p.IsMandatory).HasColumnName("is_mandatory").IsRequired();
                 b.Property(p => p.Rationale).HasColumnName("rationale");
                 b.Property(p => p.CreatedBy).HasColumnName("created_by");
                 b.Property(p => p.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("CURRENT_TIMESTAMP");

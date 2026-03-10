@@ -166,6 +166,10 @@ namespace CPR.Application.DTOs.Taxonomy
         /// <summary>Parent skill category identifier (required).</summary>
         [JsonPropertyName("category_id")]
         public Guid CategoryId { get; set; }
+
+        /// <summary>Optional proficiency levels to create together with the skill.</summary>
+        [JsonPropertyName("levels")]
+        public List<AddSkillLevelDto>? Levels { get; set; }
     }
 
     /// <summary>Request DTO for updating an existing skill (all fields optional).</summary>
