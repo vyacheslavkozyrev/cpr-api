@@ -235,7 +235,7 @@ public class SkillAssessmentController : ControllerBase
     /// <param name="dto">Manager assessment payload.</param>
     /// <param name="ct">Cancellation token.</param>
     [HttpPut("~/api/employees/{employeeId:guid}/skill-assessment/skills/{skillId:guid}/manager-assessment")]
-    [RequireRole("PeopleManager", "Director", "Administrator")]
+    [RequireRole("People Manager", "Director", "Administrator")]
     [ProducesResponseType(typeof(SkillAssessmentResponseDto), 200)]
     [ProducesResponseType(400)]
     [ProducesResponseType(401)]
