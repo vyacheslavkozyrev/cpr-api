@@ -206,8 +206,6 @@ namespace CPR.Infrastructure.Services
                     Description = null,
                     Value = 1 // Simplified - would need to join with SkillLevel table
                 } : null,
-                TargetLevel = null, // Not implemented in current schema
-                Source = s.Source,
                 EffectiveDate = s.EffectiveDate.HasValue ? new DateTimeOffset(s.EffectiveDate.Value) : null
             }).ToArray();
         }

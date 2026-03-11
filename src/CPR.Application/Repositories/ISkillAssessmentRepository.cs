@@ -24,7 +24,7 @@ namespace CPR.Application.Repositories
         Task<IReadOnlyList<EmployeeSkillRow>> GetEmployeeAssessmentsAsync(Guid employeeId, CancellationToken ct);
 
         // ---- Read: single assessment record (for mutation pre-checks) ----
-        Task<EmployeeToSkill?> GetAssessmentAsync(Guid employeeId, Guid skillId, bool isTarget, CancellationToken ct);
+        Task<EmployeeToSkill?> GetAssessmentAsync(Guid employeeId, Guid skillId, CancellationToken ct);
 
         // ---- Read: feedback item owned by the employee ----
         Task<(bool Exists, string SenderDisplayName, int? Rating, string Content)?> GetFeedbackForEmployeeAsync(Guid feedbackId, Guid toEmployeeId, CancellationToken ct);
@@ -36,10 +36,9 @@ namespace CPR.Application.Repositories
         Task<IReadOnlyList<TeamMemberAssessmentSummary>> GetTeamSummaryAsync(Guid managerEmployeeId, CancellationToken ct);
 
         // ---- Mutations ----
-        Task<EmployeeToSkill> UpsertCurrentLevelAsync(Guid employeeId, Guid skillId, Guid skillLevelId, string? notes, Guid actorId, CancellationToken ct);
+        Task<EmployeeToSkill> UpsertCurrentLevelAsync(Guid employeeId, Guid skillId, decimal selfAssessmentValue, string? notes, Guid actorId, CancellationToken ct);
         Task DeleteCurrentLevelAsync(Guid employeeId, Guid skillId, Guid actorId, CancellationToken ct);
-        Task<EmployeeToSkill> UpsertTargetLevelAsync(Guid employeeId, Guid skillId, Guid skillLevelId, Guid actorId, CancellationToken ct);
-        Task DeleteTargetLevelAsync(Guid employeeId, Guid skillId, Guid actorId, CancellationToken ct);
+        Task<EmployeeToSkill> UpsertManagerAssessmentAsync(Guid employeeId, Guid skillId, decimal managerAssessmentValue, Guid actorId, CancellationToken ct);
         Task<EmployeeSkillEvidence> LinkEvidenceAsync(Guid employeeToSkillId, Guid feedbackId, Guid actorId, CancellationToken ct);
         Task UnlinkEvidenceAsync(Guid employeeToSkillId, Guid feedbackId, CancellationToken ct);
 
@@ -59,7 +58,6 @@ namespace CPR.Application.Repositories
         public string RequiredLevelTitle { get; set; } = null!;
         public int RequiredLevelValue { get; set; }
         public bool IsMandatory { get; set; }
-        public decimal? Weight { get; set; }
     }
 
     /// <summary>Joined projection: one row per employee self-assessment record.</summary>
@@ -67,10 +65,8 @@ namespace CPR.Application.Repositories
     {
         public Guid AssessmentId { get; set; }
         public Guid SkillId { get; set; }
-        public bool IsTarget { get; set; }
-        public Guid? SkillLevelId { get; set; }
-        public string? SkillLevelTitle { get; set; }
-        public int? SkillLevelValue { get; set; }
+        public decimal SelfAssessmentValue { get; set; }
+        public decimal? ManagerAssessmentValue { get; set; }
         public string? Notes { get; set; }
         public List<EvidenceRow> Evidence { get; set; } = new();
     }

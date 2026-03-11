@@ -41,30 +41,15 @@ namespace CPR.Infrastructure.Services
             if (!positionSkills.Any(ps => ps.SkillId == skillId))
                 throw new KeyNotFoundException("skill_not_found");
 
-            var skillLevel = await _db.SkillLevels
-                .FirstOrDefaultAsync(sl => sl.Id == dto.SkillLevelId && !sl.IsDeleted, ct)
-                ?? throw new InvalidOperationException("invalid_level");
-
-            // Check target conflict: if a target exists and target.value <= new current value
-            var existingTarget = await _repo.GetAssessmentAsync(employeeId, skillId, isTarget: true, ct);
-            if (existingTarget?.SkillLevelId != null)
-            {
-                var targetLevel = await _db.SkillLevels
-                    .FirstOrDefaultAsync(sl => sl.Id == existingTarget.SkillLevelId && !sl.IsDeleted, ct);
-                if (targetLevel != null && targetLevel.Value <= skillLevel.Value)
-                    throw new InvalidOperationException("target_conflict");
-            }
-
-            var record = await _repo.UpsertCurrentLevelAsync(employeeId, skillId, dto.SkillLevelId, dto.Notes, employeeId, ct);
+            var record = await _repo.UpsertCurrentLevelAsync(employeeId, skillId, dto.SelfAssessmentValue, dto.Notes, employeeId, ct);
             await _repo.SaveChangesAsync(ct);
 
             return new AssessedLevelDto
             {
                 Id = record.Id,
                 SkillId = skillId,
-                SkillLevelId = skillLevel.Id,
-                SkillLevelTitle = skillLevel.Title,
-                SkillLevelValue = skillLevel.Value,
+                SelfAssessmentValue = record.SelfAssessmentValue,
+                ManagerAssessmentValue = record.ManagerAssessmentValue,
                 Notes = record.Notes
             };
         }
@@ -75,50 +60,37 @@ namespace CPR.Infrastructure.Services
             await _repo.SaveChangesAsync(ct);
         }
 
-        public async Task<TargetLevelDto> UpsertTargetAsync(
-            Guid employeeId, Guid skillId, UpsertSkillTargetDto dto, CancellationToken ct)
+        public async Task<SkillAssessmentResponseDto> UpsertManagerAssessmentAsync(
+            Guid actorId, Guid employeeId, Guid skillId, decimal value, CancellationToken ct)
         {
-            var employee = await _repo.GetEmployeeWithPositionAsync(employeeId, ct)
+            // Resolve actor's employee record to check direct-report constraint
+            var actorEmployee = await _repo.GetEmployeeWithPositionAsync(actorId, ct)
                 ?? throw new KeyNotFoundException("employee_not_found");
 
-            if (!employee.PositionId.HasValue)
-                throw new KeyNotFoundException("skill_not_found");
+            var targetEmployee = await _repo.GetEmployeeWithPositionAsync(employeeId, ct)
+                ?? throw new KeyNotFoundException("employee_not_found");
 
-            var positionSkills = await _repo.GetPositionSkillsAsync(employee.PositionId.Value, ct);
-            if (!positionSkills.Any(ps => ps.SkillId == skillId))
-                throw new KeyNotFoundException("skill_not_found");
-
-            var skillLevel = await _db.SkillLevels
-                .FirstOrDefaultAsync(sl => sl.Id == dto.SkillLevelId && !sl.IsDeleted, ct)
-                ?? throw new InvalidOperationException("invalid_level");
-
-            // Target value must be strictly greater than current assessed value
-            var currentAssessment = await _repo.GetAssessmentAsync(employeeId, skillId, isTarget: false, ct);
-            if (currentAssessment?.SkillLevelId != null)
+            // PeopleManager is restricted to direct reports; Director/Administrator are unrestricted
+            // Role enforcement is done in the controller via RequireRole; here we enforce the direct-report rule
+            // The actorRole context is not available here, so the controller passes actorId;
+            // if the actor is not the manager of the target, throw 403
+            if (targetEmployee.ManagerId != actorId)
             {
-                var currentLevel = await _db.SkillLevels
-                    .FirstOrDefaultAsync(sl => sl.Id == currentAssessment.SkillLevelId && !sl.IsDeleted, ct);
-                if (currentLevel != null && skillLevel.Value <= currentLevel.Value)
-                    throw new InvalidOperationException("target_too_low");
+                // Check if actor is a Director or Administrator by looking at their roles via the db
+                var actorRoles = await _db.UserRoles
+                    .Where(ur => ur.UserId == actorEmployee.UserId && !ur.IsDeleted)
+                    .Join(_db.Roles.Where(r => !r.IsDeleted), ur => ur.RoleId, r => r.Id, (ur, r) => r.Title)
+                    .ToListAsync(ct);
+
+                var isUnrestricted = actorRoles.Contains("Director") || actorRoles.Contains("Administrator");
+                if (!isUnrestricted)
+                    throw new UnauthorizedAccessException("forbidden");
             }
 
-            var record = await _repo.UpsertTargetLevelAsync(employeeId, skillId, dto.SkillLevelId, employeeId, ct);
+            await _repo.UpsertManagerAssessmentAsync(employeeId, skillId, value, actorId, ct);
             await _repo.SaveChangesAsync(ct);
 
-            return new TargetLevelDto
-            {
-                Id = record.Id,
-                SkillId = skillId,
-                SkillLevelId = skillLevel.Id,
-                SkillLevelTitle = skillLevel.Title,
-                SkillLevelValue = skillLevel.Value
-            };
-        }
-
-        public async Task DeleteTargetAsync(Guid employeeId, Guid skillId, CancellationToken ct)
-        {
-            await _repo.DeleteTargetLevelAsync(employeeId, skillId, employeeId, ct);
-            await _repo.SaveChangesAsync(ct);
+            return await BuildAssessmentResponseAsync(employeeId, ct);
         }
 
         public async Task<EvidenceItemDto> LinkEvidenceAsync(
@@ -134,7 +106,7 @@ namespace CPR.Infrastructure.Services
             if (!positionSkills.Any(ps => ps.SkillId == skillId))
                 throw new KeyNotFoundException("skill_not_found");
 
-            var currentAssessment = await _repo.GetAssessmentAsync(employeeId, skillId, isTarget: false, ct);
+            var currentAssessment = await _repo.GetAssessmentAsync(employeeId, skillId, ct);
             if (currentAssessment == null)
                 throw new InvalidOperationException("assessment_required");
 
@@ -163,7 +135,7 @@ namespace CPR.Infrastructure.Services
 
         public async Task UnlinkEvidenceAsync(Guid employeeId, Guid skillId, Guid feedbackId, CancellationToken ct)
         {
-            var currentAssessment = await _repo.GetAssessmentAsync(employeeId, skillId, isTarget: false, ct)
+            var currentAssessment = await _repo.GetAssessmentAsync(employeeId, skillId, ct)
                 ?? throw new KeyNotFoundException("evidence_not_found");
 
             await _repo.UnlinkEvidenceAsync(currentAssessment.Id, feedbackId, ct);
@@ -252,12 +224,7 @@ namespace CPR.Infrastructure.Services
             var positionSkills = await _repo.GetPositionSkillsAsync(position.Id, ct);
             var assessments = await _repo.GetEmployeeAssessmentsAsync(employeeId, ct);
 
-            var currentBySkill = assessments
-                .Where(a => !a.IsTarget)
-                .ToDictionary(a => a.SkillId);
-            var targetBySkill = assessments
-                .Where(a => a.IsTarget)
-                .ToDictionary(a => a.SkillId);
+            var currentBySkill = assessments.ToDictionary(a => a.SkillId);
 
             // Group skills by category
             var categoryGroups = positionSkills
@@ -272,7 +239,6 @@ namespace CPR.Infrastructure.Services
                         Skills = g.Select(ps =>
                         {
                             currentBySkill.TryGetValue(ps.SkillId, out var current);
-                            targetBySkill.TryGetValue(ps.SkillId, out var target);
                             nextPositionLevelMap.TryGetValue(ps.SkillId, out var nextLevel);
 
                             return new SkillItemDto
@@ -294,22 +260,13 @@ namespace CPR.Infrastructure.Services
                                         Value = nextLevel.LevelValue
                                     }
                                     : null,
-                                Assessed = current == null || !current.SkillLevelId.HasValue ? null : new AssessedLevelDto
+                                Assessed = current == null ? null : new AssessedLevelDto
                                 {
                                     Id = current.AssessmentId,
                                     SkillId = ps.SkillId,
-                                    SkillLevelId = current.SkillLevelId!.Value,
-                                    SkillLevelTitle = current.SkillLevelTitle ?? string.Empty,
-                                    SkillLevelValue = current.SkillLevelValue ?? 0,
+                                    SelfAssessmentValue = current.SelfAssessmentValue,
+                                    ManagerAssessmentValue = current.ManagerAssessmentValue,
                                     Notes = current.Notes
-                                },
-                                Target = target == null || !target.SkillLevelId.HasValue ? null : new TargetLevelDto
-                                {
-                                    Id = target.AssessmentId,
-                                    SkillId = ps.SkillId,
-                                    SkillLevelId = target.SkillLevelId!.Value,
-                                    SkillLevelTitle = target.SkillLevelTitle ?? string.Empty,
-                                    SkillLevelValue = target.SkillLevelValue ?? 0
                                 },
                                 Evidence = (current?.Evidence ?? new System.Collections.Generic.List<EvidenceRow>())
                                     .Select(e => new EvidenceItemDto

@@ -502,30 +502,6 @@ namespace CPR.UnitTests.Validators
         }
 
         [Fact]
-        public void ZeroWeight_Fails()
-        {
-            var result = _v.TestValidate(new AddPositionSkillDto
-            {
-                SkillId = Guid.NewGuid(),
-                SkillLevelId = Guid.NewGuid(),
-                Weight = 0m
-            });
-            result.ShouldHaveValidationErrorFor(x => x.Weight);
-        }
-
-        [Fact]
-        public void PositiveWeight_Passes()
-        {
-            var result = _v.TestValidate(new AddPositionSkillDto
-            {
-                SkillId = Guid.NewGuid(),
-                SkillLevelId = Guid.NewGuid(),
-                Weight = 1.5m
-            });
-            result.ShouldNotHaveValidationErrorFor(x => x.Weight);
-        }
-
-        [Fact]
         public void Rationale500Chars_Passes()
         {
             var result = _v.TestValidate(new AddPositionSkillDto
@@ -559,20 +535,6 @@ namespace CPR.UnitTests.Validators
         {
             var result = _v.TestValidate(new UpdatePositionSkillDto());
             result.ShouldNotHaveAnyValidationErrors();
-        }
-
-        [Fact]
-        public void ZeroWeight_Fails()
-        {
-            var result = _v.TestValidate(new UpdatePositionSkillDto { Weight = 0m });
-            result.ShouldHaveValidationErrorFor(x => x.Weight);
-        }
-
-        [Fact]
-        public void PositiveWeight_Passes()
-        {
-            var result = _v.TestValidate(new UpdatePositionSkillDto { Weight = 2m });
-            result.ShouldNotHaveValidationErrorFor(x => x.Weight);
         }
 
         [Fact]

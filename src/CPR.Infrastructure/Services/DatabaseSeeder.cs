@@ -2886,7 +2886,6 @@ namespace CPR.Infrastructure.Services
                     PositionId = position.Id,
                     SkillId = GetSkillId("Decision Making"),
                     SkillLevelId = GetSkillLevelId(GetSkillId("Decision Making"), decisionMakingLevel),
-                    Weight = 1.0m,
                     IsMandatory = true,
                     Rationale = "Critical for making sound technical and business decisions"
                 });
@@ -2903,7 +2902,6 @@ namespace CPR.Infrastructure.Services
                     PositionId = position.Id,
                     SkillId = GetSkillId("Communication and Influence"),
                     SkillLevelId = GetSkillLevelId(GetSkillId("Communication and Influence"), communicationLevel),
-                    Weight = 1.0m,
                     IsMandatory = true,
                     Rationale = "Essential for effective collaboration and stakeholder engagement"
                 });
@@ -2920,7 +2918,6 @@ namespace CPR.Infrastructure.Services
                     PositionId = position.Id,
                     SkillId = GetSkillId("Problem Solving"),
                     SkillLevelId = GetSkillLevelId(GetSkillId("Problem Solving"), problemSolvingLevel),
-                    Weight = 1.0m,
                     IsMandatory = true,
                     Rationale = "Core ability to analyze and solve complex challenges"
                 });
@@ -2938,7 +2935,6 @@ namespace CPR.Infrastructure.Services
                         PositionId = position.Id,
                         SkillId = GetSkillId("Stakeholder Management"),
                         SkillLevelId = GetSkillLevelId(GetSkillId("Stakeholder Management"), stakeholderLevel),
-                        Weight = 0.9m,
                         IsMandatory = true,
                         Rationale = "Managing relationships and aligning expectations with stakeholders"
                     });
@@ -2955,7 +2951,6 @@ namespace CPR.Infrastructure.Services
                     PositionId = position.Id,
                     SkillId = GetSkillId("Personal Accountability"),
                     SkillLevelId = GetSkillLevelId(GetSkillId("Personal Accountability"), accountabilityLevel),
-                    Weight = 1.0m,
                     IsMandatory = true,
                     Rationale = "Taking ownership and delivering on commitments"
                 });
@@ -2972,7 +2967,6 @@ namespace CPR.Infrastructure.Services
                     PositionId = position.Id,
                     SkillId = GetSkillId("Collaboration"),
                     SkillLevelId = GetSkillLevelId(GetSkillId("Collaboration"), collaborationLevel),
-                    Weight = 0.9m,
                     IsMandatory = true,
                     Rationale = "Working effectively with cross-functional teams"
                 });
@@ -2991,7 +2985,6 @@ namespace CPR.Infrastructure.Services
                         PositionId = position.Id,
                         SkillId = GetSkillId("DevOps & CI/CD"),
                         SkillLevelId = GetSkillLevelId(GetSkillId("DevOps & CI/CD"), techLevel),
-                        Weight = 1.0m,
                         IsMandatory = true,
                         Rationale = "Core competency for DevOps and software delivery roles"
                     });
@@ -3002,7 +2995,6 @@ namespace CPR.Infrastructure.Services
                         PositionId = position.Id,
                         SkillId = GetSkillId("Cloud Technologies"),
                         SkillLevelId = GetSkillLevelId(GetSkillId("Cloud Technologies"), techLevel),
-                        Weight = 0.95m,
                         IsMandatory = true,
                         Rationale = "Essential for modern DevOps practices"
                     });
@@ -3019,7 +3011,6 @@ namespace CPR.Infrastructure.Services
                         PositionId = position.Id,
                         SkillId = GetSkillId("Software Development"),
                         SkillLevelId = GetSkillLevelId(GetSkillId("Software Development"), techLevel),
-                        Weight = 1.0m,
                         IsMandatory = true,
                         Rationale = "Core development skills for mobile applications"
                     });
@@ -3036,7 +3027,6 @@ namespace CPR.Infrastructure.Services
                         PositionId = position.Id,
                         SkillId = GetSkillId("Software Development"),
                         SkillLevelId = GetSkillLevelId(GetSkillId("Software Development"), techLevel),
-                        Weight = 1.0m,
                         IsMandatory = true,
                         Rationale = "Core development skills for frontend engineering"
                     });
@@ -3053,7 +3043,6 @@ namespace CPR.Infrastructure.Services
                         PositionId = position.Id,
                         SkillId = GetSkillId("Software Development"),
                         SkillLevelId = GetSkillLevelId(GetSkillId("Software Development"), techLevel),
-                        Weight = 1.0m,
                         IsMandatory = true,
                         Rationale = "Core development skills for backend engineering"
                     });
@@ -3067,7 +3056,6 @@ namespace CPR.Infrastructure.Services
                                                        isSenior ? "Intermediate" :
                                                        isStaff ? "Advanced" :
                                                        isPrincipal ? "Expert" : "Foundational"),
-                        Weight = 0.9m,
                         IsMandatory = isSenior || isStaff || isPrincipal,
                         Rationale = "Important for designing scalable backend systems"
                     });
@@ -3084,7 +3072,6 @@ namespace CPR.Infrastructure.Services
                         PositionId = position.Id,
                         SkillId = GetSkillId("Machine Learning"),
                         SkillLevelId = GetSkillLevelId(GetSkillId("Machine Learning"), techLevel),
-                        Weight = 1.0m,
                         IsMandatory = true,
                         Rationale = "Core competency for ML engineering roles"
                     });
@@ -3097,7 +3084,6 @@ namespace CPR.Infrastructure.Services
                         SkillLevelId = GetSkillLevelId(GetSkillId("Data Engineering"),
                                                        isSenior ? "Intermediate" :
                                                        isStaff || isPrincipal ? "Advanced" : "Foundational"),
-                        Weight = 0.9m,
                         IsMandatory = true,
                         Rationale = "Essential for ML data pipeline and model training"
                     });
@@ -3114,7 +3100,6 @@ namespace CPR.Infrastructure.Services
                         PositionId = position.Id,
                         SkillId = GetSkillId("Testing & Quality Assurance"),
                         SkillLevelId = GetSkillLevelId(GetSkillId("Testing & Quality Assurance"), techLevel),
-                        Weight = 0.9m,
                         IsMandatory = true,
                         Rationale = "Important for diagnosing and resolving technical issues"
                     });
@@ -3131,7 +3116,6 @@ namespace CPR.Infrastructure.Services
                         PositionId = position.Id,
                         SkillId = GetSkillId("Cloud Technologies"),
                         SkillLevelId = GetSkillLevelId(GetSkillId("Cloud Technologies"), techLevel),
-                        Weight = 1.0m,
                         IsMandatory = true,
                         Rationale = "Core competency for infrastructure engineering"
                     });
@@ -3142,7 +3126,6 @@ namespace CPR.Infrastructure.Services
                         PositionId = position.Id,
                         SkillId = GetSkillId("System Architecture"),
                         SkillLevelId = GetSkillLevelId(GetSkillId("System Architecture"), techLevel),
-                        Weight = 0.95m,
                         IsMandatory = true,
                         Rationale = "Essential for designing infrastructure architecture"
                     });
@@ -3159,7 +3142,6 @@ namespace CPR.Infrastructure.Services
                         PositionId = position.Id,
                         SkillId = GetSkillId("Security Engineering"),
                         SkillLevelId = GetSkillLevelId(GetSkillId("Security Engineering"), techLevel),
-                        Weight = 1.0m,
                         IsMandatory = true,
                         Rationale = "Core competency for security engineering roles"
                     });
@@ -3172,7 +3154,6 @@ namespace CPR.Infrastructure.Services
                         SkillLevelId = GetSkillLevelId(GetSkillId("Regulatory Compliance"),
                                                        isSenior ? "Intermediate" :
                                                        isStaff || isPrincipal ? "Advanced" : "Foundational"),
-                        Weight = 0.85m,
                         IsMandatory = true,
                         Rationale = "Important for security compliance and risk management"
                     });
@@ -3189,7 +3170,6 @@ namespace CPR.Infrastructure.Services
                         PositionId = position.Id,
                         SkillId = GetSkillId("System Architecture"),
                         SkillLevelId = GetSkillLevelId(GetSkillId("System Architecture"), techLevel),
-                        Weight = 1.0m,
                         IsMandatory = true,
                         Rationale = "Core competency for platform engineering"
                     });
@@ -3200,7 +3180,6 @@ namespace CPR.Infrastructure.Services
                         PositionId = position.Id,
                         SkillId = GetSkillId("Cloud Technologies"),
                         SkillLevelId = GetSkillLevelId(GetSkillId("Cloud Technologies"), techLevel),
-                        Weight = 0.95m,
                         IsMandatory = true,
                         Rationale = "Essential for building modern platform services"
                     });
@@ -3216,7 +3195,6 @@ namespace CPR.Infrastructure.Services
                         SkillId = GetSkillId("Team Leadership"),
                         SkillLevelId = GetSkillLevelId(GetSkillId("Team Leadership"),
                                                        positionTitle.Contains("vp") ? "Expert" : "Advanced"),
-                        Weight = 1.0m,
                         IsMandatory = true,
                         Rationale = "Critical for leading and developing teams"
                     });
@@ -3228,7 +3206,6 @@ namespace CPR.Infrastructure.Services
                         SkillId = GetSkillId("Strategic Thinking"),
                         SkillLevelId = GetSkillLevelId(GetSkillId("Strategic Thinking"),
                                                        positionTitle.Contains("vp") || positionTitle.Contains("senior director") ? "Expert" : "Advanced"),
-                        Weight = 1.0m,
                         IsMandatory = true,
                         Rationale = "Essential for setting direction and strategy"
                     });
@@ -3239,7 +3216,6 @@ namespace CPR.Infrastructure.Services
                         PositionId = position.Id,
                         SkillId = GetSkillId("Business Acumen"),
                         SkillLevelId = GetSkillLevelId(GetSkillId("Business Acumen"), "Advanced"),
-                        Weight = 0.9m,
                         IsMandatory = true,
                         Rationale = "Important for aligning technical work with business objectives"
                     });
@@ -3253,7 +3229,6 @@ namespace CPR.Infrastructure.Services
                     SkillId = GetSkillId("Continuous Learning"),
                     SkillLevelId = GetSkillLevelId(GetSkillId("Continuous Learning"),
                                                    isDirector ? "Advanced" : "Intermediate"),
-                    Weight = 0.8m,
                     IsMandatory = false,
                     Rationale = "Important for staying current with technology and practices"
                 });
@@ -3346,9 +3321,8 @@ namespace CPR.Infrastructure.Services
                             EmployeeId = employee.Id,
                             SkillId = requiredSkill.SkillId,
                             SkillLevelId = actualSkillLevel.Id,
-                            Source = "System Seeded",
-                            EffectiveDate = DateTime.UtcNow.AddMonths(-random.Next(1, 12)), // Skill acquired within last year
-                            IsTarget = false // Current skill level, not a target
+                            SelfAssessmentValue = actualSkillLevel.Value,
+                            EffectiveDate = DateTime.UtcNow.AddMonths(-random.Next(1, 12))
                         });
                     }
                 }
@@ -3399,46 +3373,8 @@ namespace CPR.Infrastructure.Services
                             EmployeeId = employee.Id,
                             SkillId = additionalSkill.Id,
                             SkillLevelId = skillLevel.Id,
-                            Source = "System Seeded",
-                            EffectiveDate = DateTime.UtcNow.AddMonths(-random.Next(3, 24)),
-                            IsTarget = false
-                        });
-                    }
-                }
-
-                // Add target skills (aspirational growth areas) - 1-2 skills at higher levels
-                var targetSkillCount = random.Next(1, 3);
-                var existingSkillIds = employeeToSkills
-                    .Where(ets => ets.EmployeeId == employee.Id)
-                    .Select(ets => ets.SkillId)
-                    .ToList();
-
-                var targetSkills = requiredSkills
-                    .Where(rs => rs.IsMandatory)
-                    .OrderBy(rs => random.Next())
-                    .Take(targetSkillCount)
-                    .ToList();
-
-                foreach (var targetSkill in targetSkills)
-                {
-                    // Target level is 1-2 levels above current required level
-                    var currentSkillLevel = skillLevels.First(sl => sl.Id == targetSkill.SkillLevelId);
-                    var targetLevelValue = Math.Min(5, currentSkillLevel.Value + random.Next(1, 3));
-
-                    var targetSkillLevel = skillLevels
-                        .FirstOrDefault(sl => sl.SkillId == targetSkill.SkillId && sl.Value == targetLevelValue);
-
-                    if (targetSkillLevel != null)
-                    {
-                        employeeToSkills.Add(new EmployeeToSkill
-                        {
-                            Id = Guid.NewGuid(),
-                            EmployeeId = employee.Id,
-                            SkillId = targetSkill.SkillId,
-                            SkillLevelId = targetSkillLevel.Id,
-                            Source = "Career Development Plan",
-                            EffectiveDate = DateTime.UtcNow.AddMonths(6), // Target 6 months from now
-                            IsTarget = true // This is a growth target
+                            SelfAssessmentValue = skillLevel.Value,
+                            EffectiveDate = DateTime.UtcNow.AddMonths(-random.Next(3, 24))
                         });
                     }
                 }

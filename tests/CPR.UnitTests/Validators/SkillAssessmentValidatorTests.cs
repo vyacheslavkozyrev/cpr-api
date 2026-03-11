@@ -24,38 +24,66 @@ namespace CPR.UnitTests.Validators
         [Fact]
         public void UpsertSkillAssessmentDto_ValidInput_Passes()
         {
-            var dto = new UpsertSkillAssessmentDto { SkillLevelId = Guid.NewGuid(), Notes = "Some notes" };
+            var dto = new UpsertSkillAssessmentDto { SelfAssessmentValue = 3.0m, Notes = "Some notes" };
             Assert.True(IsValid(dto, out _));
         }
 
         [Fact]
         public void UpsertSkillAssessmentDto_NullNotes_Passes()
         {
-            var dto = new UpsertSkillAssessmentDto { SkillLevelId = Guid.NewGuid(), Notes = null };
+            var dto = new UpsertSkillAssessmentDto { SelfAssessmentValue = 2.5m, Notes = null };
             Assert.True(IsValid(dto, out _));
         }
 
         [Fact]
         public void UpsertSkillAssessmentDto_Notes1000Chars_Passes()
         {
-            var dto = new UpsertSkillAssessmentDto { SkillLevelId = Guid.NewGuid(), Notes = new string('x', 1000) };
+            var dto = new UpsertSkillAssessmentDto { SelfAssessmentValue = 1.0m, Notes = new string('x', 1000) };
             Assert.True(IsValid(dto, out _));
         }
 
         [Fact]
         public void UpsertSkillAssessmentDto_Notes1001Chars_Fails()
         {
-            var dto = new UpsertSkillAssessmentDto { SkillLevelId = Guid.NewGuid(), Notes = new string('x', 1001) };
+            var dto = new UpsertSkillAssessmentDto { SelfAssessmentValue = 1.0m, Notes = new string('x', 1001) };
             Assert.False(IsValid(dto, out _));
         }
 
-        // ---------- UpsertSkillTargetDto ----------
+        [Fact]
+        public void UpsertSkillAssessmentDto_ZeroValue_Fails()
+        {
+            var dto = new UpsertSkillAssessmentDto { SelfAssessmentValue = 0m };
+            Assert.False(IsValid(dto, out _));
+        }
 
         [Fact]
-        public void UpsertSkillTargetDto_ValidInput_Passes()
+        public void UpsertSkillAssessmentDto_NegativeValue_Fails()
         {
-            var dto = new UpsertSkillTargetDto { SkillLevelId = Guid.NewGuid() };
+            var dto = new UpsertSkillAssessmentDto { SelfAssessmentValue = -1.0m };
+            Assert.False(IsValid(dto, out _));
+        }
+
+        // ---------- UpsertManagerAssessmentDto ----------
+
+        [Fact]
+        public void UpsertManagerAssessmentDto_ValidInput_Passes()
+        {
+            var dto = new UpsertManagerAssessmentDto { ManagerAssessmentValue = 4.0m };
             Assert.True(IsValid(dto, out _));
+        }
+
+        [Fact]
+        public void UpsertManagerAssessmentDto_ZeroValue_Fails()
+        {
+            var dto = new UpsertManagerAssessmentDto { ManagerAssessmentValue = 0m };
+            Assert.False(IsValid(dto, out _));
+        }
+
+        [Fact]
+        public void UpsertManagerAssessmentDto_NegativeValue_Fails()
+        {
+            var dto = new UpsertManagerAssessmentDto { ManagerAssessmentValue = -0.5m };
+            Assert.False(IsValid(dto, out _));
         }
 
         // ---------- LinkEvidenceDto ----------

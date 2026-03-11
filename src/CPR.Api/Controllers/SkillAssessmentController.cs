@@ -111,60 +111,22 @@ public class SkillAssessmentController : ControllerBase
     }
 
     /// <summary>
-    /// Creates or updates the authenticated employee's skill target level.
+    /// Returns 404 — target level endpoints have been removed in this version.
     /// </summary>
-    /// <param name="skillId">The skill identifier.</param>
-    /// <param name="dto">Target payload.</param>
-    /// <param name="ct">Cancellation token.</param>
     [HttpPut("~/api/me/skill-assessment/skills/{skillId:guid}/target")]
     [Authorize]
-    [ProducesResponseType(typeof(TargetLevelDto), 200)]
-    [ProducesResponseType(400)]
-    [ProducesResponseType(401)]
     [ProducesResponseType(404)]
-    [ProducesResponseType(422)]
-    public async Task<IActionResult> UpsertTarget(
-        Guid skillId, [FromBody] UpsertSkillTargetDto dto, CancellationToken ct)
-    {
-        if (!ModelState.IsValid) return BadRequest(ModelState);
-
-        var (actorId, _, errorResult) = await ResolveActorContextAsync();
-        if (errorResult != null) return errorResult;
-
-        try
-        {
-            var result = await _skillAssessmentService.UpsertTargetAsync(actorId, skillId, dto, ct);
-            return Ok(result);
-        }
-        catch (KeyNotFoundException ex) { return Problem(ex.Message, statusCode: StatusCodes.Status404NotFound); }
-        catch (InvalidOperationException ex)
-        {
-            return Problem(ex.Message, statusCode: StatusCodes.Status422UnprocessableEntity);
-        }
-    }
+    public IActionResult UpsertTarget(Guid skillId)
+        => Problem("Target level endpoints have been removed.", statusCode: StatusCodes.Status404NotFound);
 
     /// <summary>
-    /// Deletes the authenticated employee's skill target level.
+    /// Returns 404 — target level endpoints have been removed in this version.
     /// </summary>
-    /// <param name="skillId">The skill identifier.</param>
-    /// <param name="ct">Cancellation token.</param>
     [HttpDelete("~/api/me/skill-assessment/skills/{skillId:guid}/target")]
     [Authorize]
-    [ProducesResponseType(204)]
-    [ProducesResponseType(401)]
     [ProducesResponseType(404)]
-    public async Task<IActionResult> DeleteTarget(Guid skillId, CancellationToken ct)
-    {
-        var (actorId, _, errorResult) = await ResolveActorContextAsync();
-        if (errorResult != null) return errorResult;
-
-        try
-        {
-            await _skillAssessmentService.DeleteTargetAsync(actorId, skillId, ct);
-            return NoContent();
-        }
-        catch (KeyNotFoundException ex) { return Problem(ex.Message, statusCode: StatusCodes.Status404NotFound); }
-    }
+    public IActionResult DeleteTarget(Guid skillId)
+        => Problem("Target level endpoints have been removed.", statusCode: StatusCodes.Status404NotFound);
 
     /// <summary>
     /// Links a feedback item as evidence to the authenticated employee's skill assessment.
@@ -259,6 +221,37 @@ public class SkillAssessmentController : ControllerBase
         try
         {
             var result = await _skillAssessmentService.GetEmployeeAssessmentAsync(actorId, actorRole, employeeId, ct);
+            return Ok(result);
+        }
+        catch (KeyNotFoundException ex) { return Problem(ex.Message, statusCode: StatusCodes.Status404NotFound); }
+        catch (UnauthorizedAccessException ex) { return Problem(ex.Message, statusCode: StatusCodes.Status403Forbidden); }
+    }
+
+    /// <summary>
+    /// Sets or updates the manager's assessment value for a specific employee's skill.
+    /// </summary>
+    /// <param name="employeeId">The target employee identifier.</param>
+    /// <param name="skillId">The skill identifier.</param>
+    /// <param name="dto">Manager assessment payload.</param>
+    /// <param name="ct">Cancellation token.</param>
+    [HttpPut("~/api/employees/{employeeId:guid}/skill-assessment/skills/{skillId:guid}/manager-assessment")]
+    [RequireRole("PeopleManager", "Director", "Administrator")]
+    [ProducesResponseType(typeof(SkillAssessmentResponseDto), 200)]
+    [ProducesResponseType(400)]
+    [ProducesResponseType(401)]
+    [ProducesResponseType(403)]
+    [ProducesResponseType(404)]
+    public async Task<IActionResult> UpsertManagerAssessment(
+        Guid employeeId, Guid skillId, [FromBody] UpsertManagerAssessmentDto dto, CancellationToken ct)
+    {
+        if (!ModelState.IsValid) return BadRequest(ModelState);
+
+        var (actorId, _, errorResult) = await ResolveActorContextAsync();
+        if (errorResult != null) return errorResult;
+
+        try
+        {
+            var result = await _skillAssessmentService.UpsertManagerAssessmentAsync(actorId, employeeId, skillId, dto.ManagerAssessmentValue, ct);
             return Ok(result);
         }
         catch (KeyNotFoundException ex) { return Problem(ex.Message, statusCode: StatusCodes.Status404NotFound); }

@@ -17,9 +17,6 @@ namespace CPR.Domain.Entities
         /// <summary>Foreign key to the minimum required skill level.</summary>
         public Guid SkillLevelId { get; set; }
 
-        /// <summary>Optional weighting factor for this skill requirement.</summary>
-        public decimal? Weight { get; set; }
-
         /// <summary>Whether this skill is mandatory for the position.</summary>
         public bool IsMandatory { get; set; }
 

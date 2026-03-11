@@ -119,18 +119,9 @@ namespace CPR.Application.Contracts
         /// <summary>Current skill level (optional)</summary>
         [JsonPropertyName("current_level")]
         public SkillLevelDto? CurrentLevel { get; set; }
-        /// <summary>Target skill level (optional)</summary>
-        [JsonPropertyName("target_level")]
-        public SkillLevelDto? TargetLevel { get; set; }
-        /// <summary>Source of the assessment</summary>
-        [JsonPropertyName("source")]
-        public string? Source { get; set; }
         /// <summary>Effective date of the assessment</summary>
         [JsonPropertyName("effective_date")]
         public DateTimeOffset? EffectiveDate { get; set; }
-        /// <summary>Whether this is a target assessment</summary>
-        [JsonPropertyName("is_target")]
-        public bool IsTarget { get; set; }
         /// <summary>When the assessment was created</summary>
         [JsonPropertyName("created_at")]
         public DateTimeOffset CreatedAt { get; set; }
@@ -150,18 +141,9 @@ namespace CPR.Application.Contracts
         /// <summary>Current skill level identifier (optional)</summary>
         [JsonPropertyName("current_level_id")]
         public Guid? CurrentLevelId { get; set; }
-        /// <summary>Target skill level identifier (optional)</summary>
-        [JsonPropertyName("target_level_id")]
-        public Guid? TargetLevelId { get; set; }
-        /// <summary>Source of the assessment</summary>
-        [JsonPropertyName("source")]
-        public string? Source { get; set; }
         /// <summary>Effective date of the assessment</summary>
         [JsonPropertyName("effective_date")]
         public DateTimeOffset? EffectiveDate { get; set; }
-        /// <summary>Whether this is a target assessment</summary>
-        [JsonPropertyName("is_target")]
-        public bool IsTarget { get; set; }
     }
 
     /// <summary>
@@ -172,18 +154,9 @@ namespace CPR.Application.Contracts
         /// <summary>Current skill level identifier (optional)</summary>
         [JsonPropertyName("current_level_id")]
         public Guid? CurrentLevelId { get; set; }
-        /// <summary>Target skill level identifier (optional)</summary>
-        [JsonPropertyName("target_level_id")]
-        public Guid? TargetLevelId { get; set; }
-        /// <summary>Source of the assessment</summary>
-        [JsonPropertyName("source")]
-        public string? Source { get; set; }
         /// <summary>Effective date of the assessment</summary>
         [JsonPropertyName("effective_date")]
         public DateTimeOffset? EffectiveDate { get; set; }
-        /// <summary>Whether this is a target assessment</summary>
-        [JsonPropertyName("is_target")]
-        public bool IsTarget { get; set; }
     }
 
     // ==================== Skill Category DTOs ====================

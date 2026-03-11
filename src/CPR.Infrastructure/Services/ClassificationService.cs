@@ -72,7 +72,6 @@ namespace CPR.Infrastructure.Services
                         join s in _db.Skills.Where(s => !s.IsDeleted) on es.SkillId equals s.Id
                         join sc in _db.SkillCategories.Where(sc => !sc.IsDeleted) on s.CategoryId equals sc.Id
                         from cl in _db.SkillLevels.Where(sl => !sl.IsDeleted && sl.Id == es.SkillLevelId).DefaultIfEmpty()
-                        from tl in _db.SkillLevels.Where(sl => !sl.IsDeleted && sl.Id == es.SkillLevelId).DefaultIfEmpty() // Note: This should be es.TargetLevelId if that field exists
                         select new EmployeeSkillDto
                         {
                             Id = es.Id,
@@ -92,17 +91,7 @@ namespace CPR.Infrastructure.Services
                                 SkillId = cl.SkillId,
                                 Value = cl.Value
                             } : null,
-                            TargetLevel = tl != null ? new SkillLevelDto
-                            {
-                                Id = tl.Id,
-                                Title = tl.Title,
-                                Description = tl.Description,
-                                SkillId = tl.SkillId,
-                                Value = tl.Value
-                            } : null,
-                            Source = es.Source,
                             EffectiveDate = es.EffectiveDate,
-                            IsTarget = es.IsTarget,
                             CreatedAt = es.CreatedAt,
                             ModifiedAt = es.ModifiedAt
                         };
@@ -125,14 +114,6 @@ namespace CPR.Infrastructure.Services
                     throw new ArgumentException("Current skill level not found", nameof(dto.CurrentLevelId));
             }
 
-            // Validate target level if provided
-            if (dto.TargetLevelId.HasValue)
-            {
-                var targetLevel = await _db.SkillLevels.FirstOrDefaultAsync(sl => sl.Id == dto.TargetLevelId.Value && !sl.IsDeleted);
-                if (targetLevel == null)
-                    throw new ArgumentException("Target skill level not found", nameof(dto.TargetLevelId));
-            }
-
             // Check if assessment already exists for this employee and skill
             var existing = await _db.EmployeeSkills.FirstOrDefaultAsync(es =>
                 es.EmployeeId == employeeId &&
@@ -143,9 +124,7 @@ namespace CPR.Infrastructure.Services
             {
                 // Update existing assessment instead of throwing exception
                 existing.SkillLevelId = dto.CurrentLevelId;
-                existing.Source = dto.Source;
                 existing.EffectiveDate = dto.EffectiveDate.HasValue ? dto.EffectiveDate.Value.UtcDateTime : DateTime.UtcNow;
-                existing.IsTarget = dto.IsTarget;
                 existing.ModifiedBy = employeeId;
                 existing.ModifiedAt = DateTimeOffset.UtcNow;
 
@@ -158,11 +137,9 @@ namespace CPR.Infrastructure.Services
                 Id = Guid.NewGuid(),
                 EmployeeId = employeeId,
                 SkillId = dto.SkillId,
-                SkillLevelId = dto.CurrentLevelId, // Note: This should be CurrentLevelId if that field exists
-                Source = dto.Source,
+                SkillLevelId = dto.CurrentLevelId,
                 EffectiveDate = dto.EffectiveDate.HasValue ? dto.EffectiveDate.Value.UtcDateTime : DateTime.UtcNow,
-                IsTarget = dto.IsTarget,
-                CreatedBy = employeeId, // Use employee ID as created by
+                CreatedBy = employeeId,
                 CreatedAt = DateTimeOffset.UtcNow
             };
 
@@ -192,20 +169,10 @@ namespace CPR.Infrastructure.Services
                     throw new ArgumentException("Current skill level not found", nameof(dto.CurrentLevelId));
             }
 
-            // Validate target level if provided
-            if (dto.TargetLevelId.HasValue)
-            {
-                var targetLevel = await _db.SkillLevels.FirstOrDefaultAsync(sl => sl.Id == dto.TargetLevelId.Value && !sl.IsDeleted);
-                if (targetLevel == null)
-                    throw new ArgumentException("Target skill level not found", nameof(dto.TargetLevelId));
-            }
-
             // Update the assessment
             existing.SkillLevelId = dto.CurrentLevelId ?? existing.SkillLevelId;
-            existing.Source = dto.Source ?? existing.Source;
             existing.EffectiveDate = dto.EffectiveDate.HasValue ? dto.EffectiveDate.Value.UtcDateTime : existing.EffectiveDate;
-            existing.IsTarget = dto.IsTarget;
-            existing.ModifiedBy = employeeId; // Use employee ID as modified by
+            existing.ModifiedBy = employeeId;
             existing.ModifiedAt = DateTimeOffset.UtcNow;
 
             await _db.SaveChangesAsync();

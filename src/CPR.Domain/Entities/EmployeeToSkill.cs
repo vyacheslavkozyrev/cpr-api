@@ -9,10 +9,9 @@ namespace CPR.Domain.Entities
         public Guid EmployeeId { get; set; }
         public Guid SkillId { get; set; }
         public Guid? SkillLevelId { get; set; }
-        public decimal? PersistValue { get; set; }
-        public string? Source { get; set; }
+        public decimal SelfAssessmentValue { get; set; }
+        public decimal? ManagerAssessmentValue { get; set; }
         public DateTime? EffectiveDate { get; set; }
-        public bool IsTarget { get; set; }
         public string? Notes { get; set; }
 
         // Navigation properties

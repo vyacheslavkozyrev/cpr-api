@@ -357,9 +357,9 @@ namespace CPR.Infrastructure.Migrations
                         .HasColumnType("boolean")
                         .HasColumnName("is_deleted");
 
-                    b.Property<bool>("IsTarget")
-                        .HasColumnType("boolean")
-                        .HasColumnName("is_target");
+                    b.Property<decimal?>("ManagerAssessmentValue")
+                        .HasColumnType("numeric")
+                        .HasColumnName("manager_assessment_value");
 
                     b.Property<DateTimeOffset?>("ModifiedAt")
                         .HasColumnType("timestamp with time zone")
@@ -369,9 +369,14 @@ namespace CPR.Infrastructure.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("modified_by");
 
-                    b.Property<decimal?>("PersistValue")
+                    b.Property<string?>("Notes")
+                        .HasColumnType("text")
+                        .HasColumnName("notes");
+
+                    b.Property<decimal>("SelfAssessmentValue")
                         .HasColumnType("numeric")
-                        .HasColumnName("persist_value");
+                        .HasDefaultValue(0m)
+                        .HasColumnName("self_assessment_value");
 
                     b.Property<Guid>("SkillId")
                         .HasColumnType("uuid")
@@ -381,11 +386,11 @@ namespace CPR.Infrastructure.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("skill_level_id");
 
-                    b.Property<string>("Source")
-                        .HasColumnType("text")
-                        .HasColumnName("source");
-
                     b.HasKey("Id");
+
+                    b.HasIndex(new[] { "EmployeeId", "SkillId" }, "UX_employee_to_skill_employee_skill")
+                        .IsUnique()
+                        .HasFilter("is_deleted = FALSE");
 
                     b.ToTable("employee_to_skill", (string)null);
                 });
@@ -966,10 +971,6 @@ namespace CPR.Infrastructure.Migrations
                     b.Property<Guid>("SkillLevelId")
                         .HasColumnType("uuid")
                         .HasColumnName("skill_level_id");
-
-                    b.Property<decimal?>("Weight")
-                        .HasColumnType("numeric")
-                        .HasColumnName("weight");
 
                     b.HasKey("Id");
 

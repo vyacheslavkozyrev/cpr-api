@@ -57,7 +57,7 @@ namespace CPR.IntegrationTests.Controllers
             var client   = _factory.CreateClient();
             var response = await client.PutAsJsonAsync(
                 $"/api/me/skill-assessment/skills/{Guid.NewGuid()}",
-                new { skill_level_id = Guid.NewGuid() });
+                new { self_assessment_value = 3.0m });
             Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
         }
 
@@ -67,7 +67,7 @@ namespace CPR.IntegrationTests.Controllers
             var client   = CreateAuthenticatedClient(EmployeeUserId);
             var response = await client.PutAsJsonAsync(
                 $"/api/me/skill-assessment/skills/{Guid.NewGuid()}",
-                new { skill_level_id = Guid.NewGuid() });
+                new { self_assessment_value = 3.0m });
             // skill_not_found or employee_not_found → 404
             Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
         }

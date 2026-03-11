@@ -105,9 +105,6 @@ namespace CPR.Application.DTOs.SkillAssessment
         [JsonPropertyName("assessed")]
         public AssessedLevelDto? Assessed { get; set; }
 
-        [JsonPropertyName("target")]
-        public TargetLevelDto? Target { get; set; }
-
         [JsonPropertyName("evidence")]
         public List<EvidenceItemDto> Evidence { get; set; } = new();
     }
@@ -132,35 +129,14 @@ namespace CPR.Application.DTOs.SkillAssessment
         [JsonPropertyName("skill_id")]
         public Guid SkillId { get; set; }
 
-        [JsonPropertyName("skill_level_id")]
-        public Guid SkillLevelId { get; set; }
+        [JsonPropertyName("self_assessment_value")]
+        public decimal SelfAssessmentValue { get; set; }
 
-        [JsonPropertyName("skill_level_title")]
-        public string SkillLevelTitle { get; set; } = null!;
-
-        [JsonPropertyName("skill_level_value")]
-        public int SkillLevelValue { get; set; }
+        [JsonPropertyName("manager_assessment_value")]
+        public decimal? ManagerAssessmentValue { get; set; }
 
         [JsonPropertyName("notes")]
         public string? Notes { get; set; }
-    }
-
-    public class TargetLevelDto
-    {
-        [JsonPropertyName("id")]
-        public Guid Id { get; set; }
-
-        [JsonPropertyName("skill_id")]
-        public Guid SkillId { get; set; }
-
-        [JsonPropertyName("skill_level_id")]
-        public Guid SkillLevelId { get; set; }
-
-        [JsonPropertyName("skill_level_title")]
-        public string SkillLevelTitle { get; set; } = null!;
-
-        [JsonPropertyName("skill_level_value")]
-        public int SkillLevelValue { get; set; }
     }
 
     public class EvidenceItemDto

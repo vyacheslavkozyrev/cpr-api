@@ -131,10 +131,6 @@ namespace CPR.Application.DTOs.Taxonomy
         [JsonPropertyName("skill_level_value")]
         public int SkillLevelValue { get; set; }
 
-        /// <summary>Optional weighting factor.</summary>
-        [JsonPropertyName("weight")]
-        public decimal? Weight { get; set; }
-
         /// <summary>Whether this skill is mandatory.</summary>
         [JsonPropertyName("is_mandatory")]
         public bool IsMandatory { get; set; }
@@ -155,10 +151,6 @@ namespace CPR.Application.DTOs.Taxonomy
         [JsonPropertyName("skill_level_id")]
         public Guid SkillLevelId { get; set; }
 
-        /// <summary>Optional weighting factor.</summary>
-        [JsonPropertyName("weight")]
-        public decimal? Weight { get; set; }
-
         /// <summary>Whether this skill is mandatory.</summary>
         [JsonPropertyName("is_mandatory")]
         public bool IsMandatory { get; set; }
@@ -174,10 +166,6 @@ namespace CPR.Application.DTOs.Taxonomy
         /// <summary>New required skill level identifier. If null, existing value is retained.</summary>
         [JsonPropertyName("skill_level_id")]
         public Guid? SkillLevelId { get; set; }
-
-        /// <summary>New weighting factor. If null, existing value is retained.</summary>
-        [JsonPropertyName("weight")]
-        public decimal? Weight { get; set; }
 
         /// <summary>New mandatory flag. If null, existing value is retained.</summary>
         [JsonPropertyName("is_mandatory")]

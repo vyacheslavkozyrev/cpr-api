@@ -136,9 +136,7 @@ public class MeControllerTests : IAsyncLifetime
         {
             SkillId = skill.Id,
             CurrentLevelId = firstLevel.Id,
-            Source = "Self-assessment",
-            EffectiveDate = DateTimeOffset.UtcNow,
-            IsTarget = false
+            EffectiveDate = DateTimeOffset.UtcNow
         };
 
         // Act
@@ -163,9 +161,7 @@ public class MeControllerTests : IAsyncLifetime
 
         var createDto = new EmployeeSkillCreateDto
         {
-            SkillId = Guid.NewGuid(), // Non-existent skill ID
-            Source = "Self-assessment",
-            IsTarget = false
+            SkillId = Guid.NewGuid() // Non-existent skill ID
         };
 
         // Act
@@ -214,9 +210,7 @@ public class MeControllerTests : IAsyncLifetime
         var createDto = new EmployeeSkillCreateDto
         {
             SkillId = skill.Id,
-            CurrentLevelId = firstLevel.Id,
-            Source = "Self-assessment",
-            IsTarget = false
+            CurrentLevelId = firstLevel.Id
         };
 
         // Create first assessment
@@ -256,9 +250,7 @@ public class MeControllerTests : IAsyncLifetime
         var createDto = new EmployeeSkillCreateDto
         {
             SkillId = skill.Id,
-            CurrentLevelId = firstLevel.Id,
-            Source = "Self-assessment",
-            IsTarget = false
+            CurrentLevelId = firstLevel.Id
         };
 
         var createResp = await client.PostAsJsonAsync("/api/me/skills", createDto);
@@ -268,8 +260,8 @@ public class MeControllerTests : IAsyncLifetime
         // Now update it
         var updateDto = new EmployeeSkillUpdateDto
         {
-            Source = "Updated self-assessment",
-            IsTarget = true
+            CurrentLevelId = firstLevel.Id,
+            EffectiveDate = DateTimeOffset.UtcNow
         };
 
         // Act
@@ -283,8 +275,6 @@ public class MeControllerTests : IAsyncLifetime
         Assert.Equal(System.Net.HttpStatusCode.OK, updateResp.StatusCode);
         var updatedSkill = await updateResp.Content.ReadFromJsonAsync<EmployeeSkillDto>();
         Assert.NotNull(updatedSkill);
-        Assert.Equal("Updated self-assessment", updatedSkill.Source);
-        Assert.True(updatedSkill.IsTarget);
     }
 
     [Fact]
@@ -299,8 +289,7 @@ public class MeControllerTests : IAsyncLifetime
 
         var updateDto = new EmployeeSkillUpdateDto
         {
-            Source = "Updated assessment",
-            IsTarget = true
+            CurrentLevelId = Guid.NewGuid()
         };
 
         // Act - try to update non-existent skill
@@ -336,9 +325,7 @@ public class MeControllerTests : IAsyncLifetime
         var createDto = new EmployeeSkillCreateDto
         {
             SkillId = skill.Id,
-            CurrentLevelId = firstLevel.Id,
-            Source = "Self-assessment",
-            IsTarget = false
+            CurrentLevelId = firstLevel.Id
         };
 
         var createResp = await client.PostAsJsonAsync("/api/me/skills", createDto);
@@ -348,8 +335,7 @@ public class MeControllerTests : IAsyncLifetime
         // Now try to update with invalid level ID
         var updateDto = new EmployeeSkillUpdateDto
         {
-            CurrentLevelId = Guid.NewGuid(), // Non-existent level ID
-            Source = "Updated assessment"
+            CurrentLevelId = Guid.NewGuid() // Non-existent level ID
         };
 
         // Act

@@ -2,6 +2,7 @@ using System;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Net.Http.Json;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -83,6 +84,39 @@ namespace CPR.IntegrationTests.Controllers
             var client   = CreateAuthenticatedClient(DirectorUserId);
             var response = await client.GetAsync($"/api/employees/{Guid.NewGuid()}/skill-assessment");
             // Director has access but the employee ID is unknown → 404
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        }
+
+        // ---------- PUT /api/employees/{employeeId}/skill-assessment/skills/{skillId}/manager-assessment ----------
+
+        [Fact]
+        public async Task UpsertManagerAssessment_Unauthenticated_Returns401()
+        {
+            var client   = _factory.CreateClient();
+            var response = await client.PutAsJsonAsync(
+                $"/api/employees/{Guid.NewGuid()}/skill-assessment/skills/{Guid.NewGuid()}/manager-assessment",
+                new { manager_assessment_value = 3.5m });
+            Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task UpsertManagerAssessment_EmployeeRole_Returns403()
+        {
+            var client   = CreateAuthenticatedClient(EmployeeUserId);
+            var response = await client.PutAsJsonAsync(
+                $"/api/employees/{Guid.NewGuid()}/skill-assessment/skills/{Guid.NewGuid()}/manager-assessment",
+                new { manager_assessment_value = 3.5m });
+            Assert.Equal(HttpStatusCode.Forbidden, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task UpsertManagerAssessment_DirectorRole_UnknownEmployee_Returns404()
+        {
+            var client   = CreateAuthenticatedClient(DirectorUserId);
+            var response = await client.PutAsJsonAsync(
+                $"/api/employees/{Guid.NewGuid()}/skill-assessment/skills/{Guid.NewGuid()}/manager-assessment",
+                new { manager_assessment_value = 3.5m });
+            // Director has access but employee is unknown → 404
             Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
         }
     }

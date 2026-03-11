@@ -537,10 +537,9 @@ namespace CPR.Infrastructure.Data
                 b.Property(es => es.EmployeeId).HasColumnName("employee_id").IsRequired();
                 b.Property(es => es.SkillId).HasColumnName("skill_id").IsRequired();
                 b.Property(es => es.SkillLevelId).HasColumnName("skill_level_id");
-                b.Property(es => es.PersistValue).HasColumnName("persist_value");
-                b.Property(es => es.Source).HasColumnName("source");
+                b.Property(es => es.SelfAssessmentValue).HasColumnName("self_assessment_value").IsRequired().HasDefaultValue(0m);
+                b.Property(es => es.ManagerAssessmentValue).HasColumnName("manager_assessment_value");
                 b.Property(es => es.EffectiveDate).HasColumnName("effective_date");
-                b.Property(es => es.IsTarget).HasColumnName("is_target");
                 b.Property(es => es.Notes).HasColumnName("notes");
                 b.Property(es => es.CreatedBy).HasColumnName("created_by");
                 b.Property(es => es.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("CURRENT_TIMESTAMP");
@@ -550,11 +549,11 @@ namespace CPR.Infrastructure.Data
                 b.Property(es => es.DeletedBy).HasColumnName("deleted_by");
                 b.Property(es => es.DeletedAt).HasColumnName("deleted_at");
 
-                // Partial unique index: one self-assessment per (employee, skill, is_target)
-                b.HasIndex(es => new { es.EmployeeId, es.SkillId, es.IsTarget })
-                    .HasFilter("source = 'self'")
+                // Partial unique index: one assessment per (employee, skill)
+                b.HasIndex(es => new { es.EmployeeId, es.SkillId })
+                    .HasFilter("is_deleted = FALSE")
                     .IsUnique()
-                    .HasDatabaseName("UX_employee_to_skill_self");
+                    .HasDatabaseName("UX_employee_to_skill_employee_skill");
             });
 
             modelBuilder.Entity<PositionToSkill>(b =>
@@ -565,7 +564,6 @@ namespace CPR.Infrastructure.Data
                 b.Property(p => p.PositionId).HasColumnName("position_id").IsRequired();
                 b.Property(p => p.SkillId).HasColumnName("skill_id").IsRequired();
                 b.Property(p => p.SkillLevelId).HasColumnName("skill_level_id").IsRequired();
-                b.Property(p => p.Weight).HasColumnName("weight").HasColumnType("numeric(5,2)");
                 b.Property(p => p.IsMandatory).HasColumnName("is_mandatory").IsRequired();
                 b.Property(p => p.Rationale).HasColumnName("rationale");
                 b.Property(p => p.CreatedBy).HasColumnName("created_by");

@@ -7,19 +7,21 @@ namespace CPR.Application.DTOs.SkillAssessment
     public class UpsertSkillAssessmentDto
     {
         [Required]
-        [JsonPropertyName("skill_level_id")]
-        public Guid SkillLevelId { get; set; }
+        [Range(0.01, double.MaxValue, ErrorMessage = "self_assessment_value must be greater than 0")]
+        [JsonPropertyName("self_assessment_value")]
+        public decimal SelfAssessmentValue { get; set; }
 
         [StringLength(1000)]
         [JsonPropertyName("notes")]
         public string? Notes { get; set; }
     }
 
-    public class UpsertSkillTargetDto
+    public class UpsertManagerAssessmentDto
     {
         [Required]
-        [JsonPropertyName("skill_level_id")]
-        public Guid SkillLevelId { get; set; }
+        [Range(0.01, double.MaxValue, ErrorMessage = "manager_assessment_value must be greater than 0")]
+        [JsonPropertyName("manager_assessment_value")]
+        public decimal ManagerAssessmentValue { get; set; }
     }
 
     public class LinkEvidenceDto

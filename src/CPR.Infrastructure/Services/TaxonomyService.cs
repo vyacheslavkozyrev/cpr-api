@@ -366,7 +366,6 @@ namespace CPR.Infrastructure.Services
                     SkillLevelId = sl.Id,
                     SkillLevelTitle = sl.Title,
                     SkillLevelValue = sl.Value,
-                    Weight = pts.Weight,
                     IsMandatory = pts.IsMandatory,
                     Rationale = pts.Rationale
                 }
@@ -860,7 +859,6 @@ namespace CPR.Infrastructure.Services
                 PositionId = positionId,
                 SkillId = dto.SkillId,
                 SkillLevelId = dto.SkillLevelId,
-                Weight = dto.Weight,
                 IsMandatory = dto.IsMandatory,
                 Rationale = dto.Rationale,
                 CreatedBy = currentUserId,
@@ -884,7 +882,6 @@ namespace CPR.Infrastructure.Services
                 SkillLevelId = skillLevel.Id,
                 SkillLevelTitle = skillLevel.Title,
                 SkillLevelValue = skillLevel.Value,
-                Weight = entity.Weight,
                 IsMandatory = entity.IsMandatory,
                 Rationale = entity.Rationale
             };
@@ -912,7 +909,6 @@ namespace CPR.Infrastructure.Services
                 entity.SkillLevelId = dto.SkillLevelId.Value;
             }
 
-            if (dto.Weight.HasValue) entity.Weight = dto.Weight.Value;
             if (dto.IsMandatory.HasValue) entity.IsMandatory = dto.IsMandatory.Value;
             if (dto.Rationale != null) entity.Rationale = dto.Rationale;
             entity.ModifiedBy = currentUserId;
@@ -944,7 +940,6 @@ namespace CPR.Infrastructure.Services
                 SkillLevelId = entity.SkillLevelId,
                 SkillLevelTitle = level?.Title ?? string.Empty,
                 SkillLevelValue = level?.Value ?? 0,
-                Weight = entity.Weight,
                 IsMandatory = entity.IsMandatory,
                 Rationale = entity.Rationale
             };

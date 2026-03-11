@@ -19,14 +19,14 @@ namespace CPR.UnitTests.Services
         private readonly Mock<ISkillAssessmentRepository> _repoMock;
         private readonly SkillAssessmentService _service;
 
-        private static readonly Guid EmployeeId   = Guid.Parse("aa000000-0000-0000-0000-000000000001");
-        private static readonly Guid PositionId   = Guid.Parse("bb000000-0000-0000-0000-000000000001");
-        private static readonly Guid SkillId      = Guid.Parse("cc000000-0000-0000-0000-000000000001");
-        private static readonly Guid Level2Id     = Guid.Parse("dd000000-0000-0000-0000-000000000002");
-        private static readonly Guid Level3Id     = Guid.Parse("dd000000-0000-0000-0000-000000000003");
-        private static readonly Guid Level4Id     = Guid.Parse("dd000000-0000-0000-0000-000000000004");
-        private static readonly Guid FeedbackId   = Guid.Parse("ee000000-0000-0000-0000-000000000001");
-        private static readonly Guid AssessmentId = Guid.Parse("ff000000-0000-0000-0000-000000000001");
+        private static readonly Guid EmployeeId     = Guid.Parse("aa000000-0000-0000-0000-000000000001");
+        private static readonly Guid ManagerId      = Guid.Parse("aa000000-0000-0000-0000-000000000002");
+        private static readonly Guid DirectorUserId = Guid.Parse("aa000000-0000-0000-0000-000000000003");
+        private static readonly Guid DirectorId     = Guid.Parse("aa000000-0000-0000-0000-000000000004");
+        private static readonly Guid PositionId     = Guid.Parse("bb000000-0000-0000-0000-000000000001");
+        private static readonly Guid SkillId        = Guid.Parse("cc000000-0000-0000-0000-000000000001");
+        private static readonly Guid FeedbackId     = Guid.Parse("ee000000-0000-0000-0000-000000000001");
+        private static readonly Guid AssessmentId   = Guid.Parse("ff000000-0000-0000-0000-000000000001");
 
         public SkillAssessmentServiceTests()
         {
@@ -42,10 +42,19 @@ namespace CPR.UnitTests.Services
 
         // ---------- Helpers ----------
 
-        private static Employee MakeEmployee() => new Employee
+        private static Employee MakeEmployee(Guid? managerId = null) => new Employee
         {
             Id = EmployeeId,
             UserId = Guid.NewGuid(),
+            PositionId = PositionId,
+            ManagerId = managerId,
+            IsDeleted = false
+        };
+
+        private static Employee MakeManager() => new Employee
+        {
+            Id = ManagerId,
+            UserId = Guid.Parse("aa000000-0000-0000-0000-000000000099"),
             PositionId = PositionId,
             IsDeleted = false
         };
@@ -57,45 +66,31 @@ namespace CPR.UnitTests.Services
             SkillTitle = "TypeScript",
             CategoryId = Guid.NewGuid(),
             CategoryTitle = "Technical",
-            RequiredLevelId = Level3Id,
+            RequiredLevelId = Guid.NewGuid(),
             RequiredLevelTitle = "Advanced",
             RequiredLevelValue = 3
         };
-
-        private async Task SeedSkillLevels()
-        {
-            _db.SkillLevels.AddRange(
-                new SkillLevel { Id = Level2Id, Title = "Intermediate", Value = 2, SkillId = SkillId, IsDeleted = false },
-                new SkillLevel { Id = Level3Id, Title = "Advanced",     Value = 3, SkillId = SkillId, IsDeleted = false },
-                new SkillLevel { Id = Level4Id, Title = "Expert",       Value = 4, SkillId = SkillId, IsDeleted = false }
-            );
-            await _db.SaveChangesAsync();
-        }
 
         // ---------- UpsertCurrentLevelAsync — happy path ----------
 
         [Fact]
         public async Task UpsertCurrentLevelAsync_HappyPath_ReturnsAssessedLevelDto()
         {
-            await SeedSkillLevels();
             _repoMock.Setup(r => r.GetEmployeeWithPositionAsync(EmployeeId, It.IsAny<CancellationToken>()))
                 .ReturnsAsync(MakeEmployee());
             _repoMock.Setup(r => r.GetPositionSkillsAsync(PositionId, It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new List<PositionSkillRow> { MakePositionSkillRow() });
-            _repoMock.Setup(r => r.GetAssessmentAsync(EmployeeId, SkillId, true, It.IsAny<CancellationToken>()))
-                .ReturnsAsync(default(EmployeeToSkill));
-            _repoMock.Setup(r => r.UpsertCurrentLevelAsync(EmployeeId, SkillId, Level2Id, null, EmployeeId, It.IsAny<CancellationToken>()))
-                .ReturnsAsync(new EmployeeToSkill { Id = AssessmentId, SkillId = SkillId, SkillLevelId = Level2Id, Notes = null, IsDeleted = false });
+            _repoMock.Setup(r => r.UpsertCurrentLevelAsync(EmployeeId, SkillId, 3.0m, null, EmployeeId, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new EmployeeToSkill { Id = AssessmentId, SkillId = SkillId, SelfAssessmentValue = 3.0m, Notes = null, IsDeleted = false });
             _repoMock.Setup(r => r.SaveChangesAsync(It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);
 
             var result = await _service.UpsertCurrentLevelAsync(
                 EmployeeId, SkillId,
-                new UpsertSkillAssessmentDto { SkillLevelId = Level2Id },
+                new UpsertSkillAssessmentDto { SelfAssessmentValue = 3.0m },
                 CancellationToken.None);
 
-            Assert.Equal(Level2Id, result.SkillLevelId);
-            Assert.Equal("Intermediate", result.SkillLevelTitle);
-            Assert.Equal(2, result.SkillLevelValue);
+            Assert.Equal(3.0m, result.SelfAssessmentValue);
+            Assert.Null(result.ManagerAssessmentValue);
         }
 
         // ---------- UpsertCurrentLevelAsync — skill_not_found ----------
@@ -111,82 +106,73 @@ namespace CPR.UnitTests.Services
             var ex = await Assert.ThrowsAsync<KeyNotFoundException>(() =>
                 _service.UpsertCurrentLevelAsync(
                     EmployeeId, SkillId,
-                    new UpsertSkillAssessmentDto { SkillLevelId = Level2Id },
+                    new UpsertSkillAssessmentDto { SelfAssessmentValue = 2.5m },
                     CancellationToken.None));
 
             Assert.Contains("skill_not_found", ex.Message);
         }
 
-        // ---------- UpsertCurrentLevelAsync — target_conflict ----------
+        // ---------- UpsertManagerAssessmentAsync — happy path (direct report) ----------
 
         [Fact]
-        public async Task UpsertCurrentLevelAsync_TargetConflict_ThrowsInvalidOperation()
+        public async Task UpsertManagerAssessmentAsync_DirectReport_ReturnsAssessment()
         {
-            await SeedSkillLevels();
+            // Manager is the actor; employee.ManagerId = ManagerId
+            _repoMock.Setup(r => r.GetEmployeeWithPositionAsync(ManagerId, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(MakeManager());
             _repoMock.Setup(r => r.GetEmployeeWithPositionAsync(EmployeeId, It.IsAny<CancellationToken>()))
-                .ReturnsAsync(MakeEmployee());
-            _repoMock.Setup(r => r.GetPositionSkillsAsync(PositionId, It.IsAny<CancellationToken>()))
-                .ReturnsAsync(new List<PositionSkillRow> { MakePositionSkillRow() });
-            // Target is Level2 (value=2); setting current to Level3 (value=3) → target.value ≤ new current
-            _repoMock.Setup(r => r.GetAssessmentAsync(EmployeeId, SkillId, true, It.IsAny<CancellationToken>()))
-                .ReturnsAsync(new EmployeeToSkill { Id = Guid.NewGuid(), SkillId = SkillId, SkillLevelId = Level2Id, IsTarget = true, IsDeleted = false });
-
-            var ex = await Assert.ThrowsAsync<InvalidOperationException>(() =>
-                _service.UpsertCurrentLevelAsync(
-                    EmployeeId, SkillId,
-                    new UpsertSkillAssessmentDto { SkillLevelId = Level3Id },
-                    CancellationToken.None));
-
-            Assert.Contains("target_conflict", ex.Message);
-        }
-
-        // ---------- UpsertTargetAsync — happy path ----------
-
-        [Fact]
-        public async Task UpsertTargetAsync_HappyPath_ReturnsTargetLevelDto()
-        {
-            await SeedSkillLevels();
-            _repoMock.Setup(r => r.GetEmployeeWithPositionAsync(EmployeeId, It.IsAny<CancellationToken>()))
-                .ReturnsAsync(MakeEmployee());
-            _repoMock.Setup(r => r.GetPositionSkillsAsync(PositionId, It.IsAny<CancellationToken>()))
-                .ReturnsAsync(new List<PositionSkillRow> { MakePositionSkillRow() });
-            _repoMock.Setup(r => r.GetAssessmentAsync(EmployeeId, SkillId, false, It.IsAny<CancellationToken>()))
-                .ReturnsAsync(default(EmployeeToSkill)); // no current assessment
-            _repoMock.Setup(r => r.UpsertTargetLevelAsync(EmployeeId, SkillId, Level4Id, EmployeeId, It.IsAny<CancellationToken>()))
-                .ReturnsAsync(new EmployeeToSkill { Id = Guid.NewGuid(), SkillId = SkillId, SkillLevelId = Level4Id, IsTarget = true, IsDeleted = false });
+                .ReturnsAsync(MakeEmployee(managerId: ManagerId));
+            _repoMock.Setup(r => r.UpsertManagerAssessmentAsync(EmployeeId, SkillId, 4.0m, ManagerId, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new EmployeeToSkill { Id = AssessmentId, SkillId = SkillId, SelfAssessmentValue = 2.0m, ManagerAssessmentValue = 4.0m, IsDeleted = false });
             _repoMock.Setup(r => r.SaveChangesAsync(It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);
+            // BuildAssessmentResponseAsync needs employee with position
+            _repoMock.Setup(r => r.GetPositionSkillsAsync(PositionId, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new List<PositionSkillRow>());
+            _repoMock.Setup(r => r.GetEmployeeAssessmentsAsync(EmployeeId, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new List<EmployeeSkillRow>());
 
-            var result = await _service.UpsertTargetAsync(
-                EmployeeId, SkillId,
-                new UpsertSkillTargetDto { SkillLevelId = Level4Id },
-                CancellationToken.None);
+            var result = await _service.UpsertManagerAssessmentAsync(
+                ManagerId, EmployeeId, SkillId, 4.0m, CancellationToken.None);
 
-            Assert.Equal(Level4Id, result.SkillLevelId);
-            Assert.Equal("Expert", result.SkillLevelTitle);
-            Assert.Equal(4, result.SkillLevelValue);
+            Assert.NotNull(result);
         }
 
-        // ---------- UpsertTargetAsync — target_too_low ----------
+        // ---------- UpsertManagerAssessmentAsync — 403 when PeopleManager targets non-direct-report ----------
 
         [Fact]
-        public async Task UpsertTargetAsync_TargetTooLow_ThrowsInvalidOperation()
+        public async Task UpsertManagerAssessmentAsync_NonDirectReport_ThrowsUnauthorized()
         {
-            await SeedSkillLevels();
+            // Employee's manager is someone else, not ManagerId
+            var otherManagerId = Guid.Parse("aa000000-0000-0000-0000-000000000099");
+            _repoMock.Setup(r => r.GetEmployeeWithPositionAsync(ManagerId, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(MakeManager());
             _repoMock.Setup(r => r.GetEmployeeWithPositionAsync(EmployeeId, It.IsAny<CancellationToken>()))
-                .ReturnsAsync(MakeEmployee());
-            _repoMock.Setup(r => r.GetPositionSkillsAsync(PositionId, It.IsAny<CancellationToken>()))
-                .ReturnsAsync(new List<PositionSkillRow> { MakePositionSkillRow() });
-            // Current is Level3 (value=3); target Level2 (value=2) → target_too_low
-            _repoMock.Setup(r => r.GetAssessmentAsync(EmployeeId, SkillId, false, It.IsAny<CancellationToken>()))
-                .ReturnsAsync(new EmployeeToSkill { Id = AssessmentId, SkillId = SkillId, SkillLevelId = Level3Id, IsTarget = false, IsDeleted = false });
+                .ReturnsAsync(MakeEmployee(managerId: otherManagerId)); // different manager
 
-            var ex = await Assert.ThrowsAsync<InvalidOperationException>(() =>
-                _service.UpsertTargetAsync(
-                    EmployeeId, SkillId,
-                    new UpsertSkillTargetDto { SkillLevelId = Level2Id },
-                    CancellationToken.None));
+            var ex = await Assert.ThrowsAsync<UnauthorizedAccessException>(() =>
+                _service.UpsertManagerAssessmentAsync(
+                    ManagerId, EmployeeId, SkillId, 4.0m, CancellationToken.None));
 
-            Assert.Contains("target_too_low", ex.Message);
+            Assert.Contains("forbidden", ex.Message);
+        }
+
+        // ---------- UpsertManagerAssessmentAsync — 404 when skill row not found ----------
+
+        [Fact]
+        public async Task UpsertManagerAssessmentAsync_AssessmentNotFound_ThrowsKeyNotFound()
+        {
+            _repoMock.Setup(r => r.GetEmployeeWithPositionAsync(ManagerId, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(MakeManager());
+            _repoMock.Setup(r => r.GetEmployeeWithPositionAsync(EmployeeId, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(MakeEmployee(managerId: ManagerId));
+            _repoMock.Setup(r => r.UpsertManagerAssessmentAsync(EmployeeId, SkillId, 4.0m, ManagerId, It.IsAny<CancellationToken>()))
+                .ThrowsAsync(new KeyNotFoundException("assessment_not_found"));
+
+            var ex = await Assert.ThrowsAsync<KeyNotFoundException>(() =>
+                _service.UpsertManagerAssessmentAsync(
+                    ManagerId, EmployeeId, SkillId, 4.0m, CancellationToken.None));
+
+            Assert.Contains("assessment_not_found", ex.Message);
         }
 
         // ---------- LinkEvidenceAsync — happy path ----------
@@ -198,8 +184,8 @@ namespace CPR.UnitTests.Services
                 .ReturnsAsync(MakeEmployee());
             _repoMock.Setup(r => r.GetPositionSkillsAsync(PositionId, It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new List<PositionSkillRow> { MakePositionSkillRow() });
-            _repoMock.Setup(r => r.GetAssessmentAsync(EmployeeId, SkillId, false, It.IsAny<CancellationToken>()))
-                .ReturnsAsync(new EmployeeToSkill { Id = AssessmentId, SkillId = SkillId, IsTarget = false, IsDeleted = false });
+            _repoMock.Setup(r => r.GetAssessmentAsync(EmployeeId, SkillId, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new EmployeeToSkill { Id = AssessmentId, SkillId = SkillId, IsDeleted = false });
             _repoMock.Setup(r => r.GetFeedbackForEmployeeAsync(FeedbackId, EmployeeId, It.IsAny<CancellationToken>()))
                 .ReturnsAsync(((bool, string, int?, string)?)(true, "Alice Johnson", (int?)4, "Good feedback content"));
             _repoMock.Setup(r => r.EvidenceLinkExistsAsync(AssessmentId, FeedbackId, It.IsAny<CancellationToken>()))
@@ -227,8 +213,8 @@ namespace CPR.UnitTests.Services
                 .ReturnsAsync(MakeEmployee());
             _repoMock.Setup(r => r.GetPositionSkillsAsync(PositionId, It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new List<PositionSkillRow> { MakePositionSkillRow() });
-            _repoMock.Setup(r => r.GetAssessmentAsync(EmployeeId, SkillId, false, It.IsAny<CancellationToken>()))
-                .ReturnsAsync(default(EmployeeToSkill)); // no current assessment
+            _repoMock.Setup(r => r.GetAssessmentAsync(EmployeeId, SkillId, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(default(EmployeeToSkill));
 
             var ex = await Assert.ThrowsAsync<InvalidOperationException>(() =>
                 _service.LinkEvidenceAsync(
@@ -248,10 +234,10 @@ namespace CPR.UnitTests.Services
                 .ReturnsAsync(MakeEmployee());
             _repoMock.Setup(r => r.GetPositionSkillsAsync(PositionId, It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new List<PositionSkillRow> { MakePositionSkillRow() });
-            _repoMock.Setup(r => r.GetAssessmentAsync(EmployeeId, SkillId, false, It.IsAny<CancellationToken>()))
-                .ReturnsAsync(new EmployeeToSkill { Id = AssessmentId, SkillId = SkillId, IsTarget = false, IsDeleted = false });
+            _repoMock.Setup(r => r.GetAssessmentAsync(EmployeeId, SkillId, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new EmployeeToSkill { Id = AssessmentId, SkillId = SkillId, IsDeleted = false });
             _repoMock.Setup(r => r.GetFeedbackForEmployeeAsync(FeedbackId, EmployeeId, It.IsAny<CancellationToken>()))
-                .ReturnsAsync(default((bool, string, int?, string)?)); // feedback not found
+                .ReturnsAsync(default((bool, string, int?, string)?));
 
             var ex = await Assert.ThrowsAsync<KeyNotFoundException>(() =>
                 _service.LinkEvidenceAsync(
@@ -271,12 +257,12 @@ namespace CPR.UnitTests.Services
                 .ReturnsAsync(MakeEmployee());
             _repoMock.Setup(r => r.GetPositionSkillsAsync(PositionId, It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new List<PositionSkillRow> { MakePositionSkillRow() });
-            _repoMock.Setup(r => r.GetAssessmentAsync(EmployeeId, SkillId, false, It.IsAny<CancellationToken>()))
-                .ReturnsAsync(new EmployeeToSkill { Id = AssessmentId, SkillId = SkillId, IsTarget = false, IsDeleted = false });
+            _repoMock.Setup(r => r.GetAssessmentAsync(EmployeeId, SkillId, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new EmployeeToSkill { Id = AssessmentId, SkillId = SkillId, IsDeleted = false });
             _repoMock.Setup(r => r.GetFeedbackForEmployeeAsync(FeedbackId, EmployeeId, It.IsAny<CancellationToken>()))
                 .ReturnsAsync(((bool, string, int?, string)?)(true, "Alice Johnson", (int?)4, "Good feedback content"));
             _repoMock.Setup(r => r.EvidenceLinkExistsAsync(AssessmentId, FeedbackId, It.IsAny<CancellationToken>()))
-                .ReturnsAsync(true); // already linked
+                .ReturnsAsync(true);
 
             var ex = await Assert.ThrowsAsync<InvalidOperationException>(() =>
                 _service.LinkEvidenceAsync(

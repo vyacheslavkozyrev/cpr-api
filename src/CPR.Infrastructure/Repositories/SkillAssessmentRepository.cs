@@ -65,8 +65,7 @@ namespace CPR.Infrastructure.Repositories
                     RequiredLevelId = sl.Id,
                     RequiredLevelTitle = sl.Title,
                     RequiredLevelValue = sl.Value,
-                    IsMandatory = pts.IsMandatory,
-                    Weight = pts.Weight
+                    IsMandatory = pts.IsMandatory
                 }
             ).ToListAsync(ct);
 
@@ -88,18 +87,13 @@ namespace CPR.Infrastructure.Repositories
 
         public async Task<IReadOnlyList<EmployeeSkillRow>> GetEmployeeAssessmentsAsync(Guid employeeId, CancellationToken ct)
         {
-            // Load base assessment records (source='self')
-            var assessments = await (
-                from es in _db.EmployeeSkills.Where(e => e.EmployeeId == employeeId && e.Source == "self" && !e.IsDeleted)
-                join sl in _db.SkillLevels on es.SkillLevelId equals sl.Id into slGroup
-                from sl in slGroup.DefaultIfEmpty()
-                select new { es.Id, es.SkillId, es.IsTarget, es.SkillLevelId, es.Notes,
-                    LevelTitle = sl != null ? sl.Title : null,
-                    LevelValue = sl != null ? (int?)sl.Value : null }
-            ).ToListAsync(ct);
+            // Load assessment records for this employee
+            var assessments = await _db.EmployeeSkills
+                .Where(e => e.EmployeeId == employeeId && !e.IsDeleted)
+                .Select(es => new { es.Id, es.SkillId, es.SelfAssessmentValue, es.ManagerAssessmentValue, es.Notes })
+                .ToListAsync(ct);
 
-            // Load evidence for all current (non-target) assessments
-            var assessmentIds = assessments.Where(a => !a.IsTarget).Select(a => a.Id).ToList();
+            var assessmentIds = assessments.Select(a => a.Id).ToList();
 
             var evidenceRows = await (
                 from ev in _db.EmployeeSkillEvidences.Where(e => assessmentIds.Contains(e.EmployeeToSkillId) && !e.IsDeleted)
@@ -116,7 +110,6 @@ namespace CPR.Infrastructure.Repositories
                 }
             ).ToListAsync(ct);
 
-            // Map evidence back by assessment id (via a separate join for the key)
             var evidenceByAssessment = await (
                 from ev in _db.EmployeeSkillEvidences.Where(e => assessmentIds.Contains(e.EmployeeToSkillId) && !e.IsDeleted)
                 select new { ev.EmployeeToSkillId, ev.Id }
@@ -132,10 +125,8 @@ namespace CPR.Infrastructure.Repositories
             {
                 AssessmentId = a.Id,
                 SkillId = a.SkillId,
-                IsTarget = a.IsTarget,
-                SkillLevelId = a.SkillLevelId,
-                SkillLevelTitle = a.LevelTitle,
-                SkillLevelValue = a.LevelValue,
+                SelfAssessmentValue = a.SelfAssessmentValue,
+                ManagerAssessmentValue = a.ManagerAssessmentValue,
                 Notes = a.Notes,
                 Evidence = evidenceMap.TryGetValue(a.Id, out var evIds)
                     ? evIds.Where(evidenceById.ContainsKey).Select(id => evidenceById[id]).ToList()
@@ -143,14 +134,12 @@ namespace CPR.Infrastructure.Repositories
             }).ToList();
         }
 
-        public async Task<EmployeeToSkill?> GetAssessmentAsync(Guid employeeId, Guid skillId, bool isTarget, CancellationToken ct)
+        public async Task<EmployeeToSkill?> GetAssessmentAsync(Guid employeeId, Guid skillId, CancellationToken ct)
         {
             return await _db.EmployeeSkills
                 .FirstOrDefaultAsync(es =>
                     es.EmployeeId == employeeId &&
                     es.SkillId == skillId &&
-                    es.IsTarget == isTarget &&
-                    es.Source == "self" &&
                     !es.IsDeleted, ct);
         }
 
@@ -197,8 +186,8 @@ namespace CPR.Infrastructure.Repositories
                     totalRequired = positionSkills.Count;
 
                     var assessmentRows = await GetEmployeeAssessmentsAsync(report.Id, ct);
-                    var currentLevels = assessmentRows.Where(a => !a.IsTarget)
-                        .ToDictionary(a => a.SkillId, a => a.SkillLevelValue ?? 0);
+                    var currentLevels = assessmentRows
+                        .ToDictionary(a => a.SkillId, a => a.SelfAssessmentValue);
 
                     assessed = currentLevels.Keys.Intersect(positionSkills.Select(ps => ps.SkillId)).Count();
                     meeting = positionSkills.Count(ps =>
@@ -219,13 +208,13 @@ namespace CPR.Infrastructure.Repositories
             return result;
         }
 
-        public async Task<EmployeeToSkill> UpsertCurrentLevelAsync(Guid employeeId, Guid skillId, Guid skillLevelId, string? notes, Guid actorId, CancellationToken ct)
+        public async Task<EmployeeToSkill> UpsertCurrentLevelAsync(Guid employeeId, Guid skillId, decimal selfAssessmentValue, string? notes, Guid actorId, CancellationToken ct)
         {
-            var existing = await GetAssessmentAsync(employeeId, skillId, isTarget: false, ct);
+            var existing = await GetAssessmentAsync(employeeId, skillId, ct);
 
             if (existing != null)
             {
-                existing.SkillLevelId = skillLevelId;
+                existing.SelfAssessmentValue = selfAssessmentValue;
                 existing.Notes = notes;
                 existing.ModifiedBy = actorId;
                 existing.ModifiedAt = DateTimeOffset.UtcNow;
@@ -237,10 +226,8 @@ namespace CPR.Infrastructure.Repositories
                 Id = Guid.NewGuid(),
                 EmployeeId = employeeId,
                 SkillId = skillId,
-                SkillLevelId = skillLevelId,
+                SelfAssessmentValue = selfAssessmentValue,
                 Notes = notes,
-                Source = "self",
-                IsTarget = false,
                 CreatedBy = actorId,
                 CreatedAt = DateTimeOffset.UtcNow
             };
@@ -250,7 +237,7 @@ namespace CPR.Infrastructure.Repositories
 
         public async Task DeleteCurrentLevelAsync(Guid employeeId, Guid skillId, Guid actorId, CancellationToken ct)
         {
-            var existing = await GetAssessmentAsync(employeeId, skillId, isTarget: false, ct)
+            var existing = await GetAssessmentAsync(employeeId, skillId, ct)
                 ?? throw new KeyNotFoundException("assessment_not_found");
 
             existing.IsDeleted = true;
@@ -258,41 +245,15 @@ namespace CPR.Infrastructure.Repositories
             existing.DeletedAt = DateTimeOffset.UtcNow;
         }
 
-        public async Task<EmployeeToSkill> UpsertTargetLevelAsync(Guid employeeId, Guid skillId, Guid skillLevelId, Guid actorId, CancellationToken ct)
+        public async Task<EmployeeToSkill> UpsertManagerAssessmentAsync(Guid employeeId, Guid skillId, decimal managerAssessmentValue, Guid actorId, CancellationToken ct)
         {
-            var existing = await GetAssessmentAsync(employeeId, skillId, isTarget: true, ct);
+            var existing = await GetAssessmentAsync(employeeId, skillId, ct)
+                ?? throw new KeyNotFoundException("assessment_not_found");
 
-            if (existing != null)
-            {
-                existing.SkillLevelId = skillLevelId;
-                existing.ModifiedBy = actorId;
-                existing.ModifiedAt = DateTimeOffset.UtcNow;
-                return existing;
-            }
-
-            var record = new EmployeeToSkill
-            {
-                Id = Guid.NewGuid(),
-                EmployeeId = employeeId,
-                SkillId = skillId,
-                SkillLevelId = skillLevelId,
-                Source = "self",
-                IsTarget = true,
-                CreatedBy = actorId,
-                CreatedAt = DateTimeOffset.UtcNow
-            };
-            _db.EmployeeSkills.Add(record);
-            return record;
-        }
-
-        public async Task DeleteTargetLevelAsync(Guid employeeId, Guid skillId, Guid actorId, CancellationToken ct)
-        {
-            var existing = await GetAssessmentAsync(employeeId, skillId, isTarget: true, ct)
-                ?? throw new KeyNotFoundException("target_not_found");
-
-            existing.IsDeleted = true;
-            existing.DeletedBy = actorId;
-            existing.DeletedAt = DateTimeOffset.UtcNow;
+            existing.ManagerAssessmentValue = managerAssessmentValue;
+            existing.ModifiedBy = actorId;
+            existing.ModifiedAt = DateTimeOffset.UtcNow;
+            return existing;
         }
 
         public Task<EmployeeSkillEvidence> LinkEvidenceAsync(Guid employeeToSkillId, Guid feedbackId, Guid actorId, CancellationToken ct)
