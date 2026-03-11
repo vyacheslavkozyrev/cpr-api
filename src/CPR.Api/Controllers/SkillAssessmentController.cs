@@ -62,7 +62,7 @@ public class SkillAssessmentController : ControllerBase
     /// <param name="ct">Cancellation token.</param>
     [HttpPut("~/api/me/skill-assessment/skills/{skillId:guid}")]
     [Authorize]
-    [ProducesResponseType(typeof(AssessedLevelDto), 200)]
+    [ProducesResponseType(typeof(SkillAssessmentResponseDto), 200)]
     [ProducesResponseType(400)]
     [ProducesResponseType(401)]
     [ProducesResponseType(404)]
@@ -136,10 +136,11 @@ public class SkillAssessmentController : ControllerBase
     /// <param name="ct">Cancellation token.</param>
     [HttpPost("~/api/me/skill-assessment/skills/{skillId:guid}/evidence")]
     [Authorize]
-    [ProducesResponseType(typeof(EvidenceItemDto), 201)]
+    [ProducesResponseType(typeof(EvidenceItemDto), 200)]
     [ProducesResponseType(400)]
     [ProducesResponseType(401)]
     [ProducesResponseType(404)]
+    [ProducesResponseType(409)]
     [ProducesResponseType(422)]
     public async Task<IActionResult> LinkEvidence(
         Guid skillId, [FromBody] LinkEvidenceDto dto, CancellationToken ct)
@@ -152,9 +153,13 @@ public class SkillAssessmentController : ControllerBase
         try
         {
             var result = await _skillAssessmentService.LinkEvidenceAsync(actorId, skillId, dto, ct);
-            return StatusCode(StatusCodes.Status201Created, result);
+            return Ok(result);
         }
         catch (KeyNotFoundException ex) { return Problem(ex.Message, statusCode: StatusCodes.Status404NotFound); }
+        catch (InvalidOperationException ex) when (ex.Message == "already_linked")
+        {
+            return Problem(ex.Message, statusCode: StatusCodes.Status409Conflict);
+        }
         catch (InvalidOperationException ex)
         {
             return Problem(ex.Message, statusCode: StatusCodes.Status422UnprocessableEntity);
@@ -236,7 +241,7 @@ public class SkillAssessmentController : ControllerBase
     /// <param name="ct">Cancellation token.</param>
     [HttpPut("~/api/employees/{employeeId:guid}/skill-assessment/skills/{skillId:guid}/manager-assessment")]
     [RequireRole("People Manager", "Director", "Administrator")]
-    [ProducesResponseType(typeof(SkillAssessmentResponseDto), 200)]
+    [ProducesResponseType(typeof(EmployeeSkillAssessmentResponseDto), 200)]
     [ProducesResponseType(400)]
     [ProducesResponseType(401)]
     [ProducesResponseType(403)]
@@ -246,12 +251,12 @@ public class SkillAssessmentController : ControllerBase
     {
         if (!ModelState.IsValid) return BadRequest(ModelState);
 
-        var (actorId, _, errorResult) = await ResolveActorContextAsync();
+        var (actorId, actorRole, errorResult) = await ResolveActorContextAsync();
         if (errorResult != null) return errorResult;
 
         try
         {
-            var result = await _skillAssessmentService.UpsertManagerAssessmentAsync(actorId, employeeId, skillId, dto.ManagerAssessmentValue, ct);
+            var result = await _skillAssessmentService.UpsertManagerAssessmentAsync(actorId, actorRole, employeeId, skillId, dto.ManagerAssessmentValue, ct);
             return Ok(result);
         }
         catch (KeyNotFoundException ex) { return Problem(ex.Message, statusCode: StatusCodes.Status404NotFound); }

@@ -78,7 +78,7 @@ namespace CPR.Application.Repositories
         public Guid FeedbackId { get; set; }
         public string SenderDisplayName { get; set; } = null!;
         public int? Rating { get; set; }
-        public string ContentExcerpt { get; set; } = null!;
+        public string FeedbackContent { get; set; } = null!;
     }
 
     /// <summary>Lightweight projection for the team summary endpoint.</summary>

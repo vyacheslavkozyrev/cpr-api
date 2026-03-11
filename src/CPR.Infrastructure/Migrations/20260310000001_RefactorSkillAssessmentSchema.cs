@@ -83,7 +83,8 @@ namespace CPR.Infrastructure.Migrations
             // Restore the original compound unique index
             migrationBuilder.Sql(
                 "CREATE UNIQUE INDEX \"UX_employee_to_skill_employee_skill_effective\" " +
-                "ON employee_to_skill(employee_id, skill_id, effective_date)");
+                "ON employee_to_skill(employee_id, skill_id, effective_date) " +
+                "WHERE is_deleted = FALSE");
 
             // Restore is_target and source columns
             migrationBuilder.AddColumn<bool>(

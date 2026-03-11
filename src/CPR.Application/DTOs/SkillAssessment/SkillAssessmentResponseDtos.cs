@@ -153,8 +153,8 @@ namespace CPR.Application.DTOs.SkillAssessment
         [JsonPropertyName("rating")]
         public int? Rating { get; set; }
 
-        [JsonPropertyName("content_excerpt")]
-        public string ContentExcerpt { get; set; } = null!;
+        [JsonPropertyName("feedback_content")]
+        public string FeedbackContent { get; set; } = null!;
     }
 
     public class TeamSkillSummaryResponseDto

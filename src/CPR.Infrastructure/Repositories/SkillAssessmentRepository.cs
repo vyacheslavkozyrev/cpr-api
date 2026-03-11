@@ -106,7 +106,7 @@ namespace CPR.Infrastructure.Repositories
                     FeedbackId = ev.FeedbackId,
                     SenderDisplayName = u.DisplayName ?? u.UserName,
                     Rating = fb.Rating,
-                    ContentExcerpt = fb.Content.Length > 200 ? fb.Content.Substring(0, 200) : fb.Content
+                    FeedbackContent = fb.Content.Length > 200 ? fb.Content.Substring(0, 200) : fb.Content
                 }
             ).ToListAsync(ct);
 

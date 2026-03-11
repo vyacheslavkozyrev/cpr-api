@@ -28,7 +28,7 @@ namespace CPR.Infrastructure.Services
             return await BuildAssessmentResponseAsync(employeeId, ct);
         }
 
-        public async Task<AssessedLevelDto> UpsertCurrentLevelAsync(
+        public async Task<SkillAssessmentResponseDto> UpsertCurrentLevelAsync(
             Guid employeeId, Guid skillId, UpsertSkillAssessmentDto dto, CancellationToken ct)
         {
             var employee = await _repo.GetEmployeeWithPositionAsync(employeeId, ct)
@@ -41,17 +41,10 @@ namespace CPR.Infrastructure.Services
             if (!positionSkills.Any(ps => ps.SkillId == skillId))
                 throw new KeyNotFoundException("skill_not_found");
 
-            var record = await _repo.UpsertCurrentLevelAsync(employeeId, skillId, dto.SelfAssessmentValue, dto.Notes, employeeId, ct);
+            await _repo.UpsertCurrentLevelAsync(employeeId, skillId, dto.SelfAssessmentValue, dto.Notes, employeeId, ct);
             await _repo.SaveChangesAsync(ct);
 
-            return new AssessedLevelDto
-            {
-                Id = record.Id,
-                SkillId = skillId,
-                SelfAssessmentValue = record.SelfAssessmentValue,
-                ManagerAssessmentValue = record.ManagerAssessmentValue,
-                Notes = record.Notes
-            };
+            return await BuildAssessmentResponseAsync(employeeId, ct);
         }
 
         public async Task DeleteCurrentLevelAsync(Guid employeeId, Guid skillId, CancellationToken ct)
@@ -60,29 +53,16 @@ namespace CPR.Infrastructure.Services
             await _repo.SaveChangesAsync(ct);
         }
 
-        public async Task<SkillAssessmentResponseDto> UpsertManagerAssessmentAsync(
-            Guid actorId, Guid employeeId, Guid skillId, decimal value, CancellationToken ct)
+        public async Task<EmployeeSkillAssessmentResponseDto> UpsertManagerAssessmentAsync(
+            Guid actorId, string actorRole, Guid employeeId, Guid skillId, decimal value, CancellationToken ct)
         {
-            // Resolve actor's employee record to check direct-report constraint
-            var actorEmployee = await _repo.GetEmployeeWithPositionAsync(actorId, ct)
-                ?? throw new KeyNotFoundException("employee_not_found");
-
             var targetEmployee = await _repo.GetEmployeeWithPositionAsync(employeeId, ct)
                 ?? throw new KeyNotFoundException("employee_not_found");
 
             // PeopleManager is restricted to direct reports; Director/Administrator are unrestricted
-            // Role enforcement is done in the controller via RequireRole; here we enforce the direct-report rule
-            // The actorRole context is not available here, so the controller passes actorId;
-            // if the actor is not the manager of the target, throw 403
             if (targetEmployee.ManagerId != actorId)
             {
-                // Check if actor is a Director or Administrator by looking at their roles via the db
-                var actorRoles = await _db.UserRoles
-                    .Where(ur => ur.UserId == actorEmployee.UserId && !ur.IsDeleted)
-                    .Join(_db.Roles.Where(r => !r.IsDeleted), ur => ur.RoleId, r => r.Id, (ur, r) => r.Title)
-                    .ToListAsync(ct);
-
-                var isUnrestricted = actorRoles.Contains("Director") || actorRoles.Contains("Administrator");
+                var isUnrestricted = actorRole == "Director" || actorRole == "Administrator";
                 if (!isUnrestricted)
                     throw new UnauthorizedAccessException("forbidden");
             }
@@ -90,7 +70,16 @@ namespace CPR.Infrastructure.Services
             await _repo.UpsertManagerAssessmentAsync(employeeId, skillId, value, actorId, ct);
             await _repo.SaveChangesAsync(ct);
 
-            return await BuildAssessmentResponseAsync(employeeId, ct);
+            var baseDto = await BuildAssessmentResponseAsync(employeeId, ct);
+            var displayName = targetEmployee.User?.DisplayName ?? targetEmployee.User?.UserName ?? targetEmployee.Id.ToString();
+
+            return new EmployeeSkillAssessmentResponseDto
+            {
+                Employee = new EmployeeBriefDto { Id = employeeId, DisplayName = displayName },
+                Position = baseDto.Position,
+                NextPosition = baseDto.NextPosition,
+                SkillCategories = baseDto.SkillCategories
+            };
         }
 
         public async Task<EvidenceItemDto> LinkEvidenceAsync(
@@ -127,7 +116,7 @@ namespace CPR.Infrastructure.Services
                 FeedbackId = dto.FeedbackId,
                 SenderDisplayName = feedback.Value.SenderDisplayName,
                 Rating = feedback.Value.Rating,
-                ContentExcerpt = feedback.Value.Content.Length > 200
+                FeedbackContent = feedback.Value.Content.Length > 200
                     ? feedback.Value.Content.Substring(0, 200)
                     : feedback.Value.Content
             };
@@ -275,7 +264,7 @@ namespace CPR.Infrastructure.Services
                                         FeedbackId = e.FeedbackId,
                                         SenderDisplayName = e.SenderDisplayName,
                                         Rating = e.Rating,
-                                        ContentExcerpt = e.ContentExcerpt
+                                        FeedbackContent = e.FeedbackContent
                                     }).ToList()
                             };
                         }).ToList()

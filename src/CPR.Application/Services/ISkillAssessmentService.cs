@@ -10,14 +10,14 @@ namespace CPR.Application.Services
         /// <summary>Returns the authenticated employee's full skill self-assessment.</summary>
         Task<SkillAssessmentResponseDto> GetMyAssessmentAsync(Guid employeeId, CancellationToken ct);
 
-        /// <summary>Upserts the current self-assessment value for a skill. Returns the updated assessment record.</summary>
-        Task<AssessedLevelDto> UpsertCurrentLevelAsync(Guid employeeId, Guid skillId, UpsertSkillAssessmentDto dto, CancellationToken ct);
+        /// <summary>Upserts the current self-assessment value for a skill. Returns the full skill assessment response.</summary>
+        Task<SkillAssessmentResponseDto> UpsertCurrentLevelAsync(Guid employeeId, Guid skillId, UpsertSkillAssessmentDto dto, CancellationToken ct);
 
         /// <summary>Soft-deletes the current self-assessment for a skill.</summary>
         Task DeleteCurrentLevelAsync(Guid employeeId, Guid skillId, CancellationToken ct);
 
-        /// <summary>Upserts the manager assessment value for a skill. Returns the updated assessment record.</summary>
-        Task<SkillAssessmentResponseDto> UpsertManagerAssessmentAsync(Guid actorId, Guid employeeId, Guid skillId, decimal value, CancellationToken ct);
+        /// <summary>Upserts the manager assessment value for a skill. Returns the updated employee skill assessment.</summary>
+        Task<EmployeeSkillAssessmentResponseDto> UpsertManagerAssessmentAsync(Guid actorId, string actorRole, Guid employeeId, Guid skillId, decimal value, CancellationToken ct);
 
         /// <summary>Links a received feedback item as evidence for a skill assessment.</summary>
         Task<EvidenceItemDto> LinkEvidenceAsync(Guid employeeId, Guid skillId, LinkEvidenceDto dto, CancellationToken ct);
