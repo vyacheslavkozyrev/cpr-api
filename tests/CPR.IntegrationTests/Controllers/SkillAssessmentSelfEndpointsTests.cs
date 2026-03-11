@@ -114,6 +114,40 @@ namespace CPR.IntegrationTests.Controllers
             Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
         }
 
+        // AC-012: DELETE self-assessment — authenticated call returns non-403/non-401
+        [Fact]
+        public async Task DeleteCurrentLevel_Authenticated_Returns204OrNotFound()
+        {
+            var client   = CreateAuthenticatedClient(EmployeeUserId);
+            var response = await client.DeleteAsync($"/api/me/skill-assessment/skills/{Guid.NewGuid()}");
+            // Skill not seeded — expects 404 (skill_not_found). The key check is that auth passes (not 401/403).
+            Assert.True(
+                response.StatusCode == System.Net.HttpStatusCode.NoContent ||
+                response.StatusCode == System.Net.HttpStatusCode.NotFound,
+                $"Expected 204 or 404 but got {response.StatusCode}");
+        }
+
+        // AC-020: PUT .../target → 404 (endpoint removed)
+        [Fact]
+        public async Task UpsertTarget_Authenticated_Returns404()
+        {
+            var client   = CreateAuthenticatedClient(EmployeeUserId);
+            var response = await client.PutAsJsonAsync(
+                $"/api/me/skill-assessment/skills/{Guid.NewGuid()}/target",
+                new { skill_level_id = Guid.NewGuid() });
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        }
+
+        // AC-021: DELETE .../target → 404 (endpoint removed)
+        [Fact]
+        public async Task DeleteTarget_Authenticated_Returns404()
+        {
+            var client   = CreateAuthenticatedClient(EmployeeUserId);
+            var response = await client.DeleteAsync(
+                $"/api/me/skill-assessment/skills/{Guid.NewGuid()}/target");
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        }
+
         // ---------- POST /api/me/skill-assessment/skills/{skillId}/evidence ----------
 
         [Fact]

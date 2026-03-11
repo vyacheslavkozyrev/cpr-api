@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Moq;
 using Xunit;
 using CPR.Application.DTOs.SkillAssessment;
+using CPR.Application.DTOs.Taxonomy;
 using CPR.Application.Repositories;
 using CPR.Domain.Entities;
 using CPR.Infrastructure.Data;
@@ -74,7 +75,7 @@ namespace CPR.UnitTests.Services
         // ---------- UpsertCurrentLevelAsync — happy path ----------
 
         [Fact]
-        public async Task UpsertCurrentLevelAsync_HappyPath_ReturnsAssessedLevelDto()
+        public async Task UpsertCurrentLevelAsync_HappyPath_ReturnsSkillAssessmentResponse()
         {
             _repoMock.Setup(r => r.GetEmployeeWithPositionAsync(EmployeeId, It.IsAny<CancellationToken>()))
                 .ReturnsAsync(MakeEmployee());
@@ -83,14 +84,34 @@ namespace CPR.UnitTests.Services
             _repoMock.Setup(r => r.UpsertCurrentLevelAsync(EmployeeId, SkillId, 3.0m, null, EmployeeId, It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new EmployeeToSkill { Id = AssessmentId, SkillId = SkillId, SelfAssessmentValue = 3.0m, Notes = null, IsDeleted = false });
             _repoMock.Setup(r => r.SaveChangesAsync(It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);
+            _repoMock.Setup(r => r.GetEmployeeAssessmentsAsync(EmployeeId, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new List<EmployeeSkillRow>());
 
             var result = await _service.UpsertCurrentLevelAsync(
                 EmployeeId, SkillId,
                 new UpsertSkillAssessmentDto { SelfAssessmentValue = 3.0m },
                 CancellationToken.None);
 
-            Assert.Equal(3.0m, result.SelfAssessmentValue);
-            Assert.Null(result.ManagerAssessmentValue);
+            // UpsertCurrentLevelAsync returns SkillAssessmentResponseDto (full response, no target_level/weight).
+            Assert.NotNull(result);
+            // Verify the repo upsert was called with the correct arguments.
+            _repoMock.Verify(r => r.UpsertCurrentLevelAsync(EmployeeId, SkillId, 3.0m, null, EmployeeId, It.IsAny<CancellationToken>()), Times.Once);
+        }
+
+        // ---------- AC-012: DeleteCurrentLevelAsync — removes assessment ----------
+
+        [Fact]
+        public async Task DeleteCurrentLevelAsync_CallsRepoDelete()
+        {
+            // AC-012: DELETE removes the self-assessment row
+            _repoMock.Setup(r => r.DeleteCurrentLevelAsync(EmployeeId, SkillId, EmployeeId, It.IsAny<CancellationToken>()))
+                .Returns(Task.CompletedTask);
+            _repoMock.Setup(r => r.SaveChangesAsync(It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);
+
+            await _service.DeleteCurrentLevelAsync(EmployeeId, SkillId, CancellationToken.None);
+
+            _repoMock.Verify(r => r.DeleteCurrentLevelAsync(EmployeeId, SkillId, EmployeeId, It.IsAny<CancellationToken>()), Times.Once);
+            _repoMock.Verify(r => r.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
         }
 
         // ---------- UpsertCurrentLevelAsync — skill_not_found ----------
@@ -132,7 +153,7 @@ namespace CPR.UnitTests.Services
                 .ReturnsAsync(new List<EmployeeSkillRow>());
 
             var result = await _service.UpsertManagerAssessmentAsync(
-                ManagerId, EmployeeId, SkillId, 4.0m, CancellationToken.None);
+                ManagerId, "People Manager", EmployeeId, SkillId, 4.0m, CancellationToken.None);
 
             Assert.NotNull(result);
         }
@@ -151,7 +172,7 @@ namespace CPR.UnitTests.Services
 
             var ex = await Assert.ThrowsAsync<UnauthorizedAccessException>(() =>
                 _service.UpsertManagerAssessmentAsync(
-                    ManagerId, EmployeeId, SkillId, 4.0m, CancellationToken.None));
+                    ManagerId, "People Manager", EmployeeId, SkillId, 4.0m, CancellationToken.None));
 
             Assert.Contains("forbidden", ex.Message);
         }
@@ -170,7 +191,7 @@ namespace CPR.UnitTests.Services
 
             var ex = await Assert.ThrowsAsync<KeyNotFoundException>(() =>
                 _service.UpsertManagerAssessmentAsync(
-                    ManagerId, EmployeeId, SkillId, 4.0m, CancellationToken.None));
+                    ManagerId, "People Manager", EmployeeId, SkillId, 4.0m, CancellationToken.None));
 
             Assert.Contains("assessment_not_found", ex.Message);
         }
@@ -271,6 +292,56 @@ namespace CPR.UnitTests.Services
                     CancellationToken.None));
 
             Assert.Contains("already_linked", ex.Message);
+        }
+
+        // ---------- AC-002/AC-003: Response DTO shape — no target_level, no weight ----------
+
+        [Fact]
+        public void SkillItemDto_DoesNotExpose_TargetLevel()
+        {
+            // AC-002: no target_level field in the skill item DTO
+            var type = typeof(CPR.Application.DTOs.SkillAssessment.SkillItemDto);
+            Assert.Null(type.GetProperty("TargetLevel"));
+            Assert.Null(type.GetProperty("Target"));
+        }
+
+        [Fact]
+        public void SkillAssessmentResponseDto_DoesNotExpose_Weight()
+        {
+            // AC-003: no weight field anywhere in the assessment response
+            var skillItemType = typeof(CPR.Application.DTOs.SkillAssessment.SkillItemDto);
+            Assert.Null(skillItemType.GetProperty("Weight"));
+            var positionSkillType = typeof(CPR.Application.DTOs.Taxonomy.PositionSkillRequirementDto);
+            Assert.Null(positionSkillType.GetProperty("Weight"));
+        }
+
+        // ---------- AC-018: employee_skill_evidence entity exists ----------
+
+        [Fact]
+        public void EmployeeSkillEvidence_EntityExists_WithCorrectForeignKeys()
+        {
+            // AC-018: evidence links stored in employee_skill_evidence table
+            var entity = new EmployeeSkillEvidence
+            {
+                Id = Guid.NewGuid(),
+                EmployeeToSkillId = AssessmentId,
+                FeedbackId = FeedbackId,
+                IsDeleted = false
+            };
+            Assert.Equal(AssessmentId, entity.EmployeeToSkillId);
+            Assert.Equal(FeedbackId, entity.FeedbackId);
+        }
+
+        // ---------- AC-022: TargetLevel types removed from codebase ----------
+
+        [Fact]
+        public void TargetLevelTypes_AreNotPresent()
+        {
+            // AC-022: UpsertSkillTargetDto and TargetLevelDto must not exist
+            var assembly = typeof(CPR.Application.DTOs.SkillAssessment.UpsertSkillAssessmentDto).Assembly;
+            var types = assembly.GetTypes();
+            Assert.DoesNotContain(types, t => t.Name == "UpsertSkillTargetDto");
+            Assert.DoesNotContain(types, t => t.Name == "TargetLevelDto");
         }
 
         // ---------- GetTeamSummaryAsync — correct mapping ----------

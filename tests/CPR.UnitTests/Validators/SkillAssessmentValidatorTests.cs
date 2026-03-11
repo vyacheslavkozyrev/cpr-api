@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Xunit;
 using CPR.Application.DTOs.SkillAssessment;
+using CPR.Application.DTOs.Taxonomy;
 
 namespace CPR.UnitTests.Validators
 {
@@ -93,6 +94,32 @@ namespace CPR.UnitTests.Validators
         {
             var dto = new LinkEvidenceDto { FeedbackId = Guid.NewGuid() };
             Assert.True(IsValid(dto, out _));
+        }
+
+        // ---------- AC-034/AC-035/AC-036: weight removed from position_to_skill ----------
+
+        [Fact]
+        public void AddPositionSkillDto_DoesNotHave_WeightProperty()
+        {
+            // AC-034/AC-035: weight column removed; DTO must not expose it
+            var type = typeof(AddPositionSkillDto);
+            Assert.Null(type.GetProperty("Weight"));
+        }
+
+        [Fact]
+        public void UpdatePositionSkillDto_DoesNotHave_WeightProperty()
+        {
+            // AC-036: PATCH silently ignores weight — DTO doesn't have Weight property
+            var type = typeof(UpdatePositionSkillDto);
+            Assert.Null(type.GetProperty("Weight"));
+        }
+
+        [Fact]
+        public void PositionSkillRequirementDto_DoesNotHave_WeightProperty()
+        {
+            // AC-035: GET position-skill response does not include weight
+            var type = typeof(PositionSkillRequirementDto);
+            Assert.Null(type.GetProperty("Weight"));
         }
     }
 }
