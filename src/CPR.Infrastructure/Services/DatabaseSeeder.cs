@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
 using CPR.Domain.Entities;
@@ -58,6 +58,7 @@ namespace CPR.Infrastructure.Services
                 await SeedProjectRolesAsync();
                 await SeedPositionToSkillsAsync();
                 await SeedEmployeeToSkillsAsync();
+                await SeedReviewCyclesAsync();
             }
             else
             {
@@ -1823,6 +1824,7 @@ namespace CPR.Infrastructure.Services
                     Id = new Guid("48316a63-4812-4a04-ae3c-97248556d3f8"),
                     CareerTrackId = new Guid("7875db90-71b6-4e06-a7cf-53a3a77f10a0"),
                     Title = "DevOps Engineer",
+                    SortOrder = 1,
                     Description = "Entry-level DevOps focusing on CI/CD, deployment automation, and infrastructure basics",
                     Expectations = "Build and maintain CI/CD pipelines, assist with deployments, learn infrastructure as code"
                 },
@@ -1831,6 +1833,7 @@ namespace CPR.Infrastructure.Services
                     Id = new Guid("4e064c81-2d4d-4dfa-b95d-419fc13b72ca"),
                     CareerTrackId = new Guid("7875db90-71b6-4e06-a7cf-53a3a77f10a0"),
                     Title = "Senior DevOps Engineer",
+                    SortOrder = 2,
                     Description = "Experienced DevOps engineer managing complex deployments and infrastructure architecture",
                     Expectations = "Lead complex infrastructure projects, mentor junior engineers, optimize deployment pipelines"
                 },
@@ -1839,6 +1842,7 @@ namespace CPR.Infrastructure.Services
                     Id = new Guid("7b018a08-132c-46ee-bbe1-d4a4320eab2a"),
                     CareerTrackId = new Guid("7875db90-71b6-4e06-a7cf-53a3a77f10a0"),
                     Title = "Lead DevOps Engineer",
+                    SortOrder = 3,
                     Description = "Technical lead for DevOps practices, mentoring team and driving automation strategy",
                     Expectations = "Define DevOps strategy, lead team initiatives, establish best practices and standards"
                 },
@@ -1847,6 +1851,7 @@ namespace CPR.Infrastructure.Services
                     Id = new Guid("f75f7943-1667-4438-a27d-93408f39f49d"),
                     CareerTrackId = new Guid("7875db90-71b6-4e06-a7cf-53a3a77f10a0"),
                     Title = "Director of DevOps Engineering",
+                    SortOrder = 4,
                     Description = "Leadership role managing DevOps teams and engineering infrastructure strategy",
                     Expectations = "Manage DevOps organization, set technical direction, align with business objectives"
                 },
@@ -1855,6 +1860,7 @@ namespace CPR.Infrastructure.Services
                     Id = new Guid("aeb133ad-e366-4b7a-be19-a86659e423f8"),
                     CareerTrackId = new Guid("7875db90-71b6-4e06-a7cf-53a3a77f10a0"),
                     Title = "Senior Director of DevOps Engineering",
+                    SortOrder = 5,
                     Description = "Executive leadership for DevOps organization and technical operations",
                     Expectations = "Executive oversight of DevOps, strategic planning, cross-organizational leadership"
                 },
@@ -1865,6 +1871,7 @@ namespace CPR.Infrastructure.Services
                     Id = new Guid("e9fa3feb-cf51-411f-adc0-8244e61a831d"),
                     CareerTrackId = new Guid("c5409a70-d866-465e-9d56-3da4684c54d3"),
                     Title = "Mobile Engineer",
+                    SortOrder = 1,
                     Description = "Developing mobile applications for iOS and Android platforms",
                     Expectations = "Build mobile features, write tests, collaborate on mobile architecture"
                 },
@@ -1873,6 +1880,7 @@ namespace CPR.Infrastructure.Services
                     Id = new Guid("4152e8ef-9424-49f3-8b86-3dd87b89c8bf"),
                     CareerTrackId = new Guid("c5409a70-d866-465e-9d56-3da4684c54d3"),
                     Title = "Senior Mobile Engineer",
+                    SortOrder = 2,
                     Description = "Leading mobile feature development and architecture decisions",
                     Expectations = "Lead complex mobile features, mentor engineers, drive mobile best practices"
                 },
@@ -1881,6 +1889,7 @@ namespace CPR.Infrastructure.Services
                     Id = new Guid("0a3ddc39-af6b-487d-9bac-2d9dd0bee554"),
                     CareerTrackId = new Guid("c5409a70-d866-465e-9d56-3da4684c54d3"),
                     Title = "Staff Mobile Engineer",
+                    SortOrder = 3,
                     Description = "Setting technical direction for mobile platform and cross-platform solutions",
                     Expectations = "Define mobile architecture, solve complex technical challenges, influence mobile strategy"
                 },
@@ -1889,6 +1898,7 @@ namespace CPR.Infrastructure.Services
                     Id = new Guid("b28f0718-03af-4a80-9d0b-6034e52a2ef0"),
                     CareerTrackId = new Guid("c5409a70-d866-465e-9d56-3da4684c54d3"),
                     Title = "Principal Mobile Engineer",
+                    SortOrder = 4,
                     Description = "Defining mobile strategy, performance optimization, and developer experience",
                     Expectations = "Strategic mobile platform decisions, performance leadership, cross-team collaboration"
                 },
@@ -1897,6 +1907,7 @@ namespace CPR.Infrastructure.Services
                     Id = new Guid("f640cd3f-6e9d-4dc8-9c4f-acbbcd34ad24"),
                     CareerTrackId = new Guid("c5409a70-d866-465e-9d56-3da4684c54d3"),
                     Title = "Director of Mobile Engineering",
+                    SortOrder = 5,
                     Description = "Leading mobile engineering teams and mobile product strategy",
                     Expectations = "Manage mobile teams, set mobile technology direction, align with product goals"
                 },
@@ -1907,6 +1918,7 @@ namespace CPR.Infrastructure.Services
                     Id = new Guid("b56b213e-fcc1-4e1c-8653-e24a52a7e28d"),
                     CareerTrackId = new Guid("0c60eaad-dab3-426e-92f4-eafcd91db208"),
                     Title = "Frontend Engineer",
+                    SortOrder = 1,
                     Description = "Building user interfaces and implementing responsive web applications",
                     Expectations = "Implement UI components, write clean code, collaborate with designers"
                 },
@@ -1915,6 +1927,7 @@ namespace CPR.Infrastructure.Services
                     Id = new Guid("0b5e0e9d-6920-4037-8312-0f3e78d0088a"),
                     CareerTrackId = new Guid("0c60eaad-dab3-426e-92f4-eafcd91db208"),
                     Title = "Senior Frontend Engineer",
+                    SortOrder = 2,
                     Description = "Leading frontend architecture and component library development",
                     Expectations = "Lead frontend projects, establish component patterns, mentor junior engineers"
                 },
@@ -1923,6 +1936,7 @@ namespace CPR.Infrastructure.Services
                     Id = new Guid("6073c789-4512-499c-84c6-0195e87c60bc"),
                     CareerTrackId = new Guid("0c60eaad-dab3-426e-92f4-eafcd91db208"),
                     Title = "Staff Frontend Engineer",
+                    SortOrder = 3,
                     Description = "Defining frontend standards, performance optimization, and accessibility",
                     Expectations = "Set frontend technical direction, optimize performance, drive accessibility initiatives"
                 },
@@ -1931,6 +1945,7 @@ namespace CPR.Infrastructure.Services
                     Id = new Guid("ad711f5b-08c2-43b3-b503-d9e25c545119"),
                     CareerTrackId = new Guid("0c60eaad-dab3-426e-92f4-eafcd91db208"),
                     Title = "Principal Frontend Engineer",
+                    SortOrder = 4,
                     Description = "Strategic frontend architecture, design system leadership, and tooling",
                     Expectations = "Define frontend strategy, lead design system evolution, establish tooling standards"
                 },
@@ -1939,6 +1954,7 @@ namespace CPR.Infrastructure.Services
                     Id = new Guid("06091429-d5c5-47f7-9f85-3034618325c5"),
                     CareerTrackId = new Guid("0c60eaad-dab3-426e-92f4-eafcd91db208"),
                     Title = "Director of Frontend Engineering",
+                    SortOrder = 5,
                     Description = "Managing frontend teams and driving frontend technology strategy",
                     Expectations = "Manage frontend organization, align frontend with product strategy, set technical vision"
                 },
@@ -1948,6 +1964,7 @@ namespace CPR.Infrastructure.Services
                     Id = new Guid("15e1ba17-e786-4a86-bbc1-1ada3f47b6df"),
                     CareerTrackId = new Guid("bdb35ab2-9c08-4a4f-952f-17fbe0b04e9f"),
                     Title = "Backend Engineer",
+                    SortOrder = 1,
                     Description = "Building APIs, microservices, and server-side business logic",
                     Expectations = "Develop backend services, write tests, design database schemas"
                 },
@@ -1956,6 +1973,7 @@ namespace CPR.Infrastructure.Services
                     Id = new Guid("4c7ded1f-7dd8-47b7-8b63-35020100ba19"),
                     CareerTrackId = new Guid("bdb35ab2-9c08-4a4f-952f-17fbe0b04e9f"),
                     Title = "Senior Backend Engineer",
+                    SortOrder = 2,
                     Description = "Designing scalable backend systems and data models",
                     Expectations = "Lead backend architecture, optimize performance, mentor engineers"
                 },
@@ -1964,6 +1982,7 @@ namespace CPR.Infrastructure.Services
                     Id = new Guid("ac69cf26-aa02-481c-ac06-5ccd9dfec7f0"),
                     CareerTrackId = new Guid("bdb35ab2-9c08-4a4f-952f-17fbe0b04e9f"),
                     Title = "Staff Backend Engineer",
+                    SortOrder = 3,
                     Description = "Architecture for distributed systems and cross-service integration",
                     Expectations = "Design distributed systems, establish integration patterns, solve complex problems"
                 },
@@ -1972,6 +1991,7 @@ namespace CPR.Infrastructure.Services
                     Id = new Guid("901c89ea-a073-48c6-ab32-c414914b8f2e"),
                     CareerTrackId = new Guid("bdb35ab2-9c08-4a4f-952f-17fbe0b04e9f"),
                     Title = "Principal Backend Engineer",
+                    SortOrder = 4,
                     Description = "Strategic backend platform decisions and technical standards",
                     Expectations = "Define backend strategy, lead platform evolution, set technical standards"
                 },
@@ -1980,6 +2000,7 @@ namespace CPR.Infrastructure.Services
                     Id = new Guid("6f33e923-834d-4639-a88a-9fdec61215f4"),
                     CareerTrackId = new Guid("bdb35ab2-9c08-4a4f-952f-17fbe0b04e9f"),
                     Title = "Director of Backend Engineering",
+                    SortOrder = 5,
                     Description = "Leading backend teams and service architecture strategy",
                     Expectations = "Manage backend teams, set architectural direction, align with business needs"
                 },
@@ -1990,6 +2011,7 @@ namespace CPR.Infrastructure.Services
                     Id = new Guid("ca70ee84-c88f-4352-b80d-914a9cd33674"),
                     CareerTrackId = new Guid("43a12f91-e50a-480d-a865-1085f53adeb6"),
                     Title = "ML Engineer",
+                    SortOrder = 1,
                     Description = "Developing and deploying machine learning models and pipelines",
                     Expectations = "Build ML models, implement training pipelines, deploy to production"
                 },
@@ -1998,6 +2020,7 @@ namespace CPR.Infrastructure.Services
                     Id = new Guid("0ecfa16b-8d67-4298-be82-06fb0be2c1a7"),
                     CareerTrackId = new Guid("43a12f91-e50a-480d-a865-1085f53adeb6"),
                     Title = "Senior ML Engineer",
+                    SortOrder = 2,
                     Description = "Leading ML model development and ML infrastructure",
                     Expectations = "Lead ML projects, optimize model performance, establish MLOps practices"
                 },
@@ -2006,6 +2029,7 @@ namespace CPR.Infrastructure.Services
                     Id = new Guid("b4c4445e-2bc2-441b-8fb9-ef5a9e6e0696"),
                     CareerTrackId = new Guid("43a12f91-e50a-480d-a865-1085f53adeb6"),
                     Title = "Staff ML Engineer",
+                    SortOrder = 3,
                     Description = "ML platform architecture and MLOps strategy",
                     Expectations = "Design ML infrastructure, establish MLOps patterns, solve complex ML challenges"
                 },
@@ -2014,6 +2038,7 @@ namespace CPR.Infrastructure.Services
                     Id = new Guid("eec819f7-a4f5-4b2a-a1f6-328bb889c6c5"),
                     CareerTrackId = new Guid("43a12f91-e50a-480d-a865-1085f53adeb6"),
                     Title = "Principal ML Engineer",
+                    SortOrder = 4,
                     Description = "Strategic ML research, model architecture, and AI strategy",
                     Expectations = "Define ML strategy, lead research initiatives, drive AI innovation"
                 },
@@ -2022,6 +2047,7 @@ namespace CPR.Infrastructure.Services
                     Id = new Guid("b707fc9a-2442-4ad7-b8bd-0567f87ef5a1"),
                     CareerTrackId = new Guid("43a12f91-e50a-480d-a865-1085f53adeb6"),
                     Title = "Director of ML Engineering",
+                    SortOrder = 5,
                     Description = "Leading ML teams and AI product strategy",
                     Expectations = "Manage ML organization, set AI strategy, align with business objectives"
                 },
@@ -2032,6 +2058,7 @@ namespace CPR.Infrastructure.Services
                     Id = new Guid("40f80e0b-f128-493a-99ce-5e1c765cc87f"),
                     CareerTrackId = new Guid("e4441805-32e1-4714-9ae7-5688c9115ef4"),
                     Title = "Support Engineer",
+                    SortOrder = 1,
                     Description = "Providing technical support and troubleshooting production issues",
                     Expectations = "Respond to support tickets, troubleshoot issues, document solutions"
                 },
@@ -2040,6 +2067,7 @@ namespace CPR.Infrastructure.Services
                     Id = new Guid("d8f594a3-1e3c-466f-a178-1e16ddb9a2ca"),
                     CareerTrackId = new Guid("e4441805-32e1-4714-9ae7-5688c9115ef4"),
                     Title = "Senior Support Engineer",
+                    SortOrder = 2,
                     Description = "Leading complex technical investigations and customer escalations",
                     Expectations = "Handle escalations, lead incident response, improve support processes"
                 },
@@ -2048,6 +2076,7 @@ namespace CPR.Infrastructure.Services
                     Id = new Guid("148802ce-fe15-42a7-b6ca-33d9ea320448"),
                     CareerTrackId = new Guid("e4441805-32e1-4714-9ae7-5688c9115ef4"),
                     Title = "Staff Support Engineer",
+                    SortOrder = 3,
                     Description = "Driving support tooling, processes, and knowledge management",
                     Expectations = "Design support systems, establish best practices, mentor support team"
                 },
@@ -2056,6 +2085,7 @@ namespace CPR.Infrastructure.Services
                     Id = new Guid("bf563729-a2eb-4716-ab53-9b1497f2fa2a"),
                     CareerTrackId = new Guid("e4441805-32e1-4714-9ae7-5688c9115ef4"),
                     Title = "Principal Support Engineer",
+                    SortOrder = 4,
                     Description = "Strategic support operations and customer success programs",
                     Expectations = "Define support strategy, optimize customer experience, lead technical programs"
                 },
@@ -2064,6 +2094,7 @@ namespace CPR.Infrastructure.Services
                     Id = new Guid("d38d1988-8914-4453-826f-063b5bc016c0"),
                     CareerTrackId = new Guid("e4441805-32e1-4714-9ae7-5688c9115ef4"),
                     Title = "Director of Technical Support",
+                    SortOrder = 5,
                     Description = "Managing support teams and customer experience strategy",
                     Expectations = "Lead support organization, set customer success vision, manage SLAs"
                 },
@@ -2074,6 +2105,7 @@ namespace CPR.Infrastructure.Services
                     Id = new Guid("7573b182-5813-411a-91ee-b5beeef80e1a"),
                     CareerTrackId = new Guid("d533dd42-c223-4b34-9ddd-6e257f8016b8"),
                     Title = "Infrastructure Engineer",
+                    SortOrder = 1,
                     Description = "Managing cloud infrastructure, networking, and systems reliability",
                     Expectations = "Maintain infrastructure, respond to incidents, optimize systems"
                 },
@@ -2082,6 +2114,7 @@ namespace CPR.Infrastructure.Services
                     Id = new Guid("835c2609-0c27-446a-9fe7-779326c9f1f6"),
                     CareerTrackId = new Guid("d533dd42-c223-4b34-9ddd-6e257f8016b8"),
                     Title = "Senior Infrastructure Engineer",
+                    SortOrder = 2,
                     Description = "Designing scalable infrastructure and platform reliability",
                     Expectations = "Lead infrastructure projects, improve reliability, mentor engineers"
                 },
@@ -2090,6 +2123,7 @@ namespace CPR.Infrastructure.Services
                     Id = new Guid("4fea9a06-63a6-4f4e-bc81-e89ba6709295"),
                     CareerTrackId = new Guid("d533dd42-c223-4b34-9ddd-6e257f8016b8"),
                     Title = "Staff Infrastructure Engineer",
+                    SortOrder = 3,
                     Description = "Infrastructure architecture, capacity planning, and site reliability",
                     Expectations = "Design infrastructure architecture, establish SRE practices, optimize costs"
                 },
@@ -2098,6 +2132,7 @@ namespace CPR.Infrastructure.Services
                     Id = new Guid("37ea7352-b7f8-43f0-a377-138fb40a6d0d"),
                     CareerTrackId = new Guid("d533dd42-c223-4b34-9ddd-6e257f8016b8"),
                     Title = "Principal Infrastructure Engineer",
+                    SortOrder = 4,
                     Description = "Strategic infrastructure decisions and cloud platform strategy",
                     Expectations = "Define infrastructure strategy, lead cloud migration, set technical direction"
                 },
@@ -2106,6 +2141,7 @@ namespace CPR.Infrastructure.Services
                     Id = new Guid("948cd97b-7376-45ee-91f3-b511a456bb58"),
                     CareerTrackId = new Guid("d533dd42-c223-4b34-9ddd-6e257f8016b8"),
                     Title = "Director of Infrastructure Engineering",
+                    SortOrder = 5,
                     Description = "Leading infrastructure teams and operations strategy",
                     Expectations = "Manage infrastructure organization, set operations strategy, ensure reliability"
                 },
@@ -2115,6 +2151,7 @@ namespace CPR.Infrastructure.Services
                     Id = new Guid("fab1f5ce-59b0-4261-a359-b4ec60e9f606"),
                     CareerTrackId = new Guid("d7556322-667b-4062-96e1-c6773eccfc04"),
                     Title = "Security Engineer",
+                    SortOrder = 1,
                     Description = "Implementing security controls and conducting security assessments",
                     Expectations = "Implement security measures, perform assessments, respond to incidents"
                 },
@@ -2123,6 +2160,7 @@ namespace CPR.Infrastructure.Services
                     Id = new Guid("cf1ac4b7-4c13-4a72-8772-211bb1832ae0"),
                     CareerTrackId = new Guid("d7556322-667b-4062-96e1-c6773eccfc04"),
                     Title = "Senior Security Engineer",
+                    SortOrder = 2,
                     Description = "Leading security projects and vulnerability management",
                     Expectations = "Lead security initiatives, manage vulnerabilities, conduct threat analysis"
                 },
@@ -2131,6 +2169,7 @@ namespace CPR.Infrastructure.Services
                     Id = new Guid("da04a0f8-bf20-45f7-af85-3595cc2f7f15"),
                     CareerTrackId = new Guid("d7556322-667b-4062-96e1-c6773eccfc04"),
                     Title = "Staff Security Engineer",
+                    SortOrder = 3,
                     Description = "Security architecture, threat modeling, and security tooling",
                     Expectations = "Design security architecture, establish threat models, build security tools"
                 },
@@ -2139,6 +2178,7 @@ namespace CPR.Infrastructure.Services
                     Id = new Guid("a35f6bd9-652e-42d6-b137-929c3b1bd791"),
                     CareerTrackId = new Guid("d7556322-667b-4062-96e1-c6773eccfc04"),
                     Title = "Principal Security Engineer",
+                    SortOrder = 4,
                     Description = "Strategic security architecture and security program leadership",
                     Expectations = "Define security strategy, lead security programs, set security standards"
                 },
@@ -2147,6 +2187,7 @@ namespace CPR.Infrastructure.Services
                     Id = new Guid("80d23551-e51e-405a-9339-8a6f52a0c6bd"),
                     CareerTrackId = new Guid("d7556322-667b-4062-96e1-c6773eccfc04"),
                     Title = "Director of Security Engineering",
+                    SortOrder = 5,
                     Description = "Managing security teams and enterprise security strategy",
                     Expectations = "Lead security organization, set enterprise security vision, manage risk"
                 },
@@ -2157,6 +2198,7 @@ namespace CPR.Infrastructure.Services
                     Id = new Guid("78d6f12b-d42c-4af5-991b-f2b069305f2a"),
                     CareerTrackId = new Guid("0cf603ee-4fb6-42d6-b1f3-e3057bb80c4c"),
                     Title = "Platform Engineer",
+                    SortOrder = 1,
                     Description = "Building developer platforms, tooling, and internal services",
                     Expectations = "Build platform services, develop tooling, support internal teams"
                 },
@@ -2165,6 +2207,7 @@ namespace CPR.Infrastructure.Services
                     Id = new Guid("7ad2dbb8-acc3-43bc-a9e5-48c166713822"),
                     CareerTrackId = new Guid("0cf603ee-4fb6-42d6-b1f3-e3057bb80c4c"),
                     Title = "Senior Platform Engineer",
+                    SortOrder = 2,
                     Description = "Designing platform services and developer experience",
                     Expectations = "Lead platform projects, improve developer experience, optimize platform"
                 },
@@ -2173,6 +2216,7 @@ namespace CPR.Infrastructure.Services
                     Id = new Guid("e3e2e045-ae6e-4629-810d-2720e750eb9c"),
                     CareerTrackId = new Guid("0cf603ee-4fb6-42d6-b1f3-e3057bb80c4c"),
                     Title = "Staff Platform Engineer",
+                    SortOrder = 3,
                     Description = "Platform architecture, API design, and platform strategy",
                     Expectations = "Design platform architecture, establish API standards, drive platform vision"
                 },
@@ -2181,6 +2225,7 @@ namespace CPR.Infrastructure.Services
                     Id = new Guid("24582967-5515-4000-a390-bce4aa59d460"),
                     CareerTrackId = new Guid("0cf603ee-4fb6-42d6-b1f3-e3057bb80c4c"),
                     Title = "Principal Platform Engineer",
+                    SortOrder = 4,
                     Description = "Strategic platform decisions and infrastructure abstraction",
                     Expectations = "Define platform strategy, lead infrastructure abstraction, set technical direction"
                 },
@@ -2189,6 +2234,7 @@ namespace CPR.Infrastructure.Services
                     Id = new Guid("5284d661-4c72-40d1-8cc5-56e08a6138d0"),
                     CareerTrackId = new Guid("0cf603ee-4fb6-42d6-b1f3-e3057bb80c4c"),
                     Title = "Director of Platform Engineering",
+                    SortOrder = 5,
                     Description = "Leading platform teams and internal platform strategy",
                     Expectations = "Manage platform organization, set platform vision, align with business needs"
                 },
@@ -2199,6 +2245,7 @@ namespace CPR.Infrastructure.Services
                     Id = new Guid("570d12e2-911e-4adc-a98a-373e4c8aab53"),
                     CareerTrackId = new Guid("22e5ed0b-43c4-4ce6-829d-3943e4b7bdd1"),
                     Title = "Engineering Manager",
+                    SortOrder = 1,
                     Description = "Managing engineering team and delivery execution",
                     Expectations = "Manage team performance, deliver projects, develop engineers, align with goals"
                 },
@@ -2207,6 +2254,7 @@ namespace CPR.Infrastructure.Services
                     Id = new Guid("ab42e7b3-caf3-417d-80f9-62422e089596"),
                     CareerTrackId = new Guid("22e5ed0b-43c4-4ce6-829d-3943e4b7bdd1"),
                     Title = "Senior Engineering Manager",
+                    SortOrder = 2,
                     Description = "Managing multiple teams and cross-functional initiatives",
                     Expectations = "Lead multiple teams, drive cross-functional work, scale engineering practices"
                 },
@@ -2215,6 +2263,7 @@ namespace CPR.Infrastructure.Services
                     Id = new Guid("8ef2121e-e2c5-4514-b16a-dda651fb1c50"),
                     CareerTrackId = new Guid("22e5ed0b-43c4-4ce6-829d-3943e4b7bdd1"),
                     Title = "Engineering Director",
+                    SortOrder = 3,
                     Description = "Managing managers and department strategy",
                     Expectations = "Manage managers, set department strategy, align with company objectives"
                 },
@@ -2223,6 +2272,7 @@ namespace CPR.Infrastructure.Services
                     Id = new Guid("f2208214-d7c6-4db4-98ea-99e097576ef8"),
                     CareerTrackId = new Guid("22e5ed0b-43c4-4ce6-829d-3943e4b7bdd1"),
                     Title = "Senior Engineering Director",
+                    SortOrder = 4,
                     Description = "Managing multiple departments and organizational strategy",
                     Expectations = "Lead multiple departments, set organizational strategy, drive transformation"
                 },
@@ -2231,6 +2281,7 @@ namespace CPR.Infrastructure.Services
                     Id = new Guid("aa00c283-1af1-4397-bc34-2f674bda4852"),
                     CareerTrackId = new Guid("22e5ed0b-43c4-4ce6-829d-3943e4b7bdd1"),
                     Title = "VP of Engineering",
+                    SortOrder = 5,
                     Description = "Executive leadership for entire engineering organization",
                     Expectations = "Executive leadership, set engineering vision, align with business strategy"
                 }
@@ -3385,6 +3436,124 @@ namespace CPR.Infrastructure.Services
 
             _logger.LogInformation("Seeded {Count} employee-to-skill mappings for {EmployeeCount} employees.",
                                   employeeToSkills.Count, employees.Count);
+        }
+
+        private async Task SeedReviewCyclesAsync(bool forceSeed = false)
+        {
+            if (!forceSeed && await _context.ReviewCycles.AnyAsync())
+            {
+                _logger.LogInformation("Review cycles already exist, skipping seeding.");
+                return;
+            }
+
+            _logger.LogInformation("Seeding review cycles...");
+
+            // Subject: Senior Frontend Engineer (Eve Adams)
+            var subjectEmployeeId = new Guid("32323232-3232-4323-2323-323232323232");
+
+            // Reviewers
+            var bobJohnsonId   = new Guid("00000000-0000-0000-0000-000000000003"); // Director of Frontend Engineering
+            var dianaPrinceId  = new Guid("23232323-2323-4232-3232-323232323232"); // Staff Frontend Engineer
+            var umaPatelId     = new Guid("15151515-1515-4151-5151-515151515151"); // Principal Frontend Engineer
+            var aliceWilsonId  = new Guid("00000000-0000-0000-0000-000000000004"); // Director of Backend Engineering
+            var victorChenId   = new Guid("16161616-1616-4161-6161-616161616161"); // Principal Backend Engineer
+
+            var engineeringDept = await _context.Departments.FirstOrDefaultAsync(d => d.Code == "ENG");
+            var deptId = engineeringDept!.Id;
+
+            // ── Cycle 1: Closed ──────────────────────────────────────────────
+            var cycle1Id = new Guid("aa000001-0000-4000-0000-000000000001");
+            var cycle1 = new ReviewCycle
+            {
+                Id = cycle1Id,
+                Title = "Q4 2025 Performance Review",
+                Description = "Annual end-of-year 360 review for Senior Frontend Engineers.",
+                SubjectEmployeeId = subjectEmployeeId,
+                DepartmentId = deptId,
+                Status = ReviewCycleStatus.Closed,
+                OpenedAt = new DateTimeOffset(2025, 10, 1, 9, 0, 0, TimeSpan.Zero),
+                StartedAt = new DateTimeOffset(2025, 10, 15, 9, 0, 0, TimeSpan.Zero),
+                ClosedAt = new DateTimeOffset(2025, 12, 31, 17, 0, 0, TimeSpan.Zero),
+                CreatedAt = new DateTimeOffset(2025, 10, 1, 9, 0, 0, TimeSpan.Zero),
+                IsDeleted = false
+            };
+
+            var nominee1Id = new Guid("bb000001-0000-4000-0000-000000000001");
+            var nominee2Id = new Guid("bb000002-0000-4000-0000-000000000002");
+            var nominee3Id = new Guid("bb000003-0000-4000-0000-000000000003");
+
+            var nominees1 = new[]
+            {
+                new ReviewNominee { Id = nominee1Id, CycleId = cycle1Id, ReviewerEmployeeId = bobJohnsonId,  NominatedBy = subjectEmployeeId, Status = ReviewNomineeStatus.Submitted, CreatedAt = new DateTimeOffset(2025, 10, 2, 9, 0, 0, TimeSpan.Zero), IsDeleted = false },
+                new ReviewNominee { Id = nominee2Id, CycleId = cycle1Id, ReviewerEmployeeId = dianaPrinceId, NominatedBy = subjectEmployeeId, Status = ReviewNomineeStatus.Submitted, CreatedAt = new DateTimeOffset(2025, 10, 2, 9, 0, 0, TimeSpan.Zero), IsDeleted = false },
+                new ReviewNominee { Id = nominee3Id, CycleId = cycle1Id, ReviewerEmployeeId = umaPatelId,    NominatedBy = subjectEmployeeId, Status = ReviewNomineeStatus.Submitted, CreatedAt = new DateTimeOffset(2025, 10, 2, 9, 0, 0, TimeSpan.Zero), IsDeleted = false },
+            };
+
+            var responses1 = new[]
+            {
+                new ReviewResponse { Id = new Guid("cc000001-0000-4000-0000-000000000001"), CycleId = cycle1Id, NomineeId = nominee1Id, ReviewerEmployeeId = bobJohnsonId,  OverallRating = 4, Comments = "Strong technical skills and great team collaboration. Delivers consistently high-quality frontend work and proactively unblocks teammates.",                                                      CreatedAt = new DateTimeOffset(2025, 11, 1, 10, 0, 0, TimeSpan.Zero), IsDeleted = false },
+                new ReviewResponse { Id = new Guid("cc000002-0000-4000-0000-000000000002"), CycleId = cycle1Id, NomineeId = nominee2Id, ReviewerEmployeeId = dianaPrinceId, OverallRating = 5, Comments = "Exceptional mentor and communicator. Always willing to share knowledge and review code thoroughly. Raised the whole team frontend quality this quarter.",                                            CreatedAt = new DateTimeOffset(2025, 11, 2, 11, 0, 0, TimeSpan.Zero), IsDeleted = false },
+                new ReviewResponse { Id = new Guid("cc000003-0000-4000-0000-000000000003"), CycleId = cycle1Id, NomineeId = nominee3Id, ReviewerEmployeeId = umaPatelId,    OverallRating = 4, Comments = "Reliable and skilled engineer. Could improve visibility of work in progress by sharing updates more frequently in standups.",                                                                     CreatedAt = new DateTimeOffset(2025, 11, 3, 9, 30, 0, TimeSpan.Zero), IsDeleted = false },
+            };
+
+            // ── Cycle 2: In Progress ─────────────────────────────────────────
+            var cycle2Id = new Guid("aa000002-0000-4000-0000-000000000002");
+            var cycle2 = new ReviewCycle
+            {
+                Id = cycle2Id,
+                Title = "Q1 2026 Mid-Year Check-in",
+                Description = "360 review focused on growth areas and cross-team collaboration.",
+                SubjectEmployeeId = subjectEmployeeId,
+                DepartmentId = deptId,
+                Status = ReviewCycleStatus.InProgress,
+                OpenedAt = new DateTimeOffset(2026, 1, 15, 9, 0, 0, TimeSpan.Zero),
+                StartedAt = new DateTimeOffset(2026, 2, 1, 9, 0, 0, TimeSpan.Zero),
+                CreatedAt = new DateTimeOffset(2026, 1, 15, 9, 0, 0, TimeSpan.Zero),
+                IsDeleted = false
+            };
+
+            var nominee4Id = new Guid("bb000004-0000-4000-0000-000000000004");
+            var nominee5Id = new Guid("bb000005-0000-4000-0000-000000000005");
+            var nominee6Id = new Guid("bb000006-0000-4000-0000-000000000006");
+
+            var nominees2 = new[]
+            {
+                new ReviewNominee { Id = nominee4Id, CycleId = cycle2Id, ReviewerEmployeeId = aliceWilsonId, NominatedBy = subjectEmployeeId, Status = ReviewNomineeStatus.Submitted, CreatedAt = new DateTimeOffset(2026, 1, 16, 9, 0, 0, TimeSpan.Zero), IsDeleted = false },
+                new ReviewNominee { Id = nominee5Id, CycleId = cycle2Id, ReviewerEmployeeId = victorChenId,  NominatedBy = subjectEmployeeId, Status = ReviewNomineeStatus.Invited,   CreatedAt = new DateTimeOffset(2026, 1, 16, 9, 0, 0, TimeSpan.Zero), IsDeleted = false },
+                new ReviewNominee { Id = nominee6Id, CycleId = cycle2Id, ReviewerEmployeeId = dianaPrinceId, NominatedBy = subjectEmployeeId, Status = ReviewNomineeStatus.Invited,   CreatedAt = new DateTimeOffset(2026, 1, 16, 9, 0, 0, TimeSpan.Zero), IsDeleted = false },
+            };
+
+            var responses2 = new[]
+            {
+                new ReviewResponse { Id = new Guid("cc000004-0000-4000-0000-000000000004"), CycleId = cycle2Id, NomineeId = nominee4Id, ReviewerEmployeeId = aliceWilsonId, OverallRating = 4, Comments = "Good cross-functional collaborator. Has shown real initiative in the API integration work with the backend team this quarter.", CreatedAt = new DateTimeOffset(2026, 2, 10, 14, 0, 0, TimeSpan.Zero), IsDeleted = false },
+            };
+
+            // ── Cycle 3: Open (nominations phase) ────────────────────────────
+            var cycle3Id = new Guid("aa000003-0000-4000-0000-000000000003");
+            var cycle3 = new ReviewCycle
+            {
+                Id = cycle3Id,
+                Title = "Q2 2026 Peer Review",
+                Description = "Quarterly peer feedback cycle.",
+                SubjectEmployeeId = subjectEmployeeId,
+                DepartmentId = deptId,
+                Status = ReviewCycleStatus.Open,
+                OpenedAt = new DateTimeOffset(2026, 3, 10, 9, 0, 0, TimeSpan.Zero),
+                CreatedAt = new DateTimeOffset(2026, 3, 10, 9, 0, 0, TimeSpan.Zero),
+                IsDeleted = false
+            };
+
+            var nominees3 = new[]
+            {
+                new ReviewNominee { Id = new Guid("bb000007-0000-4000-0000-000000000007"), CycleId = cycle3Id, ReviewerEmployeeId = bobJohnsonId, NominatedBy = subjectEmployeeId, Status = ReviewNomineeStatus.Pending, CreatedAt = new DateTimeOffset(2026, 3, 10, 10, 0, 0, TimeSpan.Zero), IsDeleted = false },
+            };
+
+            await _context.ReviewCycles.AddRangeAsync(cycle1, cycle2, cycle3);
+            await _context.ReviewNominees.AddRangeAsync(nominees1.Concat(nominees2).Concat(nominees3));
+            await _context.ReviewResponses.AddRangeAsync(responses1.Concat(responses2));
+            await _context.SaveChangesAsync();
+
+            _logger.LogInformation("Seeded 3 review cycles for employee {EmployeeId}.", subjectEmployeeId);
         }
     }
 }
