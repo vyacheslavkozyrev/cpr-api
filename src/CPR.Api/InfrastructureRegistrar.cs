@@ -47,6 +47,8 @@ namespace CPR.Api
             services.AddScoped<CPR.Application.Services.ISkillAssessmentService, CPR.Infrastructure.Services.SkillAssessmentService>();
             services.AddScoped<CPR.Domain.Repositories.ITaxonomyRepository, CPR.Infrastructure.Repositories.TaxonomyRepository>();
             services.AddScoped<CPR.Application.Services.ITaxonomyService, CPR.Infrastructure.Services.TaxonomyService>();
+            services.AddScoped<CPR.Application.Repositories.IGapAnalysisRepository, CPR.Infrastructure.Repositories.GapAnalysisRepository>();
+            services.AddScoped<CPR.Application.Services.IGapAnalysisService, CPR.Infrastructure.Services.GapAnalysisService>();
 
             // Register database seeder
             services.AddScoped<CPR.Infrastructure.Services.DatabaseSeeder>();

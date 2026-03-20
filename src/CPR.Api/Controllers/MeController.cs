@@ -1,11 +1,13 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using CPR.Api.Services;
 using CPR.Application.Services;
 using CPR.Application.Contracts;
+using CPR.Application.DTOs.GapAnalysis;
 using CPR.Application.DTOs.ReviewCycles;
 using System.Collections.Generic;
 
@@ -23,6 +25,7 @@ public class MeController : ControllerBase
     private readonly IReviewCycleService _reviewCycleService;
     private readonly IFeedbackRequestService _feedbackRequestService;
     private readonly IProjectService _projectService;
+    private readonly IGapAnalysisService _gapAnalysisService;
 
     /// <summary>
     /// Creates a new instance of <see cref="MeController"/>.
@@ -32,13 +35,15 @@ public class MeController : ControllerBase
     /// <param name="reviewCycleService">Service for review cycle operations.</param>
     /// <param name="feedbackRequestService">Service to manage feedback requests.</param>
     /// <param name="projectService">Service to manage projects.</param>
-    public MeController(IUserService userService, IClassificationService classificationService, IReviewCycleService reviewCycleService, IFeedbackRequestService feedbackRequestService, IProjectService projectService)
+    /// <param name="gapAnalysisService">Service to compute skills gap analysis.</param>
+    public MeController(IUserService userService, IClassificationService classificationService, IReviewCycleService reviewCycleService, IFeedbackRequestService feedbackRequestService, IProjectService projectService, IGapAnalysisService gapAnalysisService)
     {
         _userService = userService;
         _classificationService = classificationService;
         _reviewCycleService = reviewCycleService;
         _feedbackRequestService = feedbackRequestService;
         _projectService = projectService;
+        _gapAnalysisService = gapAnalysisService;
     }
 
     /// <summary>
@@ -279,5 +284,36 @@ public class MeController : ControllerBase
 
         var result = await _feedbackRequestService.GetTodoRequestsAsync(employeeId, query);
         return Ok(result);
+    }
+
+    /// <summary>
+    /// Returns a live skills gap analysis for the authenticated user against the next-level position.
+    /// </summary>
+    /// <returns>Gap analysis including radar chart data and skill-by-skill breakdown.</returns>
+    [Authorize]
+    [HttpGet("gap-analysis")]
+    [ProducesResponseType(typeof(GapAnalysisDto), 200)]
+    [ProducesResponseType(401)]
+    [ProducesResponseType(422)]
+    public async Task<IActionResult> GetMyGapAnalysis()
+    {
+        var profile = await _userService.GetCurrentUserProfileAsync(User);
+        if (profile == null) return Unauthorized();
+
+        if (!Guid.TryParse(profile.EmployeeId, out var employeeId))
+            return Unauthorized();
+
+        try
+        {
+            var result = await _gapAnalysisService.GetMyGapAnalysisAsync(employeeId);
+            return Ok(result);
+        }
+        catch (InvalidOperationException ex)
+        {
+            return Problem(
+                title: "Unprocessable Entity",
+                detail: ex.Message,
+                statusCode: StatusCodes.Status422UnprocessableEntity);
+        }
     }
 }

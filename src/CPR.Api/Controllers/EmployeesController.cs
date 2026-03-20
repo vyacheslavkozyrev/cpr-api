@@ -1,6 +1,14 @@
+using System;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using CPR.Api.Auth;
+using CPR.Api.Services;
 using CPR.Application.Contracts;
+using CPR.Application.DTOs.GapAnalysis;
+using CPR.Application.Services;
 using System.ComponentModel.DataAnnotations;
 
 namespace CPR.Api.Controllers;
@@ -13,6 +21,23 @@ namespace CPR.Api.Controllers;
 [Authorize]
 public class EmployeesController : ControllerBase
 {
+    private readonly IUserService _userService;
+    private readonly IRoleService _roleService;
+    private readonly IGapAnalysisService _gapAnalysisService;
+
+    /// <summary>
+    /// Creates a new instance of <see cref="EmployeesController"/>.
+    /// </summary>
+    /// <param name="userService">Service to resolve the current user profile.</param>
+    /// <param name="roleService">Service to resolve the caller's role titles.</param>
+    /// <param name="gapAnalysisService">Service to compute skills gap analysis.</param>
+    public EmployeesController(IUserService userService, IRoleService roleService, IGapAnalysisService gapAnalysisService)
+    {
+        _userService = userService;
+        _roleService = roleService;
+        _gapAnalysisService = gapAnalysisService;
+    }
+
     /// <summary>
     /// Search for employees by name, email, or job title with optional filters
     /// </summary>
@@ -195,5 +220,64 @@ public class EmployeesController : ControllerBase
                 Department = "Design"
             }
         };
+    }
+
+    /// <summary>
+    /// Returns a live skills gap analysis for the specified employee.
+    /// Accessible by PeopleManagers (direct reports only), Directors (same department only),
+    /// and Administrators (unrestricted).
+    /// </summary>
+    /// <param name="id">Target employee UUID.</param>
+    /// <returns>Gap analysis including radar chart data and skill-by-skill breakdown.</returns>
+    [HttpGet("{id:guid}/gap-analysis")]
+    [RequireRole("People Manager", "Director", "Administrator")]
+    [ProducesResponseType(typeof(GapAnalysisDto), 200)]
+    [ProducesResponseType(401)]
+    [ProducesResponseType(403)]
+    [ProducesResponseType(404)]
+    [ProducesResponseType(422)]
+    public async Task<IActionResult> GetEmployeeGapAnalysis(Guid id)
+    {
+        var profile = await _userService.GetCurrentUserProfileAsync(User);
+        if (profile == null) return Unauthorized();
+
+        if (!Guid.TryParse(profile.EmployeeId, out var callerEmployeeId) ||
+            !Guid.TryParse(profile.UserId, out var callerUserId))
+            return Unauthorized();
+
+        // Resolve the caller's highest-privilege role.
+        var roles = (await _roleService.GetUserRoleTitlesAsync(callerUserId)).ToList();
+        string callerRole;
+        if (roles.Contains("Administrator")) callerRole = "Administrator";
+        else if (roles.Contains("Director")) callerRole = "Director";
+        else if (roles.Contains("People Manager")) callerRole = "People Manager";
+        else return Forbid();
+
+        try
+        {
+            var result = await _gapAnalysisService.GetEmployeeGapAnalysisAsync(id, callerEmployeeId, callerRole);
+            return Ok(result);
+        }
+        catch (KeyNotFoundException ex)
+        {
+            return Problem(
+                title: "Not Found",
+                detail: ex.Message,
+                statusCode: StatusCodes.Status404NotFound);
+        }
+        catch (UnauthorizedAccessException ex)
+        {
+            return Problem(
+                title: "Forbidden",
+                detail: ex.Message,
+                statusCode: StatusCodes.Status403Forbidden);
+        }
+        catch (InvalidOperationException ex)
+        {
+            return Problem(
+                title: "Unprocessable Entity",
+                detail: ex.Message,
+                statusCode: StatusCodes.Status422UnprocessableEntity);
+        }
     }
 }
