@@ -295,7 +295,7 @@ public class MeController : ControllerBase
     [ProducesResponseType(typeof(GapAnalysisDto), 200)]
     [ProducesResponseType(401)]
     [ProducesResponseType(422)]
-    public async Task<IActionResult> GetMyGapAnalysis()
+    public async Task<IActionResult> GetMyGapAnalysis(CancellationToken ct)
     {
         var profile = await _userService.GetCurrentUserProfileAsync(User);
         if (profile == null) return Unauthorized();
@@ -305,8 +305,15 @@ public class MeController : ControllerBase
 
         try
         {
-            var result = await _gapAnalysisService.GetMyGapAnalysisAsync(employeeId);
+            var result = await _gapAnalysisService.GetMyGapAnalysisAsync(employeeId, ct);
             return Ok(result);
+        }
+        catch (KeyNotFoundException ex)
+        {
+            return Problem(
+                title: "Not Found",
+                detail: ex.Message,
+                statusCode: StatusCodes.Status404NotFound);
         }
         catch (InvalidOperationException ex)
         {

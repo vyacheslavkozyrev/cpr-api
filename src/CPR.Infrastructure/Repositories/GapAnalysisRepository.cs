@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using CPR.Application.Repositories;
 using CPR.Domain.Entities;
@@ -26,24 +27,24 @@ namespace CPR.Infrastructure.Repositories
         }
 
         /// <inheritdoc/>
-        public async Task<Employee?> GetEmployeeRecordAsync(Guid employeeId)
+        public async Task<Employee?> GetEmployeeRecordAsync(Guid employeeId, CancellationToken ct = default)
         {
             return await _db.Employees
                 .AsNoTracking()
-                .FirstOrDefaultAsync(e => e.Id == employeeId && !e.IsDeleted);
+                .FirstOrDefaultAsync(e => e.Id == employeeId && !e.IsDeleted, ct);
         }
 
         /// <inheritdoc/>
-        public async Task<Position?> GetPositionByIdAsync(Guid positionId)
+        public async Task<Position?> GetPositionByIdAsync(Guid positionId, CancellationToken ct = default)
         {
             return await _db.Positions
                 .AsNoTracking()
                 .Include(p => p.CareerTrack)
-                .FirstOrDefaultAsync(p => p.Id == positionId && !p.IsDeleted);
+                .FirstOrDefaultAsync(p => p.Id == positionId && !p.IsDeleted, ct);
         }
 
         /// <inheritdoc/>
-        public async Task<Position?> GetNextPositionAsync(Guid currentPositionId, Guid careerTrackId, int currentSortOrder)
+        public async Task<Position?> GetNextPositionAsync(Guid currentPositionId, Guid careerTrackId, int currentSortOrder, CancellationToken ct = default)
         {
             return await _db.Positions
                 .AsNoTracking()
@@ -53,11 +54,11 @@ namespace CPR.Infrastructure.Repositories
                     p.SortOrder > currentSortOrder &&
                     !p.IsDeleted)
                 .OrderBy(p => p.SortOrder)
-                .FirstOrDefaultAsync();
+                .FirstOrDefaultAsync(ct);
         }
 
         /// <inheritdoc/>
-        public async Task<List<PositionToSkill>> GetPositionSkillsAsync(Guid positionId)
+        public async Task<List<PositionToSkill>> GetPositionSkillsAsync(Guid positionId, CancellationToken ct = default)
         {
             return await _db.PositionToSkills
                 .AsNoTracking()
@@ -67,20 +68,20 @@ namespace CPR.Infrastructure.Repositories
                     .ThenInclude(s => s.Levels)
                 .Include(pts => pts.SkillLevel)
                 .Where(pts => pts.PositionId == positionId && !pts.IsDeleted)
-                .ToListAsync();
+                .ToListAsync(ct);
         }
 
         /// <inheritdoc/>
-        public async Task<List<EmployeeToSkill>> GetEmployeeSkillsAsync(Guid employeeId)
+        public async Task<List<EmployeeToSkill>> GetEmployeeSkillsAsync(Guid employeeId, CancellationToken ct = default)
         {
             return await _db.EmployeeSkills
                 .AsNoTracking()
                 .Where(es => es.EmployeeId == employeeId && !es.IsDeleted)
-                .ToListAsync();
+                .ToListAsync(ct);
         }
 
         /// <inheritdoc/>
-        public async Task<List<Goal>> GetLinkedGoalsAsync(Guid employeeId, IEnumerable<Guid> skillIds)
+        public async Task<List<Goal>> GetLinkedGoalsAsync(Guid employeeId, IEnumerable<Guid> skillIds, CancellationToken ct = default)
         {
             var skillIdList = skillIds.ToList();
             return await _db.Goals
@@ -91,17 +92,7 @@ namespace CPR.Infrastructure.Repositories
                     !g.IsDeleted &&
                     g.RelatedSkillId != null &&
                     skillIdList.Contains(g.RelatedSkillId.Value))
-                .ToListAsync();
-        }
-
-        /// <inheritdoc/>
-        public async Task<SkillLevel?> GetMinimumSkillLevelAsync(Guid skillId)
-        {
-            return await _db.SkillLevels
-                .AsNoTracking()
-                .Where(sl => sl.SkillId == skillId && !sl.IsDeleted)
-                .OrderBy(sl => sl.Value)
-                .FirstOrDefaultAsync();
+                .ToListAsync(ct);
         }
     }
 }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using CPR.Application.DTOs.GapAnalysis;
 using CPR.Application.Repositories;
@@ -26,30 +27,30 @@ namespace CPR.Infrastructure.Services
         }
 
         /// <inheritdoc/>
-        public async Task<GapAnalysisDto> GetMyGapAnalysisAsync(Guid callerEmployeeId)
+        public async Task<GapAnalysisDto> GetMyGapAnalysisAsync(Guid callerEmployeeId, CancellationToken ct = default)
         {
-            var employee = await _repo.GetEmployeeRecordAsync(callerEmployeeId)
+            var employee = await _repo.GetEmployeeRecordAsync(callerEmployeeId, ct)
                 ?? throw new KeyNotFoundException("errors.employee.not_found");
 
-            return await BuildGapAnalysisAsync(employee);
+            return await BuildGapAnalysisAsync(employee, ct);
         }
 
         /// <inheritdoc/>
         public async Task<GapAnalysisDto> GetEmployeeGapAnalysisAsync(
-            Guid targetEmployeeId, Guid callerEmployeeId, string callerRole)
+            Guid targetEmployeeId, Guid callerEmployeeId, string callerRole, CancellationToken ct = default)
         {
-            var target = await _repo.GetEmployeeRecordAsync(targetEmployeeId)
+            var target = await _repo.GetEmployeeRecordAsync(targetEmployeeId, ct)
                 ?? throw new KeyNotFoundException("errors.employee.not_found");
 
-            await EnforceAuthorizationAsync(target, callerEmployeeId, callerRole);
+            await EnforceAuthorizationAsync(target, callerEmployeeId, callerRole, ct);
 
-            return await BuildGapAnalysisAsync(target);
+            return await BuildGapAnalysisAsync(target, ct);
         }
 
         // ── private helpers ──────────────────────────────────────────────────
 
         private async Task EnforceAuthorizationAsync(
-            Employee target, Guid callerEmployeeId, string callerRole)
+            Employee target, Guid callerEmployeeId, string callerRole, CancellationToken ct)
         {
             switch (callerRole)
             {
@@ -58,7 +59,7 @@ namespace CPR.Infrastructure.Services
 
                 case "Director":
                 {
-                    var caller = await _repo.GetEmployeeRecordAsync(callerEmployeeId)
+                    var caller = await _repo.GetEmployeeRecordAsync(callerEmployeeId, ct)
                         ?? throw new UnauthorizedAccessException("errors.auth.forbidden");
 
                     if (caller.DepartmentId == null || caller.DepartmentId != target.DepartmentId)
@@ -76,20 +77,21 @@ namespace CPR.Infrastructure.Services
             }
         }
 
-        private async Task<GapAnalysisDto> BuildGapAnalysisAsync(Employee employee)
+        private async Task<GapAnalysisDto> BuildGapAnalysisAsync(Employee employee, CancellationToken ct)
         {
             if (!employee.PositionId.HasValue)
                 throw new InvalidOperationException("errors.gap_analysis.no_position_assigned");
 
             // Load current position with career track.
-            var currentPosition = await _repo.GetPositionByIdAsync(employee.PositionId.Value)
+            var currentPosition = await _repo.GetPositionByIdAsync(employee.PositionId.Value, ct)
                 ?? throw new InvalidOperationException("errors.gap_analysis.no_position_assigned");
 
             // Determine next-level position (next higher sort_order in the same career track).
             var nextPosition = await _repo.GetNextPositionAsync(
                 currentPosition.Id,
                 currentPosition.CareerTrackId,
-                currentPosition.SortOrder);
+                currentPosition.SortOrder,
+                ct);
 
             var currentPositionDto = new GapCurrentPositionDto
             {
@@ -122,16 +124,17 @@ namespace CPR.Infrastructure.Services
                 SortOrder = nextPosition.SortOrder,
             };
 
-            // Load requirements for the next-level position (includes Skill.Levels via repository).
-            var positionSkills = await _repo.GetPositionSkillsAsync(nextPosition.Id);
+            // Load requirements for the next-level position.
+            // GetPositionSkillsAsync eagerly loads Skill.Levels via ThenInclude — no extra query needed.
+            var positionSkills = await _repo.GetPositionSkillsAsync(nextPosition.Id, ct);
             var skillIds = positionSkills.Select(pts => pts.SkillId).ToList();
 
             // Load employee skill assessments.
-            var empSkillMap = (await _repo.GetEmployeeSkillsAsync(employee.Id))
+            var empSkillMap = (await _repo.GetEmployeeSkillsAsync(employee.Id, ct))
                 .ToDictionary(es => es.SkillId);
 
             // Load non-completed linked goals for all required skills.
-            var linkedGoalsRaw = await _repo.GetLinkedGoalsAsync(employee.Id, skillIds);
+            var linkedGoalsRaw = await _repo.GetLinkedGoalsAsync(employee.Id, skillIds, ct);
             var linkedGoalsBySkill = linkedGoalsRaw
                 .Where(g => g.RelatedSkillId.HasValue)
                 .GroupBy(g => g.RelatedSkillId!.Value)
@@ -144,7 +147,8 @@ namespace CPR.Infrastructure.Services
                 var skill = pts.Skill;
                 var requiredLevel = pts.SkillLevel;
 
-                // Resolve actual level: manager_assessment_value → matching SkillLevel; null → position minimum.
+                // Resolve actual level: manager_assessment_value → matching SkillLevel in memory;
+                // null → position minimum level (already loaded via ThenInclude — no extra query).
                 SkillLevel actualSkillLevel;
                 string assessmentSource;
 
@@ -159,7 +163,8 @@ namespace CPR.Infrastructure.Services
                 }
                 else
                 {
-                    actualSkillLevel = await _repo.GetMinimumSkillLevelAsync(skill.Id) ?? requiredLevel;
+                    // Skill.Levels is eagerly loaded — resolve minimum in memory (no extra DB round-trip).
+                    actualSkillLevel = skill.Levels.MinBy(sl => sl.Value) ?? requiredLevel;
                     assessmentSource = "default";
                 }
 

@@ -236,7 +236,7 @@ public class EmployeesController : ControllerBase
     [ProducesResponseType(403)]
     [ProducesResponseType(404)]
     [ProducesResponseType(422)]
-    public async Task<IActionResult> GetEmployeeGapAnalysis(Guid id)
+    public async Task<IActionResult> GetEmployeeGapAnalysis(Guid id, CancellationToken ct)
     {
         var profile = await _userService.GetCurrentUserProfileAsync(User);
         if (profile == null) return Unauthorized();
@@ -255,7 +255,7 @@ public class EmployeesController : ControllerBase
 
         try
         {
-            var result = await _gapAnalysisService.GetEmployeeGapAnalysisAsync(id, callerEmployeeId, callerRole);
+            var result = await _gapAnalysisService.GetEmployeeGapAnalysisAsync(id, callerEmployeeId, callerRole, ct);
             return Ok(result);
         }
         catch (KeyNotFoundException ex)

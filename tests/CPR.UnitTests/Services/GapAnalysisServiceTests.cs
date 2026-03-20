@@ -203,8 +203,7 @@ namespace CPR.UnitTests.Services
                      .ReturnsAsync(new List<PositionToSkill> { pts });
             _repoMock.Setup(r => r.GetEmployeeSkillsAsync(EmployeeId))
                      .ReturnsAsync(new List<EmployeeToSkill>()); // no assessment
-            _repoMock.Setup(r => r.GetMinimumSkillLevelAsync(SkillId))
-                     .ReturnsAsync(minLevel);
+            // No GetMinimumSkillLevelAsync — the service uses skill.Levels.MinBy() in memory.
             _repoMock.Setup(r => r.GetLinkedGoalsAsync(EmployeeId, It.IsAny<IEnumerable<Guid>>()))
                      .ReturnsAsync(new List<Goal>());
 
@@ -212,6 +211,7 @@ namespace CPR.UnitTests.Services
 
             var gap = result.SkillGaps[0];
             Assert.Equal("default", gap.AssessmentSource);
+            // MakeSkill() has Levels: Beginner(1), Mid(2), Senior(3). MinBy → value 1.
             Assert.Equal(1, gap.ActualLevel.Value);
             Assert.Equal(2, gap.Gap); // 3 - 1 = 2
         }
