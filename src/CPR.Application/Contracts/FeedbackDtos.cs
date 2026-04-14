@@ -758,4 +758,31 @@ namespace CPR.Application.Contracts
         [JsonPropertyName("previous_period_end")]
         public string PreviousPeriodEnd { get; set; } = null!;
     }
+
+    /// <summary>
+    /// Feedback entry as seen by a manager viewing a direct report's received feedback.
+    /// Maps: feedback.content → comment; feedback.from_employee_id → submitted_by_id.
+    /// </summary>
+    public class ManagerViewFeedbackDto
+    {
+        [JsonPropertyName("id")]
+        public Guid Id { get; set; }
+
+        [JsonPropertyName("rating")]
+        public int Rating { get; set; }
+
+        /// <summary>Maps to feedback.content column.</summary>
+        [JsonPropertyName("comment")]
+        public string? Comment { get; set; }
+
+        /// <summary>Maps to feedback.from_employee_id column (via user lookup).</summary>
+        [JsonPropertyName("submitted_by_id")]
+        public Guid SubmittedById { get; set; }
+
+        [JsonPropertyName("submitted_by_name")]
+        public string SubmittedByName { get; set; } = null!;
+
+        [JsonPropertyName("created_at")]
+        public DateTimeOffset CreatedAt { get; set; }
+    }
 }

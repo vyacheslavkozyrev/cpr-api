@@ -1,5 +1,8 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -8,6 +11,7 @@ using CPR.Api.Auth;
 using CPR.Api.Services;
 using CPR.Application.Contracts;
 using CPR.Application.DTOs.GapAnalysis;
+using CPR.Application.Repositories;
 using CPR.Application.Services;
 using System.ComponentModel.DataAnnotations;
 
@@ -24,6 +28,9 @@ public class EmployeesController : ControllerBase
     private readonly IUserService _userService;
     private readonly IRoleService _roleService;
     private readonly IGapAnalysisService _gapAnalysisService;
+    private readonly IGoalService _goalService;
+    private readonly IFeedbackService _feedbackService;
+    private readonly ITeamRepository _teamRepository;
 
     /// <summary>
     /// Creates a new instance of <see cref="EmployeesController"/>.
@@ -31,11 +38,23 @@ public class EmployeesController : ControllerBase
     /// <param name="userService">Service to resolve the current user profile.</param>
     /// <param name="roleService">Service to resolve the caller's role titles.</param>
     /// <param name="gapAnalysisService">Service to compute skills gap analysis.</param>
-    public EmployeesController(IUserService userService, IRoleService roleService, IGapAnalysisService gapAnalysisService)
+    /// <param name="goalService">Service for goal operations.</param>
+    /// <param name="feedbackService">Service for feedback operations.</param>
+    /// <param name="teamRepository">Repository for team data access.</param>
+    public EmployeesController(
+        IUserService userService,
+        IRoleService roleService,
+        IGapAnalysisService gapAnalysisService,
+        IGoalService goalService,
+        IFeedbackService feedbackService,
+        ITeamRepository teamRepository)
     {
         _userService = userService;
         _roleService = roleService;
         _gapAnalysisService = gapAnalysisService;
+        _goalService = goalService;
+        _feedbackService = feedbackService;
+        _teamRepository = teamRepository;
     }
 
     /// <summary>
@@ -278,6 +297,108 @@ public class EmployeesController : ControllerBase
                 title: "Unprocessable Entity",
                 detail: ex.Message,
                 statusCode: StatusCodes.Status422UnprocessableEntity);
+        }
+    }
+
+    /// <summary>
+    /// Returns all non-deleted goals for the specified employee including suggested goals.
+    /// Managers see the enriched manager view (suggested_by, pending deletion request flag, tasks).
+    /// An employee may also access their own goals.
+    /// </summary>
+    /// <param name="id">Target employee ID.</param>
+    [HttpGet("{id:guid}/goals")]
+    [RequireRole("People Manager", "Director", "Employee")]
+    [ProducesResponseType(typeof(object), 200)]
+    [ProducesResponseType(401)]
+    [ProducesResponseType(403)]
+    [ProducesResponseType(404)]
+    public async Task<IActionResult> GetEmployeeGoals(Guid id)
+    {
+        var profile = await _userService.GetCurrentUserProfileAsync(User);
+        if (profile == null) return Unauthorized();
+        if (!Guid.TryParse(profile.EmployeeId, out var callerEmployeeId))
+            return Unauthorized();
+
+        // Determine if the caller is a manager requesting a direct report's goals
+        // or an employee requesting their own goals.
+        if (callerEmployeeId == id)
+        {
+            // Employee viewing own goals (includes suggested)
+            var goals = await _goalService.GetEmployeeGoalsAsync(id, callerEmployeeId);
+            return Ok(new { data = goals });
+        }
+
+        // Manager/Director flow: caller must be direct manager of the target
+        try
+        {
+            var goals = await _goalService.GetEmployeeGoalsForManagerAsync(id, callerEmployeeId);
+            return Ok(new { data = goals });
+        }
+        catch (UnauthorizedAccessException)
+        {
+            return Problem(title: "Forbidden", detail: "errors.auth.forbidden", statusCode: StatusCodes.Status403Forbidden);
+        }
+    }
+
+    /// <summary>
+    /// Creates a suggested goal for the specified direct report (manager action).
+    /// </summary>
+    /// <param name="id">Target employee ID.</param>
+    /// <param name="dto">Goal data.</param>
+    [HttpPost("{id:guid}/goals")]
+    [RequireRole("People Manager", "Director")]
+    [ProducesResponseType(typeof(GoalDto), 201)]
+    [ProducesResponseType(400)]
+    [ProducesResponseType(401)]
+    [ProducesResponseType(403)]
+    [ProducesResponseType(404)]
+    public async Task<IActionResult> SuggestGoalForEmployee(Guid id, [FromBody] SuggestGoalDto dto)
+    {
+        var profile = await _userService.GetCurrentUserProfileAsync(User);
+        if (profile == null) return Unauthorized();
+        if (!Guid.TryParse(profile.EmployeeId, out var callerEmployeeId))
+            return Unauthorized();
+
+        try
+        {
+            var result = await _goalService.SuggestGoalAsync(callerEmployeeId, id, dto);
+            return StatusCode(StatusCodes.Status201Created, result);
+        }
+        catch (UnauthorizedAccessException)
+        {
+            return Problem(title: "Forbidden", detail: "errors.auth.forbidden", statusCode: StatusCodes.Status403Forbidden);
+        }
+        catch (KeyNotFoundException)
+        {
+            return Problem(title: "Not Found", detail: "errors.employee.not_found", statusCode: StatusCodes.Status404NotFound);
+        }
+    }
+
+    /// <summary>
+    /// Returns all feedback received by the specified direct report (manager view).
+    /// </summary>
+    /// <param name="id">Target employee ID.</param>
+    [HttpGet("{id:guid}/feedback")]
+    [RequireRole("People Manager", "Director")]
+    [ProducesResponseType(typeof(object), 200)]
+    [ProducesResponseType(401)]
+    [ProducesResponseType(403)]
+    [ProducesResponseType(404)]
+    public async Task<IActionResult> GetEmployeeFeedback(Guid id)
+    {
+        var profile = await _userService.GetCurrentUserProfileAsync(User);
+        if (profile == null) return Unauthorized();
+        if (!Guid.TryParse(profile.EmployeeId, out var callerEmployeeId))
+            return Unauthorized();
+
+        try
+        {
+            var feedback = await _feedbackService.GetEmployeeFeedbackForManagerAsync(id, callerEmployeeId);
+            return Ok(new { data = feedback });
+        }
+        catch (UnauthorizedAccessException)
+        {
+            return Problem(title: "Forbidden", detail: "errors.auth.forbidden", statusCode: StatusCodes.Status403Forbidden);
         }
     }
 }

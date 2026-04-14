@@ -1,12 +1,1 @@
-  Determining projects to restore...
-  All projects are up-to-date for restore.
-  CPR.Domain -> D:\projects\CPR\source\cpr-meta\source\cpr-api\src\CPR.Domain\bin\Debug\net9.0\CPR.Domain.dll
-  CPR.Application -> D:\projects\CPR\source\cpr-meta\source\cpr-api\src\CPR.Application\bin\Debug\net9.0\CPR.Application.dll
-  CPR.Infrastructure -> D:\projects\CPR\source\cpr-meta\source\cpr-api\src\CPR.Infrastructure\bin\Debug\net9.0\CPR.Infrastructure.dll
-  CPR.Api -> D:\projects\CPR\source\cpr-meta\source\cpr-api\src\CPR.Api\bin\Debug\net9.0\CPR.Api.dll
-
-Build succeeded.
-    0 Warning(s)
-    0 Error(s)
-
-Time Elapsed 00:00:01.28
+MSBUILD : error MSB1003: Specify a project or solution file. The current working directory does not contain a project or solution file.

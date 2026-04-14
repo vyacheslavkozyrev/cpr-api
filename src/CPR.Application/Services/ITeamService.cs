@@ -45,5 +45,11 @@ namespace CPR.Application.Services
         /// <param name="employeeId">The employee ID to check</param>
         /// <returns>True if the employee has direct reports</returns>
         Task<bool> IsManagerAsync(Guid employeeId);
+
+        /// <summary>
+        /// Get the list of direct reports for the given manager as DirectReportDto objects.
+        /// Returns an empty array when the manager has no reports.
+        /// </summary>
+        Task<DirectReportDto[]> GetDirectReportsAsync(Guid managerEmployeeId);
     }
 }

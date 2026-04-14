@@ -38,6 +38,31 @@ public class TeamController : ControllerBase
     }
 
     /// <summary>
+    /// Get the direct reports for the authenticated user — F0010a dashboard endpoint.
+    /// Route: GET /api/me/team (separate from legacy GET /api/team).
+    /// Verified not to shadow GET /api/me/team/skill-assessment-summary (F007 — longer, more-specific path wins).
+    /// </summary>
+    /// <returns>Array of direct-report employees</returns>
+    [HttpGet("~/api/me/team")]
+    [RequireRole("People Manager", "Director")]
+    [ProducesResponseType(typeof(object), 200)]
+    [ProducesResponseType(401)]
+    [ProducesResponseType(403)]
+    public async Task<IActionResult> GetMyTeam()
+    {
+        var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        if (string.IsNullOrEmpty(userIdClaim) || !Guid.TryParse(userIdClaim, out var userId))
+            return Unauthorized();
+
+        var currentEmployee = await _teamRepository.GetEmployeeByUserIdAsync(userId);
+        if (currentEmployee == null)
+            return Unauthorized();
+
+        var reports = await _teamService.GetDirectReportsAsync(currentEmployee.Id);
+        return Ok(new { data = reports });
+    }
+
+    /// <summary>
     /// Get all team members (direct reports) for the current manager
     /// </summary>
     /// <returns>List of team members</returns>

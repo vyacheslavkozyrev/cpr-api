@@ -39,5 +39,11 @@ namespace CPR.Application.Repositories
         /// Soft delete goal
         /// </summary>
         Task DeleteAsync(Goal goal);
+
+        /// <summary>
+        /// Get all non-deleted goals for an employee for the manager view.
+        /// Includes tasks and suggested-by user info; also flags whether a pending deletion request exists.
+        /// </summary>
+        Task<Goal[]> GetEmployeeGoalsForManagerAsync(Guid employeeId);
     }
 }
