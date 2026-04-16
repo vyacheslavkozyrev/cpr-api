@@ -4,7 +4,6 @@ using CPR.Application.Contracts;
 using CPR.Application.Repositories;
 using CPR.Application.Services;
 using CPR.Domain.Entities;
-using Microsoft.EntityFrameworkCore;
 
 namespace CPR.Infrastructure.Services
 {
@@ -13,18 +12,15 @@ namespace CPR.Infrastructure.Services
     /// </summary>
     public class GoalDeletionRequestService : IGoalDeletionRequestService
     {
-        private readonly CPR.Infrastructure.Data.CprDbContext _db;
         private readonly IGoalDeletionRequestRepository _deletionRepo;
         private readonly IGoalsRepository _goalsRepo;
         private readonly ITeamRepository _teamRepo;
 
         public GoalDeletionRequestService(
-            CPR.Infrastructure.Data.CprDbContext db,
             IGoalDeletionRequestRepository deletionRepo,
             IGoalsRepository goalsRepo,
             ITeamRepository teamRepo)
         {
-            _db = db;
             _deletionRepo = deletionRepo;
             _goalsRepo = goalsRepo;
             _teamRepo = teamRepo;
@@ -45,7 +41,7 @@ namespace CPR.Infrastructure.Services
                 throw new InvalidOperationException("errors.goal.deletion_request_already_pending");
 
             // Look up the employee's user ID for created_by
-            var employee = await _db.Employees.FirstOrDefaultAsync(e => e.Id == employeeId && !e.IsDeleted);
+            var employee = await _teamRepo.GetEmployeeWithDetailsAsync(employeeId);
             var userId = employee?.UserId ?? employeeId;
 
             var request = new GoalDeletionRequest
@@ -107,19 +103,8 @@ namespace CPR.Infrastructure.Services
             request.ModifiedBy = managerEmployeeId;
             await _deletionRepo.UpdateStatusAsync(request);
 
-            // Soft-delete all tasks
-            var tasks = await _db.GoalTasks
-                .Where(t => t.GoalId == goalId && !t.IsDeleted)
-                .ToListAsync();
-            foreach (var task in tasks)
-            {
-                task.IsDeleted = true;
-                task.DeletedAt = DateTimeOffset.UtcNow;
-                task.DeletedBy = managerEmployeeId;
-            }
-            if (tasks.Count > 0) await _db.SaveChangesAsync();
-
-            // Soft-delete the goal
+            // Soft-delete all tasks then the goal
+            await _goalsRepo.SoftDeleteTasksForGoalAsync(goalId, managerEmployeeId);
             await _goalsRepo.DeleteAsync(goal);
         }
 

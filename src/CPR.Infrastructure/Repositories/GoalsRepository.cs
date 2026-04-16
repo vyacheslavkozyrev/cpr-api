@@ -64,5 +64,23 @@ namespace CPR.Infrastructure.Repositories
 
             return goals;
         }
+
+        /// <inheritdoc/>
+        public async Task SoftDeleteTasksForGoalAsync(Guid goalId, Guid deletedBy)
+        {
+            var tasks = await _db.GoalTasks
+                .Where(t => t.GoalId == goalId && !t.IsDeleted)
+                .ToListAsync();
+
+            foreach (var task in tasks)
+            {
+                task.IsDeleted = true;
+                task.DeletedAt = DateTimeOffset.UtcNow;
+                task.DeletedBy = deletedBy;
+            }
+
+            if (tasks.Count > 0)
+                await _db.SaveChangesAsync();
+        }
     }
 }

@@ -82,6 +82,9 @@ namespace CPR.UnitTests.Services
         public async Task SuggestGoalAsync_DirectReport_ReturnsSuggestedGoalDto()
         {
             _teamRepoMock.Setup(r => r.IsDirectReportAsync(ManagerEmployeeId, TargetEmployeeId)).ReturnsAsync(true);
+            _teamRepoMock.Setup(r => r.GetEmployeeWithDetailsAsync(ManagerEmployeeId))
+                .ReturnsAsync(new Employee { Id = ManagerEmployeeId, UserId = ManagerUserId, IsDeleted = false,
+                    User = new User { Id = ManagerUserId, UserName = "manager", DisplayName = "Manager User", IsDeleted = false } });
             _repoMock.Setup(r => r.AddAsync(It.IsAny<Goal>())).Returns(Task.CompletedTask);
 
             var dto = new SuggestGoalDto { Name = "Learn Python", Timeframe = "quarter" };
@@ -98,6 +101,7 @@ namespace CPR.UnitTests.Services
         public async Task SuggestGoalAsync_NotDirectReport_ThrowsUnauthorized()
         {
             _teamRepoMock.Setup(r => r.IsDirectReportAsync(ManagerEmployeeId, TargetEmployeeId)).ReturnsAsync(false);
+            // GetEmployeeWithDetailsAsync won't be called if IsDirectReportAsync returns false
 
             var dto = new SuggestGoalDto { Name = "Learn Python" };
             await Assert.ThrowsAsync<UnauthorizedAccessException>(() =>
@@ -238,6 +242,7 @@ namespace CPR.UnitTests.Services
             _repoMock.Setup(r => r.GetByIdAsync(GoalId)).ReturnsAsync(goal);
             _teamRepoMock.Setup(r => r.IsDirectReportAsync(ManagerEmployeeId, goal.EmployeeId)).ReturnsAsync(true);
             _deletionRepoMock.Setup(r => r.GetPendingByGoalIdAsync(GoalId)).ReturnsAsync(default(GoalDeletionRequest));
+            _repoMock.Setup(r => r.SoftDeleteTasksForGoalAsync(GoalId, ManagerEmployeeId)).Returns(Task.CompletedTask);
             _repoMock.Setup(r => r.DeleteAsync(goal)).Returns(Task.CompletedTask);
 
             await _service.DeleteGoalByManagerAsync(GoalId, ManagerEmployeeId);
@@ -261,6 +266,7 @@ namespace CPR.UnitTests.Services
             _teamRepoMock.Setup(r => r.IsDirectReportAsync(ManagerEmployeeId, goal.EmployeeId)).ReturnsAsync(true);
             _deletionRepoMock.Setup(r => r.GetPendingByGoalIdAsync(GoalId)).ReturnsAsync(pendingRequest);
             _deletionRepoMock.Setup(r => r.UpdateStatusAsync(It.IsAny<GoalDeletionRequest>())).Returns(Task.CompletedTask);
+            _repoMock.Setup(r => r.SoftDeleteTasksForGoalAsync(GoalId, ManagerEmployeeId)).Returns(Task.CompletedTask);
             _repoMock.Setup(r => r.DeleteAsync(goal)).Returns(Task.CompletedTask);
 
             await _service.DeleteGoalByManagerAsync(GoalId, ManagerEmployeeId);

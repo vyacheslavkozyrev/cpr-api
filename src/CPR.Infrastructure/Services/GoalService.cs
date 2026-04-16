@@ -417,8 +417,7 @@ namespace CPR.Infrastructure.Services
                 throw new UnauthorizedAccessException("errors.auth.forbidden");
 
             // Look up the manager's user ID (FK → users.id for suggested_by_id)
-            var managerEmployee = await _db.Employees
-                .FirstOrDefaultAsync(e => e.Id == managerEmployeeId && !e.IsDeleted);
+            var managerEmployee = await _teamRepo.GetEmployeeWithDetailsAsync(managerEmployeeId);
             if (managerEmployee == null)
                 throw new InvalidOperationException("Manager employee record not found.");
 
@@ -447,8 +446,8 @@ namespace CPR.Infrastructure.Services
             };
             await _repo.AddAsync(goal);
 
-            // Look up manager display name for the response
-            var managerUser = await _db.Users.FindAsync(managerEmployee.UserId);
+            // Manager display name is available via the already-loaded User navigation property
+            var managerUser = managerEmployee.User;
 
             return new GoalDto
             {
@@ -654,18 +653,8 @@ namespace CPR.Infrastructure.Services
                 await _deletionRepo.UpdateStatusAsync(pendingRequest);
             }
 
-            // Soft-delete tasks
-            var tasks = await _db.GoalTasks
-                .Where(t => t.GoalId == goalId && !t.IsDeleted)
-                .ToListAsync();
-            foreach (var task in tasks)
-            {
-                task.IsDeleted = true;
-                task.DeletedAt = DateTimeOffset.UtcNow;
-                task.DeletedBy = managerEmployeeId;
-            }
-            if (tasks.Count > 0) await _db.SaveChangesAsync();
-
+            // Soft-delete tasks then the goal
+            await _repo.SoftDeleteTasksForGoalAsync(goalId, managerEmployeeId);
             await _repo.DeleteAsync(goal);
         }
     }

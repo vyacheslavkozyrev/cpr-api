@@ -45,5 +45,10 @@ namespace CPR.Application.Repositories
         /// Includes tasks and suggested-by user info; also flags whether a pending deletion request exists.
         /// </summary>
         Task<Goal[]> GetEmployeeGoalsForManagerAsync(Guid employeeId);
+
+        /// <summary>
+        /// Soft-delete all non-deleted tasks belonging to a goal.
+        /// </summary>
+        Task SoftDeleteTasksForGoalAsync(Guid goalId, Guid deletedBy);
     }
 }

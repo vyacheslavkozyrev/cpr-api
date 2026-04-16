@@ -32,21 +32,22 @@ namespace CPR.UnitTests.Services
 
         public GoalDeletionRequestServiceTests()
         {
+            // _db kept only for test isolation; service no longer takes it directly.
             var options = new DbContextOptionsBuilder<CprDbContext>()
                 .UseInMemoryDatabase(Guid.NewGuid().ToString())
                 .Options;
             _db = new CprDbContext(options);
 
-            // Seed Employee so RequestDeletionAsync can look up UserId
-            _db.Users.Add(new User { Id = EmployeeUserId, UserName = "emp", IsDeleted = false });
-            _db.Employees.Add(new Employee { Id = EmployeeId, UserId = EmployeeUserId, IsDeleted = false });
-            _db.SaveChanges();
-
             _deletionRepoMock = new Mock<IGoalDeletionRequestRepository>();
             _goalsRepoMock    = new Mock<IGoalsRepository>();
             _teamRepoMock     = new Mock<ITeamRepository>();
 
-            _service = new GoalDeletionRequestService(_db, _deletionRepoMock.Object, _goalsRepoMock.Object, _teamRepoMock.Object);
+            // Default: GetEmployeeWithDetailsAsync returns the employee with UserId populated
+            _teamRepoMock
+                .Setup(r => r.GetEmployeeWithDetailsAsync(EmployeeId))
+                .ReturnsAsync(new Employee { Id = EmployeeId, UserId = EmployeeUserId, IsDeleted = false });
+
+            _service = new GoalDeletionRequestService(_deletionRepoMock.Object, _goalsRepoMock.Object, _teamRepoMock.Object);
         }
 
         public void Dispose() => _db.Dispose();
@@ -161,6 +162,7 @@ namespace CPR.UnitTests.Services
             _teamRepoMock.Setup(r => r.IsDirectReportAsync(ManagerEmployeeId, goal.EmployeeId)).ReturnsAsync(true);
             _deletionRepoMock.Setup(r => r.GetPendingByGoalIdAsync(GoalId)).ReturnsAsync(MakePendingRequest());
             _deletionRepoMock.Setup(r => r.UpdateStatusAsync(It.IsAny<GoalDeletionRequest>())).Returns(Task.CompletedTask);
+            _goalsRepoMock.Setup(r => r.SoftDeleteTasksForGoalAsync(GoalId, ManagerEmployeeId)).Returns(Task.CompletedTask);
             _goalsRepoMock.Setup(r => r.DeleteAsync(goal)).Returns(Task.CompletedTask);
 
             await _service.ApproveDeletionAsync(GoalId, ManagerEmployeeId);
