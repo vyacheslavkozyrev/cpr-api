@@ -1,12 +1,14 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using CPR.Application.Repositories;
 using CPR.Infrastructure.Data;
 using CPR.Infrastructure.Repositories;
 using CPR.Infrastructure.Services;
 using CPR.Application.Contracts;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
+using Moq;
 using Xunit;
 
 namespace CPR.UnitTests
@@ -33,7 +35,7 @@ namespace CPR.UnitTests
         {
             // arrange
             var repo = new GoalsRepository(_db);
-            var svc = new GoalService(_db, repo);
+            var svc = new GoalService(_db, repo, new Mock<ITeamRepository>().Object, new Mock<IGoalDeletionRequestRepository>().Object);
             var ownerId = Guid.NewGuid();
 
             var createDto = new CreateGoalDto
@@ -89,7 +91,7 @@ namespace CPR.UnitTests
         public async Task Update_NonExistent_Throws()
         {
             var repo = new GoalsRepository(_db);
-            var svc = new GoalService(_db, repo);
+            var svc = new GoalService(_db, repo, new Mock<ITeamRepository>().Object, new Mock<IGoalDeletionRequestRepository>().Object);
             var ownerId = Guid.NewGuid();
 
             await Assert.ThrowsAsync<InvalidOperationException>((Func<Task>)(() => svc.UpdateGoalAsync(Guid.NewGuid(), ownerId, new UpdateGoalDto { Title = "x" })));
@@ -99,7 +101,7 @@ namespace CPR.UnitTests
         public async Task AddTask_NonExistent_Throws()
         {
             var repo = new GoalsRepository(_db);
-            var svc = new GoalService(_db, repo);
+            var svc = new GoalService(_db, repo, new Mock<ITeamRepository>().Object, new Mock<IGoalDeletionRequestRepository>().Object);
             var ownerId = Guid.NewGuid();
 
             await Assert.ThrowsAsync<InvalidOperationException>((Func<Task>)(() => svc.AddTaskAsync(Guid.NewGuid(), ownerId, new CreateGoalTaskDto { Title = "t", Description = "d" })));
@@ -109,7 +111,7 @@ namespace CPR.UnitTests
         public async Task Update_WithNoFields_NoChange()
         {
             var repo = new GoalsRepository(_db);
-            var svc = new GoalService(_db, repo);
+            var svc = new GoalService(_db, repo, new Mock<ITeamRepository>().Object, new Mock<IGoalDeletionRequestRepository>().Object);
             var ownerId = Guid.NewGuid();
 
             var created = await svc.CreateGoalAsync(ownerId, new CreateGoalDto { Title = "orig", Description = "origdesc" });
@@ -131,7 +133,7 @@ namespace CPR.UnitTests
         public async Task Update_ByDifferentUser_UpdatesModifiedBy()
         {
             var repo = new GoalsRepository(_db);
-            var svc = new GoalService(_db, repo);
+            var svc = new GoalService(_db, repo, new Mock<ITeamRepository>().Object, new Mock<IGoalDeletionRequestRepository>().Object);
             var ownerId = Guid.NewGuid();
 
             var created = await svc.CreateGoalAsync(ownerId, new CreateGoalDto { Title = "t", Description = "d" });
@@ -150,7 +152,7 @@ namespace CPR.UnitTests
         public async Task Delete_NonExistent_DoesNotThrow()
         {
             var repo = new GoalsRepository(_db);
-            var svc = new GoalService(_db, repo);
+            var svc = new GoalService(_db, repo, new Mock<ITeamRepository>().Object, new Mock<IGoalDeletionRequestRepository>().Object);
             var ownerId = Guid.NewGuid();
 
             await svc.DeleteGoalAsync(Guid.NewGuid(), ownerId);
@@ -161,7 +163,7 @@ namespace CPR.UnitTests
         public async Task Create_NullDto_Throws()
         {
             var repo = new GoalsRepository(_db);
-            var svc = new GoalService(_db, repo);
+            var svc = new GoalService(_db, repo, new Mock<ITeamRepository>().Object, new Mock<IGoalDeletionRequestRepository>().Object);
             var ownerId = Guid.NewGuid();
 
             await Assert.ThrowsAsync<ArgumentNullException>((Func<Task>)(() => svc.CreateGoalAsync(ownerId, null!)));
@@ -171,7 +173,7 @@ namespace CPR.UnitTests
         public async Task AddTask_NullDto_Throws()
         {
             var repo = new GoalsRepository(_db);
-            var svc = new GoalService(_db, repo);
+            var svc = new GoalService(_db, repo, new Mock<ITeamRepository>().Object, new Mock<IGoalDeletionRequestRepository>().Object);
             var ownerId = Guid.NewGuid();
 
             // create a goal first so the service will reach the null dto dereference
@@ -183,7 +185,7 @@ namespace CPR.UnitTests
         public async Task Create_WithAllFields_PersistsFields()
         {
             var repo = new GoalsRepository(_db);
-            var svc = new GoalService(_db, repo);
+            var svc = new GoalService(_db, repo, new Mock<ITeamRepository>().Object, new Mock<IGoalDeletionRequestRepository>().Object);
             var ownerId = Guid.NewGuid();
 
             var overrideEmployee = Guid.NewGuid();
@@ -223,7 +225,7 @@ namespace CPR.UnitTests
         public async Task AddTask_Appears_In_GetGoalById()
         {
             var repo = new GoalsRepository(_db);
-            var svc = new GoalService(_db, repo);
+            var svc = new GoalService(_db, repo, new Mock<ITeamRepository>().Object, new Mock<IGoalDeletionRequestRepository>().Object);
             var ownerId = Guid.NewGuid();
 
             var created = await svc.CreateGoalAsync(ownerId, new CreateGoalDto { Title = "task-goal" });
@@ -242,7 +244,7 @@ namespace CPR.UnitTests
         public async Task UpdateTask_CanModifyFields_AndToggleCompletion()
         {
             var repo = new GoalsRepository(_db);
-            var svc = new GoalService(_db, repo);
+            var svc = new GoalService(_db, repo, new Mock<ITeamRepository>().Object, new Mock<IGoalDeletionRequestRepository>().Object);
             var ownerId = Guid.NewGuid();
 
             var created = await svc.CreateGoalAsync(ownerId, new CreateGoalDto { Title = "task-goal-2" });
@@ -264,7 +266,7 @@ namespace CPR.UnitTests
         public async Task GetGoals_InvalidPage_Throws()
         {
             var repo = new GoalsRepository(_db);
-            var svc = new GoalService(_db, repo);
+            var svc = new GoalService(_db, repo, new Mock<ITeamRepository>().Object, new Mock<IGoalDeletionRequestRepository>().Object);
             var ownerId = Guid.NewGuid();
 
             // create one goal so query returns something
@@ -277,7 +279,7 @@ namespace CPR.UnitTests
         public async Task Update_WithEmptyTitle_DoesNotOverwrite()
         {
             var repo = new GoalsRepository(_db);
-            var svc = new GoalService(_db, repo);
+            var svc = new GoalService(_db, repo, new Mock<ITeamRepository>().Object, new Mock<IGoalDeletionRequestRepository>().Object);
             var ownerId = Guid.NewGuid();
 
             var created = await svc.CreateGoalAsync(ownerId, new CreateGoalDto { Title = "original" });
@@ -292,7 +294,7 @@ namespace CPR.UnitTests
         {
             // Arrange
             var repo = new GoalsRepository(_db);
-            var svc = new GoalService(_db, repo);
+            var svc = new GoalService(_db, repo, new Mock<ITeamRepository>().Object, new Mock<IGoalDeletionRequestRepository>().Object);
             var ownerId = Guid.NewGuid();
 
             // Create a goal
@@ -337,7 +339,7 @@ namespace CPR.UnitTests
         {
             // Arrange
             var repo = new GoalsRepository(_db);
-            var svc = new GoalService(_db, repo);
+            var svc = new GoalService(_db, repo, new Mock<ITeamRepository>().Object, new Mock<IGoalDeletionRequestRepository>().Object);
             var ownerId = Guid.NewGuid();
             var nonExistentGoalId = Guid.NewGuid();
             var taskId = Guid.NewGuid();
@@ -354,7 +356,7 @@ namespace CPR.UnitTests
         {
             // Arrange
             var repo = new GoalsRepository(_db);
-            var svc = new GoalService(_db, repo);
+            var svc = new GoalService(_db, repo, new Mock<ITeamRepository>().Object, new Mock<IGoalDeletionRequestRepository>().Object);
             var ownerId = Guid.NewGuid();
 
             // Create a goal
@@ -378,7 +380,7 @@ namespace CPR.UnitTests
         {
             // Arrange
             var repo = new GoalsRepository(_db);
-            var svc = new GoalService(_db, repo);
+            var svc = new GoalService(_db, repo, new Mock<ITeamRepository>().Object, new Mock<IGoalDeletionRequestRepository>().Object);
             var ownerId = Guid.NewGuid();
 
             // Create two goals
@@ -407,7 +409,7 @@ namespace CPR.UnitTests
         {
             // Arrange
             var repo = new GoalsRepository(_db);
-            var svc = new GoalService(_db, repo);
+            var svc = new GoalService(_db, repo, new Mock<ITeamRepository>().Object, new Mock<IGoalDeletionRequestRepository>().Object);
             var ownerId = Guid.NewGuid();
 
             // Create goal and task
@@ -432,7 +434,7 @@ namespace CPR.UnitTests
         {
             // Arrange
             var repo = new GoalsRepository(_db);
-            var svc = new GoalService(_db, repo);
+            var svc = new GoalService(_db, repo, new Mock<ITeamRepository>().Object, new Mock<IGoalDeletionRequestRepository>().Object);
             var ownerId = Guid.NewGuid();
 
             // Create goal and task
