@@ -351,4 +351,82 @@ public class DashboardServiceTests : IDisposable
         var result = await _service.GetDashboardSummaryAsync(employeeId, period);
         Assert.NotNull(result);
     }
+
+    [Fact]
+    public async Task GetFeedbackSummaryAsync_WithNullGoalIdFeedback_IncludesItemInRecentFeedback()
+    {
+        // Arrange — seed a feedback item with GoalId = null
+        var userId = Guid.Parse("00000000-0000-0000-0000-000000000011");
+        var employeeId = Guid.Parse("00000000-0000-0000-0000-000000000012");
+        var senderUserId = Guid.Parse("00000000-0000-0000-0000-000000000013");
+        var senderEmployeeId = Guid.Parse("00000000-0000-0000-0000-000000000014");
+
+        _context.Users.AddRange(
+            new User { Id = userId, UserName = "emp-nullgoal", DisplayName = "Emp NullGoal", CreatedAt = DateTime.UtcNow.AddDays(-10) },
+            new User { Id = senderUserId, UserName = "sender-nullgoal", DisplayName = "Sender NullGoal", CreatedAt = DateTime.UtcNow.AddDays(-10) }
+        );
+        _context.Employees.AddRange(
+            new Employee { Id = employeeId, UserId = userId, CreatedAt = DateTime.UtcNow.AddDays(-10) },
+            new Employee { Id = senderEmployeeId, UserId = senderUserId, CreatedAt = DateTime.UtcNow.AddDays(-10) }
+        );
+        _context.Feedback.Add(new Feedback
+        {
+            Id = Guid.NewGuid(),
+            GoalId = null,
+            FromEmployeeId = senderEmployeeId,
+            ToEmployeeId = employeeId,
+            Content = "Feedback without a linked goal.",
+            Rating = 4,
+            CreatedAt = DateTime.UtcNow.AddDays(-3)
+        });
+        await _context.SaveChangesAsync();
+
+        // Act
+        var result = await _service.GetFeedbackSummaryAsync(employeeId);
+
+        // Assert
+        Assert.NotNull(result);
+        Assert.Equal(1, result.Statistics.TotalReceived);
+        Assert.Single(result.RecentFeedback);
+        Assert.Null(result.RecentFeedback[0].GoalTitle);
+    }
+
+    [Fact]
+    public async Task GetActivityFeedAsync_WithNullGoalIdFeedback_IncludesItemInActivityFeed()
+    {
+        // Arrange — seed a feedback item with GoalId = null
+        var userId = Guid.Parse("00000000-0000-0000-0000-000000000021");
+        var employeeId = Guid.Parse("00000000-0000-0000-0000-000000000022");
+        var senderUserId = Guid.Parse("00000000-0000-0000-0000-000000000023");
+        var senderEmployeeId = Guid.Parse("00000000-0000-0000-0000-000000000024");
+
+        _context.Users.AddRange(
+            new User { Id = userId, UserName = "emp-act-nullgoal", DisplayName = "Emp Act NullGoal", CreatedAt = DateTime.UtcNow.AddDays(-10) },
+            new User { Id = senderUserId, UserName = "sender-act-nullgoal", DisplayName = "Sender Act NullGoal", CreatedAt = DateTime.UtcNow.AddDays(-10) }
+        );
+        _context.Employees.AddRange(
+            new Employee { Id = employeeId, UserId = userId, CreatedAt = DateTime.UtcNow.AddDays(-10) },
+            new Employee { Id = senderEmployeeId, UserId = senderUserId, CreatedAt = DateTime.UtcNow.AddDays(-10) }
+        );
+        _context.Feedback.Add(new Feedback
+        {
+            Id = Guid.NewGuid(),
+            GoalId = null,
+            FromEmployeeId = senderEmployeeId,
+            ToEmployeeId = employeeId,
+            Content = "Activity feed feedback without a goal.",
+            Rating = 3,
+            CreatedAt = DateTime.UtcNow.AddDays(-2)
+        });
+        await _context.SaveChangesAsync();
+
+        // Act
+        var result = await _service.GetActivityFeedAsync(employeeId, 30, 1, 20);
+
+        // Assert
+        Assert.NotNull(result);
+        var feedbackActivities = result.Items.Where(i => i.Type == "feedback_received").ToList();
+        Assert.Single(feedbackActivities);
+        Assert.Contains("Sender Act NullGoal", feedbackActivities[0].Title);
+    }
 }

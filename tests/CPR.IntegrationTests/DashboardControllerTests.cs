@@ -488,4 +488,80 @@ public class DashboardControllerTests : IAsyncLifetime
             }
         }
     }
+
+    [Fact]
+    public async Task GetFeedbackSummary_WithNullGoalIdFeedback_IncludesItemWithNullGoalTitle()
+    {
+        // Arrange — seed the standard data plus one feedback with GoalId = null
+        await SeedDashboardTestDataAsync();
+
+        using (var scope = _factory.Services.CreateScope())
+        {
+            var context = scope.ServiceProvider.GetRequiredService<CprDbContext>();
+            context.Feedback.Add(new Feedback
+            {
+                Id = Guid.NewGuid(),
+                GoalId = null,
+                FromEmployeeId = Guid.Parse(TestManagerId),
+                ToEmployeeId = Guid.Parse(TestEmployeeId),
+                Content = "General feedback not linked to any goal.",
+                Rating = 4,
+                CreatedAt = DateTime.UtcNow.AddDays(-1)
+            });
+            await context.SaveChangesAsync();
+        }
+
+        using var client = CreateAuthenticatedClient();
+
+        // Act
+        var response = await client.GetAsync("/api/dashboard/feedback-summary");
+
+        // Assert
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+        var feedbackSummary = await response.Content.ReadFromJsonAsync<DashboardFeedbackSummaryDto>();
+        Assert.NotNull(feedbackSummary);
+        // 3 from SeedDashboardTestDataAsync + 1 null-goal feedback = 4 total
+        Assert.Equal(4, feedbackSummary.Statistics.TotalReceived);
+        // The most-recent item (null-goal feedback) should have a null goal_title
+        var nullGoalItem = feedbackSummary.RecentFeedback.FirstOrDefault(f => f.GoalTitle == null);
+        Assert.NotNull(nullGoalItem);
+    }
+
+    [Fact]
+    public async Task GetActivityFeed_WithNullGoalIdFeedback_IncludesItemInFeed()
+    {
+        // Arrange — seed standard data plus one feedback with GoalId = null
+        await SeedDashboardTestDataAsync();
+
+        using (var scope = _factory.Services.CreateScope())
+        {
+            var context = scope.ServiceProvider.GetRequiredService<CprDbContext>();
+            context.Feedback.Add(new Feedback
+            {
+                Id = Guid.NewGuid(),
+                GoalId = null,
+                FromEmployeeId = Guid.Parse(TestManagerId),
+                ToEmployeeId = Guid.Parse(TestEmployeeId),
+                Content = "Activity feed: feedback without a linked goal.",
+                Rating = 3,
+                CreatedAt = DateTime.UtcNow.AddHours(-1)
+            });
+            await context.SaveChangesAsync();
+        }
+
+        using var client = CreateAuthenticatedClient();
+
+        // Act
+        var response = await client.GetAsync("/api/dashboard/activity");
+
+        // Assert
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+        var activity = await response.Content.ReadFromJsonAsync<ActivityFeedDto>();
+        Assert.NotNull(activity);
+        var feedbackItems = activity.Items.Where(i => i.Type == "feedback_received").ToList();
+        // All 4 feedback items (including the null-goal one) should appear
+        Assert.Equal(4, feedbackItems.Count);
+    }
 }
