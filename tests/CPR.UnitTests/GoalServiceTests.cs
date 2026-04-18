@@ -236,7 +236,7 @@ namespace CPR.UnitTests
             Assert.NotNull(goal);
             Assert.NotNull(goal.Tasks);
             Assert.Single(goal.Tasks);
-            Assert.Equal("subtask-1", goal.Tasks[0].Title);
+            Assert.Equal("subtask-1", goal.Tasks[0].Name);
             Assert.Equal(createdTask.Id, goal.Tasks[0].Id);
         }
 

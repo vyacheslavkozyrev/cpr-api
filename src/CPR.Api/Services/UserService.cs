@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using CPR.Api.Models;
 using CPR.Infrastructure.Data;
@@ -37,11 +39,17 @@ public class UserService(CprDbContext db) : IUserService
                 // Handle stub authentication - lookup by UserId directly
                 var stubEmployee = await _db.Employees
                     .Include(e => e.User)
+                        .ThenInclude(u => u!.UserRoles)
+                            .ThenInclude(ur => ur.Role)
                     .Include(e => e.Position)
                     .FirstOrDefaultAsync(e => e.UserId == stubUserId && !e.IsDeleted);
 
                 if (stubEmployee != null)
                 {
+                    var stubRoles = stubEmployee.User?.UserRoles
+                        .Select(ur => ur.Role.Title)
+                        .ToList() ?? new List<string>();
+
                     return new UserProfile
                     {
                         UserId = stubEmployee.UserId.ToString(),
@@ -51,7 +59,8 @@ public class UserService(CprDbContext db) : IUserService
                         Email = user.FindFirst(ClaimTypes.Email)?.Value ?? user.FindFirst("email")?.Value,
                         Position = stubEmployee.Position != null
                             ? new Position { Id = stubEmployee.Position.Id.ToString(), Title = stubEmployee.Position.Title }
-                            : new Position { Id = "", Title = "" }
+                            : new Position { Id = "", Title = "" },
+                        Roles = stubRoles
                     };
                 }
 
@@ -64,7 +73,7 @@ public class UserService(CprDbContext db) : IUserService
                 return new UserProfile
                 {
                     UserId = userIdString,
-                    EmployeeId = userIdString, // Fallback to userId
+                    EmployeeId = userIdString,
                     UserName = displayName,
                     DisplayName = displayName,
                     Email = user.FindFirst(ClaimTypes.Email)?.Value ?? user.FindFirst("email")?.Value,
@@ -74,8 +83,10 @@ public class UserService(CprDbContext db) : IUserService
             return null;
         }
 
-        // Look up user by Entra External ID
+        // Look up user by Entra External ID (including roles)
         var dbUser = await _db.Users
+            .Include(u => u.UserRoles)
+                .ThenInclude(ur => ur.Role)
             .FirstOrDefaultAsync(u => u.EntraExternalId == entraExternalId && !u.IsDeleted);
 
         if (dbUser == null)
@@ -90,13 +101,15 @@ public class UserService(CprDbContext db) : IUserService
             return new UserProfile
             {
                 UserId = fallbackUserId,
-                EmployeeId = fallbackUserId, // Fallback to userId
+                EmployeeId = fallbackUserId,
                 UserName = displayName,
                 DisplayName = displayName,
                 Email = user.FindFirst(ClaimTypes.Email)?.Value ?? user.FindFirst("email")?.Value,
                 Position = new Position { Id = "", Title = "" }
             };
         }
+
+        var roles = dbUser.UserRoles.Select(ur => ur.Role.Title).ToList();
 
         // Look up the employee record for this user
         var employee = await _db.Employees
@@ -109,11 +122,12 @@ public class UserService(CprDbContext db) : IUserService
             return new UserProfile
             {
                 UserId = dbUser.Id.ToString(),
-                EmployeeId = dbUser.Id.ToString(), // Fallback for non-employees
+                EmployeeId = dbUser.Id.ToString(),
                 UserName = dbUser.UserName,
                 DisplayName = dbUser.DisplayName ?? dbUser.UserName,
                 Email = user.FindFirst(ClaimTypes.Email)?.Value ?? user.FindFirst("email")?.Value,
-                Position = new Position { Id = "", Title = "" }
+                Position = new Position { Id = "", Title = "" },
+                Roles = roles
             };
         }
 
@@ -127,7 +141,8 @@ public class UserService(CprDbContext db) : IUserService
             Email = user.FindFirst(ClaimTypes.Email)?.Value ?? user.FindFirst("email")?.Value,
             Position = employee.Position != null
                 ? new Position { Id = employee.Position.Id.ToString(), Title = employee.Position.Title }
-                : new Position { Id = "", Title = "" }
+                : new Position { Id = "", Title = "" },
+            Roles = roles
         };
     }
 }
