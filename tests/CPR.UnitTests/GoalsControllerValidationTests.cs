@@ -25,7 +25,9 @@ namespace CPR.UnitTests
             goalService.Setup(s => s.CreateGoalAsync(It.IsAny<Guid>(), It.IsAny<CreateGoalDto>()))
                 .ReturnsAsync((Guid owner, CreateGoalDto dto) => new Application.Contracts.GoalDto { Id = Guid.NewGuid(), Title = dto.Title });
 
-            var controller = new GoalsController(userService.Object, goalService.Object);
+            var deletionRequestService = new Mock<IGoalDeletionRequestService>();
+
+            var controller = new GoalsController(userService.Object, goalService.Object, deletionRequestService.Object);
             // set a valid HttpContext with a ClaimsPrincipal
             controller.ControllerContext = new ControllerContext
             {

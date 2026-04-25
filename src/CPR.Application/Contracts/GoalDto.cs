@@ -42,8 +42,9 @@ namespace CPR.Application.Contracts
         [JsonPropertyName("employee_id")]
         public Guid EmployeeId { get; set; }
 
-        [JsonPropertyName("title")]
-        public string Title { get; set; } = null!;
+        /// <summary>Maps to goals.title column.</summary>
+        [JsonPropertyName("name")]
+        public string Name { get; set; } = null!;
 
         [JsonPropertyName("description")]
         public string? Description { get; set; }
@@ -51,14 +52,44 @@ namespace CPR.Application.Contracts
         [JsonPropertyName("status")]
         public string Status { get; set; } = "open";
 
+        /// <summary>Maps to goals.deadline column.</summary>
+        [JsonPropertyName("due_date")]
+        public DateTime? DueDate { get; set; }
+
+        [JsonPropertyName("timeframe")]
+        public string? Timeframe { get; set; }
+
+        /// <summary>Maps to goals.progress_percent column.</summary>
+        [JsonPropertyName("progress_percentage")]
+        public decimal ProgressPercentage { get; set; }
+
+        [JsonPropertyName("skill_category_id")]
+        public Guid? SkillCategoryId { get; set; }
+
+        [JsonPropertyName("skill_category_name")]
+        public string? SkillCategoryName { get; set; }
+
+        [JsonPropertyName("suggested_by_id")]
+        public Guid? SuggestedById { get; set; }
+
+        [JsonPropertyName("suggested_by_name")]
+        public string? SuggestedByName { get; set; }
+
+        [JsonPropertyName("has_pending_deletion_request")]
+        public bool HasPendingDeletionRequest { get; set; }
+
+        [JsonPropertyName("tasks")]
+        public List<GoalTaskSlimDto> Tasks { get; set; } = new();
+
         [JsonPropertyName("created_at")]
         public DateTimeOffset CreatedAt { get; set; }
 
         [JsonPropertyName("modified_at")]
         public DateTimeOffset? ModifiedAt { get; set; }
 
-        [JsonPropertyName("tasks")]
-        public List<TaskDto> Tasks { get; set; } = new();
+        // Legacy fields kept for backward compatibility with existing endpoints
+        [JsonPropertyName("title")]
+        public string Title { get; set; } = null!;
 
         [JsonPropertyName("related_skill_id")]
         public Guid? RelatedSkillId { get; set; }
@@ -83,5 +114,18 @@ namespace CPR.Application.Contracts
 
         [JsonPropertyName("visibility")]
         public string? Visibility { get; set; }
+    }
+
+    /// <summary>Slim task representation used inside GoalDto for the manager view.</summary>
+    public class GoalTaskSlimDto
+    {
+        [JsonPropertyName("id")]
+        public Guid Id { get; set; }
+
+        [JsonPropertyName("name")]
+        public string Name { get; set; } = null!;
+
+        [JsonPropertyName("is_completed")]
+        public bool IsCompleted { get; set; }
     }
 }

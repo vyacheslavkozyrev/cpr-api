@@ -1,12 +1,13 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-using CPR.Api.Services;
-using CPR.Application.Services;
-using CPR.Application.Contracts;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Http;
 using CPR.Api.Auth;
+using CPR.Api.Services;
+using CPR.Application.Contracts;
+using CPR.Application.Services;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 
 namespace CPR.Api.Controllers
 {
@@ -19,16 +20,19 @@ namespace CPR.Api.Controllers
     {
         private readonly IUserService _userService;
         private readonly IGoalService _goalService;
+        private readonly IGoalDeletionRequestService _deletionRequestService;
 
         /// <summary>
         /// Creates a new instance of <see cref="GoalsController"/>.
         /// </summary>
         /// <param name="userService">Service to resolve current user profile.</param>
         /// <param name="goalService">Service implementing goal operations.</param>
-        public GoalsController(IUserService userService, IGoalService goalService)
+        /// <param name="deletionRequestService">Service for goal deletion request operations.</param>
+        public GoalsController(IUserService userService, IGoalService goalService, IGoalDeletionRequestService deletionRequestService)
         {
             _userService = userService;
             _goalService = goalService;
+            _deletionRequestService = deletionRequestService;
         }
 
         /// <summary>
@@ -61,27 +65,6 @@ namespace CPR.Api.Controllers
             if (per_page < 1) { await Task.Yield(); throw new ArgumentOutOfRangeException(nameof(per_page)); }
 
             var goals = await _goalService.GetGoalsForUserAsync(ownerId, page, per_page);
-            return Ok(goals);
-        }
-
-        /// <summary>
-        /// Get goals for a specific employee (filtered by visibility).
-        /// Returns goals with 'team' or 'org' visibility, or all goals if requesting user is the owner.
-        /// </summary>
-        /// <param name="employeeId">Employee identifier.</param>
-        /// <param name="page">Page number (1-based).</param>
-        /// <param name="per_page">Items per page.</param>
-        [HttpGet("~/api/employees/{employeeId}/goals")]
-        [Authorize]
-        public async Task<IActionResult> GetEmployeeGoals(Guid employeeId, [FromQuery] int page = 1, [FromQuery] int per_page = 20)
-        {
-            var profile = await _userService.GetCurrentUserProfileAsync(User);
-            if (profile == null) return Unauthorized();
-            if (!Guid.TryParse(profile.EmployeeId, out var requestingUserId)) return Unauthorized();
-            if (page < 1) { await Task.Yield(); throw new ArgumentOutOfRangeException(nameof(page)); }
-            if (per_page < 1) { await Task.Yield(); throw new ArgumentOutOfRangeException(nameof(per_page)); }
-
-            var goals = await _goalService.GetEmployeeGoalsAsync(employeeId, requestingUserId, page, per_page);
             return Ok(goals);
         }
 
@@ -122,7 +105,7 @@ namespace CPR.Api.Controllers
         }
 
         /// <summary>
-        /// Delete (soft) a goal.
+        /// Delete (soft) a goal. Employees soft-delete their own; managers may also delete direct reports' goals.
         /// </summary>
         /// <param name="id">Goal identifier.</param>
         [HttpDelete("{id}")]
@@ -135,6 +118,148 @@ namespace CPR.Api.Controllers
 
             await _goalService.DeleteGoalAsync(id, ownerId);
             return NoContent();
+        }
+
+        /// <summary>
+        /// Accept or reject a suggested goal (employee action).
+        /// </summary>
+        /// <param name="id">Goal identifier.</param>
+        /// <param name="dto">Action payload — "accept" or "reject".</param>
+        [HttpPatch("{id}/suggestion")]
+        [Authorize]
+        [RequireRole("Employee", "People Manager", "Solution Owner", "Director", "Administrator")]
+        [ProducesResponseType(typeof(GoalDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> ActOnSuggestion(Guid id, [FromBody] GoalSuggestionActionDto dto)
+        {
+            var profile = await _userService.GetCurrentUserProfileAsync(User);
+            if (profile == null) return Unauthorized();
+            if (!Guid.TryParse(profile.EmployeeId, out var employeeId)) return Unauthorized();
+
+            if (dto.Action == "accept")
+            {
+                var accepted = await _goalService.AcceptSuggestionAsync(id, employeeId);
+                if (accepted == null) return NotFound();
+                return Ok(accepted);
+            }
+            else
+            {
+                await _goalService.RejectSuggestionAsync(id, employeeId);
+                return NoContent();
+            }
+        }
+
+        /// <summary>
+        /// Submit a deletion request for a goal (employee requests manager approval).
+        /// </summary>
+        /// <param name="id">Goal identifier.</param>
+        [HttpPost("{id}/deletion-request")]
+        [Authorize]
+        [RequireRole("Employee", "People Manager", "Solution Owner", "Director", "Administrator")]
+        [ProducesResponseType(typeof(GoalDeletionRequestDto), StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
+        public async Task<IActionResult> RequestDeletion(Guid id)
+        {
+            var profile = await _userService.GetCurrentUserProfileAsync(User);
+            if (profile == null) return Unauthorized();
+            if (!Guid.TryParse(profile.EmployeeId, out var employeeId)) return Unauthorized();
+
+            try
+            {
+                var request = await _deletionRequestService.RequestDeletionAsync(id, employeeId);
+                return StatusCode(StatusCodes.Status201Created, request);
+            }
+            catch (KeyNotFoundException)
+            {
+                return NotFound();
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return Forbid();
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Problem(title: "Conflict", detail: ex.Message, statusCode: StatusCodes.Status409Conflict);
+            }
+        }
+
+        /// <summary>
+        /// Cancel a pending deletion request (employee cancels their own request).
+        /// </summary>
+        /// <param name="id">Goal identifier.</param>
+        [HttpDelete("{id}/deletion-request")]
+        [Authorize]
+        [RequireRole("Employee", "People Manager", "Solution Owner", "Director", "Administrator")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> CancelDeletionRequest(Guid id)
+        {
+            var profile = await _userService.GetCurrentUserProfileAsync(User);
+            if (profile == null) return Unauthorized();
+            if (!Guid.TryParse(profile.EmployeeId, out var employeeId)) return Unauthorized();
+
+            try
+            {
+                await _deletionRequestService.CancelDeletionRequestAsync(id, employeeId);
+                return NoContent();
+            }
+            catch (KeyNotFoundException)
+            {
+                return NotFound();
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return Forbid();
+            }
+        }
+
+        /// <summary>
+        /// Approve or reject a pending deletion request (manager action).
+        /// </summary>
+        /// <param name="id">Goal identifier.</param>
+        /// <param name="dto">Action payload — "approve" or "reject".</param>
+        [HttpPatch("{id}/deletion-request")]
+        [Authorize]
+        [RequireRole("People Manager", "Director", "Administrator")]
+        [ProducesResponseType(typeof(GoalDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> ActOnDeletionRequest(Guid id, [FromBody] GoalDeletionActionDto dto)
+        {
+            var profile = await _userService.GetCurrentUserProfileAsync(User);
+            if (profile == null) return Unauthorized();
+            if (!Guid.TryParse(profile.EmployeeId, out var managerEmployeeId)) return Unauthorized();
+
+            try
+            {
+                if (dto.Action == "approve")
+                {
+                    await _deletionRequestService.ApproveDeletionAsync(id, managerEmployeeId);
+                    return NoContent();
+                }
+                else
+                {
+                    var goal = await _deletionRequestService.RejectDeletionAsync(id, managerEmployeeId);
+                    if (goal == null) return NotFound();
+                    return Ok(goal);
+                }
+            }
+            catch (KeyNotFoundException)
+            {
+                return NotFound();
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return Forbid();
+            }
         }
 
         /// <summary>

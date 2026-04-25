@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace CPR.Domain.Entities
 {
@@ -37,5 +38,17 @@ namespace CPR.Domain.Entities
 
         // visibility text NULL -- e.g., 'private','team','org'
         public string? Visibility { get; set; }
+
+        // suggested_by_id uuid NULL REFERENCES users(id)
+        public Guid? SuggestedById { get; set; }
+
+        // timeframe varchar(20) NULL -- e.g., 'week','month','quarter','year'
+        public string? Timeframe { get; set; }
+
+        // skill_category_id uuid NULL REFERENCES skill_categories(id)
+        public Guid? SkillCategoryId { get; set; }
+
+        // Navigation property
+        public virtual ICollection<GoalTask> Tasks { get; set; } = new List<GoalTask>();
     }
 }

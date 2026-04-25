@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Authorization;
 using CPR.Api.Services;
 using CPR.Application.Services;
 using CPR.Application.Contracts;
-using System.Security.Claims;
 using CPR.Application.Repositories;
 using CPR.Api.Auth;
 
@@ -25,16 +24,36 @@ public class TeamController : ControllerBase
     /// <summary>
     /// Creates a new instance of <see cref="TeamController"/>
     /// </summary>
-    /// <param name="userService">Service to read the current user's profile</param>
-    /// <param name="teamService">Service to manage team operations</param>
-    /// <param name="teamRepository">Repository for team data access</param>
-    /// <param name="feedbackRequestService">Service to manage feedback requests</param>
     public TeamController(IUserService userService, ITeamService teamService, ITeamRepository teamRepository, IFeedbackRequestService feedbackRequestService)
     {
         _userService = userService;
         _teamService = teamService;
         _teamRepository = teamRepository;
         _feedbackRequestService = feedbackRequestService;
+    }
+
+    /// <summary>
+    /// Get the direct reports for the authenticated user — F0010a dashboard endpoint.
+    /// Route: GET /api/me/team (separate from legacy GET /api/team).
+    /// </summary>
+    /// <returns>Array of direct-report employees</returns>
+    [HttpGet("~/api/me/team")]
+    [RequireRole("People Manager", "Director")]
+    [ProducesResponseType(typeof(object), 200)]
+    [ProducesResponseType(401)]
+    [ProducesResponseType(403)]
+    public async Task<IActionResult> GetMyTeam()
+    {
+        var profile = await _userService.GetCurrentUserProfileAsync(User);
+        if (profile == null || !Guid.TryParse(profile.UserId, out var userId))
+            return Unauthorized();
+
+        var currentEmployee = await _teamRepository.GetEmployeeByUserIdAsync(userId);
+        if (currentEmployee == null)
+            return Unauthorized();
+
+        var reports = await _teamService.GetDirectReportsAsync(currentEmployee.Id);
+        return Ok(new { data = reports });
     }
 
     /// <summary>
@@ -48,26 +67,17 @@ public class TeamController : ControllerBase
     [ProducesResponseType(403)]
     public async Task<IActionResult> GetTeamMembers()
     {
-        var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-        if (string.IsNullOrEmpty(userIdClaim) || !Guid.TryParse(userIdClaim, out var userId))
-        {
+        var profile = await _userService.GetCurrentUserProfileAsync(User);
+        if (profile == null || !Guid.TryParse(profile.UserId, out var userId))
             return Unauthorized();
-        }
 
-        // Get the current user's employee record
         var currentEmployee = await _teamRepository.GetEmployeeByUserIdAsync(userId);
         if (currentEmployee == null)
-        {
             return Unauthorized("Employee record not found");
-        }
 
-        // Check if the user is a manager (has direct reports)
         var isManager = await _teamService.IsManagerAsync(currentEmployee.Id);
-        System.Diagnostics.Debug.WriteLine($"TeamController.GetTeamMembers: User {userId}, Employee {currentEmployee.Id}, IsManager: {isManager}");
         if (!isManager)
-        {
             return StatusCode(403, "Access denied. Only managers can view team information.");
-        }
 
         try
         {
@@ -76,7 +86,6 @@ public class TeamController : ControllerBase
         }
         catch (Exception)
         {
-            // Log the exception
             return StatusCode(500, "An error occurred while retrieving team members");
         }
     }
@@ -94,39 +103,28 @@ public class TeamController : ControllerBase
     [ProducesResponseType(404)]
     public async Task<IActionResult> GetTeamMemberProfile(Guid employeeId)
     {
-        var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-        if (string.IsNullOrEmpty(userIdClaim) || !Guid.TryParse(userIdClaim, out var userId))
-        {
+        var profile = await _userService.GetCurrentUserProfileAsync(User);
+        if (profile == null || !Guid.TryParse(profile.UserId, out var userId))
             return Unauthorized();
-        }
 
-        // Get the current user's employee record
         var currentEmployee = await _teamRepository.GetEmployeeByUserIdAsync(userId);
         if (currentEmployee == null)
-        {
             return Unauthorized("Employee record not found");
-        }
 
-        // Check if the user is a manager (has direct reports)
         var isManager = await _teamService.IsManagerAsync(currentEmployee.Id);
         if (!isManager)
-        {
             return StatusCode(403, "Access denied. Only managers can view team information.");
-        }
 
         try
         {
             var memberProfile = await _teamService.GetTeamMemberProfileAsync(currentEmployee.Id, employeeId);
             if (memberProfile == null)
-            {
                 return NotFound("Team member not found or access denied");
-            }
 
             return Ok(memberProfile);
         }
         catch (Exception)
         {
-            // Log the exception
             return StatusCode(500, "An error occurred while retrieving team member profile");
         }
     }
@@ -142,25 +140,17 @@ public class TeamController : ControllerBase
     [ProducesResponseType(403)]
     public async Task<IActionResult> GetTeamGoals()
     {
-        var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-        if (string.IsNullOrEmpty(userIdClaim) || !Guid.TryParse(userIdClaim, out var userId))
-        {
+        var profile = await _userService.GetCurrentUserProfileAsync(User);
+        if (profile == null || !Guid.TryParse(profile.UserId, out var userId))
             return Unauthorized();
-        }
 
-        // Get the current user's employee record
         var currentEmployee = await _teamRepository.GetEmployeeByUserIdAsync(userId);
         if (currentEmployee == null)
-        {
             return Unauthorized("Employee record not found");
-        }
 
-        // Check if the user is a manager (has direct reports)
         var isManager = await _teamService.IsManagerAsync(currentEmployee.Id);
         if (!isManager)
-        {
             return StatusCode(403, "Access denied. Only managers can view team information.");
-        }
 
         try
         {
@@ -169,7 +159,6 @@ public class TeamController : ControllerBase
         }
         catch (Exception)
         {
-            // Log the exception
             return StatusCode(500, "An error occurred while retrieving team goals");
         }
     }
@@ -177,13 +166,6 @@ public class TeamController : ControllerBase
     /// <summary>
     /// Get paginated list of feedback requests sent by team members (manager view)
     /// </summary>
-    /// <param name="page">Page number (default: 1)</param>
-    /// <param name="pageSize">Page size (default: 20, max: 100)</param>
-    /// <param name="sortBy">Sort field (created_at, due_date, updated_at)</param>
-    /// <param name="sortOrder">Sort order (asc, desc)</param>
-    /// <param name="status">Filter by status (pending, partial, complete, overdue)</param>
-    /// <param name="search">Search in message content</param>
-    /// <returns>Paginated list of team feedback requests</returns>
     [HttpGet("feedback/request/sent")]
     [RequireRole("People Manager", "Solution Owner", "Director", "Administrator")]
     [ProducesResponseType(typeof(PaginatedFeedbackRequestsDto), 200)]
@@ -197,25 +179,17 @@ public class TeamController : ControllerBase
         [FromQuery] string? status = null,
         [FromQuery] string? search = null)
     {
-        var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-        if (string.IsNullOrEmpty(userIdClaim) || !Guid.TryParse(userIdClaim, out var userId))
-        {
+        var profile = await _userService.GetCurrentUserProfileAsync(User);
+        if (profile == null || !Guid.TryParse(profile.UserId, out var userId))
             return Unauthorized();
-        }
 
-        // Get the current user's employee record
         var currentEmployee = await _teamRepository.GetEmployeeByUserIdAsync(userId);
         if (currentEmployee == null)
-        {
             return Unauthorized("Employee record not found");
-        }
 
-        // Check if the user is a manager (has direct reports)
         var isManager = await _teamService.IsManagerAsync(currentEmployee.Id);
         if (!isManager)
-        {
             return StatusCode(403, "Access denied. Only managers can view team information.");
-        }
 
         var query = new FeedbackRequestListQuery
         {
@@ -234,13 +208,6 @@ public class TeamController : ControllerBase
     /// <summary>
     /// Get paginated list of feedback requests received by team members (manager view)
     /// </summary>
-    /// <param name="page">Page number (default: 1)</param>
-    /// <param name="pageSize">Page size (default: 20, max: 100)</param>
-    /// <param name="sortBy">Sort field (created_at, due_date, updated_at)</param>
-    /// <param name="sortOrder">Sort order (asc, desc)</param>
-    /// <param name="status">Filter by status (pending, partial, complete, overdue)</param>
-    /// <param name="search">Search in message content</param>
-    /// <returns>Paginated list of feedback requests addressed to team members</returns>
     [HttpGet("feedback/request/received")]
     [RequireRole("People Manager", "Solution Owner", "Director", "Administrator")]
     [ProducesResponseType(typeof(PaginatedFeedbackRequestsDto), 200)]
@@ -254,25 +221,17 @@ public class TeamController : ControllerBase
         [FromQuery] string? status = null,
         [FromQuery] string? search = null)
     {
-        var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-        if (string.IsNullOrEmpty(userIdClaim) || !Guid.TryParse(userIdClaim, out var userId))
-        {
+        var profile = await _userService.GetCurrentUserProfileAsync(User);
+        if (profile == null || !Guid.TryParse(profile.UserId, out var userId))
             return Unauthorized();
-        }
 
-        // Get the current user's employee record
         var currentEmployee = await _teamRepository.GetEmployeeByUserIdAsync(userId);
         if (currentEmployee == null)
-        {
             return Unauthorized("Employee record not found");
-        }
 
-        // Check if the user is a manager (has direct reports)
         var isManager = await _teamService.IsManagerAsync(currentEmployee.Id);
         if (!isManager)
-        {
             return StatusCode(403, "Access denied. Only managers can view team information.");
-        }
 
         var query = new FeedbackRequestListQuery
         {

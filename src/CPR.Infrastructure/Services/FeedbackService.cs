@@ -749,5 +749,39 @@ namespace CPR.Infrastructure.Services
                 Comparison = comparison
             };
         }
+
+        /// <inheritdoc/>
+        public async Task<ManagerViewFeedbackDto[]> GetEmployeeFeedbackForManagerAsync(Guid employeeId, Guid managerEmployeeId)
+        {
+            // Validate direct-report relationship
+            var isDirectReport = await _db.Employees
+                .AnyAsync(e => e.Id == employeeId && e.ManagerId == managerEmployeeId && !e.IsDeleted);
+            if (!isDirectReport)
+                throw new UnauthorizedAccessException("errors.auth.forbidden");
+
+            var feedbackList = await _db.Feedback
+                .Where(f => f.ToEmployeeId == employeeId && !f.IsDeleted)
+                .OrderByDescending(f => f.CreatedAt)
+                .ToListAsync();
+
+            // Collect submitter employee IDs for bulk lookup
+            var fromEmployeeIds = feedbackList.Select(f => f.FromEmployeeId).Distinct().ToArray();
+            var submitterNames = await _db.Employees
+                .Include(e => e.User)
+                .Where(e => fromEmployeeIds.Contains(e.Id) && !e.IsDeleted)
+                .ToDictionaryAsync(
+                    e => e.Id,
+                    e => e.User?.DisplayName ?? e.User?.UserName ?? string.Empty);
+
+            return feedbackList.Select(f => new ManagerViewFeedbackDto
+            {
+                Id = f.Id,
+                Rating = f.Rating ?? 0,
+                Comment = f.Content,
+                SubmittedById = f.FromEmployeeId,
+                SubmittedByName = submitterNames.TryGetValue(f.FromEmployeeId, out var name) ? name : string.Empty,
+                CreatedAt = f.CreatedAt
+            }).ToArray();
+        }
     }
 }

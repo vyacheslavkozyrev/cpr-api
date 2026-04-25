@@ -182,6 +182,26 @@ namespace CPR.Infrastructure.Services
         }
 
         /// <summary>
+        /// Get the list of direct reports for the given manager as DirectReportDto objects.
+        /// </summary>
+        public async Task<DirectReportDto[]> GetDirectReportsAsync(Guid managerEmployeeId)
+        {
+            var reports = await _repo.GetDirectReports(managerEmployeeId)
+                .Include(e => e.User)
+                .Include(e => e.Position)
+                .ToListAsync();
+
+            return reports.Select(e => new DirectReportDto
+            {
+                Id = e.Id,
+                FullName = e.User?.DisplayName ?? e.User?.UserName ?? string.Empty,
+                JobTitle = e.Position?.Title,
+                PositionId = e.PositionId,
+                PositionName = e.Position?.Title
+            }).ToArray();
+        }
+
+        /// <summary>
         /// Get skills for an employee
         /// </summary>
         private async Task<EmployeeSkillDto[]> GetEmployeeSkillsAsync(Guid employeeId)

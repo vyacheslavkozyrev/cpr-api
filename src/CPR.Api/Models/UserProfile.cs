@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Newtonsoft.Json;
 using System.Text.Json.Serialization;
 
@@ -69,4 +70,11 @@ public class UserProfile
     [JsonProperty("position")]
     [JsonPropertyName("position")]
     public Position Position { get; set; } = new Position();
+
+    /// <summary>
+    /// System roles assigned to this user (e.g. "Employee", "People Manager").
+    /// </summary>
+    [JsonProperty("roles")]
+    [JsonPropertyName("roles")]
+    public List<string> Roles { get; set; } = new List<string>();
 }

@@ -71,5 +71,12 @@ namespace CPR.Application.Services
         /// <param name="includeComparison">Include comparison with previous period</param>
         /// <returns>Analytics data</returns>
         Task<FeedbackAnalyticsDto> GetFeedbackAnalyticsAsync(Guid employeeId, string dateFrom, string dateTo, bool includeComparison);
+
+        /// <summary>
+        /// Get all feedback received by an employee for display in a manager's dashboard view.
+        /// Results are sorted newest-first. Manager must be the direct manager of the employee.
+        /// Maps: feedback.content → comment; feedback.from_employee_id → submitted_by_id.
+        /// </summary>
+        Task<ManagerViewFeedbackDto[]> GetEmployeeFeedbackForManagerAsync(Guid employeeId, Guid managerEmployeeId);
     }
 }

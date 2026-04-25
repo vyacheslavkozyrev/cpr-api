@@ -42,6 +42,7 @@ namespace CPR.Infrastructure.Data
         public DbSet<ReviewNominee> ReviewNominees { get; set; }
         public DbSet<ReviewResponse> ReviewResponses { get; set; }
         public DbSet<EmployeeSkillEvidence> EmployeeSkillEvidences { get; set; }
+        public DbSet<GoalDeletionRequest> GoalDeletionRequests { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -126,6 +127,9 @@ namespace CPR.Infrastructure.Data
                 b.Property(g => g.ProgressPercent).HasColumnName("progress_percent").HasColumnType("numeric(5,2)").HasDefaultValue(0.00m);
                 b.Property(g => g.Priority).HasColumnName("priority").HasColumnType("smallint");
                 b.Property(g => g.Visibility).HasColumnName("visibility");
+                b.Property(g => g.SuggestedById).HasColumnName("suggested_by_id");
+                b.Property(g => g.Timeframe).HasColumnName("timeframe");
+                b.Property(g => g.SkillCategoryId).HasColumnName("skill_category_id");
 
                 b.Property(g => g.CreatedBy).HasColumnName("created_by");
                 b.Property(g => g.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("CURRENT_TIMESTAMP");
@@ -387,6 +391,11 @@ namespace CPR.Infrastructure.Data
                 b.Property(t => t.IsDeleted).HasColumnName("is_deleted");
                 b.Property(t => t.DeletedBy).HasColumnName("deleted_by");
                 b.Property(t => t.DeletedAt).HasColumnName("deleted_at");
+
+                b.HasOne<Goal>()
+                    .WithMany(g => g.Tasks)
+                    .HasForeignKey(t => t.GoalId)
+                    .OnDelete(DeleteBehavior.Restrict);
             });
 
             modelBuilder.Entity<Feedback>(b =>
@@ -691,6 +700,33 @@ namespace CPR.Infrastructure.Data
                 b.HasIndex(ur => new { ur.UserId, ur.RoleId })
                     .IsUnique()
                     .HasFilter("is_deleted = false");
+            });
+
+            modelBuilder.Entity<GoalDeletionRequest>(b =>
+            {
+                b.ToTable("goal_deletion_requests");
+                b.HasKey(r => r.Id);
+                b.Property(r => r.Id).HasColumnName("id");
+                b.Property(r => r.GoalId).HasColumnName("goal_id");
+                b.Property(r => r.RequestedById).HasColumnName("requested_by_id");
+                b.Property(r => r.Status).HasColumnName("status").HasDefaultValue("pending");
+                b.Property(r => r.Reason).HasColumnName("reason");
+                b.Property(r => r.ReviewedById).HasColumnName("reviewed_by_id");
+                b.Property(r => r.ReviewedAt).HasColumnName("reviewed_at");
+                b.Property(r => r.CreatedBy).HasColumnName("created_by");
+                b.Property(r => r.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("CURRENT_TIMESTAMP");
+                b.Property(r => r.ModifiedBy).HasColumnName("modified_by");
+                b.Property(r => r.ModifiedAt).HasColumnName("modified_at");
+                b.Property(r => r.IsDeleted).HasColumnName("is_deleted");
+                b.Property(r => r.DeletedBy).HasColumnName("deleted_by");
+                b.Property(r => r.DeletedAt).HasColumnName("deleted_at");
+
+                b.HasOne(r => r.Goal)
+                    .WithMany()
+                    .HasForeignKey(r => r.GoalId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                b.HasIndex(r => r.GoalId).HasDatabaseName("IX_goal_deletion_requests_goal_id");
             });
         }
     }

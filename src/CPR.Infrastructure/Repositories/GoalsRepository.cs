@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using CPR.Domain.Entities;
 using CPR.Application.Repositories;
+using Microsoft.EntityFrameworkCore;
 
 namespace CPR.Infrastructure.Repositories
 {
@@ -49,6 +50,37 @@ namespace CPR.Infrastructure.Repositories
         {
             goal.IsDeleted = true;
             await UpdateAsync(goal);
+        }
+
+        /// <inheritdoc/>
+        public async Task<Goal[]> GetEmployeeGoalsForManagerAsync(Guid employeeId)
+        {
+            // Fetch non-deleted goals for the employee including their tasks
+            var goals = await _db.Goals
+                .Include(g => g.Tasks.Where(t => !t.IsDeleted))
+                .Where(g => g.EmployeeId == employeeId && !g.IsDeleted)
+                .OrderByDescending(g => g.CreatedAt)
+                .ToArrayAsync();
+
+            return goals;
+        }
+
+        /// <inheritdoc/>
+        public async Task SoftDeleteTasksForGoalAsync(Guid goalId, Guid deletedBy)
+        {
+            var tasks = await _db.GoalTasks
+                .Where(t => t.GoalId == goalId && !t.IsDeleted)
+                .ToListAsync();
+
+            foreach (var task in tasks)
+            {
+                task.IsDeleted = true;
+                task.DeletedAt = DateTimeOffset.UtcNow;
+                task.DeletedBy = deletedBy;
+            }
+
+            if (tasks.Count > 0)
+                await _db.SaveChangesAsync();
         }
     }
 }
