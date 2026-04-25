@@ -135,28 +135,28 @@ namespace CPR.Infrastructure.Services
 
             activities.AddRange(goalActivities);
 
-            // Feedback activities
-            var feedbackActivities = await _context.Feedback
-                .Where(f => f.ToEmployeeId == employeeId && !f.IsDeleted && f.CreatedAt >= cutoffDate)
-                .Join(_context.Employees, f => f.FromEmployeeId, e => e.Id, (f, e) => new { f, FromEmployee = e })
-                .Join(_context.Users, x => x.FromEmployee.UserId, u => u.Id, (x, u) => new { x.f, x.FromEmployee, User = u })
-                .Join(_context.Goals, x => x.f.GoalId, g => g.Id, (x, g) => new { x.f, x.FromEmployee, x.User, Goal = g })
-                .Select(x => new ActivityItemDto
+            // Feedback activities — LEFT JOIN on Goals so feedback with null goal_id is included
+            var feedbackActivities = await (
+                from f in _context.Feedback
+                    .Where(f => f.ToEmployeeId == employeeId && !f.IsDeleted && f.CreatedAt >= cutoffDate)
+                join e in _context.Employees on f.FromEmployeeId equals e.Id
+                join u in _context.Users on e.UserId equals u.Id
+                select new ActivityItemDto
                 {
-                    Id = x.f.Id,
+                    Id = f.Id,
                     Type = "feedback_received",
-                    Title = $"Received feedback from {x.User.DisplayName ?? "Unknown User"}",
-                    Description = x.f.Content.Length > 100 ? x.f.Content.Substring(0, 100) + "..." : x.f.Content,
-                    Timestamp = x.f.CreatedAt,
+                    Title = $"Received feedback from {u.DisplayName ?? "Unknown User"}",
+                    Description = f.Content.Length > 100 ? f.Content.Substring(0, 100) + "..." : f.Content,
+                    Timestamp = f.CreatedAt,
                     Metadata = new ActivityMetadata
                     {
-                        FeedbackId = x.f.Id,
-                        GoalId = x.f.GoalId,
-                        FromUserId = x.FromEmployee.UserId,
-                        Rating = x.f.Rating
+                        FeedbackId = f.Id,
+                        GoalId = f.GoalId,
+                        FromUserId = e.UserId,
+                        Rating = f.Rating
                     }
-                })
-                .ToListAsync();
+                }
+            ).ToListAsync();
 
             activities.AddRange(feedbackActivities);
 
@@ -317,23 +317,23 @@ namespace CPR.Infrastructure.Services
                 }
             }
 
-            // Recent feedback (last 5)
-            var recentFeedback = await feedbackQuery
-                .OrderByDescending(f => f.CreatedAt)
-                .Take(5)
-                .Join(_context.Employees, f => f.FromEmployeeId, e => e.Id, (f, e) => new { f, FromEmployee = e })
-                .Join(_context.Users, x => x.FromEmployee.UserId, u => u.Id, (x, u) => new { x.f, x.FromEmployee, User = u })
-                .Join(_context.Goals, x => x.f.GoalId, g => g.Id, (x, g) => new { x.f, x.FromEmployee, x.User, Goal = g })
-                .Select(x => new RecentFeedbackDto
+            // Recent feedback (last 5) — LEFT JOIN on Goals so null goal_id items are included
+            var recentFeedback = await (
+                from f in feedbackQuery.OrderByDescending(f => f.CreatedAt).Take(5)
+                join e in _context.Employees on f.FromEmployeeId equals e.Id
+                join u in _context.Users on e.UserId equals u.Id
+                join g in _context.Goals on f.GoalId equals g.Id into goalGroup
+                from goal in goalGroup.DefaultIfEmpty()
+                select new RecentFeedbackDto
                 {
-                    Id = x.f.Id,
-                    FromEmployeeId = x.f.FromEmployeeId,
-                    FromEmployeeName = x.User.DisplayName ?? "Unknown User",
-                    GoalTitle = x.Goal.Title,
-                    Rating = x.f.Rating,
-                    CreatedAt = x.f.CreatedAt
-                })
-                .ToListAsync();
+                    Id = f.Id,
+                    FromEmployeeId = f.FromEmployeeId,
+                    FromEmployeeName = u.DisplayName ?? "Unknown User",
+                    GoalTitle = goal != null ? goal.Title : null,
+                    Rating = f.Rating,
+                    CreatedAt = f.CreatedAt
+                }
+            ).ToListAsync();
 
             // Rating trend (group by month)
             var ratingTrend = await feedbackQuery
