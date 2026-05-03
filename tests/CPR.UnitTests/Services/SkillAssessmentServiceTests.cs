@@ -9,6 +9,7 @@ using CPR.Application.DTOs.SkillAssessment;
 using CPR.Application.DTOs.Taxonomy;
 using CPR.Application.Repositories;
 using CPR.Domain.Entities;
+using CPR.Domain.Repositories;
 using CPR.Infrastructure.Data;
 using CPR.Infrastructure.Services;
 
@@ -18,6 +19,7 @@ namespace CPR.UnitTests.Services
     {
         private readonly CprDbContext _db;
         private readonly Mock<ISkillAssessmentRepository> _repoMock;
+        private readonly Mock<IAnalyticsRepository> _analyticsRepoMock;
         private readonly SkillAssessmentService _service;
 
         private static readonly Guid EmployeeId     = Guid.Parse("aa000000-0000-0000-0000-000000000001");
@@ -36,7 +38,17 @@ namespace CPR.UnitTests.Services
                 .Options;
             _db = new CprDbContext(options);
             _repoMock = new Mock<ISkillAssessmentRepository>();
-            _service = new SkillAssessmentService(_repoMock.Object, _db);
+            _analyticsRepoMock = new Mock<IAnalyticsRepository>();
+
+            // Default stub: AddSkillHistorySnapshotAsync and SaveChangesAsync succeed silently
+            _analyticsRepoMock
+                .Setup(r => r.AddSkillHistorySnapshotAsync(It.IsAny<EmployeeSkillHistory>(), It.IsAny<CancellationToken>()))
+                .Returns(Task.CompletedTask);
+            _analyticsRepoMock
+                .Setup(r => r.SaveChangesAsync(It.IsAny<CancellationToken>()))
+                .Returns(Task.CompletedTask);
+
+            _service = new SkillAssessmentService(_repoMock.Object, _db, _analyticsRepoMock.Object);
         }
 
         public void Dispose() => _db.Dispose();
