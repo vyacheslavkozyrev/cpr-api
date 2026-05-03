@@ -7,8 +7,6 @@ using CPR.Application.DTOs.Analytics;
 using CPR.Application.Services;
 using CPR.Domain.Entities;
 using CPR.Domain.Repositories;
-using CPR.Infrastructure.Data;
-using Microsoft.EntityFrameworkCore;
 
 namespace CPR.Infrastructure.Services
 {
@@ -18,15 +16,13 @@ namespace CPR.Infrastructure.Services
     public class AnalyticsService : IAnalyticsService
     {
         private readonly IAnalyticsRepository _repo;
-        private readonly CprDbContext _db;
 
         /// <summary>
         /// Initializes a new instance of <see cref="AnalyticsService"/>.
         /// </summary>
-        public AnalyticsService(IAnalyticsRepository repo, CprDbContext db)
+        public AnalyticsService(IAnalyticsRepository repo)
         {
             _repo = repo;
-            _db = db;
         }
 
         // ==================== Public API ====================
@@ -203,13 +199,9 @@ namespace CPR.Infrastructure.Services
 
             var employeeSkills = await _repo.GetEmployeeSkillsAsync(employeeId, ct);
 
-            // Load skill + category metadata
+            // Load skill + category metadata via repository (no direct DbContext access)
             var skillIds = employeeSkills.Select(es => es.SkillId).ToList();
-            var skillMeta = await _db.Skills
-                .AsNoTracking()
-                .Include(s => s.SkillCategory)
-                .Where(s => skillIds.Contains(s.Id) && !s.IsDeleted)
-                .ToDictionaryAsync(s => s.Id, ct);
+            var skillMeta = await _repo.GetSkillMetaAsync(skillIds, ct);
 
             var skillRows = new List<SkillRowDto>();
             var gapStartValues = new List<decimal>();
@@ -220,7 +212,7 @@ namespace CPR.Infrastructure.Services
 
             foreach (var es in employeeSkills)
             {
-                skillMeta.TryGetValue(es.SkillId, out var skill);
+                skillMeta.TryGetValue(es.SkillId, out var skillEntry);
 
                 decimal? requiredLevel = null;
                 if (employee?.PositionId.HasValue == true)
@@ -237,8 +229,8 @@ namespace CPR.Infrastructure.Services
                 skillRows.Add(new SkillRowDto
                 {
                     SkillId = es.SkillId,
-                    SkillTitle = skill?.Title ?? es.SkillId.ToString(),
-                    CategoryTitle = skill?.SkillCategory?.Title ?? string.Empty,
+                    SkillTitle = skillEntry.Title ?? es.SkillId.ToString(),
+                    CategoryTitle = skillEntry.CategoryTitle ?? string.Empty,
                     CurrentSelfAssessment = es.SelfAssessmentValue,
                     CurrentManagerAssessment = es.ManagerAssessmentValue,
                     RequiredLevel = requiredLevel,

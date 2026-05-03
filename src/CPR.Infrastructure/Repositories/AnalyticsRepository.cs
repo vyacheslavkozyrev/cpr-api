@@ -147,6 +147,22 @@ namespace CPR.Infrastructure.Repositories
         }
 
         /// <inheritdoc/>
+        public async Task<Dictionary<Guid, (string Title, string CategoryTitle)>> GetSkillMetaAsync(
+            IEnumerable<Guid> skillIds, CancellationToken cancellationToken = default)
+        {
+            var ids = skillIds.ToList();
+            var skills = await _db.Skills
+                .AsNoTracking()
+                .Include(s => s.SkillCategory)
+                .Where(s => ids.Contains(s.Id) && !s.IsDeleted)
+                .ToListAsync(cancellationToken);
+
+            return skills.ToDictionary(
+                s => s.Id,
+                s => (s.Title, CategoryTitle: s.SkillCategory?.Title ?? string.Empty));
+        }
+
+        /// <inheritdoc/>
         public async Task AddSkillHistorySnapshotAsync(EmployeeSkillHistory snapshot, CancellationToken ct = default)
         {
             await _db.EmployeeSkillHistories.AddAsync(snapshot, ct);

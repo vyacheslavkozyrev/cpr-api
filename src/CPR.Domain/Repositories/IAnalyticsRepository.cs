@@ -64,6 +64,12 @@ namespace CPR.Domain.Repositories
         /// </summary>
         Task<Employee?> GetEmployeeWithPositionAsync(Guid employeeId, CancellationToken ct = default);
 
+        /// <summary>
+        /// Returns a dictionary mapping skill ID → (Title, CategoryTitle) for the provided skill IDs.
+        /// Skills that are soft-deleted are excluded.
+        /// </summary>
+        Task<Dictionary<Guid, (string Title, string CategoryTitle)>> GetSkillMetaAsync(IEnumerable<Guid> skillIds, CancellationToken cancellationToken = default);
+
         // ==================== History Writes ====================
 
         /// <summary>
