@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -9,6 +10,7 @@ using CPR.Application.DTOs.SkillAssessment;
 using CPR.Application.DTOs.Taxonomy;
 using CPR.Application.Repositories;
 using CPR.Domain.Entities;
+using CPR.Domain.Repositories;
 using CPR.Infrastructure.Data;
 using CPR.Infrastructure.Services;
 
@@ -18,6 +20,7 @@ namespace CPR.UnitTests.Services
     {
         private readonly CprDbContext _db;
         private readonly Mock<ISkillAssessmentRepository> _repoMock;
+        private readonly Mock<IAnalyticsRepository> _analyticsRepoMock;
         private readonly SkillAssessmentService _service;
 
         private static readonly Guid EmployeeId     = Guid.Parse("aa000000-0000-0000-0000-000000000001");
@@ -36,7 +39,17 @@ namespace CPR.UnitTests.Services
                 .Options;
             _db = new CprDbContext(options);
             _repoMock = new Mock<ISkillAssessmentRepository>();
-            _service = new SkillAssessmentService(_repoMock.Object, _db);
+            _analyticsRepoMock = new Mock<IAnalyticsRepository>();
+
+            // Default stub: AddSkillHistorySnapshotAsync and SaveChangesAsync succeed silently
+            _analyticsRepoMock
+                .Setup(r => r.AddSkillHistorySnapshotAsync(It.IsAny<EmployeeSkillHistory>(), It.IsAny<CancellationToken>()))
+                .Returns(Task.CompletedTask);
+            _analyticsRepoMock
+                .Setup(r => r.SaveChangesAsync(It.IsAny<CancellationToken>()))
+                .Returns(Task.CompletedTask);
+
+            _service = new SkillAssessmentService(_repoMock.Object, _db, _analyticsRepoMock.Object);
         }
 
         public void Dispose() => _db.Dispose();
@@ -96,6 +109,86 @@ namespace CPR.UnitTests.Services
             Assert.NotNull(result);
             // Verify the repo upsert was called with the correct arguments.
             _repoMock.Verify(r => r.UpsertCurrentLevelAsync(EmployeeId, SkillId, 3.0m, null, EmployeeId, It.IsAny<CancellationToken>()), Times.Once);
+        }
+
+        // ---------- AC-027/AC-028: History snapshot on create/self_assessment update ----------
+
+        [Fact(DisplayName = "AC-027 AC-028: UpsertCurrentLevelAsync calls AddSkillHistorySnapshotAsync with the new assessment values")]
+        public async Task UpsertCurrentLevelAsync_CallsAddSkillHistorySnapshot()
+        {
+            _repoMock.Setup(r => r.GetEmployeeWithPositionAsync(EmployeeId, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(MakeEmployee());
+            _repoMock.Setup(r => r.GetPositionSkillsAsync(PositionId, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new List<PositionSkillRow> { MakePositionSkillRow() });
+            _repoMock.Setup(r => r.UpsertCurrentLevelAsync(EmployeeId, SkillId, 3.0m, null, EmployeeId, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new EmployeeToSkill { Id = AssessmentId, SkillId = SkillId, SelfAssessmentValue = 3.0m, Notes = null, IsDeleted = false });
+            _repoMock.Setup(r => r.SaveChangesAsync(It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);
+            _repoMock.Setup(r => r.GetEmployeeAssessmentsAsync(EmployeeId, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new List<EmployeeSkillRow>());
+
+            await _service.UpsertCurrentLevelAsync(
+                EmployeeId, SkillId,
+                new UpsertSkillAssessmentDto { SelfAssessmentValue = 3.0m },
+                CancellationToken.None);
+
+            // AC-027/AC-028: a history snapshot must be written
+            _analyticsRepoMock.Verify(
+                r => r.AddSkillHistorySnapshotAsync(
+                    It.Is<EmployeeSkillHistory>(h =>
+                        h.EmployeeId == EmployeeId &&
+                        h.SkillId == SkillId &&
+                        h.SelfAssessmentValue == 3.0m),
+                    It.IsAny<CancellationToken>()),
+                Times.Once);
+        }
+
+        // ---------- AC-029: History snapshot on manager_assessment update ----------
+
+        [Fact(DisplayName = "AC-029: UpsertManagerAssessmentAsync calls AddSkillHistorySnapshotAsync with manager value")]
+        public async Task UpsertManagerAssessmentAsync_CallsAddSkillHistorySnapshot()
+        {
+            _repoMock.Setup(r => r.GetEmployeeWithPositionAsync(ManagerId, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(MakeManager());
+            _repoMock.Setup(r => r.GetEmployeeWithPositionAsync(EmployeeId, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(MakeEmployee(managerId: ManagerId));
+            _repoMock.Setup(r => r.UpsertManagerAssessmentAsync(EmployeeId, SkillId, 4.0m, ManagerId, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new EmployeeToSkill { Id = AssessmentId, SkillId = SkillId, SelfAssessmentValue = 2.0m, ManagerAssessmentValue = 4.0m, IsDeleted = false });
+            _repoMock.Setup(r => r.SaveChangesAsync(It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);
+            _repoMock.Setup(r => r.GetPositionSkillsAsync(PositionId, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new List<PositionSkillRow>());
+            _repoMock.Setup(r => r.GetEmployeeAssessmentsAsync(EmployeeId, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new List<EmployeeSkillRow>());
+
+            await _service.UpsertManagerAssessmentAsync(
+                ManagerId, "People Manager", EmployeeId, SkillId, 4.0m, CancellationToken.None);
+
+            // AC-029: history snapshot must include the new manager assessment value
+            _analyticsRepoMock.Verify(
+                r => r.AddSkillHistorySnapshotAsync(
+                    It.Is<EmployeeSkillHistory>(h =>
+                        h.EmployeeId == EmployeeId &&
+                        h.SkillId == SkillId &&
+                        h.ManagerAssessmentValue == 4.0m),
+                    It.IsAny<CancellationToken>()),
+                Times.Once);
+        }
+
+        // ---------- AC-030: History rows immutable — no delete/update path ----------
+
+        [Fact(DisplayName = "AC-030: employee_skill_history rows are never modified or deleted — IAnalyticsRepository exposes no delete method")]
+        public void AnalyticsRepository_DoesNotExposeDeleteHistoryMethod()
+        {
+            // AC-030: The IAnalyticsRepository interface must NOT have any method that modifies
+            // or removes existing EmployeeSkillHistory rows.
+            var repoType = typeof(IAnalyticsRepository);
+            var methods = repoType.GetMethods();
+
+            // Verify no delete/remove/update history method exists
+            var deleteMethods = methods.Where(m =>
+                m.Name.Contains("Delete") || m.Name.Contains("Remove") || m.Name.Contains("Update")
+            ).Where(m => m.Name.Contains("History") || m.Name.Contains("Snapshot"));
+
+            Assert.Empty(deleteMethods);
         }
 
         // ---------- AC-012: DeleteCurrentLevelAsync — removes assessment ----------

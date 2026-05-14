@@ -7,6 +7,7 @@ using CPR.Application.DTOs.SkillAssessment;
 using CPR.Application.Repositories;
 using CPR.Application.Services;
 using CPR.Domain.Entities;
+using CPR.Domain.Repositories;
 using CPR.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,11 +17,13 @@ namespace CPR.Infrastructure.Services
     {
         private readonly ISkillAssessmentRepository _repo;
         private readonly CprDbContext _db;
+        private readonly IAnalyticsRepository _analyticsRepo;
 
-        public SkillAssessmentService(ISkillAssessmentRepository repo, CprDbContext db)
+        public SkillAssessmentService(ISkillAssessmentRepository repo, CprDbContext db, IAnalyticsRepository analyticsRepo)
         {
             _repo = repo;
             _db = db;
+            _analyticsRepo = analyticsRepo;
         }
 
         public async Task<SkillAssessmentResponseDto> GetMyAssessmentAsync(Guid employeeId, CancellationToken ct)
@@ -41,8 +44,23 @@ namespace CPR.Infrastructure.Services
             if (!positionSkills.Any(ps => ps.SkillId == skillId))
                 throw new KeyNotFoundException("skill_not_found");
 
-            await _repo.UpsertCurrentLevelAsync(employeeId, skillId, dto.SelfAssessmentValue, dto.Notes, employeeId, ct);
+            var upserted = await _repo.UpsertCurrentLevelAsync(employeeId, skillId, dto.SelfAssessmentValue, dto.Notes, employeeId, ct);
             await _repo.SaveChangesAsync(ct);
+
+            // Record skill history snapshot (AC-027, AC-028)
+            var selfSnapshot = new EmployeeSkillHistory
+            {
+                Id = Guid.NewGuid(),
+                EmployeeId = employeeId,
+                SkillId = skillId,
+                SelfAssessmentValue = upserted.SelfAssessmentValue,
+                ManagerAssessmentValue = upserted.ManagerAssessmentValue,
+                RecordedAt = DateTimeOffset.UtcNow,
+                CreatedBy = employeeId,
+                CreatedAt = DateTimeOffset.UtcNow
+            };
+            await _analyticsRepo.AddSkillHistorySnapshotAsync(selfSnapshot, ct);
+            await _analyticsRepo.SaveChangesAsync(ct);
 
             return await BuildAssessmentResponseAsync(employeeId, ct);
         }
@@ -67,8 +85,23 @@ namespace CPR.Infrastructure.Services
                     throw new UnauthorizedAccessException("forbidden");
             }
 
-            await _repo.UpsertManagerAssessmentAsync(employeeId, skillId, value, actorId, ct);
+            var managerUpserted = await _repo.UpsertManagerAssessmentAsync(employeeId, skillId, value, actorId, ct);
             await _repo.SaveChangesAsync(ct);
+
+            // Record skill history snapshot (AC-029)
+            var managerSnapshot = new EmployeeSkillHistory
+            {
+                Id = Guid.NewGuid(),
+                EmployeeId = employeeId,
+                SkillId = skillId,
+                SelfAssessmentValue = managerUpserted.SelfAssessmentValue,
+                ManagerAssessmentValue = managerUpserted.ManagerAssessmentValue,
+                RecordedAt = DateTimeOffset.UtcNow,
+                CreatedBy = actorId,
+                CreatedAt = DateTimeOffset.UtcNow
+            };
+            await _analyticsRepo.AddSkillHistorySnapshotAsync(managerSnapshot, ct);
+            await _analyticsRepo.SaveChangesAsync(ct);
 
             var baseDto = await BuildAssessmentResponseAsync(employeeId, ct);
             var displayName = targetEmployee.User?.DisplayName ?? targetEmployee.User?.UserName ?? targetEmployee.Id.ToString();

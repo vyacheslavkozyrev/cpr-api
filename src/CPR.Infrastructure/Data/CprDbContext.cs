@@ -43,6 +43,7 @@ namespace CPR.Infrastructure.Data
         public DbSet<ReviewResponse> ReviewResponses { get; set; }
         public DbSet<EmployeeSkillEvidence> EmployeeSkillEvidences { get; set; }
         public DbSet<GoalDeletionRequest> GoalDeletionRequests { get; set; }
+        public DbSet<EmployeeSkillHistory> EmployeeSkillHistories { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -727,6 +728,29 @@ namespace CPR.Infrastructure.Data
                     .OnDelete(DeleteBehavior.Restrict);
 
                 b.HasIndex(r => r.GoalId).HasDatabaseName("IX_goal_deletion_requests_goal_id");
+            });
+
+            modelBuilder.Entity<EmployeeSkillHistory>(b =>
+            {
+                b.ToTable("employee_skill_history");
+                b.HasKey(h => h.Id);
+                b.Property(h => h.Id).HasColumnName("id").HasDefaultValueSql("gen_random_uuid()");
+                b.Property(h => h.EmployeeId).HasColumnName("employee_id").IsRequired();
+                b.Property(h => h.SkillId).HasColumnName("skill_id").IsRequired();
+                b.Property(h => h.SelfAssessmentValue).HasColumnName("self_assessment_value").HasColumnType("numeric").IsRequired();
+                b.Property(h => h.ManagerAssessmentValue).HasColumnName("manager_assessment_value").HasColumnType("numeric");
+                b.Property(h => h.RecordedAt).HasColumnName("recorded_at").HasDefaultValueSql("CURRENT_TIMESTAMP");
+                b.Property(h => h.CreatedBy).HasColumnName("created_by");
+                b.Property(h => h.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("CURRENT_TIMESTAMP");
+                b.Property(h => h.ModifiedBy).HasColumnName("modified_by");
+                b.Property(h => h.ModifiedAt).HasColumnName("modified_at");
+                b.Property(h => h.IsDeleted).HasColumnName("is_deleted").HasDefaultValue(false);
+                b.Property(h => h.DeletedBy).HasColumnName("deleted_by");
+                b.Property(h => h.DeletedAt).HasColumnName("deleted_at");
+
+                b.HasIndex(h => h.EmployeeId).HasDatabaseName("IX_employee_skill_history_employee_id");
+                b.HasIndex(h => h.SkillId).HasDatabaseName("IX_employee_skill_history_skill_id");
+                b.HasIndex(h => new { h.EmployeeId, h.SkillId, h.RecordedAt }).HasDatabaseName("IX_employee_skill_history_employee_skill_recorded_at");
             });
         }
     }
