@@ -1,0 +1,100 @@
+# cpr-api chart values
+# All overrides go under the base-chart: key — see base-chart README for full reference
+
+base-chart:
+  fullnameOverride: cpr-api
+
+  # ── Image ──────────────────────────────────────────────────────
+  image:
+    repository: ghcr.io/vyacheslavkozyrev/cpr-api
+    pullPolicy: IfNotPresent
+    # tag defaults to .Chart.AppVersion — set explicitly in CI via sed on release
+    tag: ""
+
+  # GHCR is private — pull secret must exist in the target namespace
+  # Create with: kubectl create secret docker-registry ghcr-pull-secret \
+  #   --docker-server=ghcr.io \
+  #   --docker-username=vyacheslavkozyrev \
+  #   --docker-password=YOUR_PAT \
+  #   --namespace=<namespace>
+  imagePullSecrets:
+    - name: ghcr-pull-secret
+
+  # ── Service ────────────────────────────────────────────────────
+  service:
+    type: ClusterIP
+    port: 8080
+
+  # ── Security context ───────────────────────────────────────────
+  # Override base defaults to match aspnet built-in APP_UID (1654)
+  # readOnlyRootFilesystem: false — .NET runtime requires writable filesystem
+  podSecurityContext:
+    runAsNonRoot: true
+    runAsUser: 1654
+    runAsGroup: 1654
+    fsGroup: 1654
+    fsGroupChangePolicy: OnRootMismatch
+    seccompProfile:
+      type: RuntimeDefault
+
+  securityContext:
+    allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: false  # .NET runtime writes temp files — cannot be true
+    runAsNonRoot: true
+    runAsUser: 1654
+    runAsGroup: 1654
+    privileged: false
+    capabilities:
+      drop:
+        - ALL
+    seccompProfile:
+      type: RuntimeDefault
+
+  # ── Probes ─────────────────────────────────────────────────────
+  livenessProbe:
+    enabled: false
+  readinessProbe:
+    enabled: false
+  startupProbe:
+    enabled: false
+
+  # ── Resources — sized for k3s ──────────────────────────────────
+  resources:
+    limits:
+      memory: 512Mi
+    requests:
+      cpu: 100m
+      memory: 256Mi
+
+  # ── Gateway API (Cilium) ───────────────────────────────────────
+  httpRoute:
+    enabled: false
+    parentRefs:
+      - name: cilium-gateway
+        sectionName: https
+    hostnames:
+      - cpr-api.local
+    rules:
+      - matches:
+          - path:
+              type: PathPrefix
+              value: /
+
+  # ── Ingress — disabled, using Gateway API instead ─────────────
+  ingress:
+    enabled: false
+
+  # ── Environment variables ──────────────────────────────────────
+  extraEnv:
+    - name: ASPNETCORE_ENVIRONMENT
+      value: Production
+    - name: ASPNETCORE_URLS
+      value: "http://+:8080"
+
+  # ── Autoscaling ────────────────────────────────────────────────
+  autoscaling:
+    enabled: false
+
+  # ── Pod disruption budget ──────────────────────────────────────
+  podDisruptionBudget:
+    enabled: false

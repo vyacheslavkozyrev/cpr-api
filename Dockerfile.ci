@@ -1,0 +1,27 @@
+# syntax=docker/dockerfile:1
+# ---------------------------------------------------------------
+# Dockerfile.ci — runtime only, for CI/CD pipeline use
+# Binary is built outside Docker by the workflow (dotnet publish)
+# and copied in here. No build stage, no SDK in the image.
+#
+# Companion: Dockerfile (full multi-stage) for local development
+# ---------------------------------------------------------------
+
+FROM mcr.microsoft.com/dotnet/aspnet:9.0-alpine
+
+WORKDIR /app
+
+# Upgrade Alpine packages to pick up any security fixes not yet in the base image.
+RUN apk upgrade --no-cache
+
+ENV ASPNETCORE_URLS=http://+:8080
+
+# Copy pre-built publish output — placed here by CI before docker build
+COPY src/CPR.Api/publish/ ./
+
+EXPOSE 8080
+
+# Use built-in non-root user from aspnet image
+USER $APP_UID
+
+ENTRYPOINT ["dotnet", "CPR.Api.dll"]
